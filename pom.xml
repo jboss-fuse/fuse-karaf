@@ -144,7 +144,7 @@
                     <installedFeatures>
                         <feature>wrapper</feature>
                     </installedFeatures>
-                    <bootFeatures>
+					<startupFeatures>
                         <feature>framework</feature>
                         <feature>jaas</feature>
                         <feature>shell</feature>
@@ -162,6 +162,8 @@
                         <feature>service</feature>
                         <feature>system</feature>
                         <feature>aries-blueprint</feature>
+                    </startupFeatures>
+                    <bootFeatures>
                         <feature>war</feature>
                         <feature>pax-http-undertow</feature>
                         <feature>cxf</feature>
