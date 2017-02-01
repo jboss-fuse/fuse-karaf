@@ -167,6 +167,7 @@
                         <feature>war</feature>
                         <feature>pax-http-undertow</feature>
                         <feature>cxf</feature>
+                        <feature>cxf-commands</feature>
                         <feature>cxf-http-undertow</feature>
                         <feature>camel</feature>
                         <feature>camel-undertow</feature>
