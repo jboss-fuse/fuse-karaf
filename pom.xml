@@ -14,12 +14,13 @@
         <camel.version>2.19.0-SNAPSHOT</camel.version>
         <cxf.version>3.2.0-SNAPSHOT</cxf.version>
         <artemis.version>1.4.0</artemis.version>
+        <hawtio.version>2.0-M1</hawtio.version>
         <servicemix.specs.version>2.7.0</servicemix.specs.version>
         <xerces.version>2.11.0_1</xerces.version>
         <xalan.bundle.version>2.7.2_3</xalan.bundle.version>
         <xalan-serializer.bundle.version>2.7.2_1</xalan-serializer.bundle.version>
         <jna.version>4.2.2</jna.version>
-	</properties>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -84,6 +85,14 @@
             <type>xml</type>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>io.hawt</groupId>
+            <artifactId>hawtio-karaf</artifactId>
+            <version>${hawtio.version}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -144,7 +153,7 @@
                     <installedFeatures>
                         <feature>wrapper</feature>
                     </installedFeatures>
-					<startupFeatures>
+                    <startupFeatures>
                         <feature>framework</feature>
                         <feature>jaas</feature>
                         <feature>shell</feature>
@@ -185,6 +194,7 @@
                         <feature>artemis</feature>
                         <feature>pax-jdbc-pool-narayana</feature>
                         <feature>transaction-manager-narayana</feature>
+                        <feature>hawtio</feature>
                     </bootFeatures>
                     <blacklistedBundles>
                         <bundle>camel-karaf-commands;url="mvn:org.apache.camel.karaf/camel-karaf-commands/2.18.0-SNAPSHOT"</bundle>
