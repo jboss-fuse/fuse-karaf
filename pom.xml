@@ -4,18 +4,18 @@
 
     <groupId>org.jboss.fuse</groupId>
     <artifactId>esb-project</artifactId>
-    <version>7.0.0.redhat-SNAPSHOT</version>
+    <version>7.0.0.fuse-000015</version>
     <packaging>pom</packaging>
 
     <name>JBoss Fuse :: ESB</name>
 
     <properties>
-        <karaf.version>4.1.0-SNAPSHOT</karaf.version>
-        <camel.version>2.19.0-SNAPSHOT</camel.version>
-        <cxf.version>3.2.0-SNAPSHOT</cxf.version>
+        <karaf.version>4.2.0.fuse-000001</karaf.version>
+        <camel.version>2.20.0.fuse-000002</camel.version>
+        <cxf.version>3.2.0.fuse-000047</cxf.version>
         <artemis.version>1.4.0</artemis.version>
         <hawtio.version>2.0-M1</hawtio.version>
-        <servicemix.specs.version>2.7.0</servicemix.specs.version>
+        <servicemix.specs.version>2.9.0.fuse-000002</servicemix.specs.version>
         <xerces.version>2.11.0_1</xerces.version>
         <xalan.bundle.version>2.7.2_3</xalan.bundle.version>
         <xalan-serializer.bundle.version>2.7.2_1</xalan-serializer.bundle.version>
