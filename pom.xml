@@ -212,6 +212,9 @@
                         <feature>feature:camel-jetty9</feature>
                         <feature>feature:pax-cdi-openwebbeans</feature>
                         <feature>feature:pax-cdi-web-openwebbeans</feature>
+                        <feature>feature:pax-jsf-support</feature>
+                        <feature>feature:camel-ignite</feature>
+                        <feature>feature:camel-ironmq</feature>
                     </blacklistedFeatures>
                     <libraries>
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${xerces.version};type:=endorsed;export:=true;delegate:=true</library>
