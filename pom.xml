@@ -8,6 +8,22 @@
     <packaging>pom</packaging>
 
     <name>JBoss Fuse :: ESB</name>
+    <description>JBoss Fuse is an open source ESB with capabilities based on Apache Camel, Apache CXF, Apache ActiveMQ, Apache Karaf and Fabric8 in a single integrated distribution</description>
+
+    <url>http://www.jboss.org/products/fuse</url>
+
+    <organization>
+        <name>Red Hat</name>
+        <url>http://redhat.com</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <karaf.version>4.1.1</karaf.version>
