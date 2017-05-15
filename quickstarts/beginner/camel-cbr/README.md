@@ -52,13 +52,14 @@ Build and Deploy the Quickstart
 * Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
 * In the JBoss Fuse console, enter the following command:
 
-        osgi:install -s mvn:org.jboss.quickstarts.fuse/beginner-camel-cbr/${project.version}
+        bundle:install -s mvn:org.jboss.quickstarts.fuse/beginner-camel-cbr/${project.version}
 
 * Fuse should give you an id when the bundle is deployed
 
 * You can check that everything is ok by issuing  the command:
 
-        osgi:list
+        bundle:list
+
    your bundle should be present at the end of the list
 
 
@@ -85,8 +86,8 @@ Undeploy the Archive
 
 To stop and undeploy the bundle in Fuse:
 
-1. Enter `osgi:list` command to retrieve your bundle id
+1. Enter `bundle:list` command to retrieve your bundle id
 2. To stop and uninstall the bundle enter
 
-        osgi:uninstall <id>
+        bundle:uninstall <id>
  
