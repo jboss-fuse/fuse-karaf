@@ -130,7 +130,7 @@
                             <version>${project.version}</version>
                         </artifactItem>
                     </artifactItems>
-                    <outputDirectory>${project.build.directory}/assembly/quickstarts</outputDirectory>
+                    <outputDirectory>${project.build.directory}/assembly/quickstarts/beginner/camel-cbr</outputDirectory>
                 </configuration>
             </plugin>
         

@@ -46,7 +46,7 @@
     <build>
         <resources>
             <resource>
-                <directory>${project.basedir}/../../quickstarts</directory>
+                <directory>${project.basedir}/../../quickstarts/beginner/camel-cbr</directory>
                 <filtering>false</filtering>
                 <excludes>
                     <exclude>**/target/**</exclude>
@@ -59,7 +59,7 @@
                 </excludes>
             </resource>
             <resource>
-                <directory>${project.basedir}/../../quickstarts</directory>
+                <directory>${project.basedir}/../../quickstarts/beginner/camel-cbr</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>**/README.md</include>
