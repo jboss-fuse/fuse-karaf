@@ -93,10 +93,10 @@
 
     <modules>
         <module>camel-cbr</module>
-        <module>camel-eips</module>
-        <module>camel-errorhandler</module>
-        <module>camel-log</module>
-        <module>camel-log-wiki</module>
+<!--         <module>camel-eips</module> -->
+<!--         <module>camel-errorhandler</module> -->
+<!--         <module>camel-log</module> -->
+<!--         <module>camel-log-wiki</module> -->
     </modules>
 
 

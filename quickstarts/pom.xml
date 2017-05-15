@@ -121,8 +121,8 @@
 
     <modules>
       <module>beginner</module>
-      <module>camel</module>
-      <module>cxf</module>
+<!--       <module>camel</module> -->
+<!--       <module>cxf</module> -->
     </modules>
 
     <build>
