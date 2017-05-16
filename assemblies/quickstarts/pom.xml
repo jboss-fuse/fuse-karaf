@@ -52,6 +52,8 @@
                     <exclude>**/target/**</exclude>
                     <exclude>**/README.txt</exclude>
                     <exclude>**/.project</exclude>
+                    <exclude>**/META-INF/**</exclude>
+                    <exclude>**/pom.xml.versionsBackup</exclude>
                     <exclude>**/.classpath</exclude>
                     <exclude>**/.settings/**</exclude>
                     <exclude>**/*.iws</exclude>
