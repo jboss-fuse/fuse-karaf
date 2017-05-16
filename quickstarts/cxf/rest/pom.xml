@@ -29,7 +29,7 @@
     <artifactId>cxf-rest</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>JBoss Fuse Quickstart: rest</name>
+    <name>JBoss Fuse :: Quickstarts :: rest</name>
     <description>RESTful WebService Example using JAX-RS with JBoss Fuse</description>
 
     <licenses>

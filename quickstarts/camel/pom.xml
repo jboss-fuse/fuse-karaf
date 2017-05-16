@@ -29,7 +29,7 @@
     <artifactId>camel-quickstarts</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>JBoss Fuse Quickstart: camel</name>
+    <name>JBoss Fuse :: Quickstarts :: camel</name>
 
     <licenses>
         <license>

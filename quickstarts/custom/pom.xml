@@ -26,7 +26,7 @@
     <packaging>pom</packaging>
     <version>7.0.0.redhat-SNAPSHOT</version>
 
-    <name>JBoss Fuse Quickstart: custom</name>
+    <name>JBoss Fuse :: Quickstarts :: custom</name>
 
     <properties>
         <!-- Used to configure the custom assembly -->

@@ -29,7 +29,7 @@
     <artifactId>camel-linkedin</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>JBoss Fuse Quickstart: camel-linkedin</name>
+    <name>JBoss Fuse :: Quickstarts :: camel-linkedin</name>
     <description>Camel LinkedIn Example</description>
     <url>https://github.com/jboss-fuse/fuse/tree/master/quickstarts/camel-linkedin</url>
 

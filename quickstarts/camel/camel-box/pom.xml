@@ -29,7 +29,7 @@
     <artifactId>camel-box</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>JBoss Fuse Quickstart: camel-box</name>
+    <name>JBoss Fuse :: Quickstarts :: camel-box</name>
     <description>Camel Box.com Example</description>
     <url>https://github.com/jboss-fuse/fuse/tree/master/quickstarts/camel-box</url>
 

@@ -29,7 +29,7 @@
     <artifactId>beginner-camel-log-wiki</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>JBoss Fuse Quickstart: camel-log-wiki</name>
+    <name>JBoss Fuse :: Quickstarts :: camel-log-wiki</name>
     <description>Camel Log Example (wiki)</description>
 
     <licenses>

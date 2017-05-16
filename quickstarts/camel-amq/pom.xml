@@ -29,7 +29,7 @@
     <artifactId>camel-amq</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>JBoss Fuse Quickstart: camel-amq</name>
+    <name>JBoss Fuse :: Quickstarts :: camel-amq</name>
     <description>ActiveMQ and Camel Example</description>
 
     <licenses>

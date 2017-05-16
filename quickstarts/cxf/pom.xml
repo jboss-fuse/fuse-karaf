@@ -30,7 +30,7 @@
     <artifactId>cxf</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>JBoss Fuse Quickstart: cxf</name>
+    <name>JBoss Fuse :: Quickstarts :: cxf</name>
 
     <licenses>
         <license>

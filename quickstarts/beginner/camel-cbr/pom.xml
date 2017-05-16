@@ -29,7 +29,7 @@
     <artifactId>beginner-camel-cbr</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>JBoss Fuse Quickstart: camel-cbr</name>
+    <name>JBoss Fuse :: Quickstarts :: camel-cbr</name>
     <description>Camel Content-Based Router Example</description>
 
     <licenses>

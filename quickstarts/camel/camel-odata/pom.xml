@@ -29,7 +29,7 @@
     <artifactId>camel-odata</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>JBoss Fuse Quickstart: camel-odata</name>
+    <name>JBoss Fuse :: Quickstarts :: camel-odata</name>
     <description>Camel Olingo2 OData Example</description>
     <url>https://github.com/jboss-fuse/fuse/tree/master/quickstarts/camel-odata</url>
 

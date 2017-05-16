@@ -29,7 +29,7 @@
     <artifactId>cxf-camel-cxf-code-first</artifactId>
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>bundle</packaging>
-    <name>JBoss Fuse Quickstart: camel-cxf-code-first</name>
+    <name>JBoss Fuse :: Quickstarts :: camel-cxf-code-first</name>
     <description>Creates a web service using Java code first</description>
 
     <licenses>

@@ -30,7 +30,7 @@
 	<version>7.0.0.redhat-SNAPSHOT</version>
 	<packaging>bundle</packaging>
 
-	<name>JBoss Fuse Quickstart: camel-sap</name>
+	<name>JBoss Fuse :: Quickstarts :: camel-sap</name>
 	<description>SAP Camel Components Example</description>
 	<url>https://github.com/jboss-fuse/fuse/tree/master/quickstarts/camel/camel-sap</url>
 
@@ -52,7 +52,7 @@
 		<!-- the version of the JBoss Fuse BOM, defining all the dependency versions -->
 		<jboss.fuse.bom.version>7.0.0.redhat-SNAPSHOT</jboss.fuse.bom.version>
 		<fuse.osgi.symbolic.name>org.jboss.quickstarts.fuse.camel-sap</fuse.osgi.symbolic.name>
-		<fuse.osgi.bundle.name>JBoss Fuse Quickstart: camel-sap</fuse.osgi.bundle.name>
+		<fuse.osgi.bundle.name>JBoss Fuse :: Quickstarts :: camel-sap</fuse.osgi.bundle.name>
 		<fuse.osgi.import>*</fuse.osgi.import>
 		<fuse.osgi.export>org.jboss.quickstarts.fuse.sap;version=${project.version},
 			org.jboss.quickstarts.fuse.sap.bean;version=${project.version},
