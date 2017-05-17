@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>framework</artifactId>
-            <version>${karaf.version}</version>
+            <version>${version.org.apache.karaf}</version>
             <type>kar</type>
         </dependency>
         <dependency>
@@ -32,7 +32,7 @@
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>framework</artifactId>
-            <version>${karaf.version}</version>
+            <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
@@ -40,7 +40,7 @@
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>standard</artifactId>
-            <version>${karaf.version}</version>
+            <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>compile</scope>
@@ -48,7 +48,7 @@
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>spring</artifactId>
-            <version>${karaf.version}</version>
+            <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
@@ -56,7 +56,7 @@
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>enterprise</artifactId>
-            <version>${karaf.version}</version>
+            <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
@@ -64,7 +64,7 @@
         <dependency>
             <groupId>org.apache.camel.karaf</groupId>
             <artifactId>apache-camel</artifactId>
-            <version>${camel.version}</version>
+            <version>${version.org.apache.camel}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>org.apache.cxf.karaf</groupId>
             <artifactId>apache-cxf</artifactId>
-            <version>${cxf.version}</version>
+            <version>${version.org.apache.cxf}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
@@ -80,7 +80,7 @@
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>artemis-features</artifactId>
-            <version>${artemis.version}</version>
+            <version>${version.org.apache.activemq.artemis}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
@@ -88,7 +88,7 @@
         <dependency>
             <groupId>io.hawt</groupId>
             <artifactId>hawtio-karaf</artifactId>
-            <version>${hawtio.version}</version>
+            <version>${version.io.hawt}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
@@ -157,7 +157,7 @@
             <plugin>
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
-                <version>${karaf.version}</version>
+                <version>${version.org.apache.karaf}</version>
                 <executions>
                     <execution>
                         <id>process-resources</id>
@@ -241,22 +241,22 @@
                         <feature>feature:camel-ironmq</feature>
                     </blacklistedFeatures>
                     <libraries>
-                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${xerces.version};type:=endorsed;export:=true;delegate:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxp-api-1.4/${servicemix.specs.version};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/${servicemix.specs.version};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxws-api-2.2/${servicemix.specs.version};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.saaj-api-1.3/${servicemix.specs.version};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.1/${servicemix.specs.version};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.stax-api-1.2/${servicemix.specs.version};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/${xalan.bundle.version};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${xalan-serializer.bundle.version};type:=endorsed;export:=true</library>
+                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces};type:=endorsed;export:=true;delegate:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxp-api-1.4/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxws-api-2.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.saaj-api-1.3/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.1/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.stax-api-1.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
+                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/${version.org.apache.servicemix.bundles.xalan};type:=endorsed;export:=true</library>
+                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${version.org.apache.servicemix.bundles.xalan-serializer};type:=endorsed;export:=true</library>
                         <library>mvn:javax.annotation/javax.annotation-api/1.2;type:=endorsed;export:=true</library>
 
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${servicemix.specs.version};type:=default;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.locator/${servicemix.specs.version};type:=default;export:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.locator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
 
-                        <library>mvn:net.java.dev.jna/jna/${jna.version};type:=boot;export:=false</library>
-                        <library>mvn:net.java.dev.jna/jna-platform/${jna.version};type:=boot;export:=false</library>
+                        <library>mvn:net.java.dev.jna/jna/${version.net.java.dev.jna};type:=boot;export:=false</library>
+                        <library>mvn:net.java.dev.jna/jna-platform/${version.net.java.dev.jna};type:=boot;export:=false</library>
                     </libraries>
                     <javase>1.8</javase>
                     <config>

@@ -27,16 +27,30 @@
     </licenses>
 
     <properties>
-        <karaf.version>4.1.1</karaf.version>
-        <camel.version>2.19.0</camel.version>
-        <cxf.version>3.2.0-SNAPSHOT</cxf.version>
-        <artemis.version>1.4.0</artemis.version>
-        <hawtio.version>2.0-M1</hawtio.version>
-        <servicemix.specs.version>2.7.0</servicemix.specs.version>
-        <xerces.version>2.11.0_1</xerces.version>
-        <xalan.bundle.version>2.7.2_3</xalan.bundle.version>
-        <xalan-serializer.bundle.version>2.7.2_1</xalan-serializer.bundle.version>
-        <jna.version>4.2.2</jna.version>
+        <!--
+          CONVENTIONS:
+          - A version property must be specified in the format "version.{groupId}", optionally with a suffix to make it unique.
+          - Version properties must be sorted alphabetically (other form of sorting were found to be unclear and ambiguous).
+          - Maven plugins - whatever that improves readability
+        -->
+
+        <!-- versions of "subprojects" of JBoss Fuse -->
+        <version.io.hawt>2.0-M1</version.io.hawt>
+        <version.org.apache.activemq.artemis>1.4.0</version.org.apache.activemq.artemis>
+        <version.org.apache.camel>2.19.0</version.org.apache.camel>
+        <version.org.apache.cxf>3.2.0-SNAPSHOT</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.0-SNAPSHOT</version.org.apache.karaf>
+
+        <!-- versions of normal dependencies of JBoss Fuse -->
+        <version.net.java.dev.jna>4.2.2</version.net.java.dev.jna>
+        <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
+        <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
+        <version.org.apache.servicemix.bundles.xerces>2.11.0_1</version.org.apache.servicemix.bundles.xerces>
+        <version.org.apache.servicemix.specs>2.7.0</version.org.apache.servicemix.specs>
+
+        <!-- versions of Maven plugins -->
+        <version.plugin.maven-remote-resources-plugin>1.5</version.plugin.maven-remote-resources-plugin>
+        <version.plugin.maven-resources-plugin>3.0.2</version.plugin.maven-resources-plugin>
     </properties>
 
     <repositories>
@@ -101,7 +115,7 @@
             <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-parent</artifactId>
-                <version>${camel.version}</version>
+                <version>${version.org.apache.camel}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -114,7 +128,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.0</version>
+                    <version>${version.plugin.maven-resources-plugin}</version>
                     <executions>
                         <execution>
                             <id>process-resources</id>
@@ -127,7 +141,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-remote-resources-plugin</artifactId>
-                    <version>1.5</version>
+                    <version>${version.plugin.maven-remote-resources-plugin}</version>
                     <configuration>
                         <skip>true</skip>
                     </configuration>
@@ -135,7 +149,7 @@
                 <plugin>
                     <groupId>org.apache.karaf.tooling</groupId>
                     <artifactId>karaf-maven-plugin</artifactId>
-                    <version>${karaf.version}</version>
+                    <version>${version.org.apache.karaf}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
