@@ -215,9 +215,9 @@
                 <!-- Mojohaus plugins -->
 
                 <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
+                    <groupId>com.mycila</groupId>
                     <artifactId>license-maven-plugin</artifactId>
-                    <version>${version.plugin.codehaus.license-maven-plugin}</version>
+                    <version>${version.plugin.mycila.license-maven-plugin}</version>
                 </plugin>
 
             </plugins>
