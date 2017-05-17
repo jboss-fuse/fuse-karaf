@@ -234,7 +234,8 @@
                         <feature>camel-undertow</feature>
                         <feature>camel-blueprint</feature>
                         <feature>camel-spring</feature>
-                        <feature>camel-cxf</feature>
+                        <!-- camel-cxf directly depends on cxf-http-jetty -->
+                        <!--<feature>camel-cxf</feature>-->
                         <feature>camel-jms</feature>
                         <feature>camel-csv</feature>
                         <feature>camel-ftp</feature>
@@ -262,6 +263,8 @@
                         <feature>pax-jetty-http2</feature>
                         <feature>pax-http-jetty</feature>
                         <feature>cxf-http-jetty</feature>
+                        <!-- camel-cxf directly depends on cxf-http-jetty -->
+                        <feature>camel-cxf</feature>
                         <feature>camel-jetty</feature>
                         <feature>camel-jetty8</feature>
                         <feature>camel-jetty9</feature>
