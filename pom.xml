@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+    Copyright 2005-2017 Red Hat, Inc.
+
+    Red Hat licenses this file to you under the Apache License, version
+    2.0 (the "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+    implied.  See the License for the specific language governing
+    permissions and limitations under the License.
+
+-->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -24,6 +41,17 @@
         <url>http://redhat.com</url>
     </organization>
 
+    <developers>
+        <developer>
+            <id>fuseteam</id>
+            <name>JBoss Fuse Development Team</name>
+            <organization>JBoss</organization>
+            <organizationUrl>http://jboss.org/</organizationUrl>
+        </developer>
+    </developers>
+
+    <inceptionYear>2017</inceptionYear>
+
     <licenses>
         <license>
             <name>The Apache Software License, Version 2.0</name>
@@ -33,6 +61,8 @@
     </licenses>
 
     <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
         <!--
           CONVENTIONS:
           - A version property must be specified in the format "version.{groupId}", optionally with a suffix to make it unique.
@@ -55,8 +85,12 @@
         <version.org.apache.servicemix.specs>2.7.0</version.org.apache.servicemix.specs>
 
         <!-- versions of Maven plugins -->
+        <version.plugin.felix.maven-bundle-plugin>3.3.0</version.plugin.felix.maven-bundle-plugin>
+        <version.plugin.mycila.license-maven-plugin>3.0</version.plugin.mycila.license-maven-plugin>
+        <version.plugin.maven-compiler-plugin>3.6.1</version.plugin.maven-compiler-plugin>
         <version.plugin.maven-remote-resources-plugin>1.5</version.plugin.maven-remote-resources-plugin>
         <version.plugin.maven-resources-plugin>3.0.2</version.plugin.maven-resources-plugin>
+        <version.plugin.maven-surefire-plugin>2.19.1</version.plugin.maven-surefire-plugin>
     </properties>
 
     <repositories>
@@ -131,35 +165,129 @@
     <build>
         <pluginManagement>
             <plugins>
+
+                <!-- Core plugins -->
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${version.plugin.maven-compiler-plugin}</version>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>${version.plugin.maven-resources-plugin}</version>
-                    <executions>
-                        <execution>
-                            <id>process-resources</id>
-                            <goals>
-                                <goal>resources</goal>
-                            </goals>
-                        </execution>
-                    </executions>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-remote-resources-plugin</artifactId>
                     <version>${version.plugin.maven-remote-resources-plugin}</version>
-                    <configuration>
-                        <skip>true</skip>
-                    </configuration>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${version.plugin.maven-surefire-plugin}</version>
+                </plugin>
+
+                <!-- Felix plugins -->
+
+                <plugin>
+                    <groupId>org.apache.felix</groupId>
+                    <artifactId>maven-bundle-plugin</artifactId>
+                    <version>${version.plugin.felix.maven-bundle-plugin}</version>
+                    <extensions>true</extensions>
+                </plugin>
+
+                <!-- Karaf plugins -->
+
                 <plugin>
                     <groupId>org.apache.karaf.tooling</groupId>
                     <artifactId>karaf-maven-plugin</artifactId>
                     <version>${version.org.apache.karaf}</version>
                 </plugin>
+
+                <!-- Mojohaus plugins -->
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>license-maven-plugin</artifactId>
+                    <version>${version.plugin.codehaus.license-maven-plugin}</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
+
+        <plugins>
+
+            <!-- Core plugins -->
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-remote-resources-plugin</artifactId>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+
+        </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>license</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.mycila</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <version>${version.plugin.mycila.license-maven-plugin}</version>
+                        <configuration>
+                            <aggregate>true</aggregate>
+                            <header>license-header.txt</header>
+                            <includes>
+                                <!--<include>src/main/java/**</include>-->
+                                <!--<include>src/test/java/**</include>-->
+                                <include>pom.xml</include>
+                                <!--<include>**/*.xml</include>-->
+                                <!--<include>**/*.cfg</include>-->
+                                <!--<include>**/*.properties</include>-->
+                            </includes>
+                            <excludes>
+                            </excludes>
+                            <mapping>
+                                <cfg>SCRIPT_STYLE</cfg>
+                            </mapping>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>license-format</id>
+                                <phase>process-sources</phase>
+                                <goals>
+                                    <goal>format</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>license-check</id>
+                                <!-- This is the phase this plugin runs by default. Just an explicit information -->
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 
     <modules>
         <module>quickstarts</module>
