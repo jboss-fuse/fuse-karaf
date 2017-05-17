@@ -82,7 +82,7 @@
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
         <version.org.apache.servicemix.bundles.xerces>2.11.0_1</version.org.apache.servicemix.bundles.xerces>
-        <version.org.apache.servicemix.specs>2.7.0</version.org.apache.servicemix.specs>
+        <version.org.apache.servicemix.specs>2.8.0</version.org.apache.servicemix.specs>
 
         <!-- versions of Maven plugins -->
         <version.plugin.felix.maven-bundle-plugin>3.3.0</version.plugin.felix.maven-bundle-plugin>
@@ -212,7 +212,7 @@
                     <version>${version.org.apache.karaf}</version>
                 </plugin>
 
-                <!-- Mojohaus plugins -->
+                <!-- Other plugins -->
 
                 <plugin>
                     <groupId>com.mycila</groupId>
@@ -254,7 +254,6 @@
                     <plugin>
                         <groupId>com.mycila</groupId>
                         <artifactId>license-maven-plugin</artifactId>
-                        <version>${version.plugin.mycila.license-maven-plugin}</version>
                         <configuration>
                             <aggregate>true</aggregate>
                             <header>license-header.txt</header>

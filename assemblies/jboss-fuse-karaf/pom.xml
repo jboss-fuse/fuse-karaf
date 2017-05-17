@@ -34,17 +34,27 @@
     <name>JBoss Fuse :: Assemblies :: JBoss Fuse - Karaf distro</name>
 
     <dependencies>
+        <!--
+            dependencies with "kar" type will be added as startup (scope=compile), boot (scope=runtime) or
+            installed (scope=provided) kars in karaf-maven-plugin
+        -->
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>framework</artifactId>
             <version>${version.org.apache.karaf}</version>
             <type>kar</type>
         </dependency>
+        <!--
+            dependencies with "features" classifier will be used as startup (scope=compile), boot (scope=runtime) or
+            installed (scope=provided) repositories in karaf-maven-plugin
+        -->
         <dependency>
-            <groupId>org.jboss.fuse</groupId>
-            <artifactId>quickstarts</artifactId>
-            <version>${project.version}</version>
-            <scope>provided</scope>
+            <groupId>org.apache.karaf.features</groupId>
+            <artifactId>standard</artifactId>
+            <version>${version.org.apache.karaf}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
@@ -53,14 +63,6 @@
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>standard</artifactId>
-            <version>${version.org.apache.karaf}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
@@ -110,6 +112,16 @@
             <type>xml</type>
             <scope>runtime</scope>
         </dependency>
+        <!--
+            dependencies with "bundle" or "jar" type will be used as startup (scope=compile), boot (scope=runtime) or
+            installed (scope=provided) bundles in karaf-maven-plugin
+        -->
+        <dependency>
+            <groupId>org.jboss.fuse</groupId>
+            <artifactId>quickstarts</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -128,53 +140,72 @@
             -->
         </resources>
         <plugins>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-dependency-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<id>unpack</id>-->
+                        <!--<phase>compile</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>unpack</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+                <!--<configuration>-->
+                    <!--<artifactItems>-->
+                        <!--<artifactItem>-->
+                            <!--<groupId>org.jboss.fuse</groupId>-->
+                            <!--<artifactId>quickstarts</artifactId>-->
+                            <!--<version>${project.version}</version>-->
+                        <!--</artifactItem>-->
+                    <!--</artifactItems>-->
+                    <!--<outputDirectory>${project.build.directory}/assembly/quickstarts/beginner/camel-cbr</outputDirectory>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>org.jboss.fuse</groupId>
-                            <artifactId>quickstarts</artifactId>
-                            <version>${project.version}</version>
-                        </artifactItem>
-                    </artifactItems>
-                    <outputDirectory>${project.build.directory}/assembly/quickstarts/beginner/camel-cbr</outputDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
+                <!--
+                    karaf-maven-plugin defines 3 "stages" related 1:1 with Maven scopes:
+                     - <scope>compile</scope>  : stage = Startup
+                     - <scope>runtime</scope>  : stage = Boot
+                     - <scope>provided</scope> : stage = Installed
+                    These stages are "implemented" using different Karaf files:
+                     - Startup stage: etc/startup.properties - startup features, startup profiles, startup bundles
+                       are used to prepare list of bundles to include in etc/startup.properties
+                     - Boot stage: etc/org.apache.karaf.features.cfg - manages features available in featuresBoot
+                       property
+                     - Install stage: just installs the artifacts in ${karaf.default.repository}
+                    And finally there are 5 kinds of artifacts that may be declared to belong to one of 3 stages:
+                     - <stage>Bundles
+                     - <stage>Features
+                     - <stage>Profiles
+                     - <stage>PropertiesFile
+                     - <stage>Repositories
+                -->
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
                 <version>${version.org.apache.karaf}</version>
                 <executions>
                     <execution>
                         <id>process-resources</id>
-                        <phase>process-resources</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>assembly</goal>
                         </goals>
                     </execution>
                     <execution>
                         <id>package</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>archive</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <installedFeatures>
-                        <feature>wrapper</feature>
-                    </installedFeatures>
                     <startupFeatures>
+                        <!--
+                            "framework" feature is implicitly added if not specified
+                        -->
                         <feature>framework</feature>
                         <feature>jaas</feature>
                         <feature>shell</feature>
@@ -217,27 +248,49 @@
                         <feature>transaction-manager-narayana</feature>
                         <feature>hawtio</feature>
                     </bootFeatures>
+                    <installedFeatures>
+                        <feature>wrapper</feature>
+                    </installedFeatures>
                     <blacklistedBundles>
                         <bundle>camel-karaf-commands;url="mvn:org.apache.camel.karaf/camel-karaf-commands/2.18.0-SNAPSHOT"</bundle>
                         <bundle>jetty-http;url="mvn:org.eclipse.jetty/jetty-http/9.3.11.v20160721"</bundle>
                         <bundle>jetty-all-server;url="mvn:org.eclipse.jetty.aggregate/jetty-all-server/8.1.14.v20131031"</bundle>
                     </blacklistedBundles>
                     <blacklistedFeatures>
-                        <feature>feature:jetty</feature>
-                        <feature>feature:pax-jetty</feature>
-                        <feature>feature:pax-jetty-http2</feature>
-                        <feature>feature:pax-http-jetty</feature>
-                        <feature>feature:cxf-http-jetty</feature>
-                        <feature>feature:camel-jetty</feature>
-                        <feature>feature:camel-jetty8</feature>
-                        <feature>feature:camel-jetty9</feature>
-                        <feature>feature:pax-cdi-openwebbeans</feature>
-                        <feature>feature:pax-cdi-web-openwebbeans</feature>
-                        <feature>feature:pax-jsf-support</feature>
-                        <feature>feature:camel-ignite</feature>
-                        <feature>feature:camel-ironmq</feature>
+                        <feature>jetty</feature>
+                        <feature>pax-jetty</feature>
+                        <feature>pax-jetty-http2</feature>
+                        <feature>pax-http-jetty</feature>
+                        <feature>cxf-http-jetty</feature>
+                        <feature>camel-jetty</feature>
+                        <feature>camel-jetty8</feature>
+                        <feature>camel-jetty9</feature>
+                        <feature>pax-cdi-openwebbeans</feature>
+                        <feature>pax-cdi-web-openwebbeans</feature>
+                        <feature>pax-jsf-support</feature>
+                        <feature>camel-ignite</feature>
+                        <feature>camel-ironmq</feature>
                     </blacklistedFeatures>
+                    <blacklistedRepositories>
+                        <!-- Blacklisting some repositories because the closure is not consistent -->
+                        <repository>mvn:org.apache.cxf.karaf/apache-cxf/3.1.11/xml/features</repository>
+                        <repository>mvn:org.apache.jclouds.karaf/jclouds-karaf/2.0.1/xml/features</repository>
+                        <repository>mvn:org.ops4j.pax.cdi/pax-cdi-features/1.0.0.RC1/xml/features</repository>
+                        <!--<repository>mvn:org.ops4j.pax.jdbc/pax-jdbc-features/1.0.1/xml/features</repository>-->
+                    </blacklistedRepositories>
                     <libraries>
+                        <!--
+                            type:=
+                                endorsed - library will be stored in lib/endorsed/
+                                extension - library will be stored in lib/ext/
+                                boot - library will be stored in lib/boot/
+                                default (or no type directive) - library will be stored in lib/
+                            export:=true - packages from Export-Package MANIFEST.MF header will be added to
+                                org.osgi.framework.system.packages.extra property in etc/config.properties
+                            delegate:=true - packages from Export-Package MANIFEST.MF header will be added to
+                                org.osgi.framework.bootdelegation property in etc/config.properties
+                        -->
+                        <!-- lib/endorsed -->
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces};type:=endorsed;export:=true;delegate:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxp-api-1.4/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
@@ -248,10 +301,10 @@
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/${version.org.apache.servicemix.bundles.xalan};type:=endorsed;export:=true</library>
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${version.org.apache.servicemix.bundles.xalan-serializer};type:=endorsed;export:=true</library>
                         <library>mvn:javax.annotation/javax.annotation-api/1.2;type:=endorsed;export:=true</library>
-
+                        <!-- lib -->
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.locator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
-
+                        <!-- lib/boot -->
                         <library>mvn:net.java.dev.jna/jna/${version.net.java.dev.jna};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna-platform/${version.net.java.dev.jna};type:=boot;export:=false</library>
                     </libraries>
