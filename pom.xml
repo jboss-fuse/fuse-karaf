@@ -13,6 +13,12 @@
 
     <url>https://developers.redhat.com/products/fuse/overview</url>
 
+    <scm>
+        <connection>scm:git:git@github.com:jboss-fuse/fuse-karaf.git</connection>
+        <developerConnection>scm:git:git@github.com:jboss-fuse/fuse-karaf.git</developerConnection>
+        <tag>master</tag>
+    </scm>
+
     <organization>
         <name>Red Hat</name>
         <url>http://redhat.com</url>
