@@ -199,6 +199,9 @@
                         <goals>
                             <goal>archive</goal>
                         </goals>
+                        <configuration>
+                            <archiveTarGz>false</archiveTarGz>
+                        </configuration>
                     </execution>
                 </executions>
                 <configuration>
