@@ -22,30 +22,36 @@
 
     <parent>
         <groupId>org.jboss.fuse</groupId>
-        <artifactId>jboss-fuse-parent</artifactId>
+        <artifactId>assemblies</artifactId>
         <version>7.0.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.jboss.fuse</groupId>
-    <artifactId>assemblies</artifactId>
+    <artifactId>debug</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Assemblies</name>
+    <name>JBoss Fuse :: Assemblies :: Debugging support</name>
 
-    <modules>
-        <module>quickstarts</module>
-        <module>jboss-fuse-karaf</module>
-    </modules>
+    <properties>
+        <version.org.ops4j.pax.web>6.0.3</version.org.ops4j.pax.web>
+    </properties>
 
-    <profiles>
-        <profile>
-            <!-- This profile, when enabled "brings" more dependencies into IDE, so finding sources of JARs is easier -->
-            <id>debugging-support</id>
-            <modules>
-                <module>debug</module>
-            </modules>
-        </profile>
-    </profiles>
+    <dependencies>
+
+        <!--
+            Dependencies which may be used in running Fuse container.
+            Fuse assembly doesn't really need them, but when debugging Fuse from IDE, having these dependencies
+            available makes debugging easier
+        -->
+
+        <dependency>
+            <groupId>org.ops4j.pax.web</groupId>
+            <artifactId>pax-web-undertow</artifactId>
+            <version>${version.org.ops4j.pax.web}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+    </dependencies>
 
 </project>
