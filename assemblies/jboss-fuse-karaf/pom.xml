@@ -146,7 +146,7 @@
                 <executions>
                     <execution>
                         <id>unpack</id>
-                        <phase>compile</phase>
+                        <phase>package</phase>
                         <goals>
                             <goal>unpack</goal>
                         </goals>
@@ -188,7 +188,7 @@
                 <executions>
                     <execution>
                         <id>process-resources</id>
-                        <phase>package</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>assembly</goal>
                         </goals>
