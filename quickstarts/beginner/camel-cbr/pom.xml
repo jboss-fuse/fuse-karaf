@@ -26,16 +26,11 @@
         <version>7.0.0.redhat-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.jboss.fuse.quickstarts</groupId>
     <artifactId>beginner-camel-cbr</artifactId>
     <packaging>bundle</packaging>
 
     <name>JBoss Fuse :: Quickstarts :: camel-cbr</name>
     <description>Camel Content-Based Router Example</description>
-
-    <properties>
-        <version.maven-bundle-plugin>2.3.7</version.maven-bundle-plugin>
-    </properties>
 
     <dependencies>
         <!--

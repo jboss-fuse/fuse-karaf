@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: Camel, Blueprint, ActiveMQ  
 Summary: This quickstart demonstrates how to use Apache Camel to route messages using the Content Based Router (cbr) pattern.
 Target Product: Fuse  
-Source: <https://github.com/jboss-fuse/quickstarts>
+Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>
 
 
 
@@ -29,7 +29,7 @@ This example picks up incoming XML files, and depending on the content of the XM
 For more information see:
 
 * http://www.enterpriseintegrationpatterns.com/ContentBasedRouter.html for more information about the CBR EIP
-* https://access.redhat.com/site/documentation/JBoss_Fuse/ for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
 
 Note: Extra steps, like use of Camel VM Component, need to be taken when accessing Camel Routes in different Camel Contexts, and in different OSGi bundles, as you are dealing with classes in different ClassLoaders.
 
@@ -52,7 +52,7 @@ Build and Deploy the Quickstart
 * Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
 * In the JBoss Fuse console, enter the following command:
 
-        bundle:install -s mvn:org.jboss.quickstarts.fuse/beginner-camel-cbr/${project.version}
+        bundle:install -s mvn:org.jboss.fuse.quickstarts/beginner-camel-cbr/${project.version}
 
 * Fuse should give you an id when the bundle is deployed
 
