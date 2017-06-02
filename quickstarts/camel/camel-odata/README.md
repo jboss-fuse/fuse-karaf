@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: Camel, Blueprint, JBoss Data Virtualization  
 Summary: Demonstrates how to use the camel-olingo2 component in Camel to integrate with JBoss Data Virtualization (JDV) using OData 2.0  
 Target Product: Fuse  
-Source: <https://github.com/jboss-fuse/quickstarts>  
+Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>  
 
 
 
@@ -27,7 +27,7 @@ In studying this quick start you will learn:
 For more information see:
 
 * https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.2/html/Apache_Camel_Component_Reference/files/_IDU_Olingo2.html for more information about the Camel Olingo2 component
-* https://access.redhat.com/site/documentation/JBoss_Fuse/ for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
 
 System requirements
 -------------------
@@ -36,7 +36,7 @@ Before building and running this quick start you need:
 
 * Maven 3.1.1 or higher
 * JDK 1.7 or 1.8
-* JBoss Fuse 6
+* JBoss Fuse 7
 
 Build and Deploy the Quickstart
 -------------------------
@@ -45,11 +45,11 @@ Build and Deploy the Quickstart
   Note that if you are not using MySQL, change the <to/> uri in src/main/resources/OSGI-INF/blueprint/odata.xml to point to the correct OData service.
 * Change your working directory to `camel-odata` directory.
 * Run `mvn clean install` to build the quickstart.
-* Start JBoss Fuse 6 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+* Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
 * Create the following configuration file in the etc/ directory of your Red Hat JBoss Fuse installation:
 
-  InstallDir/etc/org.jboss.quickstarts.fuse.camel-odata.cfg
-  Edit the org.jboss.quickstarts.fuse.camel-odata.cfg file with a text editor and add the following contents:
+  InstallDir/etc/org.jboss.fuse.quickstarts.camel-odata.cfg
+  Edit the org.jboss.fuse.quickstarts.camel-odata.cfg file with a text editor and add the following contents:
 
   userPassword=Basic <base64 encoded JBoss Data Virtualization password>
   serviceUri=http://localhost:8080/camel-odata/BooksRest
@@ -59,13 +59,13 @@ Build and Deploy the Quickstart
 
         features:install camel-olingo2
         features:install camel-jackson
-        osgi:install -s mvn:org.jboss.quickstarts.fuse/camel-odata/${project.version}
+        bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-odata/${project.version}
 
 * Fuse should give you an id when the bundle is deployed
 
 * You can check that everything is ok by issuing  the command:
 
-        osgi:list
+        bundle:list
    your bundle should be present at the end of the list
 
 
@@ -88,7 +88,7 @@ Undeploy the Archive
 
 To stop and undeploy the bundle in Fuse:
 
-1. Enter `osgi:list` command to retrieve your bundle id
+1. Enter `bundle:list` command to retrieve your bundle id
 2. To stop and uninstall the bundle enter
 
-        osgi:uninstall <id>
+        bundle:uninstall <id>

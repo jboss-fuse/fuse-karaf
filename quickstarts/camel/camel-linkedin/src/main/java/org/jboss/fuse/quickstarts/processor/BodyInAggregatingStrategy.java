@@ -1,5 +1,5 @@
 /**
- *  Copyright 2005-2016 Red Hat, Inc.
+ *  Copyright 2005-2017 Red Hat, Inc.
  *
  *  Red Hat licenses this file to you under the Apache License, version
  *  2.0 (the "License"); you may not use this file except in compliance
@@ -13,7 +13,7 @@
  *  implied.  See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-package org.jboss.quickstarts.fuse.processor;
+package org.jboss.fuse.quickstarts.processor;
 
 import org.apache.camel.Exchange;
 import org.apache.camel.processor.aggregate.AggregationStrategy;

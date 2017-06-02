@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 
-     Copyright 2005-2016 Red Hat, Inc.
+     Copyright 2005-2017 Red Hat, Inc.
 
      Red Hat licenses this file to you under the Apache License, version
      2.0 (the "License"); you may not use this file except in compliance
@@ -30,7 +30,7 @@
              http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
     <!-- osgi blueprint property placeholder -->
-    <cm:property-placeholder id="placeholder" persistent-id="org.jboss.quickstarts.fuse.camel.box" />
+    <cm:property-placeholder id="placeholder" persistent-id="org.jboss.fuse.quickstarts.camel.box" />
 
     <bean id="box" class="org.apache.camel.component.box.BoxComponent">
       <property name="configuration">

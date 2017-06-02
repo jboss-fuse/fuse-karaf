@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: Camel, ActiveMQ  
 Summary: This quickstart demonstrates how to use the camel-amq component o connect to the local A-MQ broker and use JMS messaging between two Camel routes.  
 Target Product: Fuse  
-Source: <https://github.com/jboss-fuse/quickstarts>  
+Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>  
 
 
 What is it?
@@ -27,12 +27,12 @@ Before building and running this quick start you need:
 
 * Maven 3.1.1 or higher
 * JDK 1.7 or 1.8
-* JBoss Fuse 6
+* JBoss Fuse 7
 
 
 ### This example requires creating a fabric.  To try it, follow the instructions below
 
-* Start JBoss Fuse 6 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+* Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
 * In the JBoss Fuse console, enter the following command:
     
     fabric:create --wait-for-provisioning

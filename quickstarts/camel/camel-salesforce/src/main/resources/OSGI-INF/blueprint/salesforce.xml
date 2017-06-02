@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 
-     Copyright 2005-2016 Red Hat, Inc.
+     Copyright 2005-2017 Red Hat, Inc.
 
      Red Hat licenses this file to you under the Apache License, version
      2.0 (the "License"); you may not use this file except in compliance
@@ -30,7 +30,7 @@
              http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
   <!-- OSGi blueprint property placeholder -->
-  <cm:property-placeholder id="placeholder" persistent-id="org.jboss.quickstarts.fuse.salesforce" />
+  <cm:property-placeholder id="placeholder" persistent-id="org.jboss.fuse.quickstarts.salesforce" />
 
   <bean id="salesforce" class="org.apache.camel.component.salesforce.SalesforceComponent">
     <property name="loginConfig">
@@ -74,7 +74,7 @@
       <log message="Sending file ${file:name} to Salesforce" />
 
       <!-- use JsonHelper to use org.codehaus.jackson to convert json String to Cheese__c -->
-      <bean beanType="org.jboss.quickstarts.fuse.salesforce.JsonHelper" method="readFile"/>
+      <bean beanType="org.jboss.fuse.quickstarts.salesforce.JsonHelper" method="readFile"/>
 
       <!-- remember name for later -->
       <setHeader headerName="name">
@@ -110,7 +110,7 @@
       </setHeader>
 
       <!-- use JsonHelper to use org.codehaus.jackson to convert Cheese__c to json String -->
-      <bean beanType="org.jboss.quickstarts.fuse.salesforce.JsonHelper" method="writeFile"/>
+      <bean beanType="org.jboss.fuse.quickstarts.salesforce.JsonHelper" method="writeFile"/>
 
       <!-- write to output directory -->
       <to uri="file:work/camel-salesforce/output/" />

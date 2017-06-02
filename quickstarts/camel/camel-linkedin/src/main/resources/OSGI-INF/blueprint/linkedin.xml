@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--
 
-     Copyright 2005-2016 Red Hat, Inc.
+     Copyright 2005-2017 Red Hat, Inc.
 
      Red Hat licenses this file to you under the Apache License, version
      2.0 (the "License"); you may not use this file except in compliance
@@ -30,7 +30,7 @@
              http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
     <!-- OSGi blueprint property placeholder -->
-    <cm:property-placeholder id="placeholder" persistent-id="org.jboss.quickstarts.fuse.camel.linkedin">
+    <cm:property-placeholder id="placeholder" persistent-id="org.jboss.fuse.quickstarts.camel.linkedin">
         <cm:default-properties>
             <cm:property name="redirectUri" value="https://localhost"/>
         </cm:default-properties>
@@ -116,6 +116,6 @@
         </route>
     </camelContext>
 
-    <bean id="aggregatorStrategy" class="org.jboss.quickstarts.fuse.processor.BodyInAggregatingStrategy"/>
+    <bean id="aggregatorStrategy" class="org.jboss.fuse.quickstarts.processor.BodyInAggregatingStrategy"/>
 
 </blueprint>

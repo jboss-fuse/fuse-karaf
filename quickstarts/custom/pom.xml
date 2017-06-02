@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-     Copyright 2005-2016 Red Hat, Inc.
+     Copyright 2005-2017 Red Hat, Inc.
 
      Red Hat licenses this file to you under the Apache License, version
      2.0 (the "License"); you may not use this file except in compliance
@@ -20,7 +20,7 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.jboss.quickstarts.fuse</groupId>
+    <groupId>org.jboss.fuse.quickstarts</groupId>
     <artifactId>custom-distro</artifactId>
     <packaging>pom</packaging>
     <version>7.0.0.redhat-SNAPSHOT</version>
@@ -361,7 +361,7 @@
                                     <outputDirectory>target/dependencies/unix</outputDirectory>
                                 </artifactItem>
                                 <artifactItem>
-                                    <groupId>org.jboss.quickstarts.fuse</groupId>
+                                    <groupId>org.jboss.fuse.quickstarts</groupId>
                                     <artifactId>quickstarts-parent</artifactId>
                                     <version>7.0.0.redhat-SNAPSHOT</version>
                                     <classifier>profile</classifier>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-     Copyright 2005-2016 Red Hat, Inc.
+     Copyright 2005-2017 Red Hat, Inc.
 
      Red Hat licenses this file to you under the Apache License, version
      2.0 (the "License"); you may not use this file except in compliance
@@ -21,7 +21,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>org.jboss.quickstarts.fuse</groupId>
+		<groupId>org.jboss.fuse.quickstarts</groupId>
 		<artifactId>camel-quickstarts</artifactId>
 		<version>7.0.0.redhat-SNAPSHOT</version>
 	</parent>
@@ -51,14 +51,14 @@
 	<properties>
 		<!-- the version of the JBoss Fuse BOM, defining all the dependency versions -->
 		<jboss.fuse.bom.version>7.0.0.redhat-SNAPSHOT</jboss.fuse.bom.version>
-		<fuse.osgi.symbolic.name>org.jboss.quickstarts.fuse.camel-sap</fuse.osgi.symbolic.name>
+		<fuse.osgi.symbolic.name>org.jboss.fuse.quickstarts.camel-sap</fuse.osgi.symbolic.name>
 		<fuse.osgi.bundle.name>JBoss Fuse :: Quickstarts :: camel-sap</fuse.osgi.bundle.name>
 		<fuse.osgi.import>*</fuse.osgi.import>
-		<fuse.osgi.export>org.jboss.quickstarts.fuse.sap;version=${project.version},
-			org.jboss.quickstarts.fuse.sap.bean;version=${project.version},
-			org.jboss.quickstarts.fuse.sap.jaxb;version=${project.version},
-			org.jboss.quickstarts.fuse.sap.processor;version=${project.version}</fuse.osgi.export>
-		<fuse.osgi.private.pkg>org.jboss.quickstarts.fuse.sap.*;-split-package:=merge-first</fuse.osgi.private.pkg>
+		<fuse.osgi.export>org.jboss.fuse.quickstarts.sap;version=${project.version},
+			org.jboss.fuse.quickstarts.sap.bean;version=${project.version},
+			org.jboss.fuse.quickstarts.sap.jaxb;version=${project.version},
+			org.jboss.fuse.quickstarts.sap.processor;version=${project.version}</fuse.osgi.export>
+		<fuse.osgi.private.pkg>org.jboss.fuse.quickstarts.sap.*;-split-package:=merge-first</fuse.osgi.private.pkg>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>

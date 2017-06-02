@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: Camel,Blueprint  
 Summary: This quickstart demonstrates how to combine multiple EIPs in Camel in order to solve integration problems.
 Target Product: Fuse  
-Source: <https://github.com/jboss-fuse/quickstarts>
+Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>
 
 What is it?
 -----------
@@ -41,7 +41,7 @@ For more information see:
 * http://www.enterpriseintegrationpatterns.com/WireTap.html
 * http://www.enterpriseintegrationpatterns.com/Filter.html
 * http://www.enterpriseintegrationpatterns.com/Sequencer.html
-* https://access.redhat.com/site/documentation/JBoss_Fuse/
+* https://access.redhat.com/documentation/en/red-hat-jboss-fuse for more information about using JBoss Fuse
 
 
 System requirements
@@ -51,7 +51,7 @@ Before building and running this example you need:
 
 * Maven 3.1.1 or higher
 * JDK 1.7 or 1.8
-* JBoss Fuse 6
+* JBoss Fuse 7
 
 
 Build and Deploy the Quickstart
@@ -59,15 +59,15 @@ Build and Deploy the Quickstart
 
 1. Change your working directory to `camel-eips` directory.
 *. Run `mvn clean install` to build the quickstart.
-*. Start JBoss Fuse 6 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+*. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
 *. In the JBoss Fuse console, enter the following command:
 
-        osgi:install -s mvn:org.jboss.quickstarts.fuse/beginner-camel-eips/6.3.0.redhat-187
+        bundle:install -s mvn:org.jboss.fuse.quickstarts/beginner-camel-eips/${project.version}
 
 *. Fuse should give you an id when the bundle is deployed
 *. You can check that everything is ok by issuing  the command:
 
-        osgi:list
+        bundle:list
    your bundle should be present at the end of the list
 
 
@@ -80,15 +80,15 @@ To use the application be sure to have deployed the quickstart in Fuse as descri
 2. Copy the file you find in this example's `src/main/fabric8/data` directory to the newly created `work/eip/input`
 directory.
 3. Wait a few moments and you will find multiple files organized by geographical region under `work/eip/output':
-** `2012_0003.xml` and `2012_0005.xml` in `work/eip/output/AMER`
-** `2012_0020.xml` in `work/eip/output/APAC`
-** `2012_0001.xml`, `2012_0002.xml` and `2012_0004.xml` in `work/eip/output/EMEA`
+** `2017_0003.xml` and `2017_0005.xml` in `work/eip/output/AMER`
+** `2017_0020.xml` in `work/eip/output/APAC`
+** `2017_0001.xml`, `2017_0002.xml` and `2017_0004.xml` in `work/eip/output/EMEA`
 4. Use `log:display` on the ESB shell to check out the business logging.
         [main]    Processing orders.xml
         [wiretap]  Archiving orders.xml
-        [splitter] Shipping order 2012_0001 to region EMEA
-        [splitter] Shipping order 2012_0002 to region EMEA
-        [filter]   Order 2012_0002 is an order for more than 100 animals
+        [splitter] Shipping order 2017_0001 to region EMEA
+        [splitter] Shipping order 2017_0002 to region EMEA
+        [filter]   Order 2017_0002 is an order for more than 100 animals
         ...
 
 Undeploy the Bundle
@@ -96,9 +96,9 @@ Undeploy the Bundle
 
 To stop and undeploy the bundle in Fuse:
 
-1. Enter `osgi:list` command to retrieve your bundle id
+1. Enter `bundle:list` command to retrieve your bundle id
 2. To stop and uninstall the bundle enter
 
-        osgi:uninstall <id>
+        bundle:uninstall <id>
  
 

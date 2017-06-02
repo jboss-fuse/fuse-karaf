@@ -5,7 +5,7 @@ Level: Intermediate
 Technologies: JBoss Fuse, Maven  
 Summary: This quickstart demonstrates to use Maven to create a custom assembly of JBoss Fuse  
 Target Product: Fuse  
-Source: <https://github.com/jboss-fuse/quickstarts>  
+Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>  
 
 
 
@@ -24,7 +24,7 @@ In studying this quick start you will learn:
 
 For more information see:
 
-* https://access.redhat.com/site/documentation/JBoss_Fuse/ for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
 
 System requirements
 -------------------
@@ -33,7 +33,7 @@ Before building and running this quick start you need:
 
 * Maven 3.1.1 or higher
 * JDK 1.7 or 1.8
-* JBoss Fuse 6
+* JBoss Fuse 7
 
 You will also need to install the JBoss Fuse distribution into your local Maven repository. You can use a command like:
 

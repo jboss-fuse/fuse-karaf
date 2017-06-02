@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: Camel, OSGi 
 Summary: This directory contains various quickstart projects using [Apache Camel](http://camel.apache.org).  
 Target Product: Fuse  
-Source: <https://github.com/jboss-fuse/quickstarts>  
+Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>  
 
 The following quickstarts are provided out of the box:
 

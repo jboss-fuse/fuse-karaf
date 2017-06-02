@@ -30,10 +30,10 @@ public class OrderServiceTest {
     @Test
     public void testValidateValidOrderDate() {
         try {
-            service.validateOrderDate("2012-03-01");
-            service.validateOrderDate("2012-03-02");
-            service.validateOrderDate("2012-03-03");
-            service.validateOrderDate("2012-03-05");
+            service.validateOrderDate("2017-03-01");
+            service.validateOrderDate("2017-03-02");
+            service.validateOrderDate("2017-03-03");
+            service.validateOrderDate("2017-03-06");
         } catch (OrderValidationException e) {
             fail("No OrderValidationException expected - we can accept orders on any of those dates");
         }
@@ -41,6 +41,6 @@ public class OrderServiceTest {
 
     @Test(expected = OrderValidationException.class)
     public void testValidateInvalidOrderDate() throws OrderValidationException {
-        service.validateOrderDate("2012-03-04");
+        service.validateOrderDate("2017-03-05");
     }
 }

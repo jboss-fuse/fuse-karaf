@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: Camel, Blueprint  
 Summary: This quickstart demonstrates how to use the camel-linkedin component in Camel to search companies
 Target Product: Fuse  
-Source: <https://github.com/jboss-fuse/quickstarts>  
+Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>  
 
 
 
@@ -26,7 +26,7 @@ In studying this quick start you will learn:
 For more information see:
 
 * https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.2/html/Apache_Camel_Component_Reference/files/_IDU_LinkedIn.html for more information about the Camel LinkedIn component
-* https://access.redhat.com/site/documentation/JBoss_Fuse/ for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
 
 System requirements
 -------------------
@@ -35,18 +35,18 @@ Before building and running this quick start you need:
 
 * Maven 3.1.1 or higher
 * JDK 1.7 or 1.8
-* JBoss Fuse 6
+* JBoss Fuse 7
 
 Build and Deploy the Quickstart
 -------------------------
 
 1. Change your working directory to `camel-linkedin` directory.
 * Run `mvn clean install` to build the quickstart.
-* Start JBoss Fuse 6 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+* Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
 * Create the following configuration file in the etc/ directory of your Red Hat JBoss Fuse installation:
 
-  InstallDir/etc/org.jboss.quickstarts.fuse.camel.linkedin.cfg
-  Edit the org.jboss.quickstarts.fuse.camel.linkedin.cfg file with a text editor and add the following contents:
+  InstallDir/etc/org.jboss.fuse.quickstarts.camel.linkedin.cfg
+  Edit the org.jboss.fuse.quickstarts.camel.linkedin.cfg file with a text editor and add the following contents:
 
   userName=<LinkedIn account user name>
   userPassword=<LinkedIn account password>
@@ -56,13 +56,13 @@ Build and Deploy the Quickstart
 * In the JBoss Fuse console, enter the following commands:
 
         features:install camel-linkedin
-        osgi:install -s mvn:org.jboss.quickstarts.fuse/camel-linkedin/${project.version}
+        bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-linkedin/${project.version}
 
 * Fuse should give you an id when the bundle is deployed
 
 * You can check that everything is ok by issuing  the command:
 
-        osgi:list
+        bundle:list
    your bundle should be present at the end of the list
 
 
@@ -84,7 +84,7 @@ Undeploy the Archive
 
 To stop and undeploy the bundle in Fuse:
 
-1. Enter `osgi:list` command to retrieve your bundle id
+1. Enter `bundle:list` command to retrieve your bundle id
 2. To stop and uninstall the bundle enter
 
-        osgi:uninstall <id>
+        bundle:uninstall <id>
