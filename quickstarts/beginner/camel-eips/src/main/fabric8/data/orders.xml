@@ -16,7 +16,7 @@
     limitations under the License.
 -->
 <orders xmlns="http://fabric8.com/examples/order/v7">
-    <order id="2012_0001">
+    <order id="2017_0001">
 
         <customer id="A0001">
             <name>Antwerp Zoo</name>

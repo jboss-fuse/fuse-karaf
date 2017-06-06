@@ -22,6 +22,10 @@ In studying this quick start you will learn:
 * how to define a default error handler to your Camel context
 * how to define exception-specific error handling routines
 
+This example picks up XML files, and depending on the error that occurs during processing, they are routed to different endpoints, as shown in figure below.
+                                                                                                     
+![Camel DLC diagram](https://raw.githubusercontent.com/jboss-fuse/fabric8/1.2.0.redhat-6-3-x/docs/images/camel-errorhandler-diagram.jpg)   
+
 For more information see:
 
 * http://www.enterpriseintegrationpatterns.com/DeadLetterChannel.html for the Dead Letter Channel EIP

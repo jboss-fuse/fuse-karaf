@@ -59,30 +59,3 @@ To stop and undeploy the bundle in Fuse:
 2. To stop and uninstall the bundle enter
 
         bundle:uninstall <id>
-
-### Using the web console
-
-You can deploy and run this example from the web console, as follows
-
-1. It is assumed that you have already created a fabric and are logged into a container called `root`.
-1. Login the web console
-1. Click the Wiki button in the navigation bar
-1. Select `quickstarts` --> `beginner` --> `camel.log`
-1. Click the `New` button in the top right corner
-1. In the Create New Container page, enter `mychild` in the Container Name field, and click the *Create and start container* button
-
-## How to try this example
-This example comes with sample data which you can use to try this example
-
-1. Login the web console
-1. Click the Containers button in the navigation bar
-1. Select the `mychild` container in the containers list, and click the *open* button right next to the container name.
-1. A new window opens and connects to the container. Click the *Logs* button in the navigation bar if the logs are not already displayed
-1. You can also click the *Camel* button in the top navigation bar, to see information about the Camel application. 
-
-## Undeploy this example
-
-To stop and undeploy the example in fabric8:
-
-1. In the web console, click the *Runtime* button in the navigation bar.
-1. Select the `mychild` container in the *Containers* list, and click the *Stop* button in the top right corner

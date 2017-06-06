@@ -13,6 +13,3 @@ The following quickstarts are beginner examples that use Apache Camel and which 
 * [camel.eips](camel-eips) - demonstrates a number of other commonly used EIP patterns with Apache Camel.
 * [camel.errorhandler](camel-errorhandler) - introduction to error handling with Camel, including using redelivery and a Dead Letter Channel.
 * [camel.log](camel-log) - a very simple Camel application using a timer to trigger a message every 5th second which is then written to the server log.
-* [camel.log.wiki](camel-log-wiki) - a wiki based example of [camel.log](camel-log) where the Camel routes are stored in an <a fabric-version-link="/camel/canvas/fabric/profiles/quickstarts/beginner/camel.log.wiki.profile/camel-log.xml">XML file inside the wiki</a> so you can edit it via the browser and use <a href="/fabric/profiles/docs/fabric/rollingUpgrade.md">rolling upgrades</a> to update it and roll forward/backward changes to containers without having to release any Java artifacts.
-
- 

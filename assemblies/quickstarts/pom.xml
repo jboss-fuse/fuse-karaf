@@ -45,7 +45,7 @@
     <build>
         <resources>
             <resource>
-                <directory>${project.basedir}/../../quickstarts/beginner/camel-cbr</directory>
+                <directory>${project.basedir}/../../quickstarts/beginner</directory>
                 <filtering>false</filtering>
                 <excludes>
                     <exclude>**/target/**</exclude>
@@ -57,10 +57,11 @@
                     <exclude>**/.settings/**</exclude>
                     <exclude>**/*.iws</exclude>
                     <exclude>**/*.iwl</exclude>
+                    <exclude>**/*.iml</exclude>
                 </excludes>
             </resource>
             <resource>
-                <directory>${project.basedir}/../../quickstarts/beginner/camel-cbr</directory>
+                <directory>${project.basedir}/../../quickstarts/beginner</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>**/README.md</include>

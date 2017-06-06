@@ -27,7 +27,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.jboss.fuse</groupId>
     <artifactId>jboss-fuse-karaf</artifactId>
     <packaging>pom</packaging>
 
@@ -160,7 +159,10 @@
                             <version>${project.version}</version>
                         </artifactItem>
                     </artifactItems>
-                    <outputDirectory>${project.build.directory}/assembly/quickstarts/beginner/camel-cbr</outputDirectory>
+                    <excludes>
+                        META-INF/**
+                    </excludes>
+                    <outputDirectory>${project.build.directory}/assembly/quickstarts/beginner</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>

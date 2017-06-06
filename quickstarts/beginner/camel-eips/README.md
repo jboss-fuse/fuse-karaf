@@ -20,7 +20,11 @@ After saving the original, we want to split the file up into the individual orde
 
 Then we want to store the orders in separate directories by geographical region. This is done using a Recipient List EIP.
 
-Finally, we want to filter out the orders that contain more than 100 animals and generate a message for the strategic account team. This is done using a Filter EIP.
+Finally, we want to filter out the orders that contain more than 100 animals and generate a message for the strategic account team. This is done using a Filter EIP, as shown in the figure below.
+
+![Camel EIP diagram](https://raw.githubusercontent.com/jboss-fuse/fabric8/1.2.0.redhat-6-3-x/docs/images/camel-eips-diagram.jpg)
+
+
 
 In studying this example you will learn:
 

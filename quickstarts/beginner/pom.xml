@@ -27,7 +27,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.jboss.fuse.quickstarts</groupId>
     <artifactId>beginner</artifactId>
     <packaging>pom</packaging>
 
@@ -35,10 +34,9 @@
 
     <modules>
         <module>camel-cbr</module>
-        <!--<module>camel-eips</module>-->
-        <!--<module>camel-errorhandler</module>-->
-        <!--<module>camel-log</module>-->
-        <!--<module>camel-log-wiki</module>-->
+        <module>camel-eips</module>
+        <module>camel-errorhandler</module>
+        <module>camel-log</module>
     </modules>
 
 </project>
