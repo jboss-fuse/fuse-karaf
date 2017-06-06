@@ -247,7 +247,6 @@
                         <feature>camel-mail</feature>
                         <feature>camel-paxlogging</feature>
                         <feature>pax-cdi-weld</feature>
-                        <feature>artemis</feature>
                         <feature>pax-jdbc-pool-narayana</feature>
                         <feature>transaction-manager-narayana</feature>
                         <feature>hawtio</feature>
