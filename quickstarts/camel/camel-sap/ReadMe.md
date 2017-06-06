@@ -37,7 +37,7 @@ System requirements
 Before building and running this quick start you will need:
 
 * Maven 3.1.1 or higher
-* JDK 1.7 or 1.8
+* JDK 1.8
 * JBoss Fuse 7
 * SAP JCo3 and IDoc3 libraries (sapjco3.jar, sapidoc3.jar and JCo native library for your OS platform)
 * SAP instance with [Flight Data Application](http://help.sap.com/saphelp_erp60_sp/helpdata/en/db/7c623cf568896be10000000a11405a/content.htm) setup.

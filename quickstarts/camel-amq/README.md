@@ -26,7 +26,7 @@ System requirements
 Before building and running this quick start you need:
 
 * Maven 3.1.1 or higher
-* JDK 1.7 or 1.8
+* JDK 1.8
 * JBoss Fuse 7
 
 
