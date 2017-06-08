@@ -71,18 +71,19 @@
         -->
 
         <!-- versions of "subprojects" of JBoss Fuse -->
-        <version.io.hawt>2.0-M1</version.io.hawt>
-        <version.org.apache.activemq.artemis>1.4.0</version.org.apache.activemq.artemis>
+        <version.io.hawt>2.0-SNAPSHOT</version.io.hawt>
+        <version.org.apache.activemq.artemis>1.5.5</version.org.apache.activemq.artemis>
         <version.org.apache.camel>2.19.0</version.org.apache.camel>
         <version.org.apache.cxf>3.2.0-SNAPSHOT</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.0-SNAPSHOT</version.org.apache.karaf>
 
         <!-- versions of normal dependencies of JBoss Fuse -->
+        <version.javax.servlet>3.1.0</version.javax.servlet>
         <version.net.java.dev.jna>4.2.2</version.net.java.dev.jna>
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
         <version.org.apache.servicemix.bundles.xerces>2.11.0_1</version.org.apache.servicemix.bundles.xerces>
-        <version.org.apache.servicemix.specs>2.8.0</version.org.apache.servicemix.specs>
+        <version.org.apache.servicemix.specs>2.9.0</version.org.apache.servicemix.specs>
 
         <!-- versions of Maven plugins -->
         <version.plugin.felix.maven-bundle-plugin>3.3.0</version.plugin.felix.maven-bundle-plugin>

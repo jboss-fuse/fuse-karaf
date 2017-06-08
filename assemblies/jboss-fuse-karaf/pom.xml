@@ -76,6 +76,16 @@
             <artifactId>enterprise</artifactId>
             <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.osgi</groupId>
+                    <artifactId>org.osgi.core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.osgi</groupId>
+                    <artifactId>org.osgi.compendium</artifactId>
+                </exclusion>
+            </exclusions>
             <type>xml</type>
             <scope>runtime</scope>
         </dependency>
@@ -213,15 +223,12 @@
                         -->
                         <feature>framework</feature>
                         <feature>jaas</feature>
-                        <feature>shell</feature>
                         <feature>feature</feature>
-                        <feature>ssh</feature>
                         <feature>management</feature>
                         <feature>bundle</feature>
                         <feature>config</feature>
                         <feature>deployer</feature>
                         <feature>diagnostic</feature>
-                        <feature>instance</feature>
                         <feature>kar</feature>
                         <feature>log</feature>
                         <feature>package</feature>
@@ -230,6 +237,9 @@
                         <feature>aries-blueprint</feature>
                     </startupFeatures>
                     <bootFeatures>
+                        <feature>shell</feature>
+                        <feature>ssh</feature>
+                        <feature>instance</feature>
                         <feature>war</feature>
                         <feature>pax-http-undertow</feature>
                         <feature>cxf</feature>
