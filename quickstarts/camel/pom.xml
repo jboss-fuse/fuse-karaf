@@ -26,39 +26,10 @@
       <version>7.0.0.redhat-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.jboss.fuse.quickstarts</groupId>
     <artifactId>camel-quickstarts</artifactId>
-    <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>JBoss Fuse :: Quickstarts :: camel</name>
-
-    <licenses>
-        <license>
-            <name>Apache License, Version 2.0</name>
-            <distribution>repo</distribution>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-        </license>
-    </licenses>
-
-    <developers>
-      <developer>
-        <id>fuseteam</id>
-        <name>JBoss Fuse Development Team</name>
-        <organization>JBoss</organization>
-        <organizationUrl>http://jboss.org/</organizationUrl>
-      </developer>
-    </developers>
     
-    <scm>
-      <connection>scm:git:git@github.com:jboss-fuse/fuse.git</connection>
-      <developerConnection>scm:git:git@github.com:jboss-fuse/fuse.git</developerConnection>
-      <url>https://github.com/jboss-fuse/fuse/tree/master/quickstarts</url>
-    </scm>
-
-    <properties>
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <maven.compiler.source>1.7</maven.compiler.source>
-    </properties>
+    <name>JBoss Fuse :: Quickstarts :: camel</name>
 
     <modules>
         <module>camel-box</module>

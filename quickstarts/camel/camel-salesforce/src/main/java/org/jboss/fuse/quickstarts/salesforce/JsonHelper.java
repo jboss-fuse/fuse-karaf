@@ -17,9 +17,9 @@ package org.jboss.fuse.quickstarts.salesforce;
 
 import java.io.IOException;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import org.apache.camel.salesforce.dto.Cheese__c;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
 
 /**
  * Helper class to convert JSON data files to SObjects.
@@ -30,7 +30,7 @@ public final class JsonHelper {
 
     static {
         MAPPER = new ObjectMapper();
-        MAPPER.configure(SerializationConfig.Feature.WRITE_DATES_AS_TIMESTAMPS, false);
+        MAPPER.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
     }
 
     private JsonHelper() {

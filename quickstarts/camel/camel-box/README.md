@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: Camel, Blueprint  
 Summary: This quickstart demonstrates how to use the camel-box component in Camel in order to upload files to Box.com  
 Target Product: Fuse  
-Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>  
+Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-box>  
 
 
 
@@ -25,7 +25,9 @@ In studying this quick start you will learn:
 
 For more information see:
 
-* https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.2/html/Apache_Camel_Component_Reference/files/_IDU_Box.html for more information about the Camel Box component
+[comment]: <> (TODO Update to Fuse 7 docs once they are available)
+
+* https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/apache_camel_component_reference/idu-box for more information about the Camel Box component
 * https://access.redhat.com/documentation/red-hat-jboss-fuse/ for more information about using JBoss Fuse
 
 System requirements
@@ -55,7 +57,7 @@ Build and Deploy the Quickstart
 
 * In the JBoss Fuse console, enter the following commands:
 
-        features:install camel-box
+        feature:install camel-box
         bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-box/${project.version}
 
 * Fuse should give you an id when the bundle is deployed

@@ -44,7 +44,7 @@ To build the quick start:
    admin=admin,admin
 * In the JBoss Fuse console, enter the following command:
 
-        features:install cxf-ws-security
+        feature:install cxf-ws-security
         bundle:install -s mvn:org.jboss.fuse.quickstarts/cxf-secure-soap/${project.version}
 
 * Fuse should give you an id when the bundle is deployed

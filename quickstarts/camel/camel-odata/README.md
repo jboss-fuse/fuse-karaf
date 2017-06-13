@@ -5,7 +5,7 @@ Level: Beginner
 Technologies: Camel, Blueprint, JBoss Data Virtualization  
 Summary: Demonstrates how to use the camel-olingo2 component in Camel to integrate with JBoss Data Virtualization (JDV) using OData 2.0  
 Target Product: Fuse  
-Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>  
+Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel-odata>  
 
 
 
@@ -26,7 +26,9 @@ In studying this quick start you will learn:
 
 For more information see:
 
-* https://access.redhat.com/documentation/en-US/Red_Hat_JBoss_Fuse/6.2/html/Apache_Camel_Component_Reference/files/_IDU_Olingo2.html for more information about the Camel Olingo2 component
+[comment]: <> (TODO Update to Fuse 7 docs once they are available)
+
+* https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/apache_camel_component_reference/idu-olingo2 for more information about the Camel Olingo2 component
 * https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
 
 System requirements
@@ -57,8 +59,8 @@ Build and Deploy the Quickstart
 
 * In the JBoss Fuse console, enter the following commands:
 
-        features:install camel-olingo2
-        features:install camel-jackson
+        feature:install camel-olingo2
+        feature:install camel-jackson
         bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-odata/${project.version}
 
 * Fuse should give you an id when the bundle is deployed
