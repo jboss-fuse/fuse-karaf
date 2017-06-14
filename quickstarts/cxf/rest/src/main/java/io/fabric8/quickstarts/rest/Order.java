@@ -46,7 +46,7 @@ public class Order {
 
     private long id;
     private String description;
-    private Map<Long, Product> products = new HashMap<Long, Product>();
+    private Map<Long, Product> products = new HashMap<>();
 
     public Order() {
         init();
@@ -101,8 +101,7 @@ public class Order {
     @Produces("application/xml")
     public Product getProduct(@PathParam("productId") int productId) {
         LOG.info("----invoking getProduct with id: " + productId);
-        Product p = products.get(new Long(productId));
-        return p;
+        return products.get(productId);
     }
 
     final void init() {

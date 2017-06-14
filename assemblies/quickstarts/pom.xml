@@ -27,7 +27,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.jboss.fuse</groupId>
     <artifactId>quickstarts</artifactId>
     <packaging>jar</packaging>
 
@@ -45,7 +44,7 @@
     <build>
         <resources>
             <resource>
-                <directory>${project.basedir}/../../quickstarts/beginner</directory>
+                <directory>${project.basedir}/../../quickstarts</directory>
                 <filtering>false</filtering>
                 <excludes>
                     <exclude>**/target/**</exclude>
@@ -61,7 +60,7 @@
                 </excludes>
             </resource>
             <resource>
-                <directory>${project.basedir}/../../quickstarts/beginner</directory>
+                <directory>${project.basedir}/../../quickstarts</directory>
                 <filtering>true</filtering>
                 <includes>
                     <include>**/README.md</include>

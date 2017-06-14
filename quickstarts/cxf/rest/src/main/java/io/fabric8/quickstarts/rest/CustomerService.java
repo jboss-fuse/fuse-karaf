@@ -15,7 +15,6 @@
  */
 package io.fabric8.quickstarts.rest;
 
-import javax.annotation.Resource;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -27,11 +26,11 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.annotations.ApiOperation;
-import com.wordnik.swagger.annotations.ApiParam;
-import com.wordnik.swagger.annotations.ApiResponses;
-import com.wordnik.swagger.annotations.ApiResponse;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ApiResponse;
 
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.slf4j.Logger;
@@ -54,10 +53,10 @@ public class CustomerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomerService.class);
 
-    long currentId = 123;
-    Map<Long, Customer> customers = new HashMap<Long, Customer>();
-    Map<Long, Order> orders = new HashMap<Long, Order>();
     private MessageContext jaxrsContext;
+    private long currentId                = 123;
+    private Map<Long, Customer> customers = new HashMap<>();
+    private Map<Long, Order> orders       = new HashMap<>();
 
     public CustomerService() {
         init();
@@ -83,8 +82,7 @@ public class CustomerService {
     public Customer getCustomer(@ApiParam(value = "ID of Customer to fetch", required = true) @PathParam("id") String id) {
         LOG.info("Invoking getCustomer, Customer id is: {}", id);
         long idNumber = Long.parseLong(id);
-        Customer c = customers.get(idNumber);
-        return c;
+        return customers.get(idNumber);
     }
 
     /**
@@ -193,8 +191,7 @@ public class CustomerService {
     public Order getOrder(@PathParam("orderId") String orderId) {
         LOG.info("Invoking getOrder, Order id is: {}", orderId);
         long idNumber = Long.parseLong(orderId);
-        Order c = orders.get(idNumber);
-        return c;
+        return orders.get(idNumber);
     }
 
     /**

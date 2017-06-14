@@ -172,7 +172,7 @@
                     <excludes>
                         META-INF/**
                     </excludes>
-                    <outputDirectory>${project.build.directory}/assembly/quickstarts/beginner</outputDirectory>
+                    <outputDirectory>${project.build.directory}/assembly/quickstarts</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>

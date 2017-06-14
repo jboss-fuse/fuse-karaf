@@ -71,19 +71,30 @@
         -->
 
         <!-- versions of "subprojects" of JBoss Fuse -->
-        <version.io.hawt>2.0-SNAPSHOT</version.io.hawt>
+        <version.io.fabric8>2.2.215</version.io.fabric8>
+        <version.io.hawt>2.0-M1</version.io.hawt>
         <version.org.apache.activemq.artemis>1.5.5</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.19.0</version.org.apache.camel>
+        <version.org.apache.camel>2.20.0-SNAPSHOT</version.org.apache.camel>
         <version.org.apache.cxf>3.2.0-SNAPSHOT</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.0-SNAPSHOT</version.org.apache.karaf>
 
         <!-- versions of normal dependencies of JBoss Fuse -->
+        <version.com.fasterxml.jackson.module>2.8.8</version.com.fasterxml.jackson.module>
+        <version.io.swagger>1.5.13</version.io.swagger>
         <version.javax.servlet>3.1.0</version.javax.servlet>
+        <version.joda.time>2.9.9</version.joda.time>
         <version.net.java.dev.jna>4.2.2</version.net.java.dev.jna>
+        <version.org.apache.aries.proxy.api>1.1.0</version.org.apache.aries.proxy.api>
+        <version.org.apache.aries.proxy.impl>1.0.6</version.org.apache.aries.proxy.impl>
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
         <version.org.apache.servicemix.bundles.xerces>2.11.0_1</version.org.apache.servicemix.bundles.xerces>
         <version.org.apache.servicemix.specs>2.9.0</version.org.apache.servicemix.specs>
+        <version.org.javassist>3.21.0-GA</version.org.javassist>
+        <version.org.ops4j.base>1.5.0</version.org.ops4j.base>
+        <version.org.ops4j.pax.swissbox>1.8.3</version.org.ops4j.pax.swissbox>
+        <version.org.ow2.asm>5.2</version.org.ow2.asm>
+        <version.org.slf4j>1.7.25</version.org.slf4j>
 
         <!-- versions of Maven plugins -->
         <version.plugin.felix.maven-bundle-plugin>3.3.0</version.plugin.felix.maven-bundle-plugin>
@@ -168,11 +179,87 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-jsonSchema</artifactId>
+                <version>${version.com.fasterxml.jackson.module}</version>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-jaxrs</artifactId>
+                <version>${version.io.swagger}</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${version.joda.time}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.aries.proxy</groupId>
+                <artifactId>org.apache.aries.proxy.api</artifactId>
+                <version>${version.org.apache.aries.proxy.api}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.aries.proxy</groupId>
+                <artifactId>org.apache.aries.proxy.impl</artifactId>
+                <version>${version.org.apache.aries.proxy.impl}</version>
+            </dependency>
+            <dependency>
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-parent</artifactId>
                 <version>${version.org.apache.camel}</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http-undertow</artifactId>
+                <version>${version.org.apache.cxf}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.servicemix.specs</groupId>
+                <artifactId>org.apache.servicemix.specs.jaxws-api-2.2</artifactId>
+                <version>${version.org.apache.servicemix.specs}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.servicemix.specs</groupId>
+                <artifactId>org.apache.servicemix.specs.jsr339-api-2.0</artifactId>
+                <version>${version.org.apache.servicemix.specs}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.javassist</groupId>
+                <artifactId>javassist</artifactId>
+                <version>${version.org.javassist}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.base</groupId>
+                <artifactId>ops4j-base-io</artifactId>
+                <version>${version.org.ops4j.base}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.base</groupId>
+                <artifactId>ops4j-base-lang</artifactId>
+                <version>${version.org.ops4j.base}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.base</groupId>
+                <artifactId>ops4j-base-store</artifactId>
+                <version>${version.org.ops4j.base}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.swissbox</groupId>
+                <artifactId>pax-swissbox-bnd</artifactId>
+                <version>${version.org.ops4j.pax.swissbox}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ow2.asm</groupId>
+                <artifactId>asm-all</artifactId>
+                <version>${version.org.ow2.asm}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${version.org.slf4j}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -182,7 +269,11 @@
             <plugins>
 
                 <!-- Core plugins -->
-
+                <plugin>
+                    <groupId>io.fabric8</groupId>
+                    <artifactId>fabric-cxf-plugins</artifactId>
+                    <version>${version.io.fabric8}</version>
+                </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
