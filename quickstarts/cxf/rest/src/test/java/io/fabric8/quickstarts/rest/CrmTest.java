@@ -121,7 +121,7 @@ public final class CrmTest {
      * @throws Exception
      */
     @Test
-    public void postCustomerTestJson() throws IOException {
+    public void postCustomerTestJson() throws Exception {
         LOG.info("Sent HTTP POST request to add customer");
         String inputFile = this.getClass().getResource("/add_customer.json").getFile();
         File input = new File(inputFile);
@@ -136,7 +136,7 @@ public final class CrmTest {
             int result = httpclient.executeMethod(post);
             LOG.info("Response status code: " + result);
             LOG.info("Response body: ");
-            res = post.getResponseBodyAsString();
+            res = getStringFromInputStream(post.getResponseBodyAsStream());
             LOG.info(res);
         } catch (IOException e) {
             LOG.error("Error connecting to {}", CUSTOMER_SERVICE_URL);
@@ -161,7 +161,7 @@ public final class CrmTest {
      * @throws Exception
      */
     @Test
-    public void postCustomerTest() throws IOException {
+    public void postCustomerTest() throws Exception {
         LOG.info("Sent HTTP POST request to add customer");
         String inputFile = this.getClass().getResource("/add_customer.xml").getFile();
         File input = new File(inputFile);
@@ -176,7 +176,7 @@ public final class CrmTest {
             int result = httpclient.executeMethod(post);
             LOG.info("Response status code: " + result);
             LOG.info("Response body: ");
-            res = post.getResponseBodyAsString();
+            res = getStringFromInputStream(post.getResponseBodyAsStream());
             LOG.info(res);
         } catch (IOException e) {
             LOG.error("Error connecting to {}", CUSTOMER_SERVICE_URL);

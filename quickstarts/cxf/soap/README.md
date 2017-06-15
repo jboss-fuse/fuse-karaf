@@ -119,7 +119,7 @@ By default CXF Servlet is assigned a '/cxf' alias. You can change it in a couple
 2. Use shell config commands, for example:
 
         config:edit org.apache.cxf.osgi
-        config:propset org.apache.cxf.servlet.context /custom
+        config:property-set org.apache.cxf.servlet.context /custom
         config:update
 
     JBoss Fuse will create org.apache.cxf.osgi.cfg file in the /etc directory and and set the entry as we did in the first way after the commands are run, you need to restart the CXF bundle to load the change.

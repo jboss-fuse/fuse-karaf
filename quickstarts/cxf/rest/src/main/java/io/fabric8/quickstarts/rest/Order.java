@@ -101,7 +101,7 @@ public class Order {
     @Produces("application/xml")
     public Product getProduct(@PathParam("productId") int productId) {
         LOG.info("----invoking getProduct with id: " + productId);
-        return products.get(productId);
+        return products.get(new Long(productId));
     }
 
     final void init() {

@@ -45,7 +45,7 @@
            <bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider"/>
         </jaxrs:providers>
         <jaxrs:features>
-            <bean class="io.fabric8.cxf.endpoint.SwaggerFeature">
+            <bean class="org.apache.cxf.jaxrs.swagger.Swagger2Feature">
                 <property name="title" value="Fabric8:CXF:Quickstarts - Customer Service" />
                 <property name="description" value="Sample REST-based Customer Service" />
                 <property name="version" value="${project.version}" />
