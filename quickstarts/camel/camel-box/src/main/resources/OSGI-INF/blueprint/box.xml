@@ -39,6 +39,7 @@
           <property name="userPassword" value="${userPassword}"/>
           <property name="clientId" value="${clientId}"/>
           <property name="clientSecret" value="${clientSecret}"/>
+          <property name="authenticationType" value="${authenticationType}"/>
         </bean>
       </property>
     </bean>
