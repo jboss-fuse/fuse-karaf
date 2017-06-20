@@ -25,23 +25,23 @@
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
-    xsi:schemaLocation="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.0.0.xsd
+           xsi:schemaLocation="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.0.0.xsd
              http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
              http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
     <!-- osgi blueprint property placeholder -->
-    <cm:property-placeholder id="placeholder" persistent-id="org.jboss.fuse.quickstarts.camel.box" />
+    <cm:property-placeholder id="placeholder" persistent-id="org.jboss.fuse.quickstarts.camel.box"/>
 
     <bean id="box" class="org.apache.camel.component.box.BoxComponent">
-      <property name="configuration">
-        <bean class="org.apache.camel.component.box.BoxConfiguration">
-          <property name="userName" value="${userName}"/>
-          <property name="userPassword" value="${userPassword}"/>
-          <property name="clientId" value="${clientId}"/>
-          <property name="clientSecret" value="${clientSecret}"/>
-          <property name="authenticationType" value="${authenticationType}"/>
-        </bean>
-      </property>
+        <property name="configuration">
+            <bean class="org.apache.camel.component.box.BoxConfiguration">
+                <property name="userName" value="${userName}"/>
+                <property name="userPassword" value="${userPassword}"/>
+                <property name="clientId" value="${clientId}"/>
+                <property name="clientSecret" value="${clientSecret}"/>
+                <property name="authenticationType" value="STANDARD_AUTHENTICATION"/>
+            </bean>
+        </property>
     </bean>
 
     <!--
@@ -59,23 +59,31 @@
 
           The <log/> elements are used to add human-friendly business logging statements. They make it easier to see what the
           route is doing.
-
+          
+          The <setHeader/> elements are passed to the BoxFilesManager API. For more information, see
+            org.apache.camel.component.box.api.BoxFilesManager#uploadFile.
+            
           The <to/> element contains the Box.com destination endpoint.
         -->
         <route id="box-route">
-            <from uri="file:work/box/input" />
-            <log message="Receiving file ${file:name}" />
-            <log message="Sending file ${file:name} to Box.com" />
-            <!-- Camel will automatically convert the file to BoxFileUploadRequestObject using
-            org.apache.camel.component.box.BoxConverter, which is equivalent to adding the element
+            <from uri="file:work/box/input"/>
+            <log message="Receiving file ${file:name}"/>
+            <log message="Sending file ${file:name} to Box.com"/>
 
-            <convertBodyTo type="com.box.restclientv2.requestsbase.BoxFileUploadRequestObject" />
-
-            For more complex logic, such a duplicate file detection, adding timestamp, etc. write a helper bean
-            to create a BoxFileRequestObject for the box endpoint
-            -->
-            <to uri="box://files/uploadFile?inBody=fileUploadRequest" />
-            <log message="Done uploading ${file:name}" />
+            <convertBodyTo type="java.io.InputStream"/>
+            
+            <setHeader headerName="CamelBox.parentFolderId">
+                <constant>0</constant>
+            </setHeader>
+            <setHeader headerName="CamelBox.fileName">
+                <simple>${file:name}</simple>
+            </setHeader>
+            <setHeader headerName="CamelBox.content">
+                <simple>${body}</simple>
+            </setHeader>
+            
+            <to uri="box://files/uploadFile"/>
+            <log message="Done uploading ${file:name}"/>
         </route>
     </camelContext>
 

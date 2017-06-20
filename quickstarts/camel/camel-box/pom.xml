@@ -34,6 +34,10 @@
     <url>https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-box</url>
 
     <dependencies>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-box</artifactId>
+        </dependency>
          <!--
           For this example, we will be using the OSGi Blueprint XML syntax for Apache Camel.
           The camel-blueprint bundle is installed in JBoss Fuse by default,
@@ -42,6 +46,7 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-blueprint</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
