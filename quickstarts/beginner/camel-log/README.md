@@ -12,7 +12,7 @@ What is it?
 
 This quick start shows how to create a simple Apache Camel application that logs a message to the server log every 5th second.  
 This example is implemented using solely the XML DSL (there is no Java code). The source code is provided in the following XML file `src/main/resources/OSGI-INF/blueprint/camel-log.xml`.
-                                                   
+
 System requirements
 -------------------
 
@@ -27,24 +27,21 @@ Build and Deploy the Quickstart
 -------------------------
 
 1. Change your working directory to `camel-log` directory.
-* Run `mvn clean install` to build the quickstart.
-* Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-* In the JBoss Fuse console, enter the following command:
+2. Run `mvn clean install` to build the quickstart.
+3. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+4. In the JBoss Fuse console, enter the following command:
 
         bundle:install -s mvn:org.jboss.fuse.quickstarts/beginner-camel-log/${project.version}
-
-* Fuse should give you an id when the bundle is deployed
-
-* You can check that everything is ok by issuing the command:
+5. Fuse should give you an id when the bundle is deployed
+6. You can check that everything is ok by issuing the command:
 
         bundle:list
    your bundle should be present at the end of the list
 
-
 Use the bundle
 ---------------------
 
-To use the application be sure to have deployed the quickstart in Fuse as described above. 
+To use the application be sure to have deployed the quickstart in Fuse as described above.
 
 1. At the fuse prompt, enter the following command: log:tail
 2. Every 5 seconds you will see a message containing ">>> Hello from Fabric based Camel route!"
