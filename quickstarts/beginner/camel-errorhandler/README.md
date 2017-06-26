@@ -23,7 +23,7 @@ In studying this quick start you will learn:
 * how to define exception-specific error handling routines
 
 This example picks up XML files, and depending on the error that occurs during processing, they are routed to different endpoints, as shown in figure below.
-                                                                                                     
+
 ![Camel DLC diagram](https://raw.githubusercontent.com/jboss-fuse/fabric8/1.2.0.redhat-6-3-x/docs/images/camel-errorhandler-diagram.jpg)   
 
 For more information see:
@@ -46,14 +46,14 @@ Build and Deploy the Quickstart
 -------------------------------
 
 1. Change your working directory to `camel-errorhandler` directory.
-*. Run `mvn clean install` to build the quickstart.
-*. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-*. In the JBoss Fuse console, enter the following command:
+2. Run `mvn clean install` to build the quickstart.
+3. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+4. In the JBoss Fuse console, enter the following command:
 
         bundle:install -s mvn:org.jboss.fuse.quickstarts/beginner-camel-errorhandler/${project.version}
 
-*. Fuse should give you an id when the bundle is deployed
-*. You can check that everything is ok by issuing  the command:
+5. Fuse should give you an id when the bundle is deployed
+6. You can check that everything is ok by issuing  the command:
 
         bundle:list
    your bundle should be present at the end of the list
@@ -68,7 +68,6 @@ To use the application be sure to have deployed the quickstart in Fuse as descri
 2. Copy the file you find in this quick start's `src/main/fabric8/data` directory to the newly created
 `work/errors/input` directory.
 4. Wait a few moments and you will find the files in directories under `work/errors`:
-
   * `order4.xml` will always end up in the `work/errors/validation` directory
   * other files will end up in `work/errors/done` or `work/errors/deadletter` depending on the runtime exceptions that occur
 5. Use `log:display` to check out the business logging - the exact output may look differently because the 'unexpected runtime exception...' happen randomly
@@ -90,4 +89,3 @@ To stop and undeploy the bundle in Fuse:
 2. To stop and uninstall the bundle enter
 
         bundle:uninstall <id>
- 
