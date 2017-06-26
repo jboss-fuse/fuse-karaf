@@ -22,32 +22,20 @@
 
     <parent>
         <groupId>org.jboss.fuse</groupId>
-        <artifactId>jboss-fuse-parent</artifactId>
+        <artifactId>assemblies</artifactId>
         <version>7.0.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.jboss.fuse</groupId>
-    <artifactId>assemblies</artifactId>
+    <artifactId>features</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Assemblies</name>
+    <name>JBoss Fuse :: Assemblies :: Features</name>
 
     <modules>
-        <module>features</module>
-        <module>quickstarts</module>
-        <module>jboss-fuse-karaf-minimal</module>
-        <module>jboss-fuse-karaf</module>
+        <module>base</module>
+        <module>fuse-framework</module>
     </modules>
-
-    <profiles>
-        <profile>
-            <!-- This profile, when enabled "brings" more dependencies into IDE, so finding sources of JARs is easier -->
-            <id>debugging-support</id>
-            <modules>
-                <module>debug</module>
-            </modules>
-        </profile>
-    </profiles>
 
 </project>
