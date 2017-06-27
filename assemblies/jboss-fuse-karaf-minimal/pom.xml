@@ -197,8 +197,6 @@
                         <feature>pax-jetty-http2</feature>
                         <feature>pax-http-jetty</feature>
                         <feature>cxf-http-jetty</feature>
-                        <!-- camel-cxf directly depends on cxf-http-jetty -->
-                        <feature>camel-cxf</feature>
                         <feature>camel-jetty</feature>
                         <feature>camel-jetty8</feature>
                         <feature>camel-jetty9</feature>
