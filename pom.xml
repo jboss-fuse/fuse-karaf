@@ -283,6 +283,7 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>camel-parent</artifactId>
                 <version>${version.org.apache.camel}</version>
+                <scope>import</scope>
                 <type>pom</type>
             </dependency>
             <dependency>
