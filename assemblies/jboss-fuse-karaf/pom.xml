@@ -30,6 +30,10 @@
     <artifactId>jboss-fuse-karaf</artifactId>
     <packaging>pom</packaging>
 
+    <properties>
+        <camel.sap.bundle/>
+    </properties>
+
     <name>JBoss Fuse :: Assemblies :: JBoss Fuse - Karaf distro</name>
 
     <dependencies>
@@ -217,6 +221,9 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <installedBundles>
+                        <installedBundle>${camel.sap.bundle}</installedBundle>
+                    </installedBundles>
                     <startupFeatures>
                         <!--
                             "framework" feature is implicitly added if not specified
@@ -331,5 +338,14 @@
             </plugin>
         </plugins>
     </build>
+    
+    <profiles>
+        <profile>
+            <id>sap</id>
+            <properties>
+                <camel.sap.bundle>mvn:org.fusesource/camel-sap/${version.org.fusesource.camel-sap}</camel.sap.bundle>
+            </properties>
+        </profile>
+    </profiles>
 
 </project>
