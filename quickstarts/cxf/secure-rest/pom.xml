@@ -155,9 +155,9 @@
                             org.osgi.service.blueprint,
                             io.swagger.jaxrs.config,
                             io.swagger.jaxrs.listing,
+                            org.apache.cxf.jaxrs.swagger,
                             io.swagger.annotations,
                             org.apache.cxf.transport.http,
-                            io.fabric8.cxf,
                             com.fasterxml.jackson.annotation, com.fasterxml.jackson.core,
                             com.fasterxml.jackson.databind,
                             com.fasterxml.jackson.jaxrs.json, javax.ws.rs.ext,*

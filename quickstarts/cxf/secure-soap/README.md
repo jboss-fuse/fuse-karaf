@@ -38,17 +38,17 @@ Build and Deploy the Quickstart
 To build the quick start:
 
 1. Change your working directory to `secure-soap` directory.
-* Run `mvn clean install` to build the quick start.
-* Start JBoss Fuse 7 by running `bin/fuse` (on Linux) or `bin\fuse.bat` (on Windows).
-* Verify etc/users.properties from the JBoss Fuse installation contains the following 'admin' user configured:
+2. Run `mvn clean install` to build the quick start.
+3. Start JBoss Fuse 7 by running `bin/fuse` (on Linux) or `bin\fuse.bat` (on Windows).
+4. Verify etc/users.properties from the JBoss Fuse installation contains the following 'admin' user configured:
    admin=admin,admin
-* In the JBoss Fuse console, enter the following command:
+5. In the JBoss Fuse console, enter the following command:
 
         feature:install cxf-ws-security
         bundle:install -s mvn:org.jboss.fuse.quickstarts/cxf-secure-soap/${project.version}
 
-* Fuse should give you an id when the bundle is deployed
-* You can check that everything is ok by issuing  the command:
+6. Fuse should give you an id when the bundle is deployed
+6. You can check that everything is ok by issuing  the command:
 
         bundle:list
    your bundle should be present at the end of the list

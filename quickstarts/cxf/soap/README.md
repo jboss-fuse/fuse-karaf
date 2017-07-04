@@ -39,14 +39,14 @@ Build and Deploy the Quickstart
 To build the quick start:
 
 1.Change your working directory to `soap` directory.
-* Run `mvn clean install` to build the quickstart.
-* Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-* In the JBoss Fuse console, enter the following command:
+2. Run `mvn clean install` to build the quickstart.
+3. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+4. In the JBoss Fuse console, enter the following command:
 
         bundle:install -s mvn:org.jboss.fuse.quickstarts/cxf-soap/${project.version}
 
-* Fuse should give you on id when the bundle is deployed
-* You can check that everything is ok by issue the command:
+5. Fuse should give you on id when the bundle is deployed
+6. You can check that everything is ok by issue the command:
 
         bundle:list
    your bundle should be present at the end of the list
@@ -75,8 +75,10 @@ You can also use "cxf:list-endpoints" in Fuse to check the state of all CXF web 
 
     JBossFuse:karaf@root> cxf:list-endpoints
     
-    Name                      State      Address                                                      BusID                                   
-    [HelloWorldImplPort     ] [Started ] [http://localhost:8181/cxf/HelloWorld                   ] [org.jboss.fuse.examples.soap-cxf2040055609]
+    |Name                |  State  |  Address    |       BusID                                      |
+    |:------------------:|:-------:|:-----------:|:------------------------------------------------:|
+    | HelloWorldImplPort | Started | /HelloWorld | org.jboss.fuse.quickstarts.cxf-soap-cxf278553749 |
+    
     
 
 ### To run a Web client:

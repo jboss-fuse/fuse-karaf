@@ -261,6 +261,7 @@
                         <feature>pax-jdbc-pool-narayana</feature>
                         <feature>transaction-manager-narayana</feature>
                         <feature>hawtio</feature>
+                        <feature>cxf-rs-description-swagger2</feature>
                     </bootFeatures>
                     <installedFeatures>
                         <feature>wrapper</feature>

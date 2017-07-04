@@ -163,6 +163,7 @@
                             javax.ws.rs.core,
                             javax.xml.bind.annotation,
                             org.osgi.service.blueprint,
+                            org.apache.cxf.jaxrs.swagger,
                             io.swagger.jaxrs.config,
                             io.swagger.jaxrs.listing,
                             io.swagger.annotations,
