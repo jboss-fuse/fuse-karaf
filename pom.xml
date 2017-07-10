@@ -111,6 +111,7 @@
         <version.plugin.maven-antrun-plugin>1.8</version.plugin.maven-antrun-plugin>
         <version.plugin.maven-assembly-plugin>3.0.0</version.plugin.maven-assembly-plugin>
         <version.plugin.maven-compiler-plugin>3.6.1</version.plugin.maven-compiler-plugin>
+        <version.plugin.maven-enforcer-plugin>1.4.1</version.plugin.maven-enforcer-plugin>
         <version.plugin.maven-dependency-plugin>3.0.1</version.plugin.maven-dependency-plugin>
         <version.plugin.maven-remote-resources-plugin>1.5</version.plugin.maven-remote-resources-plugin>
         <version.plugin.maven-resources-plugin>3.0.2</version.plugin.maven-resources-plugin>
@@ -386,7 +387,12 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${version.plugin.maven-surefire-plugin}</version>
                 </plugin>
-                
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>${version.plugin.maven-enforcer-plugin}</version>
+                </plugin>
+
                 <!-- CXF plugins -->
                 
                 <plugin>
@@ -457,6 +463,30 @@
                 <configuration>
                     <skip>true</skip>
                 </configuration>
+            </plugin>
+
+            <!-- Require maven 3.3 or above, Java 1.8 or above. -->
+            <plugin>
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-enforcer-plugin</artifactId>
+                 <executions>
+                     <execution>
+                         <id>enforce-maven</id>
+                         <goals>
+                             <goal>enforce</goal>
+                         </goals>
+                         <configuration>
+                             <rules>
+                                 <requireMavenVersion>
+                                     <version>[3.3,4)</version>
+                                 </requireMavenVersion>
+                                 <requireJavaVersion>
+                                     <version>[1.8,9]</version>
+                                 </requireJavaVersion>
+                             </rules>
+                         </configuration>
+                     </execution>
+                 </executions>
             </plugin>
 
         </plugins>
