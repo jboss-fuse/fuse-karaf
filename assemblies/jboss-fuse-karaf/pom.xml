@@ -31,7 +31,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <camel.sap.bundle/>
+        <camel.sap.bundle>mvn:org.fusesource/camel-sap/${version.org.fusesource.camel-sap}</camel.sap.bundle>
     </properties>
 
     <name>JBoss Fuse :: Assemblies :: JBoss Fuse - Karaf distro</name>
@@ -338,14 +338,4 @@
             </plugin>
         </plugins>
     </build>
-    
-    <profiles>
-        <profile>
-            <id>sap</id>
-            <properties>
-                <camel.sap.bundle>mvn:org.fusesource/camel-sap/${version.org.fusesource.camel-sap}</camel.sap.bundle>
-            </properties>
-        </profile>
-    </profiles>
-
 </project>
