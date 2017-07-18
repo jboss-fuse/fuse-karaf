@@ -74,6 +74,7 @@
         <version.io.fabric8>2.2.215</version.io.fabric8>
         <version.io.hawt>2.0-SNAPSHOT</version.io.hawt>
         <version.org.apache.activemq.artemis>1.5.5</version.org.apache.activemq.artemis>
+        <!-- this must be built, for now, from https://github.com/jboss-fuse/camel not from upstream camel (due to different cxf version being used) -->
         <version.org.apache.camel>2.20.0-SNAPSHOT</version.org.apache.camel>
         <version.org.apache.cxf>3.2.0-SNAPSHOT</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.0-SNAPSHOT</version.org.apache.karaf>
@@ -394,7 +395,7 @@
                 </plugin>
 
                 <!-- CXF plugins -->
-                
+
                 <plugin>
                     <groupId>org.apache.cxf</groupId>
                     <artifactId>cxf-java2wadl-plugin</artifactId>
@@ -425,7 +426,7 @@
                     <artifactId>karaf-maven-plugin</artifactId>
                     <version>${version.org.apache.karaf}</version>
                 </plugin>
-                
+
                 <!-- MojoHaus plugins -->
 
                 <plugin>
@@ -433,7 +434,7 @@
                     <artifactId>build-helper-maven-plugin</artifactId>
                     <version>${version.plugin.mojo.build-helper-maven-plugin}</version>
                 </plugin>
-                
+
                 <!-- Other plugins -->
 
                 <plugin>
@@ -441,7 +442,7 @@
                     <artifactId>license-maven-plugin</artifactId>
                     <version>${version.plugin.mycila.license-maven-plugin}</version>
                 </plugin>
-                                
+
             </plugins>
         </pluginManagement>
 
