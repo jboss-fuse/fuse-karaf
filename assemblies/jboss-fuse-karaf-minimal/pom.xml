@@ -36,6 +36,8 @@
         <!--
             dependencies with "kar" type will be added as startup (scope=compile), boot (scope=runtime) or
             installed (scope=provided) kars in karaf-maven-plugin
+            kars are simply unzipped to working directory (target/assembly) and features XMLs are being
+            searched for and used as additional feature repositories (with stage equal to the stage of given kar)
         -->
         <dependency>
             <groupId>org.jboss.fuse.features</groupId>
@@ -53,15 +55,29 @@
             <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
-            <scope>compile</scope>
+            <scope>runtime</scope>
         </dependency>
+        <!--
+            org.jboss.fuse.features:fuse-framework:kar includes org.apache.karaf.features:framework:xml:features
+            so there's no need to declare it explicitly
+        -->
+        <!--
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>framework</artifactId>
             <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
-            <scope>runtime</scope>
+            <scope>compile</scope>
+        </dependency>
+        -->
+        <dependency>
+            <groupId>org.apache.karaf.features</groupId>
+            <artifactId>enterprise</artifactId>
+            <version>${version.org.apache.karaf}</version>
+            <classifier>features</classifier>
+            <type>xml</type>
+            <scope>provided</scope>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>org.apache.karaf.features</groupId>-->
@@ -89,14 +105,14 @@
             <!--<type>xml</type>-->
             <!--<scope>runtime</scope>-->
         <!--</dependency>-->
-        <dependency>
-            <groupId>io.hawt</groupId>
-            <artifactId>hawtio-karaf</artifactId>
-            <version>${version.io.hawt}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>io.hawt</groupId>-->
+            <!--<artifactId>hawtio-karaf</artifactId>-->
+            <!--<version>${version.io.hawt}</version>-->
+            <!--<classifier>features</classifier>-->
+            <!--<type>xml</type>-->
+            <!--<scope>runtime</scope>-->
+        <!--</dependency>-->
         <!--
             dependencies with "bundle" or "jar" type will be used as startup (scope=compile), boot (scope=runtime) or
             installed (scope=provided) bundles in karaf-maven-plugin
@@ -161,27 +177,53 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <!--
+                        explicit <framework> configuration is needed if there's no compile dependency on
+                        mvn:org.apache.karaf.features/framework/VERSION/kar or
+                        mvn:org.apache.karaf.features/static/VERSION/kar
+                    -->
                     <framework>framework</framework>
+                    <!--
+                        installAllFeaturesByDefault should be false when using custom kar. Otherwise all
+                        features from feature repositories found in the kar would be installed by default
+                    -->
                     <installAllFeaturesByDefault>false</installAllFeaturesByDefault>
                     <startupFeatures>
                         <!--
                             "framework" feature is implicitly added if not specified
+                            it's fundamental feature that starts feature service, configadmin, fileinstall
+                            pax-logging and pax-url-aether
                         -->
                         <feature>framework</feature>
-                        <feature>feature</feature>
-                        <feature>bundle</feature>
-                        <feature>config</feature>
-                        <feature>log</feature>
-                        <feature>package</feature>
-                        <feature>service</feature>
-                        <feature>system</feature>
-                        <feature>aries-blueprint</feature>
+                        <!-- when "patch" feature is ready, it'll be used as startup feature -->
+                        <!--<feature>patch-core</feature>-->
                     </startupFeatures>
                     <bootFeatures>
+                        <!-- feature:* commands -->
+                        <feature>feature</feature>
+                        <!-- bundle:* commands -->
+                        <feature>bundle</feature>
+                        <!-- config:* commands -->
+                        <feature>config</feature>
+                        <!-- log:* commands -->
+                        <feature>log</feature>
+                        <!-- package:exports/package:imports commands -->
+                        <feature>package</feature>
+                        <!-- service:list command -->
+                        <feature>service</feature>
+                        <!-- system:* commands -->
+                        <feature>system</feature>
+                        <!-- Karaf shell support (jline, æsh) -->
                         <feature>shell</feature>
+                        <!-- SSH support (commands and ssh shell) -->
                         <feature>ssh</feature>
-                        <feature>war</feature>
+                        <!-- Service Component Runtime -->
+                        <feature>scr</feature>
+                        <!-- Blueprint -->
+                        <feature>aries-blueprint</feature>
+                        <!-- pax-web: undertow, war, whiteboard -->
                         <feature>pax-http-undertow</feature>
+                        <feature>war</feature>
                     </bootFeatures>
                     <installedFeatures>
                         <!--<feature>wrapper</feature>-->
