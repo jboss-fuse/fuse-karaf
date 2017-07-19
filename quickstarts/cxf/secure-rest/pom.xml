@@ -217,7 +217,7 @@
         <profile>
             <id>test</id>
             <properties>
-                <skipTests>${skipTests}</skipTests>
+                <skipTests>false</skipTests>
             </properties>
             <build>
                 <defaultGoal>verify</defaultGoal>
