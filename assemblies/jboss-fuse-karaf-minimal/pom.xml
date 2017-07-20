@@ -197,6 +197,8 @@
                         <feature>service</feature>
                         <!-- system:* commands -->
                         <feature>system</feature>
+                        <!-- maven:* commands -->
+                        <feature>maven</feature>
                         <!-- Karaf shell support (jline, æsh) -->
                         <feature>shell</feature>
                         <!-- SSH support (commands and ssh shell) -->
