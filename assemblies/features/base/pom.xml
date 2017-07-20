@@ -42,40 +42,15 @@
          - fundamental system libraries (e.g., Felix framework)
         org.jboss.fuse.features:base:jar builds on org.apache.karaf.features:base:jar and adds
         customized versions of the above resources
+        also this org.jboss.fuse.features:base:jar is used by org.jboss.fuse.features:fuse-framework:[kar] which
+        is used as base KAR of fuse-karaf distro (full and minimal)
     </description>
 
     <dependencies>
 
         <dependency>
-            <groupId>org.apache.felix</groupId>
-            <artifactId>org.apache.felix.framework</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>base</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf</groupId>
-            <artifactId>org.apache.karaf.main</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf</groupId>
-            <artifactId>org.apache.karaf.exception</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf</groupId>
-            <artifactId>org.apache.karaf.client</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.osgi</groupId>
-            <artifactId>org.osgi.core</artifactId>
             <scope>runtime</scope>
         </dependency>
 
@@ -90,6 +65,11 @@
             <resource>
                 <directory>src/main/filtered-resources</directory>
                 <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/appended-resources</directory>
+                <filtering>true</filtering>
+                <targetPath>${project.build.directory}/appended-resources</targetPath>
             </resource>
         </resources>
 
@@ -116,46 +96,6 @@
                                 </artifactItem>
                             </artifactItems>
                             <outputDirectory>${project.build.directory}/karaf-base</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <!--
-                           explicitly copy dependencies - do not rely on those that may be part of Karaf base.jar
-                        -->
-                        <id>copy-dependencies</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <useBaseVersion>true</useBaseVersion>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>org.osgi</groupId>
-                                    <artifactId>org.osgi.core</artifactId>
-                                    <outputDirectory>${project.build.outputDirectory}/resources/lib/boot</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.felix</groupId>
-                                    <artifactId>org.apache.felix.framework</artifactId>
-                                    <outputDirectory>${project.build.outputDirectory}/resources/system/org/apache/felix/org.apache.felix.framework/${version.org.apache.felix}</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.karaf</groupId>
-                                    <artifactId>org.apache.karaf.main</artifactId>
-                                    <outputDirectory>${project.build.outputDirectory}/resources/lib/boot</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.karaf</groupId>
-                                    <artifactId>org.apache.karaf.exception</artifactId>
-                                    <outputDirectory>${project.build.outputDirectory}/resources/lib/endorsed</outputDirectory>
-                                </artifactItem>
-                                <artifactItem>
-                                    <groupId>org.apache.karaf</groupId>
-                                    <artifactId>org.apache.karaf.client</artifactId>
-                                    <outputDirectory>${project.build.outputDirectory}/resources/system/org/apache/karaf/org.apache.karaf.client/${version.org.apache.karaf}</outputDirectory>
-                                </artifactItem>
-                            </artifactItems>
                         </configuration>
                     </execution>
                 </executions>
@@ -239,6 +179,24 @@
                                 <replace file="${project.build.outputDirectory}/resources/bin/stop.bat" token="karaf.bat" value="fuse.bat" />
                                 <replace file="${project.build.outputDirectory}/resources/bin/start" token="bin/karaf" value="bin/fuse" />
                                 <replace file="${project.build.outputDirectory}/resources/bin/stop" token="bin/karaf" value="bin/fuse" />
+
+                                <!-- I don't quite like it - think about changing it -->
+                                <echo message="Fixing versions in bin scripts" />
+                                <replace file="${project.build.outputDirectory}/resources/bin/client"
+                                        token="org/slf4j/slf4j-api/1.7.12/slf4j-api-1.7.12" value="org/slf4j/slf4j-api/${version.org.slf4j}/slf4j-api-${version.org.slf4j}" />
+                                <replace file="${project.build.outputDirectory}/resources/bin/client.bat"
+                                        token="org\slf4j\slf4j-api\1.7.12\slf4j-api-1.7.12" value="org\slf4j\slf4j-api\${version.org.slf4j}\slf4j-api-${version.org.slf4j}" />
+
+                                <echo message="Customizing etc configuration files" />
+                                <concat destfile="${project.build.outputDirectory}/resources/etc/config.properties" append="true" encoding="UTF-8">
+                                    <filelist dir="${project.build.directory}/appended-resources" files="append-header.part" />
+                                </concat>
+                                <concat destfile="${project.build.outputDirectory}/resources/etc/config.properties" append="true" encoding="UTF-8">
+                                    <filelist dir="${project.build.directory}/appended-resources/etc" files="config.properties" />
+                                    <filterchain>
+                                        <headfilter lines="-1" skip="15" />
+                                    </filterchain>
+                                </concat>
                             </target>
                         </configuration>
                     </execution>

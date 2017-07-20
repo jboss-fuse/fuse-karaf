@@ -44,24 +44,13 @@
             <artifactId>fuse-framework</artifactId>
             <version>${project.version}</version>
             <type>kar</type>
+            <scope>compile</scope>
         </dependency>
         <!--
             dependencies with "features" classifier will be used as startup (scope=compile), boot (scope=runtime) or
             installed (scope=provided) repositories in karaf-maven-plugin
+            there's no need to explicitly add feature repositories that are found in kar
         -->
-        <dependency>
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>standard</artifactId>
-            <version>${version.org.apache.karaf}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
-        <!--
-            org.jboss.fuse.features:fuse-framework:kar includes org.apache.karaf.features:framework:xml:features
-            so there's no need to declare it explicitly
-        -->
-        <!--
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>framework</artifactId>
@@ -70,38 +59,27 @@
             <type>xml</type>
             <scope>compile</scope>
         </dependency>
-        -->
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
-            <artifactId>enterprise</artifactId>
+            <artifactId>standard</artifactId>
             <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
-            <scope>provided</scope>
+            <scope>runtime</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.karaf.features</groupId>-->
-            <!--<artifactId>spring</artifactId>-->
-            <!--<version>${version.org.apache.karaf}</version>-->
-            <!--<classifier>features</classifier>-->
-            <!--<type>xml</type>-->
-            <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>org.apache.karaf.features</groupId>-->
             <!--<artifactId>enterprise</artifactId>-->
             <!--<version>${version.org.apache.karaf}</version>-->
             <!--<classifier>features</classifier>-->
-            <!--<exclusions>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.osgi</groupId>-->
-                    <!--<artifactId>org.osgi.core</artifactId>-->
-                <!--</exclusion>-->
-                <!--<exclusion>-->
-                    <!--<groupId>org.osgi</groupId>-->
-                    <!--<artifactId>org.osgi.compendium</artifactId>-->
-                <!--</exclusion>-->
-            <!--</exclusions>-->
+            <!--<type>xml</type>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.karaf.features</groupId>-->
+            <!--<artifactId>spring</artifactId>-->
+            <!--<version>${version.org.apache.karaf}</version>-->
+            <!--<classifier>features</classifier>-->
             <!--<type>xml</type>-->
             <!--<scope>runtime</scope>-->
         <!--</dependency>-->
@@ -116,24 +94,30 @@
         <!--
             dependencies with "bundle" or "jar" type will be used as startup (scope=compile), boot (scope=runtime) or
             installed (scope=provided) bundles in karaf-maven-plugin
+            Apache Karaf takes the fundamental bundles from org.apache.karaf.features:base:jar
+            Fuse will specify these bundles at distro level
+            (distro = maven artifact with karaf-maven-plugin:assembly goal)
+            Only "provided" scope doesn't configure karaf-maven-plugin to generate special feature file in etc/
+            as we only want these bundles to be copied to system/ directory
         -->
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.karaf</groupId>
+            <artifactId>org.apache.karaf.client</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
-        <resources>
-            <!--
-            <resource>
-                <directory>${project.basedir}/../..</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>README</include>
-                    <include>RELEASE*</include>
-                    <include>LICENSE</include>
-                    <include>NOTICE</include>
-                </includes>
-            </resource>
-            -->
-        </resources>
         <plugins>
             <plugin>
                 <!--
@@ -145,8 +129,8 @@
                      - Startup stage: etc/startup.properties - startup features, startup profiles, startup bundles
                        are used to prepare list of bundles to include in etc/startup.properties
                      - Boot stage: etc/org.apache.karaf.features.cfg - manages features available in featuresBoot
-                       property
-                     - Install stage: just installs the artifacts in ${karaf.default.repository}
+                       property and repositories in featuresRepositories property
+                     - Install stage: just installs the artifacts in ${karaf.home}/${karaf.default.repository}
                     And finally there are 5 kinds of artifacts that may be declared to belong to one of 3 stages:
                      - <stage>Bundles
                      - <stage>Features
@@ -226,7 +210,7 @@
                         <feature>war</feature>
                     </bootFeatures>
                     <installedFeatures>
-                        <!--<feature>wrapper</feature>-->
+                        <feature>wrapper</feature>
                     </installedFeatures>
                     <blacklistedBundles>
                         <bundle>camel-karaf-commands;url="mvn:org.apache.camel.karaf/camel-karaf-commands/2.18.0-SNAPSHOT"</bundle>
@@ -268,6 +252,7 @@
                                 org.osgi.framework.bootdelegation property in etc/config.properties
                         -->
                         <!-- lib/endorsed -->
+                        <library>mvn:org.apache.karaf/org.apache.karaf.exception/${version.org.apache.karaf};type:=endorsed</library>
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces};type:=endorsed;export:=true;delegate:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxp-api-1.4/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
@@ -279,9 +264,12 @@
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${version.org.apache.servicemix.bundles.xalan-serializer};type:=endorsed;export:=true</library>
                         <library>mvn:javax.annotation/javax.annotation-api/1.2;type:=endorsed;export:=true</library>
                         <!-- lib -->
+                        <library>mvn:org.jboss.fuse.modules/fuse-branding/${project.version};type:=default;export:=false</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.locator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <!-- lib/boot -->
+                        <library>mvn:org.osgi/org.osgi.core/${version.org.osgi};type:=boot;export:=false</library>
+                        <library>mvn:org.apache.karaf/org.apache.karaf.main/${version.org.apache.karaf};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna/${version.net.java.dev.jna};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna-platform/${version.net.java.dev.jna};type:=boot;export:=false</library>
                     </libraries>

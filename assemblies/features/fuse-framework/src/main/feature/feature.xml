@@ -16,7 +16,9 @@
     permissions and limitations under the License.
 
 -->
-<features name="fuse-framework-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.3.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.3.0 http://karaf.apache.org/xmlns/features/v1.3.0">
+<features name="fuse-framework-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.5.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.5.0 http://karaf.apache.org/xmlns/features/v1.5.0">
+
+    <!-- JBoss Fuse Karaf features -->
 
 </features>

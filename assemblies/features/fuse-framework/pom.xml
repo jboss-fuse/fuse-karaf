@@ -53,6 +53,7 @@
             <resource>
                 <directory>src/main/feature</directory>
                 <filtering>true</filtering>
+                <!-- convention for org.apache.karaf.tooling.KarMojo#featuresFile -->
                 <targetPath>${project.build.directory}/feature</targetPath>
             </resource>
         </resources>
@@ -109,8 +110,13 @@
                             <goal>kar</goal>
                         </goals>
                         <configuration>
-                            <!--<featuresFile>${project.build.outputDirectory}/resources/system/org/apache/karaf/features/framework/${version.org.apache.karaf}/framework-${version.org.apache.karaf}-features.xml</featuresFile>-->
-                            <featuresFile>mvn:org.apache.karaf.features/framework/${version.org.apache.karaf}/xml/features</featuresFile>
+                            <!--
+                                We use own features XML for this KAR - kar goal will copy only these bundles that
+                                are referenced from "our" features XML. org.apache.karaf.features/framework/VERSION/xml/features
+                                will be used in the distro itself (where karaf-maven-plugin:assembly is configured)
+                            -->
+                            <featuresFile>${project.build.directory}/feature/feature.xml</featuresFile>
+                            <!--<featuresFile>mvn:org.apache.karaf.features/framework/${version.org.apache.karaf}/xml/features</featuresFile>-->
                         </configuration>
                     </execution>
                 </executions>
