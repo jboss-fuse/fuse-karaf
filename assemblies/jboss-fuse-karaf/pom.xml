@@ -40,20 +40,24 @@
         <!--
             dependencies with "kar" type will be added as startup (scope=compile), boot (scope=runtime) or
             installed (scope=provided) kars in karaf-maven-plugin
+            kars are simply unzipped to working directory (target/assembly) and features XMLs are being
+            searched for and used as additional feature repositories (with stage equal to the stage of given kar)
         -->
         <dependency>
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>framework</artifactId>
-            <version>${version.org.apache.karaf}</version>
+            <groupId>org.jboss.fuse.features</groupId>
+            <artifactId>fuse-framework</artifactId>
+            <version>${project.version}</version>
             <type>kar</type>
+            <scope>compile</scope>
         </dependency>
         <!--
             dependencies with "features" classifier will be used as startup (scope=compile), boot (scope=runtime) or
             installed (scope=provided) repositories in karaf-maven-plugin
+            there's no need to explicitly add feature repositories that are found in kar
         -->
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
-            <artifactId>standard</artifactId>
+            <artifactId>framework</artifactId>
             <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
@@ -61,15 +65,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
-            <artifactId>framework</artifactId>
-            <version>${version.org.apache.karaf}</version>
-            <classifier>features</classifier>
-            <type>xml</type>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.karaf.features</groupId>
-            <artifactId>spring</artifactId>
+            <artifactId>standard</artifactId>
             <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
@@ -80,16 +76,14 @@
             <artifactId>enterprise</artifactId>
             <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.osgi</groupId>
-                    <artifactId>org.osgi.compendium</artifactId>
-                </exclusion>
-            </exclusions>
+            <type>xml</type>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.karaf.features</groupId>
+            <artifactId>spring</artifactId>
+            <version>${version.org.apache.karaf}</version>
+            <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
         </dependency>
@@ -128,7 +122,27 @@
         <!--
             dependencies with "bundle" or "jar" type will be used as startup (scope=compile), boot (scope=runtime) or
             installed (scope=provided) bundles in karaf-maven-plugin
+            Apache Karaf takes the fundamental bundles from org.apache.karaf.features:base:jar
+            Fuse will specify these bundles at distro level
+            (distro = maven artifact with karaf-maven-plugin:assembly goal)
+            Only "provided" scope doesn't configure karaf-maven-plugin to generate special feature file in etc/
+            as we only want these bundles to be copied to system/ directory
         -->
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.framework</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.karaf</groupId>
+            <artifactId>org.apache.karaf.client</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.jboss.fuse</groupId>
             <artifactId>quickstarts</artifactId>
@@ -138,20 +152,6 @@
     </dependencies>
 
     <build>
-        <resources>
-            <!--
-            <resource>
-                <directory>${project.basedir}/../..</directory>
-                <filtering>false</filtering>
-                <includes>
-                    <include>README</include>
-                    <include>RELEASE*</include>
-                    <include>LICENSE</include>
-                    <include>NOTICE</include>
-                </includes>
-            </resource>
-            -->
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -189,8 +189,8 @@
                      - Startup stage: etc/startup.properties - startup features, startup profiles, startup bundles
                        are used to prepare list of bundles to include in etc/startup.properties
                      - Boot stage: etc/org.apache.karaf.features.cfg - manages features available in featuresBoot
-                       property
-                     - Install stage: just installs the artifacts in ${karaf.default.repository}
+                       property and repositories in featuresRepositories property
+                     - Install stage: just installs the artifacts in ${karaf.home}/${karaf.default.repository}
                     And finally there are 5 kinds of artifacts that may be declared to belong to one of 3 stages:
                      - <stage>Bundles
                      - <stage>Features
@@ -221,37 +221,80 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <!--
+                        explicit <framework> configuration is needed if there's no compile dependency on
+                        mvn:org.apache.karaf.features/framework/VERSION/kar or
+                        mvn:org.apache.karaf.features/static/VERSION/kar
+                    -->
+                    <framework>framework</framework>
+                    <!--
+                        installAllFeaturesByDefault should be false when using custom kar. Otherwise all
+                        features from feature repositories found in the kar would be installed by default
+                    -->
+                    <installAllFeaturesByDefault>false</installAllFeaturesByDefault>
                     <installedBundles>
                         <installedBundle>${camel.sap.bundle}</installedBundle>
                     </installedBundles>
                     <startupFeatures>
                         <!--
                             "framework" feature is implicitly added if not specified
+                            it's fundamental feature that starts feature service, configadmin, fileinstall
+                            pax-logging and pax-url-aether
                         -->
                         <feature>framework</feature>
-                        <feature>jaas</feature>
-                        <feature>feature</feature>
-                        <feature>management</feature>
-                        <feature>bundle</feature>
-                        <feature>config</feature>
-                        <feature>deployer</feature>
-                        <feature>diagnostic</feature>
-                        <feature>kar</feature>
-                        <feature>log</feature>
-                        <feature>package</feature>
-                        <feature>service</feature>
-                        <feature>system</feature>
-                        <feature>aries-blueprint</feature>
+                        <!-- when "patch" feature is ready, it'll be used as startup feature -->
+                        <!--<feature>patch-core</feature>-->
                     </startupFeatures>
                     <bootFeatures>
+                        <!-- feature:* commands -->
+                        <feature>feature</feature>
+                        <!-- bundle:* commands -->
+                        <feature>bundle</feature>
+                        <!-- config:* commands -->
+                        <feature>config</feature>
+                        <!-- log:* commands -->
+                        <feature>log</feature>
+                        <!-- package:exports/package:imports commands -->
+                        <feature>package</feature>
+                        <!-- service:list command -->
+                        <feature>service</feature>
+                        <!-- system:* commands -->
+                        <feature>system</feature>
+                        <!-- maven:* commands -->
+                        <feature>maven</feature>
+                        <!-- Karaf shell support (jline, æsh) -->
                         <feature>shell</feature>
+                        <!-- SSH support (commands and ssh shell) -->
                         <feature>ssh</feature>
-                        <feature>instance</feature>
-                        <feature>war</feature>
+                        <!-- Service Component Runtime -->
+                        <feature>scr</feature>
+                        <!-- Blueprint -->
+                        <feature>aries-blueprint</feature>
+                        <!-- pax-web: undertow, war, whiteboard -->
                         <feature>pax-http-undertow</feature>
+                        <feature>war</feature>
+                        <!-- jaas:* commands and modules -->
+                        <feature>jaas</feature>
+                        <!-- Karaf JMX Management server -->
+                        <feature>management</feature>
+                        <!-- KAR support -->
+                        <feature>kar</feature>
+                        <!-- features/blueprint/wrap/kar deployer -->
+                        <feature>deployer</feature>
+                        <!-- dev commands -->
+                        <feature>diagnostic</feature>
+                        <!-- child container support -->
+                        <feature>instance</feature>
+
+                        <!-- non Karaf features -->
+
+                        <feature>hawtio</feature>
+
                         <feature>cxf</feature>
                         <feature>cxf-commands</feature>
                         <feature>cxf-http-undertow</feature>
+                        <feature>cxf-rs-description-swagger2</feature>
+
                         <feature>camel</feature>
                         <feature>camel-undertow</feature>
                         <feature>camel-blueprint</feature>
@@ -264,11 +307,11 @@
                         <feature>camel-jaxb</feature>
                         <feature>camel-mail</feature>
                         <feature>camel-paxlogging</feature>
+
                         <feature>pax-cdi-weld</feature>
+
                         <feature>pax-jdbc-pool-narayana</feature>
                         <feature>transaction-manager-narayana</feature>
-                        <feature>hawtio</feature>
-                        <feature>cxf-rs-description-swagger2</feature>
                     </bootFeatures>
                     <installedFeatures>
                         <feature>wrapper</feature>
@@ -313,6 +356,7 @@
                                 org.osgi.framework.bootdelegation property in etc/config.properties
                         -->
                         <!-- lib/endorsed -->
+                        <library>mvn:org.apache.karaf/org.apache.karaf.exception/${version.org.apache.karaf};type:=endorsed</library>
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces};type:=endorsed;export:=true;delegate:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxp-api-1.4/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
@@ -324,12 +368,18 @@
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${version.org.apache.servicemix.bundles.xalan-serializer};type:=endorsed;export:=true</library>
                         <library>mvn:javax.annotation/javax.annotation-api/1.2;type:=endorsed;export:=true</library>
                         <!-- lib -->
+                        <library>mvn:org.jboss.fuse.modules/fuse-branding/${project.version};type:=default;export:=false</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.locator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <!-- lib/boot -->
+                        <library>mvn:org.osgi/org.osgi.core/${version.org.osgi};type:=boot;export:=false</library>
+                        <library>mvn:org.apache.karaf/org.apache.karaf.main/${version.org.apache.karaf};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna/${version.net.java.dev.jna};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna-platform/${version.net.java.dev.jna};type:=boot;export:=false</library>
                     </libraries>
+                    <pidsToExtract>
+                        *
+                    </pidsToExtract>
                     <javase>1.8</javase>
                     <config>
                         <karaf.delay.console>true</karaf.delay.console>
