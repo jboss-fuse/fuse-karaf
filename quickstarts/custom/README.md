@@ -3,24 +3,22 @@ custom: Demonstrates how to create a custom assembly
 Author: Fuse Team  
 Level: Intermediate  
 Technologies: JBoss Fuse, Maven  
-Summary: This quickstart demonstrates to use Maven to create a custom assembly of JBoss Fuse  
+Summary: This quickstart demonstrates how to use Maven to create a custom assembly of JBoss Fuse  
 Target Product: Fuse  
 Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts>  
-
-
 
 What is it?
 -----------
 
-This quick start shows how to use Apache Maven to update and repackage JBoss Fuse to create a custom assembly.
+This quick start shows how to use Apache Maven to create a custom assembly of JBoss Fuse. 
 
-This quick start demonstrates how to create a small, custom assembly. Contrary to the full JBoss Fuse assembly, the custom assembly created will have a much smaller footprint with only a limited set of features that are installed by default.
+This quick start demonstrates how to create a small, custom assembly. 
+The custom assembly created will have a small footprint including just your application and his dependencies.
+The `beginner-camel-log` quickstart will be used as an example of an application.
 
 In studying this quick start you will learn:
 
-* how to use Maven to unpack the existing assembly
-* how to use Karaf's Features Maven plugin to create a new system folder
-* how to use Maven to package the custom assembly
+* how to use Karaf's Features Maven plugin to create a new custom Fuse 7 distro
 
 For more information see:
 
@@ -35,30 +33,28 @@ Before building and running this quick start you need:
 * JDK 1.8
 * JBoss Fuse 7
 
-You will also need to install the JBoss Fuse distribution into your local Maven repository. You can use a command like:
-
-mvn install:install-file -Dfile=/path/to/fuse/jboss-fuse-karaf-6.2.1.redhat-084.zip \
-                         -DgroupId=org.jboss.fuse \
-                         -DartifactId=jboss-fuse-karaf \
-                         -Dversion=6.2.1.redhat-084 \
-                         -Dpackaging=zip \
-                         -DgeneratePom=false
-
 Build the custom assembly
 -------------------------
 
 * Run `mvn clean install` to build the quickstart.
-* After the build has finished, you will find the `target/custom-distro-${project.version}-bin.zip` file with the custom assembly.
+* After the build has finished, you will find the `target/custom-distro-${project.version}.zip` file with the custom assembly.
+
+Run your custom assembly
+------------------------
+
+In `target/assembly` there is the unziped version of the custom distro that can be used to quickly locally run it:
+1. run `target/assembly/bin/karaf`
+2. the custom distro should startup and in JBoss Fuse command prompt should run `log:tail`
+3. a message similar to `| >>> Hello from Fabric based Camel route! :` should be printed every 5 seconds. This is because the custom distro already contains our application (The `beginner-camel-log` quickstart).
+4. to exit the command use `Ctrl+C`
+5. to stop JBoss fuse use `Ctrl+D`, intentionally no `system:*` commands were part of the custom distro so is not possible to use `system:shutdown`.
 
 Customizing the assembly
 ------------------------
 
-The quick start shows a custom assembly with just a few features enabled. Typically, that list of features needs to be modified to match
-your own environment or requirement.
+The quick start shows a custom assembly with just a few features enabled. Typically, that list of features needs to be modified to match your own environment or requirement.
 
-Those features are configured in two locations:
-* The configuration for the `features-maven-plugin` in the `pom.xml` (see `Step 3`) file controls which bundles will be available in the custom assembly's `system` folder
-* `src/main/filtered-resources/etc/org.apache.karaf.features.cfg` defines which features will be installed automatically when the container first starts
-
-If there are any other configurations files you need to add or modify in the custom assembly, those can be added to the `src/main/filtered-resources` directory as well.
-
+The whole custom distro is configured in the pom.xml which is commented out in each section. 
+Adding and removing features and bundles is usually done in `<configuration>` section of the `karaf-maven-plugin`. 
+Files that you need to include inside the assembly (for example configuration files) can be placed in `src/main/resources/assembly`, as an example an `etc/test-property.cfg` is already included and can be found in the built assembly at `target/assembly/etc/test-property.cfg`.
+As an exercise is possible to uncomment some feature in the `<configuration>` section of the `karaf-maven-plugin`, for example `<!--<feature>system</feature>-->`, rebuild the project and see what happens (Will you be able to use the `shutdown` command to stop JBoss Fuse this time?).

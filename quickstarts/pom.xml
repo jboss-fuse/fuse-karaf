@@ -128,6 +128,7 @@
     <modules>
         <module>beginner</module>
         <module>camel</module>
+        <module>custom</module>
         <module>cxf</module>
     </modules>
 
