@@ -51,7 +51,7 @@
       in place, this endpoint will be available at 'http://localhost:8181/cxf/HelloWorld'.
     -->
     <jaxws:endpoint id="helloWorld"
-                    implementor="io.fabric8.quickstarts.soap.HelloWorldImpl"
+                    implementor="org.jboss.fuse.quickstarts.cxf.soap.HelloWorldImpl"
                     address="/HelloWorld">
     </jaxws:endpoint>
 

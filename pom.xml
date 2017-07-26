@@ -26,7 +26,7 @@
     <packaging>pom</packaging>
 
     <name>JBoss Fuse :: Parent</name>
-    <description>JBoss Fuse is an open source ESB with capabilities based on Apache Camel, Apache CXF, Apache ActiveMQ, Apache Karaf and Fabric8 in a single integrated distribution</description>
+    <description>JBoss Fuse is an open source ESB with capabilities based on Apache Camel, Apache CXF and Apache Karaf in a single integrated distribution</description>
 
     <url>https://developers.redhat.com/products/fuse/overview</url>
 

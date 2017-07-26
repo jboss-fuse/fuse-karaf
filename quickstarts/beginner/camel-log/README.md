@@ -44,7 +44,7 @@ Use the bundle
 To use the application be sure to have deployed the quickstart in Fuse as described above.
 
 1. At the fuse prompt, enter the following command: log:tail
-2. Every 5 seconds you will see a message containing ">>> Hello from Fabric based Camel route!"
+2. Every 5 seconds you will see a message containing ">>> Hello from Fuse based Camel route!"
 3. Hit ctrl-c to return to the fuse prompt.
 
 Undeploy the Archive

@@ -45,7 +45,7 @@ Run your custom assembly
 In `target/assembly` there is the unziped version of the custom distro that can be used to quickly locally run it:
 1. run `target/assembly/bin/karaf`
 2. the custom distro should startup and in JBoss Fuse command prompt should run `log:tail`
-3. a message similar to `| >>> Hello from Fabric based Camel route! :` should be printed every 5 seconds. This is because the custom distro already contains our application (The `beginner-camel-log` quickstart).
+3. a message similar to `| >>> Hello from Fuse based Camel route! :` should be printed every 5 seconds. This is because the custom distro already contains our application (The `beginner-camel-log` quickstart).
 4. to exit the command use `Ctrl+C`
 5. to stop JBoss fuse use `Ctrl+D`, intentionally no `system:*` commands were part of the custom distro so is not possible to use `system:shutdown`.
 

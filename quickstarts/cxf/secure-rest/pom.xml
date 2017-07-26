@@ -30,7 +30,7 @@
     <packaging>bundle</packaging>
     
     <name>JBoss Fuse :: Quickstarts :: secure-rest</name>
-    <description>Secure Restful Web Services Example using JAX-RS Basic Authentication with Fabric8</description>
+    <description>Secure Restful Web Services Example using JAX-RS Basic Authentication with Fuse</description>
 
     <properties>
         <skipTests>true</skipTests>
@@ -166,7 +166,7 @@
                             osgi.service.blueprint.namespace=http://cxf.apache.org/transports/http/configuration
                         </Import-Service>
                         <Export-Package>
-                            io.fabric8.quickstarts.rest.secure
+                            org.jboss.fuse.quickstarts.cxf.rest.secure
                         </Export-Package>
                     </instructions>
                 </configuration>
@@ -183,7 +183,7 @@
                         </goals>
                         <configuration>
                             <classResourceNames>
-                                <classResourceName>io.fabric8.quickstarts.rest.secure.CustomerService
+                                <classResourceName>org.jboss.fuse.quickstarts.cxf.rest.secure.CustomerService
                                 </classResourceName>
                             </classResourceNames>
                             <attachWadl>false</attachWadl>
@@ -203,7 +203,7 @@
                         </goals>
                         <configuration>
                             <classResourceNames>
-                                <classResourceName>io.fabric8.quickstarts.rest.secure.CustomerService</classResourceName>
+                                <classResourceName>org.jboss.fuse.quickstarts.cxf.rest.secure.CustomerService</classResourceName>
                             </classResourceNames>
                             <attachSwagger>false</attachSwagger>
                         </configuration>

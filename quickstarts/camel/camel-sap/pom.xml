@@ -85,7 +85,7 @@
 				<filtering>true</filtering>
 			</resource>
 			<resource>
-				<directory>src/main/fabric8</directory>
+				<directory>src/main/fuse</directory>
 				<filtering>true</filtering>
 			</resource>
 		</resources>

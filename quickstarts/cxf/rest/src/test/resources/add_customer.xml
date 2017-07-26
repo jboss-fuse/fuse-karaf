@@ -15,6 +15,6 @@
      permissions and limitations under the License.
 
 -->
-<Customer xmlns="http://rest.fabric.quickstarts.fabric8.io/">
+<Customer xmlns="http://org.jboss.fuse.quickstarts/">
     <name>Jack</name>
 </Customer>

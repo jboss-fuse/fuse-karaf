@@ -177,7 +177,7 @@
                             osgi.service.blueprint.namespace=http://cxf.apache.org/transports/http/configuration
                         </Import-Service>
                         <Export-Package>
-                            io.fabric8.quickstarts.rest
+                            org.jboss.fuse.quickstarts.cxf.rest
                         </Export-Package>
                     </instructions>
                 </configuration>
@@ -236,7 +236,7 @@
                         </goals>
                         <configuration>
                             <classResourceNames>
-                                <classResourceName>io.fabric8.quickstarts.rest.CustomerService</classResourceName>
+                                <classResourceName>org.jboss.fuse.quickstarts.cxf.rest.CustomerService</classResourceName>
                             </classResourceNames>
                             <docProvider>org.apache.cxf.maven_plugin.javatowadl.ResourceMapJavaDocProvider</docProvider>
                             <attachWadl>false</attachWadl>
@@ -256,7 +256,7 @@
                         </goals>
                         <configuration>
                             <classResourceNames>
-                                <classResourceName>io.fabric8.quickstarts.rest.CustomerService</classResourceName>
+                                <classResourceName>org.jboss.fuse.quickstarts.cxf.rest.CustomerService</classResourceName>
                             </classResourceNames>
                             <attachSwagger>false</attachSwagger>
                         </configuration>

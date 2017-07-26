@@ -65,7 +65,7 @@ Use the bundle
 To use the application be sure to have deployed the quickstart in Fuse as described above. Successful deployment will create and start a Camel route in Fuse.
 
 1. As soon as the Camel route has been started, you will see a directory `work/errors/input` in your JBoss Fuse installation.
-2. Copy the file you find in this quick start's `src/main/fabric8/data` directory to the newly created
+2. Copy the file you find in this quick start's `src/main/fuse/data` directory to the newly created
 `work/errors/input` directory.
 4. Wait a few moments and you will find the files in directories under `work/errors`:
   * `order4.xml` will always end up in the `work/errors/validation` directory
