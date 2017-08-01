@@ -23,13 +23,13 @@
     <parent>
         <groupId>org.jboss.fuse.quickstarts</groupId>
         <artifactId>quickstarts-parent</artifactId>
-        <version>7.0.0.redhat-SNAPSHOT</version>
+        <version>7.0.0.fuse-000063</version>
     </parent>
 
     <groupId>org.jboss.fuse.quickstarts</groupId>
     <artifactId>custom-distro</artifactId>
     <packaging>pom</packaging>
-    <version>7.0.0.redhat-SNAPSHOT</version>
+    <version>7.0.0.fuse-000063</version>
 
     <name>JBoss Fuse :: Quickstarts :: custom distro</name>
 
