@@ -71,7 +71,6 @@
         -->
 
         <!-- versions of "subprojects" of JBoss Fuse -->
-        <version.io.fabric8>2.2.215</version.io.fabric8>
         <version.io.hawt>2.0-SNAPSHOT</version.io.hawt>
         <version.org.apache.activemq.artemis>1.5.5</version.org.apache.activemq.artemis>
         <version.org.apache.camel>2.20.0-SNAPSHOT</version.org.apache.camel>
@@ -416,13 +415,6 @@
                     <version>${version.org.apache.cxf}</version>
                 </plugin>
 
-                <!-- Fabric8 plugins -->
-
-                <plugin>
-                    <groupId>io.fabric8</groupId>
-                    <artifactId>fabric8-cxf-plugins</artifactId>
-                    <version>${version.io.fabric8}</version>
-                </plugin>
 
                 <!-- Felix plugins -->
 
