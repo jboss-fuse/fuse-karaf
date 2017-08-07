@@ -149,6 +149,16 @@
                 <updatePolicy>interval:120</updatePolicy>
             </snapshots>
         </repository>
+        <repository>
+            <id>ops4j-snapshots-repository</id>
+            <url>https://oss.sonatype.org/content/repositories/ops4j-snapshots</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <pluginRepositories>
