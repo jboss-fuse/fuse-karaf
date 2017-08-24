@@ -40,8 +40,8 @@
             searched for and used as additional feature repositories (with stage equal to the stage of given kar)
         -->
         <dependency>
-            <groupId>org.jboss.fuse.features</groupId>
-            <artifactId>fuse-framework</artifactId>
+            <groupId>org.jboss.fuse</groupId>
+            <artifactId>fuse-karaf-framework</artifactId>
             <version>${project.version}</version>
             <type>kar</type>
             <scope>compile</scope>

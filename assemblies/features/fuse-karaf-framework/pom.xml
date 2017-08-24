@@ -27,8 +27,8 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.jboss.fuse.features</groupId>
-    <artifactId>fuse-framework</artifactId>
+    <groupId>org.jboss.fuse</groupId>
+    <artifactId>fuse-karaf-framework</artifactId>
     <!--<packaging>kar</packaging>-->
     <packaging>pom</packaging>
 

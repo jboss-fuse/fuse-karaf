@@ -35,7 +35,7 @@
 
     <modules>
         <module>base</module>
-        <module>fuse-framework</module>
+        <module>fuse-karaf-framework</module>
     </modules>
 
 </project>
