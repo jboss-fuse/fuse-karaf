@@ -42,7 +42,7 @@
          - fundamental system libraries (e.g., Felix framework)
         org.jboss.fuse.features:base:jar builds on org.apache.karaf.features:base:jar and adds
         customized versions of the above resources
-        also this org.jboss.fuse.features:base:jar is used by org.jboss.fuse.features:fuse-framework:[kar] which
+        also this org.jboss.fuse.features:base:jar is used by org.jboss.fuse:fuse-karaf-framework:[kar] which
         is used as base KAR of fuse-karaf distro (full and minimal)
     </description>
 
