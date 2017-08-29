@@ -17,7 +17,7 @@
 
 DIRNAME=`dirname "$0"`
 
-KARAF_OPTS=""
+KARAF_OPTS="$KARAF_OPTS"
 export KARAF_OPTS
 
 exec "${DIRNAME}/karaf" "$@"
