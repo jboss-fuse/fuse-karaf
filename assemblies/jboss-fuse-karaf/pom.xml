@@ -322,11 +322,9 @@
                         <bundle>jetty-all-server;url="mvn:org.eclipse.jetty.aggregate/jetty-all-server/8.1.14.v20131031"</bundle>
                     </blacklistedBundles>
                     <blacklistedFeatures>
-                        <feature>jetty</feature>
                         <feature>pax-jetty</feature>
                         <feature>pax-jetty-http2</feature>
                         <feature>pax-http-jetty</feature>
-                        <feature>cxf-http-jetty</feature>
                         <feature>camel-jetty</feature>
                         <feature>camel-jetty8</feature>
                         <feature>camel-jetty9</feature>
