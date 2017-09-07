@@ -15,15 +15,15 @@
  */
 package org.jboss.fuse.quickstarts.cxf.soap.secure;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.interceptor.Interceptor;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * CXF Interceptors are a very powerful and flexible mechanism to add custom logic to the default CXF processing,

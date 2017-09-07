@@ -29,11 +29,11 @@ public class RegionSupport {
 
     /**
      * Get the region code that corresponds to the given country code.
-     * 
+     *
      * This method can be used as a plain Java method. However, when it is used inside a Camel route, the @XPath annotation will
      * evaluate the XPath expression and use the result as the method parameter. In this case, it will fetch the country code
      * from the order XML message. So, the method will determine the region code for the country that is in the XML message.
-     * 
+     *
      * @param country the country code
      * @return the region code
      */

@@ -15,6 +15,8 @@
  */
 package org.jboss.fuse.quickstarts.cxf.rest.secure;
 
+import java.util.HashMap;
+import java.util.Map;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -23,13 +25,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@io.swagger.annotations.Api(value = "/customerservice", description = "Operations about CustomerService")
 /**
  * This Java class with be hosted in the URI path defined by the @Path annotation. @Path annotations on the methods
  * of this class always refer to a path relative to the path defined at the class level.
@@ -39,13 +38,14 @@ import org.slf4j.LoggerFactory;
  * one of the methods would result in 'http://localhost:8181/cxf/customerservice/customers'.
  */
 @Path("/customerservice/")
+@io.swagger.annotations.Api(value = "/customerservice", description = "Operations about CustomerService")
 public class CustomerService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CustomerService.class);
 
-    long currentId = 123;
-    Map<Long, Customer> customers = new HashMap<Long, Customer>();
-    Map<Long, Order> orders = new HashMap<Long, Order>();
+    private long currentId = 123;
+    private Map<Long, Customer> customers = new HashMap<Long, Customer>();
+    private Map<Long, Order> orders = new HashMap<Long, Order>();
 
     public CustomerService() {
         init();

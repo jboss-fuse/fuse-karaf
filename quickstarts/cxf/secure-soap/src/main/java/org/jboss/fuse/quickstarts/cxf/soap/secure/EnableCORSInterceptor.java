@@ -15,15 +15,15 @@
  */
 package org.jboss.fuse.quickstarts.cxf.soap.secure;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.cxf.interceptor.Fault;
 import org.apache.cxf.message.Message;
 import org.apache.cxf.phase.AbstractPhaseInterceptor;
 import org.apache.cxf.phase.Phase;
 import org.apache.cxf.transport.http.Headers;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 public class EnableCORSInterceptor extends AbstractPhaseInterceptor<Message> {
 

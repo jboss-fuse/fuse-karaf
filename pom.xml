@@ -109,6 +109,8 @@
         <version.plugin.mojo.properties-maven-plugin>1.0.0</version.plugin.mojo.properties-maven-plugin>
         <version.plugin.maven-antrun-plugin>1.8</version.plugin.maven-antrun-plugin>
         <version.plugin.maven-assembly-plugin>3.1.0</version.plugin.maven-assembly-plugin>
+        <version.plugin.maven-checkstyle-plugin>2.17</version.plugin.maven-checkstyle-plugin>
+        <version.com.puppycrawl.tools.checkstyle>8.2</version.com.puppycrawl.tools.checkstyle>
         <version.plugin.maven-compiler-plugin>3.7.0</version.plugin.maven-compiler-plugin>
         <version.plugin.maven-dependency-plugin>3.0.1</version.plugin.maven-dependency-plugin>
         <version.plugin.maven-enforcer-plugin>1.4.1</version.plugin.maven-enforcer-plugin>
@@ -412,6 +414,11 @@
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${version.plugin.maven-enforcer-plugin}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${version.plugin.maven-checkstyle-plugin}</version>
+                </plugin>
 
                 <!-- CXF plugins -->
                 
@@ -581,6 +588,42 @@
             <modules>
                 <module>itests</module>
             </modules>
+        </profile>
+        <profile>
+            <!-- Checkstyle -->
+            <id>cs</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>validate</id>
+                                <phase>validate</phase>
+                                <configuration>
+                                    <configLocation>etc/fuse-checkstyle.xml</configLocation>
+                                    <suppressionsLocation>etc/fuse-checkstyle-suppressions.xml</suppressionsLocation>
+                                    <encoding>UTF-8</encoding>
+                                    <consoleOutput>true</consoleOutput>
+                                    <failsOnError>true</failsOnError>
+                                    <logViolationsToConsole>true</logViolationsToConsole>
+                                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                                </configuration>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <dependencies>
+                            <dependency>
+                                <groupId>com.puppycrawl.tools</groupId>
+                                <artifactId>checkstyle</artifactId>
+                                <version>${version.com.puppycrawl.tools.checkstyle}</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

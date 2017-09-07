@@ -15,19 +15,19 @@
  */
 package org.jboss.fuse.quickstarts.beginner.camel.errorhandler;
 
-import org.apache.camel.Exchange;
-import org.apache.camel.Header;
-import org.apache.camel.language.NamespacePrefix;
-import org.apache.camel.language.XPath;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Random;
+
+import org.apache.camel.Exchange;
+import org.apache.camel.Header;
+import org.apache.camel.language.NamespacePrefix;
+import org.apache.camel.language.XPath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * An order service implementation that provides one method to do validation and another method that just randomly throws

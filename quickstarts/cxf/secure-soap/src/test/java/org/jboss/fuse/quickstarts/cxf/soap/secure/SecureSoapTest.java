@@ -15,15 +15,15 @@
  */
 package org.jboss.fuse.quickstarts.cxf.soap.secure;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.cxf.frontend.ClientProxy;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.ws.security.wss4j.WSS4JOutInterceptor;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static org.junit.Assert.*;
 
