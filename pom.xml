@@ -108,13 +108,14 @@
         <version.plugin.mojo.build-helper-maven-plugin>3.0.0</version.plugin.mojo.build-helper-maven-plugin>
         <version.plugin.mojo.properties-maven-plugin>1.0.0</version.plugin.mojo.properties-maven-plugin>
         <version.plugin.maven-antrun-plugin>1.8</version.plugin.maven-antrun-plugin>
-        <version.plugin.maven-assembly-plugin>3.0.0</version.plugin.maven-assembly-plugin>
-        <version.plugin.maven-compiler-plugin>3.6.1</version.plugin.maven-compiler-plugin>
-        <version.plugin.maven-enforcer-plugin>1.4.1</version.plugin.maven-enforcer-plugin>
+        <version.plugin.maven-assembly-plugin>3.1.0</version.plugin.maven-assembly-plugin>
+        <version.plugin.maven-compiler-plugin>3.7.0</version.plugin.maven-compiler-plugin>
         <version.plugin.maven-dependency-plugin>3.0.1</version.plugin.maven-dependency-plugin>
+        <version.plugin.maven-enforcer-plugin>1.4.1</version.plugin.maven-enforcer-plugin>
+        <version.plugin.maven-failsafe-plugin>2.20</version.plugin.maven-failsafe-plugin>
         <version.plugin.maven-remote-resources-plugin>1.5</version.plugin.maven-remote-resources-plugin>
         <version.plugin.maven-resources-plugin>3.0.2</version.plugin.maven-resources-plugin>
-        <version.plugin.maven-surefire-plugin>2.19.1</version.plugin.maven-surefire-plugin>
+        <version.plugin.maven-surefire-plugin>2.20</version.plugin.maven-surefire-plugin>
     </properties>
 
     <repositories>
@@ -403,6 +404,11 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>${version.plugin.maven-failsafe-plugin}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-enforcer-plugin</artifactId>
                     <version>${version.plugin.maven-enforcer-plugin}</version>
                 </plugin>
@@ -569,6 +575,12 @@
                     </plugin>
                 </plugins>
             </build>
+        </profile>
+        <profile>
+            <id>test</id>
+            <modules>
+                <module>itests</module>
+            </modules>
         </profile>
     </profiles>
 
