@@ -46,7 +46,6 @@
         <dependency>
             <groupId>org.jboss.fuse</groupId>
             <artifactId>fuse-karaf-framework</artifactId>
-            <version>${project.version}</version>
             <type>kar</type>
             <scope>compile</scope>
         </dependency>
@@ -58,23 +57,20 @@
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>framework</artifactId>
-            <version>${version.org.apache.karaf}</version>
-            <classifier>features</classifier>
             <type>xml</type>
+            <classifier>features</classifier>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>standard</artifactId>
-            <version>${version.org.apache.karaf}</version>
-            <classifier>features</classifier>
             <type>xml</type>
+            <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>enterprise</artifactId>
-            <version>${version.org.apache.karaf}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
@@ -82,15 +78,13 @@
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>spring</artifactId>
-            <version>${version.org.apache.karaf}</version>
-            <classifier>features</classifier>
             <type>xml</type>
+            <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.camel.karaf</groupId>
             <artifactId>apache-camel</artifactId>
-            <version>${version.org.apache.camel}</version>
             <classifier>features</classifier>
             <type>xml</type>
             <scope>runtime</scope>
@@ -98,25 +92,22 @@
         <dependency>
             <groupId>org.apache.cxf.karaf</groupId>
             <artifactId>apache-cxf</artifactId>
-            <version>${version.org.apache.cxf}</version>
-            <classifier>features</classifier>
             <type>xml</type>
+            <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.activemq</groupId>
             <artifactId>artemis-features</artifactId>
-            <version>${version.org.apache.activemq.artemis}</version>
-            <classifier>features</classifier>
             <type>xml</type>
+            <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>io.hawt</groupId>
             <artifactId>hawtio-karaf</artifactId>
-            <version>${version.io.hawt}</version>
-            <classifier>features</classifier>
             <type>xml</type>
+            <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
         <!--
@@ -146,7 +137,6 @@
         <dependency>
             <groupId>org.jboss.fuse</groupId>
             <artifactId>quickstarts</artifactId>
-            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -200,7 +190,6 @@
                 -->
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
-                <version>${version.org.apache.karaf}</version>
                 <executions>
                     <execution>
                         <id>process-resources</id>

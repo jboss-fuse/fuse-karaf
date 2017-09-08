@@ -37,7 +37,6 @@
             <groupId>org.jboss.fuse.quickstarts</groupId>
             <artifactId>quickstarts-parent</artifactId>
             <type>pom</type>
-            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
