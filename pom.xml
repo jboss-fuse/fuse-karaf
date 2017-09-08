@@ -246,6 +246,12 @@
                 <type>zip</type>
             </dependency>
             <dependency>
+                <groupId>org.jboss.fuse</groupId>
+                <artifactId>jboss-fuse-karaf</artifactId>
+                <version>${project.version}</version>
+                <type>zip</type>
+            </dependency>
+            <dependency>
                 <groupId>org.jboss.fuse.quickstarts</groupId>
                 <artifactId>quickstarts-parent</artifactId>
                 <version>${project.version}</version>
@@ -257,6 +263,11 @@
                 <version>${project.version}</version>
                 <type>xml</type>
                 <classifier>features</classifier>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.fuse.itests</groupId>
+                <artifactId>fuse-itests-common</artifactId>
+                <version>${project.version}</version>
             </dependency>
 
             <!-- Karaf dependencies -->
@@ -650,7 +661,6 @@
                     <version>${version.org.apache.cxf}</version>
                 </plugin>
 
-
                 <!-- Felix plugins -->
 
                 <plugin>
@@ -786,6 +796,22 @@
                         </exclusions>
                     </dependency>
                 </dependencies>
+            </plugin>
+
+            <!-- Felix plugins -->
+
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>${version.plugin.felix.maven-bundle-plugin}</version>
+                <inherited>true</inherited>
+                <extensions>true</extensions>
+                <configuration>
+                    <obrRepository>NONE</obrRepository>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                    </instructions>
+                </configuration>
             </plugin>
 
         </plugins>

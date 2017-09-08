@@ -25,16 +25,16 @@ import org.ops4j.pax.exam.spi.reactors.PerClass;
 
 @RunWith(PaxExam.class)
 @ExamReactorStrategy(PerClass.class)
-public class MinimalDistroIntegrationTest extends FuseKarafTestSupport {
+public class FullDistroIntegrationTest extends FuseKarafTestSupport {
 
     @Configuration
     public Option[] configuration() {
-        return configurationMinimal();
+        return configurationFull();
     }
 
     @Test
-    public void runMinimalFuse7DistroIntegrationTest() {
-        LOG.info("Fuse 7 Minimal is running");
+    public void runFullFuse7DistroIntegrationTest() {
+        LOG.info("Fuse 7 is running");
         LOG.debug("Test bundle symbolic name {}/{}", context.getBundle().getSymbolicName(), context.getBundle().getVersion());
     }
 
