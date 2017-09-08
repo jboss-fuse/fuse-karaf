@@ -805,7 +805,7 @@
             </modules>
         </profile>
         <profile>
-            <!-- License generation: `mvn -Plicense process-sources` -->
+            <!-- License generation: `mvn -Plicense,test process-sources` -->
             <id>license</id>
             <build>
                 <plugins>
@@ -858,7 +858,7 @@
             </build>
         </profile>
         <profile>
-            <!-- Checkstyle: `mvn -Pcs validate` -->
+            <!-- Checkstyle: `mvn -Pcs,test validate` -->
             <id>cs</id>
             <build>
                 <plugins>

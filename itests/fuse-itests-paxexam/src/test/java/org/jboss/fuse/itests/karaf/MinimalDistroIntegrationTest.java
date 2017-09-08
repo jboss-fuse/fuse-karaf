@@ -43,14 +43,14 @@ import static org.ops4j.pax.exam.karaf.options.KarafDistributionOption.*;
 @ExamReactorStrategy(PerClass.class)
 public class MinimalDistroIntegrationTest {
 
-    public static Logger LOG = LoggerFactory.getLogger(MinimalDistroIntegrationTest.class);
+    public static final Logger LOG = LoggerFactory.getLogger(MinimalDistroIntegrationTest.class);
+
+    @Rule
+    public TestName testName = new TestName();
 
     // @Inject is handled by org.ops4j.pax.exam.inject.internal.ServiceInjector.injectField()
     @Inject
     private BundleContext context;
-
-    @Rule
-    public TestName testName = new TestName();
 
     @Before
     public void beforeEach() {
