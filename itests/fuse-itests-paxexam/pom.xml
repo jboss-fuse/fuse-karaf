@@ -93,32 +93,12 @@
             <groupId>org.jboss.fuse</groupId>
             <artifactId>jboss-fuse-karaf-minimal</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ops4j.pax.logging</groupId>
-                    <artifactId>pax-logging-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.karaf</groupId>
-                    <artifactId>org.apache.karaf.client</artifactId>
-                </exclusion>
-            </exclusions>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.jboss.fuse</groupId>
             <artifactId>jboss-fuse-karaf</artifactId>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.ops4j.pax.logging</groupId>
-                    <artifactId>pax-logging-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.apache.karaf</groupId>
-                    <artifactId>org.apache.karaf.client</artifactId>
-                </exclusion>
-            </exclusions>
             <type>zip</type>
         </dependency>
         <dependency>

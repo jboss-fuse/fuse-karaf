@@ -156,7 +156,9 @@
         <!-- Modifier Checks                                    -->
         <!-- See http://checkstyle.sf.net/config_modifiers.html -->
         <module name="ModifierOrder" />
-        <module name="RedundantModifier" />
+        <module name="RedundantModifier">
+            <property name="tokens" value="METHOD_DEF, VARIABLE_DEF, ANNOTATION_FIELD_DEF, INTERFACE_DEF, CLASS_DEF, ENUM_DEF, RESOURCE" />
+        </module>
 
         <!-- Checks for blocks. You know, those {}'s         -->
         <!-- See http://checkstyle.sf.net/config_blocks.html -->
@@ -211,6 +213,8 @@
         <module name="InterfaceIsType" />
         <module name="VisibilityModifier">
             <property name="protectedAllowed" value="true" />
+            <property name="packageAllowed" value="true" />
+            <property name="ignoreAnnotationCanonicalNames" value="org.junit.Rule, org.junit.ClassRule, com.google.common.annotations.VisibleForTesting, org.assertj.core.util.VisibleForTesting" />
         </module>
 
         <module name="MutableException">

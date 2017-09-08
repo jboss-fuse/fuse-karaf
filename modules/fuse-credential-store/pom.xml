@@ -21,23 +21,22 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jboss.fuse</groupId>
-        <artifactId>jboss-fuse-parent</artifactId>
+        <groupId>org.jboss.fuse.modules</groupId>
+        <artifactId>fuse-modules</artifactId>
         <version>7.0.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.jboss.fuse.modules</groupId>
-    <artifactId>fuse-modules</artifactId>
+    <artifactId>fuse-credential-store</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules</name>
-
-    <description>Additional components for JBoss Fuse (commands, services, libraries, etc.)</description>
+    <name>JBoss Fuse :: Fuse Modules :: Fuse Credential Store</name>
+    <description>Parent POM for Fuse Credential Store support for Apache Karaf</description>
 
     <modules>
-        <module>fuse-branding</module>
-        <module>fuse-credential-store</module>
+        <module>fuse-credential-store-karaf</module>
+        <!--<module>fuse-credential-store-karaf-itests</module>-->
     </modules>
 
 </project>
