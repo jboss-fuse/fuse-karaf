@@ -238,6 +238,8 @@
             <property name="maximumNumber" value="0" />
         </module>
 
+        <module name="SuppressionCommentFilter" />
+
     </module>
 
 </module>

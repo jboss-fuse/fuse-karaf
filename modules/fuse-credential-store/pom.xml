@@ -36,7 +36,6 @@
 
     <modules>
         <module>fuse-credential-store-karaf</module>
-        <!--<module>fuse-credential-store-karaf-itests</module>-->
     </modules>
 
 </project>

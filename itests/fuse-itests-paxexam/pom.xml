@@ -39,6 +39,11 @@
             <groupId>org.jboss.fuse.itests</groupId>
             <artifactId>fuse-itests-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.fuse.modules</groupId>
+            <artifactId>fuse-credential-store-karaf</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.ops4j.pax.exam</groupId>
@@ -108,10 +113,27 @@
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.apache.karaf.features</groupId>
+            <artifactId>standard</artifactId>
+            <scope>test</scope>
+            <type>xml</type>
+            <classifier>features</classifier>
+        </dependency>
 
     </dependencies>
 
     <build>
+        <testResources>
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+            </testResource>
+            <testResource>
+                <directory>src/test/resources-binary</directory>
+                <filtering>false</filtering>
+            </testResource>
+        </testResources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

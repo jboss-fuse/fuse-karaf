@@ -183,6 +183,7 @@
                         <!-- pax-web: undertow, war, whiteboard -->
                         <feature>pax-http-undertow</feature>
                         <feature>war</feature>
+                        <feature>fuse-credential-store</feature>
                     </bootFeatures>
                     <installedFeatures>
                         <feature>wrapper</feature>

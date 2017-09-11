@@ -35,6 +35,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wildfly.security.WildFlyElytronProvider;
@@ -55,14 +57,15 @@ import org.wildfly.security.password.interfaces.ClearPassword;
  * When stopping, removes the {@link WildFlyElytronProvider} and restores the original {@link RuntimeMXBean} and
  * original system property values.
  */
-public final class Activator implements BundleActivator {
+public final class Activator implements BundleActivator, ServiceTrackerCustomizer<MBeanServer, MBeanServer> {
 
     private static final Logger LOG = LoggerFactory.getLogger(Activator.class);
 
     private static final String SENSITIVE_VALUE_REPLACEMENT = "<sensitive>";
 
-    private ServiceReference<MBeanServer> mbeanServerReference;
+    private BundleContext context;
 
+    private ServiceReference<MBeanServer> mbeanServerReference;
     private RuntimeMXBean originalRuntimeBean;
 
     private String providerName;
@@ -70,6 +73,8 @@ public final class Activator implements BundleActivator {
     private final Map<String, String> replacedProperties = new HashMap<>();
 
     private ObjectName runtimeBeanName;
+
+    private ServiceTracker<MBeanServer, MBeanServer> mbeanServerTracker;
 
     /**
      * If there are any Credential store references as values in the system properties, adds
@@ -81,6 +86,12 @@ public final class Activator implements BundleActivator {
      */
     @Override
     public void start(final BundleContext context) throws Exception {
+        this.context = context;
+
+        final WildFlyElytronProvider elytronProvider = new WildFlyElytronProvider();
+        providerName = elytronProvider.getName();
+        Security.addProvider(elytronProvider);
+
         final Properties properties = System.getProperties();
 
         @SuppressWarnings("unchecked")
@@ -91,11 +102,6 @@ public final class Activator implements BundleActivator {
         if (!hasValuesFromCredentialStore) {
             return;
         }
-
-        final WildFlyElytronProvider elytronProvider = new WildFlyElytronProvider();
-        providerName = elytronProvider.getName();
-
-        Security.addProvider(elytronProvider);
 
         CredentialStore credentialStore;
         try {
@@ -128,7 +134,8 @@ public final class Activator implements BundleActivator {
         }
 
         if (!replacedProperties.isEmpty()) {
-            installFilteringRuntimeBean(context);
+            mbeanServerTracker = new ServiceTracker<>(context, MBeanServer.class, this);
+            mbeanServerTracker.open();
         }
     }
 
@@ -147,23 +154,16 @@ public final class Activator implements BundleActivator {
             Security.removeProvider(providerName);
         }
 
-        // if we've replaced the RuntimeMXBean
-        if (originalRuntimeBean != null) {
-            final MBeanServer mbeanServer = context.getService(mbeanServerReference);
-
-            // and the MBeanServer is still around
-            if (mbeanServer != null) {
-                // remove our proxy
-                mbeanServer.unregisterMBean(runtimeBeanName);
-                // and restore the original
-                mbeanServer.registerMBean(originalRuntimeBean, runtimeBeanName);
-            }
-        }
+        restoreRuntimeMBean();
 
         if (!replacedProperties.isEmpty()) {
             // restore original value references
-            replacedProperties.forEach((k, v) -> System.setProperty(k, v));
+            replacedProperties.forEach(System::setProperty);
             replacedProperties.clear();
+        }
+
+        if (mbeanServerTracker != null) {
+            mbeanServerTracker.close();
         }
     }
 
@@ -176,10 +176,7 @@ public final class Activator implements BundleActivator {
      *            OSGI bundle context
      * @throws JMException
      */
-    void installFilteringRuntimeBean(final BundleContext context) throws JMException {
-        mbeanServerReference = context.getServiceReference(MBeanServer.class);
-        final MBeanServer mbeanServer = context.getService(mbeanServerReference);
-
+    void installFilteringRuntimeBean(final BundleContext context, final MBeanServer mbeanServer) throws JMException {
         runtimeBeanName = ObjectName.getInstance("java.lang", "type", "Runtime");
 
         originalRuntimeBean = ManagementFactory.getRuntimeMXBean();
@@ -207,6 +204,21 @@ public final class Activator implements BundleActivator {
 
         mbeanServer.unregisterMBean(runtimeBeanName);
         mbeanServer.registerMBean(proxy, runtimeBeanName);
+    }
+
+    private void restoreRuntimeMBean() throws JMException {
+        // if we've replaced the RuntimeMXBean
+        if (originalRuntimeBean != null && mbeanServerReference != null) {
+            final MBeanServer mbeanServer = context.getService(mbeanServerReference);
+
+            // and the MBeanServer is still around
+            if (mbeanServer != null) {
+                // remove our proxy
+                mbeanServer.unregisterMBean(runtimeBeanName);
+                // and restore the original
+                mbeanServer.registerMBean(originalRuntimeBean, runtimeBeanName);
+            }
+        }
     }
 
     /**
@@ -247,4 +259,27 @@ public final class Activator implements BundleActivator {
 
         return true;
     }
+
+    @Override
+    public MBeanServer addingService(ServiceReference<MBeanServer> serviceReference) {
+        mbeanServerReference = serviceReference;
+        MBeanServer server = context.getService(serviceReference);
+        try {
+            installFilteringRuntimeBean(context, server);
+        } catch (JMException e) {
+            LOG.error(e.getMessage(), e);
+        }
+        return server;
+    }
+
+    @Override
+    public void modifiedService(ServiceReference<MBeanServer> serviceReference, MBeanServer mBeanServer) {
+        mbeanServerReference = serviceReference;
+    }
+
+    @Override
+    public void removedService(ServiceReference<MBeanServer> serviceReference, MBeanServer mBeanServer) {
+        mbeanServerReference = null;
+    }
+
 }

@@ -303,6 +303,11 @@
                 <artifactId>fuse-itests-common</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jboss.fuse.modules</groupId>
+                <artifactId>fuse-credential-store-karaf</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- OSGi/Karaf dependencies -->
 

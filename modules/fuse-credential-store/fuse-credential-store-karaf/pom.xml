@@ -39,10 +39,12 @@
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>osgi.core</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.osgi</groupId>
             <artifactId>osgi.cmpn</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -137,6 +139,7 @@
                             org.ietf.jgss,
                             org.osgi.framework,
                             org.osgi.service.cm,
+                            org.osgi.util.tracker,
                             org.apache.karaf.shell.api.action,
                             org.apache.karaf.shell.api.action.lifecycle,
                             org.apache.karaf.shell.api.console,
