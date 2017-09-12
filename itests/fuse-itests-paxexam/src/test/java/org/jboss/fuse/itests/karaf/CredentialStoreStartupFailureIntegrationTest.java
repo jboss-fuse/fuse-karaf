@@ -53,7 +53,6 @@ public class CredentialStoreStartupFailureIntegrationTest {
                     configureConsole().ignoreRemoteShell().ignoreLocalConsole(),
                     systemTimeout(60000),
                     vmOptions("-Dprop=CS:key"),
-                    mavenBundle("org.jboss.fuse.modules", "fuse-credential-store-karaf").versionAsInProject(),
                     logLevel(LogLevelOption.LogLevel.WARN)
             );
         }

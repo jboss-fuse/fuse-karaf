@@ -64,8 +64,7 @@ public class CredentialStoreIntegrationTest extends FuseKarafTestSupport {
                 environment("CREDENTIAL_STORE_PROTECTION=9KjAtKnaEnb3hgj+67wrS85IHABrZXBgG2gShcQ9kEGl4zjV9TLfyEwxBJ6836dI"),
                 environment("CREDENTIAL_STORE_ATTR_location=credential.store"),
                 vmOption("-Dprop=CS:key"),
-                KarafDistributionOption.features(karafStandardFeature, "management"),
-                mavenBundle("org.jboss.fuse.modules", "fuse-credential-store-karaf").versionAsInProject()
+                KarafDistributionOption.features(karafStandardFeature, "management")
         );
     }
 
