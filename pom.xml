@@ -75,12 +75,13 @@
         -->
 
         <!-- versions of "subprojects" of JBoss Fuse -->
-        <version.io.hawt>2.0-SNAPSHOT</version.io.hawt>
-        <version.org.apache.activemq.artemis>1.5.5</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.20.0-SNAPSHOT</version.org.apache.camel>
-        <version.org.apache.cxf>3.2.0</version.org.apache.cxf>
+        <version.io.hawt>2.0.0.fuse-000063</version.io.hawt>
+        <version.org.apache.activemq.artemis>2.0.0.amq-700011-redhat-1</version.org.apache.activemq.artemis>
+        <version.org.apache.camel>2.20.0.fuse-000093</version.org.apache.camel>
+        <version.org.apache.cxf>3.1.11.fuse-000093</version.org.apache.cxf>
+        <!-- At some point, Karaf will also use pipeline version -->
         <version.org.apache.karaf>4.2.0-SNAPSHOT</version.org.apache.karaf>
-        <version.org.fusesource.camel-sap>6.3.0.redhat-262</version.org.fusesource.camel-sap>
+        <version.org.fusesource.camel-sap>6.3.0.redhat-283</version.org.fusesource.camel-sap>
 
         <!-- versions of normal dependencies of JBoss Fuse -->
         <version.com.fasterxml.jackson.module>2.8.8</version.com.fasterxml.jackson.module>
@@ -168,6 +169,16 @@
             </snapshots>
         </repository>
         <repository>
+            <id>jboss-ea</id>
+            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>apache-snapshots-repository</id>
             <url>https://repository.apache.org/content/groups/snapshots</url>
             <releases>
@@ -175,7 +186,7 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>interval:120</updatePolicy>
+                <updatePolicy>daily</updatePolicy>
             </snapshots>
         </repository>
         <repository>
@@ -204,6 +215,16 @@
         <pluginRepository>
             <id>redhat-ea-repository</id>
             <url>https://maven.repository.redhat.com/earlyaccess/all</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </pluginRepository>
+        <pluginRepository>
+            <id>jboss-ea</id>
+            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
