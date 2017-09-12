@@ -34,7 +34,7 @@
     <name>JBoss Fuse :: Assemblies</name>
 
     <modules>
-        <module>features</module>
+        <module>fuse-karaf-framework</module>
         <module>quickstarts</module>
         <module>jboss-fuse-karaf-minimal</module>
         <module>jboss-fuse-karaf</module>
