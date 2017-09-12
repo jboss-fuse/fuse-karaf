@@ -47,11 +47,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.jboss.fuse.features</groupId>
-            <artifactId>base</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>base</artifactId>
             <scope>runtime</scope>
