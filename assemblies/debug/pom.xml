@@ -33,12 +33,6 @@
 
     <name>JBoss Fuse :: Assemblies :: Debugging support</name>
 
-    <properties>
-        <version.io.undertow>1.3.25.Final</version.io.undertow>
-        <version.org.ops4j.pax.tipi.undertow>1.3.25.1</version.org.ops4j.pax.tipi.undertow>
-        <version.org.ops4j.pax.web>6.0.7</version.org.ops4j.pax.web>
-    </properties>
-
     <dependencies>
 
         <!--
@@ -50,7 +44,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${version.javax.servlet}</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -63,95 +56,66 @@
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>
             <artifactId>pax-web-undertow</artifactId>
-            <version>${version.org.ops4j.pax.web}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>
             <artifactId>pax-web-api</artifactId>
-            <version>${version.org.ops4j.pax.web}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>
             <artifactId>pax-web-spi</artifactId>
-            <version>${version.org.ops4j.pax.web}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>
             <artifactId>pax-web-runtime</artifactId>
-            <version>${version.org.ops4j.pax.web}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>
             <artifactId>pax-web-extender-war</artifactId>
-            <version>${version.org.ops4j.pax.web}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>
             <artifactId>pax-web-extender-whiteboard</artifactId>
-            <version>${version.org.ops4j.pax.web}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.web</groupId>
             <artifactId>pax-web-jsp</artifactId>
-            <version>${version.org.ops4j.pax.web}</version>
             <scope>runtime</scope>
         </dependency>
 
         <dependency>
             <groupId>org.ops4j.pax.tipi</groupId>
             <artifactId>org.ops4j.pax.tipi.undertow.core</artifactId>
-            <version>${version.org.ops4j.pax.tipi.undertow}</version>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.tipi</groupId>
             <artifactId>org.ops4j.pax.tipi.undertow.servlet</artifactId>
-            <version>${version.org.ops4j.pax.tipi.undertow}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>io.undertow</groupId>
-                    <artifactId>undertow-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>io.undertow</groupId>
-                    <artifactId>undertow-servlet</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.ops4j.pax.tipi</groupId>
             <artifactId>org.ops4j.pax.tipi.undertow.websocket-jsr</artifactId>
-            <version>${version.org.ops4j.pax.tipi.undertow}</version>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>io.undertow</groupId>-->
             <!--<artifactId>undertow-core</artifactId>-->
-            <!--<version>${version.io.undertow}</version>-->
             <!--<scope>runtime</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>io.undertow</groupId>-->
             <!--<artifactId>undertow-servlet</artifactId>-->
-            <!--<version>${version.io.undertow}</version>-->
             <!--<scope>runtime</scope>-->
         <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>io.undertow</groupId>-->
             <!--<artifactId>undertow-websockets-jsr</artifactId>-->
-            <!--<version>${version.io.undertow}</version>-->
             <!--<scope>runtime</scope>-->
         <!--</dependency>-->
-
-        <dependency>
-            <groupId>io.hawt</groupId>
-            <artifactId>hawtio-war</artifactId>
-            <version>${version.io.hawt}</version>
-        </dependency>
 
     </dependencies>
 
