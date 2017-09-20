@@ -39,7 +39,7 @@ System requirements
 
 Before building and running this quick start you need:
 
-* Maven 3.1.1 or higher
+* Maven 3.3.1 or higher
 * JDK 1.8
 * JBoss Fuse 7
 
@@ -69,7 +69,7 @@ Use the bundle
 To use the application be sure to have deployed the quickstart in Fuse as described above. 
 
 1. As soon as the Camel route has been started, you will see a directory `work/cbr/input` in your JBoss Fuse installation.
-2. Copy the files you find in this quick start's `src/main/fabric8/data` directory to the newly created `work/cbr/input`
+2. Copy the files you find in this quick start's `src/main/fuse/data` directory to the newly created `work/cbr/input`
 directory.
 3. Wait a few moments and you will find the same files organized by country under the `work/cbr/output` directory.
   * `order1.xml` in `work/cbr/output/others`

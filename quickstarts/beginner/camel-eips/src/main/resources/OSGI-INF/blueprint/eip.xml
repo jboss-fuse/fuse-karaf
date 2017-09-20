@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2005-2017 Red Hat, Inc.
-  
-    Red Hat licenses this file to you under the Apache License, version
-    2.0 (the "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-  
-       http://www.apache.org/licenses/LICENSE-2.0
-  
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-    implied.  See the License for the specific language governing
-    permissions and limitations under the License.
+
+     Copyright 2005-2017 Red Hat, Inc.
+
+     Red Hat licenses this file to you under the Apache License, version
+     2.0 (the "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+     implied.  See the License for the specific language governing
+     permissions and limitations under the License.
+
 -->
 <!--
    This is the OSGi Blueprint XML file defining the Camel context and routes.  Because the file is in the
@@ -29,9 +31,9 @@
 
     <!--
       We are using the OSGi Blueprint XML syntax to define a bean that we use in our Camel route to determine
-      the geographical region. The code for this bean can be found in src/main/java/io/fabric8/quickstarts/fabric/eip/RegionSupport.java
+      the geographical region. The code for this bean can be found in src/main/java/org/jboss/fuse/quickstarts/beginner/camel/eip/RegionSupport.java
     -->
-    <bean id="MyRegionSupport" class="io.fabric8.quickstarts.eip.RegionSupport" />
+    <bean id="MyRegionSupport" class="org.jboss.fuse.quickstarts.beginner.camel.eip.RegionSupport" />
 
     <!--
       The namespace for the camelContext element in Blueprint is 'http://camel.apache.org/schema/blueprint'. We can also define
@@ -42,7 +44,7 @@
       While it is not required to assign id's to the <camelContext/> and <route/> elements, it is a good idea
       to set them for runtime management purposes (logging, JMX MBeans, ...)
     -->
-    <camelContext xmlns="http://camel.apache.org/schema/blueprint" xmlns:order="http://fabric8.com/examples/order/v7"
+    <camelContext xmlns="http://camel.apache.org/schema/blueprint" xmlns:order="http://org.jboss.fuse.quickstarts/examples/order/v7"
         id="eip-example-context">
 
         <!--

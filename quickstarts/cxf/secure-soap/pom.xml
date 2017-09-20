@@ -117,7 +117,7 @@
                         <Import-Service>org.apache.aries.blueprint.NamespaceHandler;
                             osgi.service.blueprint.namespace=http://cxf.apache.org/transports/http/configuration
                         </Import-Service>
-                        <Export-Package>io.fabric8.quickstarts.soap.secure</Export-Package>
+                        <Export-Package>org.jboss.fuse.quickstarts.cxf.soap.secure</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>
@@ -132,7 +132,7 @@
                             <goal>java2ws</goal>
                         </goals>
                         <configuration>
-                            <className>io.fabric8.quickstarts.soap.secure.HelloWorld</className>
+                            <className>org.jboss.fuse.quickstarts.cxf.soap.secure.HelloWorld</className>
                             <genWsdl>true</genWsdl>
                             <attachWsdl>false</attachWsdl>
                             <verbose>true</verbose>

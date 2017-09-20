@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Copyright 2005-2017 Red Hat, Inc.
-  
-    Red Hat licenses this file to you under the Apache License, version
-    2.0 (the "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-  
-       http://www.apache.org/licenses/LICENSE-2.0
-  
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
-    implied.  See the License for the specific language governing
-    permissions and limitations under the License.
+
+     Copyright 2005-2017 Red Hat, Inc.
+
+     Red Hat licenses this file to you under the Apache License, version
+     2.0 (the "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+     implied.  See the License for the specific language governing
+     permissions and limitations under the License.
+
 -->
 <!--
    This is the OSGi Blueprint XML file defining the CXF JAX-RS beans.  Because the file is in the
@@ -46,7 +48,7 @@
         </jaxrs:providers>
         <jaxrs:features>
             <bean class="org.apache.cxf.jaxrs.swagger.Swagger2Feature">
-                <property name="title" value="Fabric8:CXF:Quickstarts - Customer Service" />
+                <property name="title" value="Fuse:CXF:Quickstarts - Customer Service" />
                 <property name="description" value="Sample REST-based Customer Service" />
                 <property name="version" value="${project.version}" />
             </bean>
@@ -71,6 +73,6 @@
       We are using the OSGi Blueprint XML syntax to define a bean that we referred to in our JAX-RS server setup.
       This bean carries a set of JAX-RS annotations that allow its methods to be mapped to incoming requests.
     -->
-    <bean id="customerSvc" class="io.fabric8.quickstarts.rest.CustomerService"/>
+    <bean id="customerSvc" class="org.jboss.fuse.quickstarts.cxf.rest.CustomerService"/>
 
 </blueprint>

@@ -177,7 +177,7 @@
                             osgi.service.blueprint.namespace=http://cxf.apache.org/transports/http/configuration
                         </Import-Service>
                         <Export-Package>
-                            io.fabric8.quickstarts.rest
+                            org.jboss.fuse.quickstarts.cxf.rest
                         </Export-Package>
                     </instructions>
                 </configuration>
@@ -236,7 +236,7 @@
                         </goals>
                         <configuration>
                             <classResourceNames>
-                                <classResourceName>io.fabric8.quickstarts.rest.CustomerService</classResourceName>
+                                <classResourceName>org.jboss.fuse.quickstarts.cxf.rest.CustomerService</classResourceName>
                             </classResourceNames>
                             <docProvider>org.apache.cxf.maven_plugin.javatowadl.ResourceMapJavaDocProvider</docProvider>
                             <attachWadl>false</attachWadl>
@@ -245,8 +245,8 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>fabric8-cxf-plugins</artifactId>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-java2swagger-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>process-classes</id>
@@ -255,9 +255,9 @@
                             <goal>java2swagger</goal>
                         </goals>
                         <configuration>
-                            <classResourceNames>
-                                <classResourceName>io.fabric8.quickstarts.rest.CustomerService</classResourceName>
-                            </classResourceNames>
+                            <resourcePackages>
+                                <resourcePackage>org.jboss.fuse.quickstarts.cxf.rest</resourcePackage>
+                            </resourcePackages>
                             <attachSwagger>false</attachSwagger>
                         </configuration>
                     </execution>

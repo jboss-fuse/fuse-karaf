@@ -101,7 +101,7 @@
                             osgi.service.blueprint.namespace=http://cxf.apache.org/transports/http/configuration
                         </Import-Service>
                         <Export-Package>
-                            io.fabric8.quickstarts.soap
+                            org.jboss.fuse.quickstarts.cxf.soap
                         </Export-Package>
                     </instructions>
                 </configuration>
@@ -117,7 +117,7 @@
                             <goal>java2ws</goal>
                         </goals>
                         <configuration>
-                            <className>io.fabric8.quickstarts.soap.HelloWorld</className>
+                            <className>org.jboss.fuse.quickstarts.cxf.soap.HelloWorld</className>
                             <genWsdl>true</genWsdl>
                             <attachWsdl>false</attachWsdl>
                             <verbose>true</verbose>

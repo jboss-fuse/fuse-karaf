@@ -30,7 +30,7 @@
     <packaging>bundle</packaging>
     
     <name>JBoss Fuse :: Quickstarts :: secure-rest</name>
-    <description>Secure Restful Web Services Example using JAX-RS Basic Authentication with Fabric8</description>
+    <description>Secure Restful Web Services Example using JAX-RS Basic Authentication with Fuse</description>
 
     <properties>
         <skipTests>true</skipTests>
@@ -166,7 +166,7 @@
                             osgi.service.blueprint.namespace=http://cxf.apache.org/transports/http/configuration
                         </Import-Service>
                         <Export-Package>
-                            io.fabric8.quickstarts.rest.secure
+                            org.jboss.fuse.quickstarts.cxf.rest.secure
                         </Export-Package>
                     </instructions>
                 </configuration>
@@ -183,7 +183,7 @@
                         </goals>
                         <configuration>
                             <classResourceNames>
-                                <classResourceName>io.fabric8.quickstarts.rest.secure.CustomerService
+                                <classResourceName>org.jboss.fuse.quickstarts.cxf.rest.secure.CustomerService
                                 </classResourceName>
                             </classResourceNames>
                             <attachWadl>false</attachWadl>
@@ -192,8 +192,8 @@
                 </executions>
             </plugin>
             <plugin>
-                <groupId>io.fabric8</groupId>
-                <artifactId>fabric8-cxf-plugins</artifactId>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-java2swagger-plugin</artifactId>
                 <executions>
                     <execution>
                         <id>process-classes</id>
@@ -202,9 +202,9 @@
                             <goal>java2swagger</goal>
                         </goals>
                         <configuration>
-                            <classResourceNames>
-                                <classResourceName>io.fabric8.quickstarts.rest.secure.CustomerService</classResourceName>
-                            </classResourceNames>
+                            <resourcePackages>
+                                <resourcePackage>org.jboss.fuse.quickstarts.cxf.rest.secure.CustomerService</resourcePackage>
+                            </resourcePackages>
                             <attachSwagger>false</attachSwagger>
                         </configuration>
                     </execution>
@@ -217,7 +217,7 @@
         <profile>
             <id>test</id>
             <properties>
-                <skipTests>${skipTests}</skipTests>
+                <skipTests>false</skipTests>
             </properties>
             <build>
                 <defaultGoal>verify</defaultGoal>

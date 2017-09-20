@@ -18,7 +18,7 @@ System requirements
 
 Before building and running this quick start you need:
 
-* Maven 3.1.1 or higher
+* Maven 3.3.1 or higher
 * JDK 1.8
 * JBoss Fuse 7
 
@@ -44,7 +44,7 @@ Use the bundle
 To use the application be sure to have deployed the quickstart in Fuse as described above.
 
 1. At the fuse prompt, enter the following command: log:tail
-2. Every 5 seconds you will see a message containing ">>> Hello from Fabric based Camel route!"
+2. Every 5 seconds you will see a message containing ">>> Hello from Fuse based Camel route!"
 3. Hit ctrl-c to return to the fuse prompt.
 
 Undeploy the Archive

@@ -38,7 +38,7 @@ System requirements
 
 Before building and running this quick start you will need:
 
-* Maven 3.1.1 or higher
+* Maven 3.3.1 or higher
 * JDK 1.8
 * JBoss Fuse 7
 * SAP JCo3 and IDoc3 libraries (sapjco3.jar, sapidoc3.jar and JCo native library for your OS platform)
