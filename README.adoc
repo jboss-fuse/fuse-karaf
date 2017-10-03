@@ -1,3 +1,5 @@
+image:https://img.shields.io/badge/stack%20overflow-jbossfuse-red.svg?colorB=cc0000[link="https://stackoverflow.com/questions/tagged/jbossfuse"]
+
 = JBoss Fuse
 :toc:
 :icons: font
