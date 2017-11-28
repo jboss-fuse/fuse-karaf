@@ -970,7 +970,7 @@
                                      <onlyWhenRelease>true</onlyWhenRelease>
                                  </requireReleaseDeps>
                                  <requireMavenVersion>
-                                     <version>[3.3,4)</version>
+                                     <version>[3.3.9,4)</version>
                                  </requireMavenVersion>
                                  <requireJavaVersion>
                                      <version>[1.8,9]</version>
