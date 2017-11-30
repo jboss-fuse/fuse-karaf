@@ -220,6 +220,7 @@
             <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-java2wadl-plugin</artifactId>
+                <version>${version.org.apache.cxf}</version>
                 <executions>
                     <execution>
                         <id>parsejavadoc</id>
