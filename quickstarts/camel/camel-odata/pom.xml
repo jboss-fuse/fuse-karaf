@@ -30,7 +30,7 @@
     <packaging>bundle</packaging>
     
     <name>JBoss Fuse :: Quickstarts :: camel-odata</name>
-    <description>Camel Olingo2 OData Example</description>
+    <description>Camel Olingo4 OData Example</description>
     <url>https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-odata</url>
 
     <dependencies>
@@ -42,6 +42,11 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-blueprint</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-olingo4</artifactId>
         </dependency>
     </dependencies>
 
