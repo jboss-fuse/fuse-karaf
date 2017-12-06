@@ -24,27 +24,15 @@
    and the Camel namespaces.
 -->
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0"
-           xsi:schemaLocation="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.0.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.0.0.xsd
+           xsi:schemaLocation="
              http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
              http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
 
-  <!-- OSGi blueprint property placeholder -->
-  <cm:property-placeholder id="placeholder" persistent-id="org.jboss.fuse.quickstarts.odata" />
-
-  <bean id="odata" class="org.apache.camel.component.olingo2.Olingo2Component">
-    <property name="configuration">
-      <bean class="org.apache.camel.component.olingo2.Olingo2Configuration">
-        <property name="httpHeaders">
-          <map>
-            <entry key="AUTHORIZATION" value="${userPassword}" />
-          </map>
-        </property>
-        <property name="serviceUri" value="${serviceUri}"/>
-        <property name="contentType" value="${contentType}"/>
-      </bean>
-    </property>
+  <bean id="odata4" class="org.apache.camel.component.olingo4.Olingo4Component">
+    <property name="configuration" ref="odata4Configuration"/>
   </bean>
+
+  <bean id="odata4Configuration" class="org.apache.camel.example.olingo4.blueprint.Olingo4TestConfiguration"/>
 
   <!--
     The namespace for the camelContext element in Blueprint is 'http://camel.apache.org/schema/blueprint'. Additionally,
@@ -53,34 +41,21 @@
     While it is not required to assign id's to the <camelContext/> and <route/> elements, it is a good idea
     to set those for runtime management purposes (logging, JMX MBeans, ...)
   -->
-  <camelContext xmlns="http://camel.apache.org/schema/blueprint" id="odata-example-context">
-
-    <dataFormats>
-      <!-- Here we define a Json data format with the id jack and use a Map as the unmarshal type -->
-      <json id="jack" library="Jackson" />
-    </dataFormats>
-
-    <!--
-      When this route is started, it will automatically create the work/odata/input directory where you can drop the
-      file that need to be processed.
-
-      The <log/> elements are used to add human-friendly business logging statements. They make it easier to see what the
-      route is doing.
-
-      The <to/> element contains the JBoss Data Virtualization destination endpoint.
-    -->
+  <camelContext xmlns="http://camel.apache.org/schema/blueprint" id="odata4-example-context">
     <route id="odata-route">
 
       <from uri="file:work/odata/input" />
 
       <log message="Receiving file ${file:name}" />
-      <log message="Sending file ${file:name} to JBoss Data Virtualization Server" />
+      <log message="Sending file ${file:name} to OData Test Service" />
 
-      <unmarshal ref="jack" />
-      <to uri="odata://create/BooksMySQL.BOOKS" />
+      <unmarshal>
+        <string charset="UTF-8"/>
+      </unmarshal>
 
-      <log message="Done creating book with ISBN ${body.properties[ISBN]}" />
+      <to uri="odata4://create/People"/>
+
+      <log message="Done creating person with properties ${body.properties}" />
     </route>
   </camelContext>
-
 </blueprint>
