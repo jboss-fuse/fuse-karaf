@@ -90,32 +90,64 @@
         </dependency>
 
         <dependency>
-            <groupId>org.ops4j.pax.tipi</groupId>
-            <artifactId>org.ops4j.pax.tipi.undertow.core</artifactId>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-core</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.ops4j.pax.tipi</groupId>
-            <artifactId>org.ops4j.pax.tipi.undertow.servlet</artifactId>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-servlet</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
-            <groupId>org.ops4j.pax.tipi</groupId>
-            <artifactId>org.ops4j.pax.tipi.undertow.websocket-jsr</artifactId>
+            <groupId>io.undertow</groupId>
+            <artifactId>undertow-websockets-jsr</artifactId>
+            <scope>runtime</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>io.undertow</groupId>-->
-            <!--<artifactId>undertow-core</artifactId>-->
-            <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>io.undertow</groupId>-->
-            <!--<artifactId>undertow-servlet</artifactId>-->
-            <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>io.undertow</groupId>-->
-            <!--<artifactId>undertow-websockets-jsr</artifactId>-->
-            <!--<scope>runtime</scope>-->
-        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.spring-core</artifactId>
+            <version>${version.org.apache.servicemix.bundles.spring}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.spring-beans</artifactId>
+            <version>${version.org.apache.servicemix.bundles.spring}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.spring-tx</artifactId>
+            <version>${version.org.apache.servicemix.bundles.spring}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.spring-orm</artifactId>
+            <version>${version.org.apache.servicemix.bundles.spring}</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-osgi</artifactId>
+            <version>${version.org.hibernate}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>${version.org.hibernate.javax.persistence}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.camel</groupId>
+            <artifactId>camel-jpa</artifactId>
+            <version>${version.org.apache.camel}</version>
+            <scope>runtime</scope>
+        </dependency>
 
     </dependencies>
 
