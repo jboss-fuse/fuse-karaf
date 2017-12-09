@@ -22,7 +22,7 @@
 
     <groupId>org.jboss.fuse</groupId>
     <artifactId>jboss-fuse-parent</artifactId>
-    <version>7.0.0.redhat-SNAPSHOT</version>
+    <version>7.0.0.fuse-000110</version>
     <packaging>pom</packaging>
 
     <name>JBoss Fuse :: Parent</name>
@@ -75,12 +75,12 @@
         -->
 
         <!-- versions of "subprojects" of JBoss Fuse -->
-        <version.io.hawt>2.0.0.fuse-000096</version.io.hawt>
-        <version.org.apache.activemq.artemis>2.0.0.amq-700011-redhat-1</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.21.0.fuse-000012</version.org.apache.camel>
-        <version.org.apache.cxf>3.1.11.fuse-000152</version.org.apache.cxf>
+        <version.io.hawt>2.0.0.fuse-000103</version.io.hawt>
+        <version.org.apache.activemq.artemis>2.4.0</version.org.apache.activemq.artemis>
+        <version.org.apache.camel>2.21.0.fuse-000022</version.org.apache.camel>
+        <version.org.apache.cxf>3.1.11.fuse-000163</version.org.apache.cxf>
         <!-- At some point, Karaf will also use pipeline version -->
-        <version.org.apache.karaf>4.2.0-SNAPSHOT</version.org.apache.karaf>
+        <version.org.apache.karaf>4.2.0.fuse-000162</version.org.apache.karaf>
         <version.org.fusesource.camel-sap>6.3.0.redhat-283</version.org.fusesource.camel-sap>
 
         <!-- versions of normal dependencies of JBoss Fuse -->
@@ -103,7 +103,7 @@
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
         <version.org.apache.servicemix.bundles.xerces>2.11.0_1</version.org.apache.servicemix.bundles.xerces>
-        <version.org.apache.servicemix.specs>2.9.0</version.org.apache.servicemix.specs>
+        <version.org.apache.servicemix.specs>2.10.0.fuse-000157</version.org.apache.servicemix.specs>
         <version.org.assertj>3.8.0</version.org.assertj>
         <version.org.hibernate>5.2.8.Final</version.org.hibernate>
         <version.org.hibernate.javax.persistence>1.0.0.Final</version.org.hibernate.javax.persistence>
