@@ -75,7 +75,7 @@
         -->
 
         <!-- versions of "subprojects" of JBoss Fuse -->
-        <version.io.hawt>2.0.0.fuse-000096</version.io.hawt>
+        <version.io.hawt>2.0.0.fuse-000106</version.io.hawt>
         <version.org.apache.activemq.artemis>2.0.0.amq-700011-redhat-1</version.org.apache.activemq.artemis>
         <version.org.apache.camel>2.21.0.fuse-000012</version.org.apache.camel>
         <version.org.apache.cxf>3.1.11.fuse-000152</version.org.apache.cxf>
