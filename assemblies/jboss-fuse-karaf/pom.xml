@@ -326,18 +326,6 @@
                         <feature>camel-ironmq</feature>
                         <feature>camel-chronicle</feature>
                         <feature>camel-openstack</feature>
-                        <feature>camel-db4o</feature>
-                        <feature>camel-esper</feature>
-                        <feature>camel-exist</feature>
-                        <feature>camel-hibernate</feature>
-                        <feature>camel-jboss</feature>
-                        <feature>camel-jboss6</feature>
-                        <feature>camel-rcode</feature>
-                        <feature>camel-spring-neo4j</feature>
-                        <feature>camel-virtualbox</feature>
-                        <feature>camel-vtdxml</feature>
-                        <feature>camel-wmq</feature>
-                        <feature>camel-zeromq</feature>
                     </blacklistedFeatures>
                     <blacklistedRepositories>
                         <!-- Blacklisting some repositories because the closure is not consistent -->
