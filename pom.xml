@@ -82,6 +82,7 @@
         <!-- At some point, Karaf will also use pipeline version -->
         <version.org.apache.karaf>4.2.0-SNAPSHOT</version.org.apache.karaf>
         <version.org.fusesource.camel-sap>6.3.0.redhat-283</version.org.fusesource.camel-sap>
+        <version.extra>2.21.0.fuse-000002</version.extra>
 
         <!-- versions of normal dependencies of JBoss Fuse -->
         <version.com.fasterxml.jackson.module>2.8.8</version.com.fasterxml.jackson.module>
@@ -474,6 +475,23 @@
                 <groupId>org.apache.camel</groupId>
                 <artifactId>apache-salesforce</artifactId>
                 <version>${version.org.apache.camel}</version>
+            </dependency>
+
+            <!-- Camel-extra dependencies -->
+
+            <dependency>
+                <groupId>org.apache-extras.camel-extra</groupId>
+                <artifactId>camel-parent</artifactId>
+                <version>${version.extra}</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache-extras.camel-extra.karaf</groupId>
+                <artifactId>camel-extra</artifactId>
+                <version>${version.extra}</version>
+                <type>xml</type>
+                <classifier>features</classifier>
             </dependency>
 
             <!-- ActiveMQ dependencies -->
