@@ -59,7 +59,7 @@ public class CredentialStoreProtectionCompletionSupportTest {
         assertThat(completition.complete(NOT_NEEDED, commandLine, candidates)).isEqualTo(37);
 
         assertThat(candidates).containsOnly(Arrays.stream(Security.getProviders()).map(Provider::getName)
-                .filter(p -> p.startsWith("S")).map(p -> "provider=" + p).toArray(String[]::new));
+                .filter(p -> p.startsWith("S")).map(p -> "provider=" + p + " ").toArray(String[]::new));
     }
 
     @Test
@@ -72,7 +72,7 @@ public class CredentialStoreProtectionCompletionSupportTest {
 
         assertThat(completition.complete(NOT_NEEDED, commandLine, candidates)).isEqualTo(37);
 
-        assertThat(candidates).containsOnly("provider");
+        assertThat(candidates).containsOnly("provider=");
     }
 
     @Test
@@ -86,7 +86,7 @@ public class CredentialStoreProtectionCompletionSupportTest {
         assertThat(completition.complete(NOT_NEEDED, commandLine, candidates)).isEqualTo(37);
 
         assertThat(candidates).containsOnly(
-                Arrays.stream(Security.getProviders()).map(p -> "provider=" + p.getName()).toArray(String[]::new));
+                Arrays.stream(Security.getProviders()).map(p -> "provider=" + p.getName() + " ").toArray(String[]::new));
     }
 
     @Test

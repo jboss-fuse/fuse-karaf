@@ -18,6 +18,7 @@ package org.jboss.fuse.credential.store.karaf.command;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import org.apache.karaf.shell.api.action.lifecycle.Service;
@@ -151,12 +152,12 @@ public class CredentialStoreProtectionCompletionSupport implements Completer {
         final int complete = new StringsCompleter(Arrays.stream(supportedOptions).filter(o -> !usedOptions.contains(o))
                 .map(o -> o + "=").toArray(String[]::new)).complete(session, commandLine, candidates);
 
-        if ((complete > 0) && (candidates.size() == 1)) {
-            // the StringCompleter adds a space character if there is only one option, we remove it to have the cursor
-            // right after '=' sign
-            final String singleOption = candidates.get(0);
+        for (final ListIterator<String> i = candidates.listIterator(); i.hasNext();) {
+            String candidate = i.next();
 
-            candidates.set(0, singleOption.substring(0, singleOption.length() - 1));
+            if (candidate.endsWith("= ")) {
+                i.set(candidate.substring(0, candidate.length() - 1));
+            }
         }
 
         return complete;
