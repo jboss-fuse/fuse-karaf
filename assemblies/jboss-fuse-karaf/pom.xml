@@ -90,6 +90,13 @@
             <scope>runtime</scope>
         </dependency>
         <dependency>
+            <groupId>org.apache-extras.camel-extra.karaf</groupId>
+            <artifactId>camel-extra</artifactId>
+            <type>xml</type>
+            <classifier>features</classifier>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.cxf.karaf</groupId>
             <artifactId>apache-cxf</artifactId>
             <type>xml</type>
