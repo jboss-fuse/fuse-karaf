@@ -353,6 +353,8 @@
                         <feature>camel-quartz</feature>
                         <feature>camel-routebox</feature>
 
+                        <!-- Tomcat -->
+                        <feature>*tomcat*</feature>
                     </blacklistedFeatures>
                     <blacklistedRepositories>
                         <!-- Blacklisting some repositories because the closure is not consistent -->
