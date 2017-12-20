@@ -418,7 +418,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.features</groupId>
-                <artifactId>spring</artifactId>
+                <artifactId>spring-legacy</artifactId>
                 <version>${version.org.apache.karaf}</version>
                 <type>xml</type>
                 <classifier>features</classifier>
