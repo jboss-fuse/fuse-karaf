@@ -345,6 +345,23 @@
                         <feature>camel-vtdxml</feature>
                         <feature>camel-wmq</feature>
                         <feature>camel-zeromq</feature>
+
+                        <!-- deprecated components -->
+                        <feature>camel-context</feature>
+                        <feature>camel-cache</feature>
+                        <feature>camel-hdfs</feature>
+                        <feature>camel-http</feature>
+                        <feature>camel-ibatis</feature>
+                        <feature>camel-javaspace</feature>
+                        <feature>camel-kestrel</feature>
+                        <feature>camel-krati</feature>
+                        <feature>camel-mina</feature>
+                        <feature>camel-netty</feature>
+                        <feature>camel-netty-http</feature>
+                        <feature>camel-openshift</feature>
+                        <feature>camel-quartz</feature>
+                        <feature>camel-routebox</feature>
+
                     </blacklistedFeatures>
                     <blacklistedRepositories>
                         <!-- Blacklisting some repositories because the closure is not consistent -->
