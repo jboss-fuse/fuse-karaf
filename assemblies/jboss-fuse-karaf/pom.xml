@@ -410,6 +410,7 @@
                     <config>
                         <karaf.delay.console>true</karaf.delay.console>
                     </config>
+                    <generateConsistencyReport>${project.build.directory}/assembly/welcome-content</generateConsistencyReport>
                 </configuration>
             </plugin>
         </plugins>
