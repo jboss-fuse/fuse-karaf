@@ -33,7 +33,7 @@
     <!-- JBoss Fuse Karaf features -->
 
     <feature name="fuse-credential-store" description="fuse-credential-store" version="${project.version}">
-        <bundle start-level="1">mvn:org.jboss.fuse.modules/fuse-credential-store-karaf/${project.version}</bundle>
+        <bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-credential-store-karaf/${project.version}</bundle>
     </feature>
 
 </features>
