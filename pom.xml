@@ -80,7 +80,7 @@
         <version.org.apache.camel>2.21.0.fuse-000012</version.org.apache.camel>
         <version.org.apache.cxf>3.1.11.fuse-000152</version.org.apache.cxf>
         <!-- At some point, Karaf will also use pipeline version -->
-        <version.org.apache.karaf>4.2.0-SNAPSHOT</version.org.apache.karaf>
+        <version.org.apache.karaf>4.2.0.redhat-700-SNAPSHOT</version.org.apache.karaf>
         <version.org.fusesource.camel-sap>6.3.0.redhat-283</version.org.fusesource.camel-sap>
         <version.extra>2.21.0.fuse-000002</version.extra>
 
