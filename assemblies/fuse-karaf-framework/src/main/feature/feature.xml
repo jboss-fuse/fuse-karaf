@@ -24,7 +24,7 @@
     <repository>mvn:org.apache.karaf.features/framework/${version.org.apache.karaf}/xml/features</repository>
     <repository>mvn:org.apache.karaf.features/standard/${version.org.apache.karaf}/xml/features</repository>
     <repository>mvn:org.apache.karaf.features/enterprise/${version.org.apache.karaf}/xml/features</repository>
-    <repository>mvn:org.apache.karaf.features/spring/${version.org.apache.karaf}/xml/features</repository>
+    <repository>mvn:org.apache.karaf.features/spring-legacy/${version.org.apache.karaf}/xml/features</repository>
     <repository>mvn:org.apache.camel.karaf/apache-camel/${version.org.apache.camel}/xml/features</repository>
     <repository>mvn:org.apache.cxf.karaf/apache-cxf/${version.org.apache.cxf}/xml/features</repository>
     <repository>mvn:org.apache.activemq/artemis-features/${version.org.apache.activemq.artemis}/xml/features</repository>
