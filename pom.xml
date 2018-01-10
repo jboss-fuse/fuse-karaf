@@ -111,6 +111,7 @@
         <version.org.javassist>3.21.0-GA</version.org.javassist>
         <version.org.jboss.logging>3.2.1.Final</version.org.jboss.logging>
         <version.org.jboss.modules>1.5.2.Final</version.org.jboss.modules>
+        <version.org.jboss.narayana>5.5.30.Final-redhat-1</version.org.jboss.narayana>
         <version.org.ops4j.base>1.5.0</version.org.ops4j.base>
         <version.org.ops4j.pax.exam>4.11.0</version.org.ops4j.pax.exam>
         <version.org.ops4j.pax.logging>1.10.1</version.org.ops4j.pax.logging>
@@ -177,6 +178,17 @@
         <repository>
             <id>jboss-ea</id>
             <url>https://repository.jboss.org/nexus/content/groups/ea</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <!-- For Narayana 5.5.30.Final-redhat-1 -->
+            <id>jb-eap-7.1-brew</id>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.1-rhel-7-maven-build/latest/maven</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
