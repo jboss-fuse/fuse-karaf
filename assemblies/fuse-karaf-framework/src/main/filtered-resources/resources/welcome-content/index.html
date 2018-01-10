@@ -2,10 +2,17 @@
 <head>
   <meta charset="utf-8" />
   <style type="text/css">
-    body { background-color: black; color: white }
+    body { background-color: white; color: black; margin: 0 }
+    p.header { background-color: black; color: white; font-size: 16pt; padding: 0.5em; border-top: 3px solid #C82E2E }
+    p.link { margin: 0.1em 0.5em; font-size: 12pt }
+    a { text-decoration: none; color: black }
+    a:hover { text-decoration: underline }
   </style>
 </head>
 <body>
-<p>JBoss Fuse ${project.version}</p>
+<p class="header">JBoss Fuse ${project.version}</p>
+<p class="link"> &middot; <a href="/hawtio">hawtio console</a></p>
+<p class="link"> &middot; <a href="/bundle-report.xml">bundle consistency report (dev)</a></p>
+<p class="link"> &middot; <a href="https://issues.jboss.org/browse/ENTESB-7569" target="_blank">ENTESB-7569 - Create "welcome page" for Fuse 7 standalone</a></p>
 </body>
 </html>

@@ -137,11 +137,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>org.jboss.fuse</groupId>
             <artifactId>quickstarts</artifactId>
             <scope>provided</scope>
@@ -318,6 +313,7 @@
                     <blacklistedFeatures>
                         <feature>jetty</feature>
                         <feature>pax-*jetty*</feature>
+                        <feature>cxf-*-jetty</feature>
                         <feature>camel-jetty*</feature>
                         <feature>*openwebbeans*</feature>
                         <feature>pax-jsf-support</feature>
