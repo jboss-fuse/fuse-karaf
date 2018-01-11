@@ -32,7 +32,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- versions of "subprojects" of JBoss Fuse -->
-        <version.org.apache.cxf>3.1.11.fuse-000152</version.org.apache.cxf>
+        <version.org.apache.cxf>3.1.11.fuse-000176</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.0.redhat-700-SNAPSHOT</version.org.apache.karaf>
 
         <!-- versions of Maven plugins -->
