@@ -417,6 +417,27 @@
             <properties>
                 <camel.sap.bundle>mvn:org.fusesource/camel-sap/${version.org.fusesource.camel-sap}</camel.sap.bundle>
             </properties>
+            <dependencies>
+                <dependency>
+                    <groupId>org.fusesource</groupId>
+                    <artifactId>camel-sap</artifactId>
+                    <scope>runtime</scope>
+                    <type>xml</type>
+                    <classifier>features</classifier>
+                </dependency>
+            </dependencies>
+            <dependencyManagement>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.fusesource</groupId>
+                        <artifactId>camel-sap</artifactId>
+                        <version>${version.org.fusesource.camel-sap}</version>
+                    <scope>provided</scope>
+                    <type>xml</type>
+                    <classifier>features</classifier>
+                    </dependency>
+                </dependencies>
+            </dependencyManagement>
         </profile>
     </profiles>
 
