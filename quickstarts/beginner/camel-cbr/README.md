@@ -56,7 +56,7 @@ Build and Deploy the Quickstart
 
 * Fuse should give you an id when the bundle is deployed
 
-* You can check that everything is ok by issuing  the command:
+* You can check that everything is ok by issuing the command:
 
         bundle:list
 
