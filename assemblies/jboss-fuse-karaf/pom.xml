@@ -358,6 +358,9 @@
                         <!-- Tomcat -->
                         <feature>*tomcat*</feature>
                     </blacklistedFeatures>
+                    <blacklistedBundles>
+                        <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
+                    </blacklistedBundles>
                     <blacklistedRepositories>
                         <!-- Blacklisting some repositories because the closure is not consistent -->
                         <repository>mvn:org.apache.jclouds.karaf/jclouds-karaf</repository>
