@@ -314,6 +314,28 @@
                     <installedFeatures>
                         <feature>wrap</feature>
                         <feature>wrapper</feature>
+
+                        <!-- Include some widely used features to be ready to install offline -->
+
+                        <!-- Karaf Standard features -->
+                        <feature>audit-log</feature>
+                        <feature>eventadmin</feature>
+
+                        <!-- Karaf Spring 4 features -->
+                        <feature>spring/[4.3,5)</feature>
+                        <feature>spring-tx/[4.3,5)</feature>
+                        <feature>spring-jms/[4.3,5)</feature>
+                        <feature>spring-jdbc/[4.3,5)</feature>
+
+                        <!-- Karaf Enterprise features -->
+                        <feature>jms</feature>
+                        <feature>jdbc</feature>
+                        <feature>jndi</feature>
+
+                        <!-- Additional Camel features for offline use -->
+                        <feature>camel-bindy</feature>
+                        <feature>camel-sql</feature>
+                        <feature>camel-jpa</feature>
                     </installedFeatures>
                     <blacklistedFeatures>
                         <feature>jetty</feature>
@@ -357,16 +379,15 @@
 
                         <!-- Tomcat -->
                         <feature>*tomcat*</feature>
+
+                        <!-- Old Spring version -->
+                        <feature>spring*/[3,4.3)</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
                     </blacklistedBundles>
                     <blacklistedRepositories>
                         <!-- Blacklisting some repositories because the closure is not consistent -->
-                        <repository>mvn:org.apache.jclouds.karaf/jclouds-karaf</repository>
-                        <repository>mvn:org.ops4j.pax.cdi/pax-cdi-features/[0,1.0.0.RC2)/xml/features</repository>
-                        <!--<repository>mvn:org.ops4j.pax.jdbc/pax-jdbc-features/1.0.1/xml/features</repository>-->
-                        <repository>mvn:org.apache.camel.karaf/apache-camel/2.21.0.fuse-000027/xml/features</repository>
                     </blacklistedRepositories>
                     <libraries>
                         <!--
