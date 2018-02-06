@@ -11,4 +11,14 @@
                 replacement="mvn:org.jboss.narayana.osgi/narayana-osgi-jta/${version.org.jboss.narayana}" mode="maven" />
     </bundleReplacements>
 
+    <!-- A list of feature replacements that allows changing external feature definitions -->
+    <featureReplacements>
+        <replacement>
+            <feature name="hibernate-validator-paranamer" version="${version.org.hibernate.validator}">
+                <f:feature>hibernate-validator</f:feature>
+                <f:bundle>wrap:mvn:com.thoughtworks.paranamer/paranamer/${version.com.thoughtworks.paranamer}</f:bundle>
+            </feature>
+        </replacement>
+    </featureReplacements>
+
 </featuresProcessing>
