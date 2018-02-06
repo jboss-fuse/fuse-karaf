@@ -129,10 +129,10 @@
         <version.org.apache.servicemix.specs>2.9.0</version.org.apache.servicemix.specs>
         <version.org.apache.sshd>1.7.0</version.org.apache.sshd>
         <version.org.assertj>3.8.0</version.org.assertj>
-        <version.org.hibernate>5.2.8.Final</version.org.hibernate>
-        <version.org.hibernate.validator>5.3.4.Final</version.org.hibernate.validator>
         <version.org.atmosphere>2.4.16</version.org.atmosphere>
         <version.org.glassfish.web.javax.el>2.2.5</version.org.glassfish.web.javax.el>
+        <version.org.hibernate>5.1.10.Final-redhat-1</version.org.hibernate>
+        <version.org.hibernate.validator>5.3.5.Final-redhat-2</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.0.Final</version.org.hibernate.javax.persistence>
         <version.org.javassist>3.21.0-GA</version.org.javassist>
         <version.org.jboss.logging>3.3.1.Final-redhat-1</version.org.jboss.logging>
