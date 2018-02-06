@@ -19,6 +19,13 @@
                 <f:bundle>wrap:mvn:com.thoughtworks.paranamer/paranamer/${version.com.thoughtworks.paranamer}</f:bundle>
             </feature>
         </replacement>
+        <replacement>
+            <feature name="hibernate-ehcache" version="${version.org.hibernate}">
+                <f:feature>hibernate-orm</f:feature>
+                <f:bundle dependency="true">mvn:net.sf.ehcache/ehcache/${version.net.sf.ehcache}</f:bundle>
+                <f:bundle>mvn:org.hibernate/hibernate-ehcache/${version.org.hibernate}</f:bundle>
+            </feature>
+        </replacement>
     </featureReplacements>
 
 </featuresProcessing>
