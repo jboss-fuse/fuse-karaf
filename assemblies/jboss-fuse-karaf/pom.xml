@@ -382,6 +382,9 @@
 
                         <!-- Old Spring version -->
                         <feature>spring*/[3,4.3)</feature>
+
+                        <!-- Artemis broker -->
+                        <feature>artemis</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
