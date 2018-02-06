@@ -119,6 +119,7 @@
         <version.org.ops4j.pax.url>2.5.4</version.org.ops4j.pax.url>
         <version.org.ops4j.pax.web>6.1.1</version.org.ops4j.pax.web>
         <version.org.osgi>6.0.0</version.org.osgi>
+        <version.org.osgi.compendium>5.0.0</version.org.osgi.compendium>
         <version.org.ow2.asm>6.0</version.org.ow2.asm>
         <version.org.slf4j>1.7.25</version.org.slf4j>
         <version.org.wildfly.common>1.2.0.Beta3</version.org.wildfly.common>
@@ -314,14 +315,6 @@
                         <groupId>org.apache.karaf</groupId>
                         <artifactId>org.apache.karaf.client</artifactId>
                     </exclusion>
-                    <exclusion>
-                        <groupId>org.osgi</groupId>
-                        <artifactId>org.osgi.core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.osgi</groupId>
-                        <artifactId>org.osgi.compendium</artifactId>
-                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -352,13 +345,13 @@
 
             <dependency>
                 <groupId>org.osgi</groupId>
-                <artifactId>osgi.core</artifactId>
+                <artifactId>org.osgi.core</artifactId>
                 <version>${version.org.osgi}</version>
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
-                <artifactId>osgi.cmpn</artifactId>
-                <version>${version.org.osgi}</version>
+                <artifactId>org.osgi.compendium</artifactId>
+                <version>${version.org.osgi.compendium}</version>
             </dependency>
 
             <dependency>
@@ -377,6 +370,11 @@
                 <version>${version.org.apache.felix.configadmin}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.karaf.features</groupId>
+                <artifactId>org.apache.karaf.features.core</artifactId>
+                <version>${version.org.apache.karaf}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.karaf.features</groupId>
                 <artifactId>base</artifactId>
@@ -417,16 +415,6 @@
                 <version>${version.org.apache.karaf}</version>
                 <type>xml</type>
                 <classifier>features</classifier>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.osgi</groupId>
-                        <artifactId>org.osgi.core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.osgi</groupId>
-                        <artifactId>org.osgi.compendium</artifactId>
-                    </exclusion>
-                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.features</groupId>
@@ -438,6 +426,16 @@
             <dependency>
                 <groupId>org.apache.karaf.shell</groupId>
                 <artifactId>org.apache.karaf.shell.core</artifactId>
+                <version>${version.org.apache.karaf}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.shell</groupId>
+                <artifactId>org.apache.karaf.shell.console</artifactId>
+                <version>${version.org.apache.karaf}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.jaas</groupId>
+                <artifactId>org.apache.karaf.jaas.config</artifactId>
                 <version>${version.org.apache.karaf}</version>
             </dependency>
 
