@@ -138,7 +138,7 @@
         <version.org.jboss.logging>3.3.1.Final-redhat-1</version.org.jboss.logging>
         <version.org.jboss.modules>1.5.2.Final</version.org.jboss.modules>
         <version.org.jboss.narayana>5.5.30.Final-redhat-1</version.org.jboss.narayana>
-        <version.org.jgroups>3.6.10.Final-redhat-1</version.org.jgroups>
+        <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.ops4j.base>1.5.0</version.org.ops4j.base>
         <version.org.ops4j.pax.exam>4.11.0</version.org.ops4j.pax.exam>
         <version.org.ops4j.pax.logging>1.10.1</version.org.ops4j.pax.logging>

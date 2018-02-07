@@ -80,7 +80,7 @@
         <bundle originalUri="mvn:org.jboss.narayana.osgi/narayana-osgi-jta/[5,6)"
                 replacement="mvn:org.jboss.narayana.osgi/narayana-osgi-jta/${version.org.jboss.narayana}" mode="maven" />
         <bundle originalUri="mvn:org.jgroups/jgroups/[3.6,4)"
-                replacement="mvn:org.jgroups/jgroups/${version.org.jgroups}" mode="maven" />
+                replacement="mvn:org.jgroups/jgroups/${version.org.jgroups3}" mode="maven" />
         <bundle originalUri="mvn:org.yaml/snakeyaml/[1,2)"
                 replacement="mvn:org.yaml/snakeyaml/${version.org.yaml.snakeyaml}" mode="maven" />
     </bundleReplacements>
