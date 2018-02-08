@@ -56,6 +56,6 @@ public class StopWalkException extends RuntimeException {
 	public static final StopWalkException INSTANCE = new StopWalkException();
 
 	private StopWalkException() {
-		// Nothing.
+		super(null, null, false, false);
 	}
 }

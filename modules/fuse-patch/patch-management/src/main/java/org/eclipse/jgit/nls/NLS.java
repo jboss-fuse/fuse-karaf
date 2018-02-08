@@ -74,10 +74,13 @@ public class NLS {
 	 */
 	public static final Locale ROOT_LOCALE = new Locale("", "", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-	private static final InheritableThreadLocal<NLS> local = new InheritableThreadLocal<NLS>() {
+	// static field instead of thread local
+	private static NLS local = new NLS(Locale.getDefault());
+
+	// Artificial inner class, so we have empty, harmless NLS$1.class in the JAR
+	private Runnable artificialDollarOneRunnable = new Runnable() {
 		@Override
-		protected NLS initialValue() {
-			return new NLS(Locale.getDefault());
+		public void run() {
 		}
 	};
 
@@ -93,7 +96,7 @@ public class NLS {
 	 *            the preferred locale
 	 */
 	public static void setLocale(Locale locale) {
-		local.set(new NLS(locale));
+		local = new NLS(locale);
 	}
 
 	/**
@@ -102,7 +105,7 @@ public class NLS {
 	 * Semantically this is equivalent to <code>NLS.setLocale(Locale.getDefault())</code>.
 	 */
 	public static void useJVMDefaultLocale() {
-		local.set(new NLS(Locale.getDefault()));
+		local = new NLS(Locale.getDefault());
 	}
 
 	/**
@@ -122,7 +125,7 @@ public class NLS {
 	 *                {@link TranslationStringMissingException}
 	 */
 	public static <T extends TranslationBundle> T getBundleFor(Class<T> type) {
-		return local.get().get(type);
+		return local.get(type);
 	}
 
 	final private Locale locale;
