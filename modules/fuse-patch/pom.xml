@@ -21,24 +21,26 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jboss.fuse</groupId>
-        <artifactId>jboss-fuse-parent</artifactId>
+        <groupId>org.jboss.fuse.modules</groupId>
+        <artifactId>fuse-modules</artifactId>
         <version>7.0.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.jboss.fuse.modules</groupId>
-    <artifactId>fuse-modules</artifactId>
+    <groupId>org.jboss.fuse.modules.patch</groupId>
+    <artifactId>fuse-patch</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules</name>
-
-    <description>Additional components for JBoss Fuse (commands, services, libraries, etc.)</description>
+    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch</name>
+    <description>Parent POM for standalone Fuse Patch support</description>
 
     <modules>
-        <module>fuse-branding</module>
-        <module>fuse-credential-store</module>
-        <module>fuse-patch</module>
+        <module>patch-management</module>
+        <!--<module>patch-core-api</module>-->
+        <!--<module>patch-core</module>-->
+        <!--<module>patch-commands</module>-->
+        <!--<module>patch-features</module>-->
+        <!--<module>patch-itests</module>-->
     </modules>
 
 </project>

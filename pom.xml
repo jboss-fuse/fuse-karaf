@@ -130,6 +130,7 @@
         <version.org.apache.sshd>1.7.0</version.org.apache.sshd>
         <version.org.assertj>3.8.0</version.org.assertj>
         <version.org.atmosphere>2.4.16</version.org.atmosphere>
+        <version.org.eclipse.jgit>4.10.0.201712302008-r</version.org.eclipse.jgit>
         <version.org.glassfish.web.javax.el>2.2.5</version.org.glassfish.web.javax.el>
         <version.org.hibernate>5.1.10.Final-redhat-1</version.org.hibernate>
         <version.org.hibernate.validator>5.3.5.Final-redhat-2</version.org.hibernate.validator>
@@ -707,14 +708,9 @@
                 <version>${version.org.ow2.asm}</version>
             </dependency>
             <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${version.org.slf4j}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>${version.org.slf4j}</version>
+                <groupId>org.eclipse.jgit</groupId>
+                <artifactId>org.eclipse.jgit</artifactId>
+                <version>${version.org.eclipse.jgit}</version>
             </dependency>
 
             <!-- Test dependencies -->
@@ -750,6 +746,18 @@
                 <version>${version.org.ops4j.pax.exam}</version>
             </dependency>
 
+            <!-- Logging dependencies -->
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${version.org.slf4j}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>jcl-over-slf4j</artifactId>
+                <version>${version.org.slf4j}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-api</artifactId>
