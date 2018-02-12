@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.quickstarts</groupId>
         <artifactId>quickstarts-parent</artifactId>
-        <version>7.0.0.redhat-SNAPSHOT</version>
+        <version>7.0.0.fuse-000146</version>
     </parent>
 
     <artifactId>cxf</artifactId>
@@ -34,8 +34,6 @@
     <modules>
         <module>camel-cxf-code-first</module>
         <module>camel-cxf-contract-first</module>
-        <module>rest</module>
-        <module>secure-rest</module>
         <module>secure-soap</module>
         <module>soap</module>
     </modules>
