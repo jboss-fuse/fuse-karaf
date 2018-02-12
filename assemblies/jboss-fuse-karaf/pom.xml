@@ -338,7 +338,6 @@
                         <feature>camel-jpa</feature>
                     </installedFeatures>
                     <blacklistedFeatures>
-                        <feature>jetty</feature>
                         <feature>pax-*jetty*</feature>
                         <feature>cxf-*-jetty</feature>
                         <feature>camel-jetty*</feature>
