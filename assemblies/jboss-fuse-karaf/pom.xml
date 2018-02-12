@@ -338,10 +338,9 @@
                         <feature>camel-jpa</feature>
                     </installedFeatures>
                     <blacklistedFeatures>
-                        <feature>jetty</feature>
                         <feature>pax-*jetty*</feature>
                         <feature>cxf-*-jetty</feature>
-                        <feature>camel-jetty*</feature>
+                        <feature>camel-jetty8</feature>
                         <feature>*openwebbeans*</feature>
                         <feature>pax-jsf-support</feature>
                         <feature>camel-ignite</feature>
