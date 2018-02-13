@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { margin: 0; padding: 0 }
+
+    table.compare { table-layout: fixed; width: 100% }
+    .header { font-size: 1.3em; font-family: monospace }
+    .side { padding: 5px; vertical-align: top }
+    .side.right { border-left: 1px solid #ccc }
+    .side .content { margin: 3px; padding: 3px; font-family: monospace; overflow-x: scroll }
+    div.edit { white-space: pre; margin: 0 0 0 5px; padding: 0 0 0 5px }
+    .content>.edit { margin: 0 }
+    .edit.unchanged { border-left: 4px solid #ccc }
+    .edit.added { border-left: 4px solid #7f7 }
+    .edit.removed { border-left: 4px solid #f77 }
+    .edit.changed { border-left: 4px solid #77f }
+    .side>.header { font-weight: bold; font-size: 1.3em; text-align: center }
+    .expand {
+      display: inline-block; margin-right: 1em; border: 1px solid #ccc; width: 1.2em; height: 1.2em; padding-bottom: 0.2em;
+      border-radius: 3px; text-align: center; cursor: pointer; background-color: #eee
+    }
+    .table { display: none }
+
+    .menu { background-color: black; padding: 1em; position: fixed; top: 0; width: 100%; box-sizing: border-box }
+    .menu div {
+      display: inline-block; border: 1px solid white; border-radius: 3px; padding: 2px 5px; background-color: #ddd;
+      cursor: pointer; margin-right: 0.3em
+    }
+    .file { margin: 5px }
+
+    .file.original .edit.added { display: none }
+    .file.original .edit { border-left-width: 0; margin-left: 0; padding-left: 0 }
+    .file.changed .edit.removed { display: none }
+    .file.changed .edit { border-left-width: 0; margin-left: 0; padding-left: 0 }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var buttons = document.querySelectorAll("div.expand");
+      for (var i = 0; i < buttons.length; ++i) {
+        buttons.item(i).addEventListener("click", function (ev) {
+          var table = ev.target.parentNode.parentNode.querySelector("div.table");
+          if (table.style.display == 'none') {
+            table.style.display = 'block';
+            ev.target.innerHTML = '–';
+          } else {
+            table.style.display = 'none';
+            ev.target.innerHTML = '+';
+          }
+        });
+      }
+      document.getElementById("bt-original").addEventListener("click", function () {
+        var files = document.querySelectorAll("div.file");
+        for (var i = 0; i < files.length; ++i) {
+          files.item(i).setAttribute("class", "file original");
+        }
+      });
+      document.getElementById("bt-changed").addEventListener("click", function () {
+        var files = document.querySelectorAll("div.file");
+        for (var i = 0; i < files.length; ++i) {
+          files.item(i).setAttribute("class", "file changed");
+        }
+      });
+      document.getElementById("bt-diff").addEventListener("click", function () {
+        var files = document.querySelectorAll("div.file");
+        for (var i = 0; i < files.length; ++i) {
+          files.item(i).setAttribute("class", "file");
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="menu">
+  <div id="bt-original">See original version</div>
+  <div id="bt-changed">See changed version</div>
+  <div id="bt-diff">See diff</div>
+</div>
+<div class="menu" style="visibility: hidden; position: static">
+  <div>See diff</div>
+</div>
+<div class="file">
+  <div class="header"><div class="expand">+</div>etc/org.ops4j.pax.logging.cfg</div>
+  <div class="table" style="display: none">
+  <table class="compare">
+    <colgroup>
+      <col width="50%" />
+      <col width="50%" />
+    </colgroup>
+    <tr>
+    <td class="side">
+      <div class="header">Custom change</div>
+      <div class="content"><div class="edit unchanged">#
+# Copyright (C) Red Hat, Inc.
+# http://redhat.com
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#    http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+
+</div><div class="edit added">##
+## Comment out original setting and adding Custom Sutter Settings
+##
+
+</div><div class="edit unchanged"># Root logger
+</div><div class="edit changed"><div class="edit removed">log4j.rootLogger=INFO, out, osgi:VmLogAppender
+log4j.throwableRenderer=org.apache.log4j.OsgiThrowableRenderer
+</div><div class="edit added">##log4j.rootLogger=INFO, out, osgi:VmLogAppender
+##log4j.throwableRenderer=org.apache.log4j.OsgiThrowableRenderer
+</div></div><div class="edit unchanged">
+# CONSOLE appender not used by default
+</div><div class="edit changed"><div class="edit removed">log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+</div><div class="edit added">##log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+##log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+##log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+</div></div><div class="edit unchanged">
+# File appender
+</div><div class="edit changed"><div class="edit removed">log4j.appender.out=org.apache.log4j.RollingFileAppender
+log4j.appender.out.layout=org.apache.log4j.PatternLayout
+log4j.appender.out.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+log4j.appender.out.file=${karaf.data}/log/fuse.log
+log4j.appender.out.append=true
+log4j.appender.out.maxFileSize=10MB
+log4j.appender.out.maxBackupIndex=10
+</div><div class="edit added">##log4j.appender.out=org.apache.log4j.RollingFileAppender
+##log4j.appender.out.layout=org.apache.log4j.PatternLayout
+##log4j.appender.out.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+##log4j.appender.out.file=${karaf.data}/log/fuse.log
+##log4j.appender.out.append=true
+##log4j.appender.out.maxFileSize=10MB
+##log4j.appender.out.maxBackupIndex=10
+
+# Sift appender
+##log4j.appender.sift=org.apache.log4j.sift.MDCSiftingAppender
+##log4j.appender.sift.key=bundle.name
+##log4j.appender.sift.default=servicemix
+##log4j.appender.sift.appender=org.apache.log4j.FileAppender
+##log4j.appender.sift.appender.layout=org.apache.log4j.PatternLayout
+##log4j.appender.sift.appender.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %-16.16t | %-32.32c{1} | %m%n
+##log4j.appender.sift.appender.file=${karaf.data}/log/$\\{bundle.name\\}.log
+##log4j.appender.sift.appender.append=true
+
+##
+## This is the Custom Settings added
+##
+
+# Root logger
+log4j.rootLogger = INFO, out, osgi:VmLogAppender
+  log4j.throwableRenderer=org.apache.log4j.OsgiThrowableRenderer
+# CONSOLE appender not used by default
+  log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+  log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+  log4j.appender.stdout.layout.ConversionPattern=%d{ISO8601} | %p | %t | %c | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+# File appender
+  log4j.appender.out=org.apache.log4j.RollingFileAppender
+  log4j.appender.out.layout=org.apache.log4j.PatternLayout
+  log4j.appender.out.layout.ConversionPattern=%d{ISO8601} | %p | %t | %c} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+  log4j.appender.out.file=${karaf.data}/log/${karaf.name}.log
+  log4j.appender.out.append=true
+  log4j.appender.out.maxFileSize=25MB
+  log4j.appender.out.maxBackupIndex=5
+
+</div></div><div class="edit unchanged">
+# Sift appender
+log4j.appender.sift=org.apache.log4j.sift.MDCSiftingAppender
+log4j.appender.sift.key=bundle.name
+log4j.appender.sift.default=servicemix
+log4j.appender.sift.appender=org.apache.log4j.FileAppender
+log4j.appender.sift.appender.layout=org.apache.log4j.PatternLayout
+log4j.appender.sift.appender.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %-16.16t | %-32.32c{1} | %m%n
+log4j.appender.sift.appender.file=${karaf.data}/log/$\\{bundle.name\\}.log
+log4j.appender.sift.appender.append=true
+</div>
+</div>
+  </td>
+    <td class="side right">
+      <div class="header">Change from patch</div>
+      <div class="content"><div class="edit unchanged">#
+</div><div class="edit changed"><div class="edit removed"># Copyright (C) Red Hat, Inc.
+# http://redhat.com
+</div><div class="edit added">#  Copyright 2005-2016 Red Hat, Inc.
+</div></div><div class="edit unchanged">#
+</div><div class="edit changed"><div class="edit removed"># Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+</div><div class="edit added">#  Red Hat licenses this file to you under the Apache License, version
+#  2.0 (the "License"); you may not use this file except in compliance
+#  with the License.  You may obtain a copy of the License at
+</div></div><div class="edit unchanged">#
+</div><div class="edit changed"><div class="edit removed">#    http://www.apache.org/licenses/LICENSE-2.0
+</div><div class="edit added">#     http://www.apache.org/licenses/LICENSE-2.0
+</div></div><div class="edit unchanged">#
+</div><div class="edit changed"><div class="edit removed"># Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+</div><div class="edit added">#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+#  implied.  See the License for the specific language governing
+#  permissions and limitations under the License.
+</div></div><div class="edit unchanged">#
+
+# Root logger
+log4j.rootLogger=INFO, out, osgi:VmLogAppender
+log4j.throwableRenderer=org.apache.log4j.OsgiThrowableRenderer
+
+# CONSOLE appender not used by default
+log4j.appender.stdout=org.apache.log4j.ConsoleAppender
+</div><div class="edit changed"><div class="edit removed">log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
+</div><div class="edit added">log4j.appender.stdout.layout=org.apache.log4j.SanitizingPatternLayout
+log4j.appender.stdout.layout.replaceRegex=\\n
+log4j.appender.stdout.layout.replacement=\\\\n  |\u0020
+</div></div><div class="edit unchanged">log4j.appender.stdout.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+
+# File appender
+log4j.appender.out=org.apache.log4j.RollingFileAppender
+</div><div class="edit changed"><div class="edit removed">log4j.appender.out.layout=org.apache.log4j.PatternLayout
+</div><div class="edit added">log4j.appender.out.layout=org.apache.log4j.SanitizingPatternLayout
+log4j.appender.out.layout.replaceRegex=\\n
+log4j.appender.out.layout.replacement=\\\\n  |\u0020
+</div></div><div class="edit unchanged">log4j.appender.out.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %-16.16t | %-32.32c{1} | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+</div><div class="edit added"># use this for source code lines enabled and full thread and class names
+#log4j.appender.out.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | {%t} [%C] (%F:%L) | %X{bundle.id} - %X{bundle.name} - %X{bundle.version} | %m%n
+</div><div class="edit unchanged">log4j.appender.out.file=${karaf.data}/log/fuse.log
+log4j.appender.out.append=true
+log4j.appender.out.maxFileSize=10MB
+log4j.appender.out.maxBackupIndex=10
+
+# Sift appender
+log4j.appender.sift=org.apache.log4j.sift.MDCSiftingAppender
+log4j.appender.sift.key=bundle.name
+log4j.appender.sift.default=servicemix
+log4j.appender.sift.appender=org.apache.log4j.FileAppender
+</div><div class="edit changed"><div class="edit removed">log4j.appender.sift.appender.layout=org.apache.log4j.PatternLayout
+</div><div class="edit added">log4j.appender.sift.appender.layout=org.apache.log4j.SanitizingPatternLayout
+log4j.appender.sift.appender.layout.replaceRegex=\\n
+log4j.appender.sift.appender.layout.replacement=\\\\n  |\u0020
+</div></div><div class="edit unchanged">log4j.appender.sift.appender.layout.ConversionPattern=%d{ABSOLUTE} | %-5.5p | %-16.16t | %-32.32c{1} | %m%n
+log4j.appender.sift.appender.file=${karaf.data}/log/$\\{bundle.name\\}.log
+log4j.appender.sift.appender.append=true
+</div><div class="edit added">
+# tone down logging
+log4j.logger.org.apache.aries.spifly.dynamic.bundle=WARN
+log4j.logger.org.ops4j.pax.web.jsp.TldScanner=WARN
+</div></div>
+  </td>
+    </tr>
+  </table>
+  </div>
+</div>
+</body>
+</html>

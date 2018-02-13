@@ -93,6 +93,7 @@
         <version.commons-beanutils>1.9.3</version.commons-beanutils>
         <version.commons-codec>1.11</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
+        <version.commons-io>2.6</version.commons-io>
         <version.io.dropwizard.metrics>3.1.5</version.io.dropwizard.metrics>
         <version.io.swagger>1.5.13</version.io.swagger>
         <version.io.undertow>1.4.22.Final</version.io.undertow>
@@ -104,10 +105,12 @@
         <version.net.sf.ehcache>2.10.3</version.net.sf.ehcache>
         <version.org.apache.aries.proxy.api>1.1.0</version.org.apache.aries.proxy.api>
         <version.org.apache.aries.proxy>1.1.1</version.org.apache.aries.proxy>
+        <version.org.apache.commons.compress>1.16</version.org.apache.commons.compress>
         <version.org.apache.commons.lang3>3.7</version.org.apache.commons.lang3>
         <version.org.apache.felix>5.6.10</version.org.apache.felix>
         <version.org.apache.felix.configadmin>1.8.16</version.org.apache.felix.configadmin>
         <version.org.apache.felix.fileinstall>3.6.4</version.org.apache.felix.fileinstall>
+        <version.org.apache.felix.utils>1.10.4</version.org.apache.felix.utils>
         <version.org.apache.geronimo.specs.jms_2.0>1.0.0.alpha-2-redhat-2</version.org.apache.geronimo.specs.jms_2.0>
         <version.org.apache.httpcomponents.httpclient>4.5.4</version.org.apache.httpcomponents.httpclient>
         <version.org.apache.httpcomponents.httpcore>4.4.8</version.org.apache.httpcomponents.httpcore>
@@ -140,6 +143,7 @@
         <version.org.jboss.modules>1.5.2.Final</version.org.jboss.modules>
         <version.org.jboss.narayana>5.5.30.Final-redhat-1</version.org.jboss.narayana>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
+        <version.org.mockito>2.13.0</version.org.mockito>
         <version.org.ops4j.base>1.5.0</version.org.ops4j.base>
         <version.org.ops4j.pax.exam>4.11.0</version.org.ops4j.pax.exam>
         <version.org.ops4j.pax.logging>1.10.1</version.org.ops4j.pax.logging>
@@ -397,6 +401,11 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>org.apache.felix.configadmin</artifactId>
                 <version>${version.org.apache.felix.configadmin}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>org.apache.felix.utils</artifactId>
+                <version>${version.org.apache.felix.utils}</version>
             </dependency>
 
             <dependency>
@@ -724,6 +733,22 @@
                 <version>${version.org.eclipse.jgit}</version>
             </dependency>
 
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${version.commons-io}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-compress</artifactId>
+                <version>${version.org.apache.commons.compress}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${version.org.apache.commons.lang3}</version>
+            </dependency>
+
             <!-- Test dependencies -->
 
             <dependency>
@@ -755,6 +780,11 @@
                 <groupId>org.ops4j.pax.exam</groupId>
                 <artifactId>pax-exam-container-karaf</artifactId>
                 <version>${version.org.ops4j.pax.exam}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${version.org.mockito}</version>
             </dependency>
 
             <!-- Logging dependencies -->

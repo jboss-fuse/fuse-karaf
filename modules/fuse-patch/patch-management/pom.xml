@@ -41,6 +41,11 @@
             <artifactId>org.osgi.core</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.osgi</groupId>
+            <artifactId>org.osgi.compendium</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -58,6 +63,17 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- Private-Packaged dependencies. patch-management should be able to run as "bundle 1" -->
 
         <dependency>
@@ -67,6 +83,19 @@
         <dependency>
             <groupId>org.eclipse.jgit</groupId>
             <artifactId>org.eclipse.jgit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
+            <!-- Handles UNIX file permissions better than java.util.zip -->
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.utils</artifactId>
         </dependency>
 
     </dependencies>
@@ -79,13 +108,48 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Import-Package>
-                            *
-                        </Import-Package>
-                        <Export-Package>!*</Export-Package>
-                        <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Bundle-Activator>org.jboss.fuse.patch.management.impl.Activator</Bundle-Activator>
+                        <Import-Package>
+                            javax.net.ssl,
+                            org.osgi.framework,
+                            org.osgi.framework.startlevel,
+                            org.osgi.service.log;resolution:=optional,
+                            org.osgi.util.tracker
+                        </Import-Package>
+                        <Export-Package>
+                            org.jboss.fuse.patch.management
+                        </Export-Package>
+                        <Private-Package>
+                            org.eclipse.jgit.errors;-split-package:=merge-first,
+                            org.eclipse.jgit.nls;-split-package:=merge-first,
+                            !org.osgi*,
+                            org.slf4j,
+                            *
+                        </Private-Package>
+                        <Provide-Capability>
+                            osgi.service;effective:=active;objectClass="org.jboss.fuse.patch.management.PatchManagement",
+                            osgi.service;effective:=active;objectClass="org.jboss.fuse.patch.management.BackupService"
+                        </Provide-Capability>
                     </instructions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <classpathDependencyExcludes>
+                        <classpathDependencyExclude>org.eclipse.jgit:org.eclipse.jgit</classpathDependencyExclude>
+                    </classpathDependencyExcludes>
+                    <additionalClasspathElements>
+                        <additionalClasspathElement>${project.build.directory}/${project.build.finalName}.jar</additionalClasspathElement>
+                    </additionalClasspathElements>
                 </configuration>
             </plugin>
         </plugins>
