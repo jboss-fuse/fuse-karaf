@@ -339,7 +339,6 @@
                     </installedFeatures>
                     <blacklistedFeatures>
                         <feature>pax-*jetty*</feature>
-                        <feature>cxf-*-jetty</feature>
                         <feature>camel-jetty8</feature>
                         <feature>*openwebbeans*</feature>
                         <feature>pax-jsf-support</feature>
