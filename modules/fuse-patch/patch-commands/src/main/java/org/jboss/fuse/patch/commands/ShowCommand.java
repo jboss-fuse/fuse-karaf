@@ -20,6 +20,7 @@ import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Completion;
 import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Reference;
+import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.jboss.fuse.patch.PatchService;
 import org.jboss.fuse.patch.commands.completers.PatchCompleter;
 import org.jboss.fuse.patch.management.ManagedPatch;
@@ -28,6 +29,7 @@ import org.jboss.fuse.patch.management.PatchDetailsRequest;
 import org.jboss.fuse.patch.management.PatchException;
 import org.jboss.fuse.patch.management.PatchManagement;
 
+@Service
 @Command(scope = "patch", name = "show", description = "Display information about added/installed patch")
 public class ShowCommand extends PatchCommandSupport {
 

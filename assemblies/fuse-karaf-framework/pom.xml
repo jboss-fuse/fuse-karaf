@@ -130,6 +130,7 @@
                                     <excludes>
                                         <exlude>etc/equinox-debug.properties</exlude>
                                         <exlude>etc/distribution.info</exlude>
+                                        <exlude>etc/custom.properties</exlude>
                                     </excludes>
                                 </resource>
                             </resources>

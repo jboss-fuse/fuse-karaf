@@ -20,9 +20,11 @@ import java.net.URL;
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Option;
+import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.jboss.fuse.patch.PatchService;
 import org.jboss.fuse.patch.management.Patch;
 
+@Service
 @Command(scope = "patch", name = "add", description = "Download a patch")
 public class AddCommand extends PatchCommandSupport {
 

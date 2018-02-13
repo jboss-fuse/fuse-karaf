@@ -17,8 +17,10 @@ package org.jboss.fuse.patch.commands;
 
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Option;
+import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.jboss.fuse.patch.PatchService;
 
+@Service
 @Command(scope = "patch", name = "list", description = "Display known patches")
 public class ListCommand extends PatchCommandSupport {
 

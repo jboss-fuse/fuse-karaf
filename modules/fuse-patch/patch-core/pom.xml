@@ -115,10 +115,8 @@
                         <Import-Package>
                             *
                         </Import-Package>
-                        <Export-Package>
-                            org.jboss.fuse.patch;version="${project.version}"
-                        </Export-Package>
                         <Private-Package>
+                            org.jboss.fuse.patch.impl,
                             org.apache.felix.utils.manifest;-split-package:=merge-first,
                             org.apache.felix.utils.version;-split-package:=merge-first,
                             org.apache.karaf.util.bundles;-split-package:=merge-first,
@@ -129,24 +127,25 @@
                             org.apache.commons.io.monitor;-split-package:=merge-first,
                             org.apache.commons.io.output;-split-package:=merge-first
                         </Private-Package>
+                        <Service-Component>*</Service-Component>
                     </instructions>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-scr-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>scr</goal>
-                        </goals>
-                        <configuration>
-                            <specVersion>1.2</specVersion>
-                            <strictMode>false</strictMode>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.apache.felix</groupId>-->
+                <!--<artifactId>maven-scr-plugin</artifactId>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<goals>-->
+                            <!--<goal>scr</goal>-->
+                        <!--</goals>-->
+                        <!--<configuration>-->
+                            <!--<specVersion>1.2</specVersion>-->
+                            <!--<strictMode>false</strictMode>-->
+                        <!--</configuration>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
         </plugins>
     </build>
 

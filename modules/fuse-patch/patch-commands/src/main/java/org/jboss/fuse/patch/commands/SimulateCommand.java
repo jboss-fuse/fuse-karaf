@@ -18,12 +18,14 @@ package org.jboss.fuse.patch.commands;
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Completion;
+import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.jboss.fuse.patch.PatchService;
 import org.jboss.fuse.patch.commands.completers.UninstallPatchCompleter;
 import org.jboss.fuse.patch.management.Patch;
 import org.jboss.fuse.patch.management.PatchException;
 import org.jboss.fuse.patch.management.PatchResult;
 
+@Service
 @Command(scope = "patch", name = "simulate", description = "Simulate a patch installation")
 public class SimulateCommand extends PatchCommandSupport {
 

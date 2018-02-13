@@ -62,6 +62,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.jboss.fuse.modules.patch</groupId>
+            <artifactId>patch-features</artifactId>
+            <type>xml</type>
+            <classifier>features</classifier>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>standard</artifactId>
             <type>xml</type>
@@ -238,8 +245,7 @@
                             pax-logging and pax-url-aether
                         -->
                         <feature>framework</feature>
-                        <!-- when "patch" feature is ready, it'll be used as startup feature -->
-                        <!--<feature>patch-core</feature>-->
+                        <feature>patch-management</feature>
                     </startupFeatures>
                     <bootFeatures>
                         <!-- feature:* commands -->
@@ -310,6 +316,7 @@
                         <feature>transaction-manager-narayana</feature>
 
                         <feature>fuse-credential-store</feature>
+                        <feature>patch</feature>
                     </bootFeatures>
                     <installedFeatures>
                         <feature>wrap</feature>
