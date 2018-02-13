@@ -34,16 +34,6 @@
     <name>JBoss Fuse :: Fuse Modules :: Fuse Patch :: Core :: API</name>
     <description>OSGi bundle with patch API interfaces</description>
 
-    <properties>
-        <fuse.osgi.export>
-            org.jboss.fuse.patch;version="${project.version}"
-        </fuse.osgi.export>
-        <fuse.osgi.import>
-            *
-        </fuse.osgi.import>
-        <fuse.osgi.private.pkg />
-    </properties>
-
     <dependencies>
 
         <dependency>
@@ -52,5 +42,25 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <configuration>
+                    <instructions>
+                        <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+                        <Import-Package>
+                            *
+                        </Import-Package>
+                        <Export-Package>
+                            org.jboss.fuse.patch;version="${project.version}"
+                        </Export-Package>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

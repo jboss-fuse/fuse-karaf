@@ -32,8 +32,8 @@ public class PatchDataTest {
     @Test
     public void readPatchDataFromDescriptor() throws IOException {
         String sb = "id = myid\n" +
-                "bundle.0 = org/jboss/fuse/fuse-api/1.0/fabric-api-1.0.jar\n" +
-                "bundle.1 = org/jboss/fuse/fuse-web/1.0/fabric-web-1.0.war\n" +
+                "bundle.0 = org/jboss/fuse/fuse-api/1.0/fuse-api-1.0.jar\n" +
+                "bundle.1 = org/jboss/fuse/fuse-web/1.0/fuse-web-1.0.war\n" +
                 "bundle.count = 2";
         File patchFile = new File("target/patch-descriptor-1.patch");
         FileUtils.write(patchFile, sb, "UTF-8");

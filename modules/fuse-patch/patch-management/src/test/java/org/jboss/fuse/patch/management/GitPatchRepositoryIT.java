@@ -215,14 +215,14 @@ public class GitPatchRepositoryIT {
         repo.tag().setName("baseline-1.2.3").setObjectId(c1).call();
         RevCommit c2 = repository.prepareCommit(repo, "commit2").call();
         repo.tag().setName("baseline-1.2.1").setObjectId(c2).call(); // for the purpose of test
-        repo.tag().setName("baseline-in-fabric-1.2.1").setObjectId(c2).call(); // 2nd tag for the same commit
+        repo.tag().setName("baseline-in-fuse-1.2.1").setObjectId(c2).call(); // 2nd tag for the same commit
         RevCommit c3 = repository.prepareCommit(repo, "commit3").call();
 
         RevTag tag1 = repository.findLatestBaseline(repo);
         assertThat(tag1.getTagName(), equalTo("baseline-1.2.3"));
         assertThat(tag1.getObject(), equalTo(c1.getId()));
         RevTag tag2 = repository.findCurrentBaseline(repo);
-        assertThat(tag2.getTagName(), equalTo("baseline-in-fabric-1.2.1"));
+        assertThat(tag2.getTagName(), equalTo("baseline-in-fuse-1.2.1"));
         assertThat(tag2.getObject(), equalTo(c2.getId()));
     }
 

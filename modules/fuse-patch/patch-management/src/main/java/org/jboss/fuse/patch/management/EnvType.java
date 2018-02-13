@@ -22,13 +22,9 @@ public enum EnvType {
     /** Fuse/Karaf child container (<code>instance:create</code>) */
     STANDALONE_CHILD("baseline-child-%s"),
 
-    /** Openshift? JClouds? Fabric? SSH? */
+    /** Openshift? JClouds? Other? SSH? */
     UNKNOWN(null);
 
-    /**
-     * Fabric mode: Pattern for a tag that contains the state of container at particular version. Each container's
-     * private history branch starts from one of such baselines.
-     */
     private String baselineTagFormat;
 
     EnvType(String baselineTagFormat) {

@@ -25,7 +25,7 @@ public interface EnvService {
 
     /**
      * Checks in what kind of environment we are running. Used to make a decision whether to start tracking
-     * patch history (standalone, fabric root container) or not (child, ssh container)
+     * patch history (standalone) or not (child)
      * @return
      */
     EnvType determineEnvironmentType() throws IOException;

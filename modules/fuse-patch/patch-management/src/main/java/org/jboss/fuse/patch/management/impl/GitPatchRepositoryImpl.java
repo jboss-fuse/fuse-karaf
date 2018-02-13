@@ -93,20 +93,8 @@ public class GitPatchRepositoryImpl implements GitPatchRepository {
 
     // main patch branch name that tracks the history of patch installations/rollbacks for current product
     private String mainPatchBranchName;
-
-    // in fabric mode, we will have separate patch branches for root, SSH and child containers
+    // patch branch name that tracks the history of patch installations for child containers (instance:create)
     private String childContainerPatchBranchName;
-    // history of patches for SSH containers created from unreliable distro (ZIPped Fuse)
-    private String fuseSSHContainerPatchBranchName;
-    // history of patches for SSH containers created from reliable (official, not ZIPped on the fly) distro
-    private String fabric8SSHContainerPatchBranchName;
-    // history of baselines for Fuse root container
-    private String fuseRootContainerPatchBranchName;
-    // history of baselines for AMQ root container
-    private String amqRootContainerPatchBranchName;
-
-    // are we master repository? (doing further pushes to origin?)
-    private boolean master;
 
     // let's keep instance:create container's ID here
     private String standaloneChildkarafName;
@@ -125,9 +113,7 @@ public class GitPatchRepositoryImpl implements GitPatchRepository {
 
         // private branch - don't pushed anywhere outside of patches/.management/history
         // in either env, each container tracks its own history - this branch's HEAD shows how ${karaf.base} looks
-        // like. In fabric mode, each container's history branch starts with copy of particular baseline tag
-        // and have custom changes on top. When fabric-agent detects the upgrade/downgrade, it rebuilds the
-        // container history from another baseline
+        // like.
         this.mainPatchBranchName = GitPatchRepository.HISTORY_BRANCH;
         if (env == EnvType.STANDALONE_CHILD) {
             String suffix = "";
@@ -338,21 +324,6 @@ public class GitPatchRepositoryImpl implements GitPatchRepository {
                 .setPushTags()
                 .setForce(true)
                 .call();
-
-        // in fabric env we synchronize changes with "local" git repo, which will be then (from fabric-agent)
-        // pushed further to cluster's git repo
-        if (master && mainRepository != null
-                && !branch.startsWith("patch-")
-                && !branch.equals(getMainBranchName())) {
-            // we don't push "patch-*" branches to central repo (we push "patches-*")
-            // getMainBranchName() is used to track current container's history
-            mainRepository.push()
-                    .setRemote("origin")
-                    .setRefSpecs(new RefSpec(branch))
-                    .setPushTags()
-                    .setForce(true)
-                    .call();
-        }
     }
 
     @Override
@@ -460,6 +431,7 @@ public class GitPatchRepositoryImpl implements GitPatchRepository {
                 if (tagMap.get(rc.getId()).size() == 1) {
                     return tagMap.get(rc.getId()).get(0);
                 } else {
+                    // old case from fabric-mode
                     // we may assume there's tag from standalone baseline and from fabric baseline
                     // standalone may look like "baseline-6.2.1.xxx-NNN"
                     // fabric may look like "baseline-root-fuse-6.2.1.xxx-NNN"

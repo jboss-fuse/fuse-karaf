@@ -395,7 +395,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
     }
 
     /**
-     * Patch 4 is rollup patch (doesn't contain descriptor, contains default.profile/io.fabric8.version.properties)
+     * Patch 4 is rollup patch (doesn't contain descriptor, contains etc/version.properties)
      * Adding it is not different that adding non-rollup patch. Installation is different
      * @throws IOException
      * @throws GitAPIException

@@ -23,6 +23,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
@@ -40,7 +41,10 @@ import java.util.zip.CRC32;
 import org.apache.commons.io.FileUtils;
 import org.apache.felix.utils.version.VersionCleaner;
 import org.jboss.fuse.patch.management.impl.Activator;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Version;
 import org.osgi.service.log.LogService;
 

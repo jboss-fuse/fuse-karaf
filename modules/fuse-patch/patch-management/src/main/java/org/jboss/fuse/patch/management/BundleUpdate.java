@@ -20,8 +20,6 @@ package org.jboss.fuse.patch.management;
  * version:location.
  * If <code>newVersion/newLocation</code> are null, this update means we should reinstall the bundle as is (in rollup
  * patch).
- * If <code>previousVersion/previousLocation</code> are null, this update means we're preparing a future update
- * (for example in fabric mode).
  */
 public class BundleUpdate {
 
@@ -62,7 +60,7 @@ public class BundleUpdate {
             // reinstallation
             toString = String.format("%s: reinstall from %s (sl=%d)", symbolicName, previousLocation, startLevel);
         } else if (previousVersion == null) {
-            // update from any version (fabric mode)
+            // update from any version
             toString = String.format("%s: update to %s (from %s)", symbolicName, newVersion, newLocation);
         } else {
             // update

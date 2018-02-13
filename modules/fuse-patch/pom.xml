@@ -37,7 +37,7 @@
     <modules>
         <module>patch-management</module>
         <module>patch-core-api</module>
-        <!--<module>patch-core</module>-->
+        <module>patch-core</module>
         <!--<module>patch-commands</module>-->
         <!--<module>patch-features</module>-->
         <!--<module>patch-itests</module>-->
