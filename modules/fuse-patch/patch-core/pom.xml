@@ -113,30 +113,21 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                         <Import-Package>
-                            io.fabric8.api;resolution:=optional,
-                            io.fabric8.common.util;resolution:=optional,
-                            io.fabric8.git;resolution:=optional,
-                            io.fabric8.git.internal;resolution:=optional,
-                            io.fabric8.zookeeper.utils;resolution:=optional,
-                            org.apache.curator.framework;resolution:=optional;version="[2.6,3)",
-                            org.eclipse.jgit.api;resolution:=optional,
-                            org.eclipse.jgit.lib;resolution:=optional,
-                            org.eclipse.jgit.transport;resolution:=optional,
                             *
                         </Import-Package>
                         <Export-Package>
                             org.jboss.fuse.patch;version="${project.version}"
                         </Export-Package>
                         <Private-Package>
-                            org.apache.felix.utils.manifest,
-                            org.apache.felix.utils.version,
-                            org.apache.karaf.util.bundles,
-                            org.apache.commons.io,
-                            org.apache.commons.io.filefilter,
-                            org.apache.commons.io.comparator,
-                            org.apache.commons.io.input,
-                            org.apache.commons.io.monitor,
-                            org.apache.commons.io.output
+                            org.apache.felix.utils.manifest;-split-package:=merge-first,
+                            org.apache.felix.utils.version;-split-package:=merge-first,
+                            org.apache.karaf.util.bundles;-split-package:=merge-first,
+                            org.apache.commons.io;-split-package:=merge-first,
+                            org.apache.commons.io.filefilter;-split-package:=merge-first,
+                            org.apache.commons.io.comparator;-split-package:=merge-first,
+                            org.apache.commons.io.input;-split-package:=merge-first,
+                            org.apache.commons.io.monitor;-split-package:=merge-first,
+                            org.apache.commons.io.output;-split-package:=merge-first
                         </Private-Package>
                     </instructions>
                 </configuration>

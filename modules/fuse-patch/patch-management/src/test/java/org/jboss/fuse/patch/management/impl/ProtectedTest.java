@@ -103,7 +103,9 @@ public class ProtectedTest {
         new GitPatchManagementServiceImpl(context).updateReferences(git, "bin/instance.bat", "system/", updates, true);
 
         String expected = FileUtils.readFileToString(new File("src/test/resources/files/bin/instance.bat.updated"), "UTF-8");
+        expected = expected.replaceAll("\\r\\n", "\n");
         String changed = FileUtils.readFileToString(binInstance, "UTF-8");
+        changed = changed.replaceAll("\\r\\n", "\n");
         assertThat(changed, equalTo(expected));
     }
 
