@@ -21,26 +21,36 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jboss.fuse.modules</groupId>
-        <artifactId>fuse-modules</artifactId>
+        <groupId>org.jboss.fuse.modules.patch</groupId>
+        <artifactId>fuse-patch</artifactId>
         <version>7.0.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>org.jboss.fuse.modules.patch</groupId>
-    <artifactId>fuse-patch</artifactId>
-    <packaging>pom</packaging>
+    <artifactId>patch-core-api</artifactId>
+    <packaging>bundle</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch</name>
-    <description>Parent POM for standalone Fuse Patch support</description>
+    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch :: Core :: API</name>
+    <description>OSGi bundle with patch API interfaces</description>
 
-    <modules>
-        <module>patch-management</module>
-        <module>patch-core-api</module>
-        <!--<module>patch-core</module>-->
-        <!--<module>patch-commands</module>-->
-        <!--<module>patch-features</module>-->
-        <!--<module>patch-itests</module>-->
-    </modules>
+    <properties>
+        <fuse.osgi.export>
+            org.jboss.fuse.patch;version="${project.version}"
+        </fuse.osgi.export>
+        <fuse.osgi.import>
+            *
+        </fuse.osgi.import>
+        <fuse.osgi.private.pkg />
+    </properties>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.jboss.fuse.modules.patch</groupId>
+            <artifactId>patch-management</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>
