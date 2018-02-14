@@ -21,28 +21,63 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jboss.fuse.itests</groupId>
-        <artifactId>fuse-itests</artifactId>
+        <groupId>org.jboss.fuse.modules.patch</groupId>
+        <artifactId>fuse-patch</artifactId>
         <version>7.0.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.jboss.fuse.itests</groupId>
-    <artifactId>fuse-itests-paxexam</artifactId>
+    <groupId>org.jboss.fuse.modules.patch</groupId>
+    <artifactId>patch-itests</artifactId>
     <packaging>jar</packaging>
 
-    <name>JBoss Fuse :: Fuse Integration Tests :: PAX-Exam tests</name>
+    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch :: Integration Tests</name>
+
+    <!-- Properties -->
+    <properties>
+        <karaf.home>${project.build.directory}/apache-karaf-${version.org.apache.karaf}</karaf.home>
+    </properties>
 
     <dependencies>
+
+        <!-- With multiple slf4j bindings, let's naively rely on classpath ordering -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.jboss.fuse.itests</groupId>
             <artifactId>fuse-itests-common</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.jboss.fuse.modules</groupId>
-            <artifactId>fuse-credential-store-karaf</artifactId>
+            <groupId>org.jboss.fuse.modules.patch</groupId>
+            <artifactId>patch-core-api</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-nop</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.fuse.modules.patch</groupId>
+            <artifactId>patch-features</artifactId>
+            <type>xml</type>
+            <classifier>features</classifier>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.jboss.fuse.modules.patch</groupId>
+                    <artifactId>patch-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.jboss.fuse.modules.patch</groupId>
+                    <artifactId>patch-commands</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -86,11 +121,6 @@
             <artifactId>log4j-core</artifactId>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-slf4j-impl</artifactId>
-            <scope>test</scope>
-        </dependency>
 
         <!-- Dependencies required for org.ops4j.pax.exam.options.MavenArtifactUrlReference.versionAsInProject() -->
 
@@ -110,6 +140,12 @@
             <groupId>org.jboss.fuse</groupId>
             <artifactId>fuse-karaf-framework</artifactId>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.karaf</groupId>
+                    <artifactId>org.apache.karaf.client</artifactId>
+                </exclusion>
+            </exclusions>
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
@@ -120,6 +156,21 @@
             <type>xml</type>
             <classifier>features</classifier>
         </dependency>
+        <dependency>
+            <groupId>org.apache.karaf</groupId>
+            <artifactId>apache-karaf</artifactId>
+            <scope>test</scope>
+            <type>tar.gz</type>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-compress</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
 
     </dependencies>
 
@@ -127,11 +178,6 @@
         <testResources>
             <testResource>
                 <directory>src/test/resources</directory>
-                <filtering>true</filtering>
-            </testResource>
-            <testResource>
-                <directory>src/test/resources-binary</directory>
-                <filtering>false</filtering>
             </testResource>
         </testResources>
         <plugins>
@@ -143,9 +189,11 @@
                         <include>**/*IntegrationTest.java</include>
                     </includes>
                     <reuseForks>false</reuseForks>
-                    <systemPropertyVariables />
                     <runOrder>alphabetical</runOrder>
                     <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                    <systemPropertyVariables>
+                        <fuse.patch.location>${project.build.directory}/patches</fuse.patch.location>
+                    </systemPropertyVariables>
                     <forkedProcessExitTimeoutInSeconds>3</forkedProcessExitTimeoutInSeconds>
                 </configuration>
                 <executions>
@@ -176,6 +224,60 @@
                         <goals>
                             <goal>generate-depends-file</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- We have to unpack Karaf distro to create baseline on fly -->
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-karaf</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>org.apache.karaf</groupId>
+                                    <artifactId>apache-karaf</artifactId>
+                                    <version>${version.org.apache.karaf}</version>
+                                    <type>tar.gz</type>
+                                    <outputDirectory>${project.build.directory}</outputDirectory>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <!-- Create the baseline before pax-exam runs Karaf container -->
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <phase>process-test-resources</phase>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${karaf.home}/../patches/_baseline-root" />
+                                <copy todir="${karaf.home}/../patches/_baseline-root">
+                                    <fileset dir="${karaf.home}"/>
+                                </copy>
+                                <copy todir="${karaf.home}/../patches/_baseline-root/etc">
+                                    <fileset dir="${project.basedir}/src/test/resources/etc">
+                                        <include name="version.properties" />
+                                    </fileset>
+                                </copy>
+                                <zip destfile="${karaf.home}/../patches/jboss-fuse-karaf-7.0.0-baseline.zip">
+                                    <fileset dir="${karaf.home}/../patches" >
+                                        <include name="_baseline-root/**" />
+                                    </fileset>
+                                </zip>
+                            </target>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

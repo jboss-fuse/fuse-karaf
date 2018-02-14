@@ -61,27 +61,24 @@ public class FuseKarafTestSupport {
     }
 
     /**
-     *
-     * @param fuseDistroArtifact
+     * @param distroUrl
      * @return
      */
-    protected Option[] baseConfiguration(String fuseDistroArtifact) {
-        MavenUrlReference fuseDistro = maven()
-                .groupId("org.jboss.fuse").artifactId(fuseDistroArtifact)
-                .type("zip").versionAsInProject();
-
+    protected Option[] baseConfiguration(MavenUrlReference distroUrl) {
         MavenUrlReference karafStandardFeature = maven()
                 .groupId("org.jboss.fuse").artifactId("fuse-karaf-framework")
                 .type("xml").classifier("features").versionAsInProject();
 
         return combine(
                 new Option[] {
-                        karafDistributionConfiguration().frameworkUrl(fuseDistro)
+                        karafDistributionConfiguration().frameworkUrl(distroUrl)
                                 .unpackDirectory(new File("target/paxexam")),
                         keepRuntimeFolder(),
                         configureConsole().ignoreLocalConsole(),
                         editConfigurationFilePut("etc/branding.properties", "welcome", ""),
                         editConfigurationFilePut("etc/branding-ssh.properties", "welcome", ""),
+                        editConfigurationFilePut("etc/system.properties", "patching.disabled", Boolean.toString(!usePatching())),
+                        editConfigurationFilePut("etc/system.properties", "java.security.egd", "file:/dev/./urandom"),
 
                         // feature exam/4.11.0 uses:
                         // <bundle dependency="true">mvn:org.apache.geronimo.specs/geronimo-atinject_1.0_spec/1.0</bundle>
@@ -96,12 +93,36 @@ public class FuseKarafTestSupport {
         );
     }
 
+    protected MavenUrlReference fuseDistroUrl(String fuseDistroArtifact) {
+        return maven()
+                .groupId("org.jboss.fuse").artifactId(fuseDistroArtifact)
+                .type("zip").versionAsInProject();
+    }
+
+    protected MavenUrlReference karafDistroUrl() {
+        return maven()
+                .groupId("org.apache.karaf").artifactId("apache-karaf")
+                .type("tar.gz").versionAsInProject();
+    }
+
+    public Option[] configurationKaraf() {
+        return baseConfiguration(karafDistroUrl());
+    }
+
     public Option[] configurationFull() {
-        return baseConfiguration("jboss-fuse-karaf");
+        return baseConfiguration(fuseDistroUrl("jboss-fuse-karaf"));
     }
 
     public Option[] configurationMinimal() {
-        return baseConfiguration("jboss-fuse-karaf-minimal");
+        return baseConfiguration(fuseDistroUrl("jboss-fuse-karaf-minimal"));
+    }
+
+    /**
+     * Tests may decide to turn on patching. It's disabled by default.
+     * @return
+     */
+    protected boolean usePatching() {
+        return false;
     }
 
 }

@@ -2043,18 +2043,26 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         File systemRepo = getSystemRepository(karafHome, systemContext);
         File baselineDistribution = null;
 
-        // the only expected location of baseline for standalone JBoss Fuse
+        // the preferred location of baseline for standalone JBoss Fuse
         String location = systemRepo.getCanonicalPath() + "/org/jboss/fuse/jboss-fuse-karaf/%1$s/jboss-fuse-karaf-%1$s-baseline.zip";
         location = String.format(location, currentFuseVersion);
         if (new File(location).isFile()) {
             baselineDistribution = new File(location);
             Activator.log(LogService.LOG_INFO, "Found baseline distribution: " + baselineDistribution.getCanonicalPath());
+        } else {
+            // fallback/test location
+            location = patchesDir.getCanonicalPath() + "/jboss-fuse-karaf-%1$s-baseline.zip";
+            location = String.format(location, currentFuseVersion);
+            if (new File(location).isFile()) {
+                baselineDistribution = new File(location);
+                Activator.log(LogService.LOG_INFO, "Found baseline distribution: " + baselineDistribution.getCanonicalPath());
+            }
         }
 
         if (baselineDistribution != null) {
             return trackBaselineRepository(git, baselineDistribution, currentFuseVersion);
         } else {
-            String message = "Can't find baseline distribution inside system repository.";
+            String message = "Can't find baseline distribution inside system repository or in " + patchesDir + ".";
             Activator.log2(LogService.LOG_WARNING, message);
             throw new PatchException(message);
         }

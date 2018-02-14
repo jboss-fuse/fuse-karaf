@@ -104,6 +104,15 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
     }
 
     @Test
+    public void initializationPerformedBaselineDistributionFoundInPatches() throws IOException, GitAPIException {
+        freshKarafStandaloneDistro();
+        preparePatchZip("src/test/resources/baselines/baseline1", "target/karaf/patches/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        validateInitialGitRepository();
+        // check one more time - should not do anything harmful
+        validateInitialGitRepository();
+    }
+
+    @Test
     public void initializationPerformedBaselineDistributionFoundInSystem() throws IOException, GitAPIException {
         freshKarafStandaloneDistro();
         preparePatchZip("src/test/resources/baselines/baseline1", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);

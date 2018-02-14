@@ -82,12 +82,16 @@ import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.jboss.fuse.patch.management.Utils.mvnurlToArtifact;
 import static org.jboss.fuse.patch.management.Utils.stripSymbolicName;
 
 @Component(immediate = true, service = PatchService.class)
 public class PatchServiceImpl implements PatchService {
+
+    public static Logger LOG = LoggerFactory.getLogger(PatchServiceImpl.class);
 
     private static final String ID = "id";
     private static final String DESCRIPTION = "description";
@@ -123,11 +127,14 @@ public class PatchServiceImpl implements PatchService {
     void activate(ComponentContext componentContext) throws IOException {
         // Use system bundle' bundle context to avoid running into
         // "Invalid BundleContext" exceptions when updating bundles
-        this.bundleContext = componentContext.getBundleContext().getBundle(0).getBundleContext();
+        bundleContext = componentContext.getBundleContext().getBundle(0).getBundleContext();
 
         String dir = this.bundleContext.getProperty(PATCH_LOCATION);
         if (dir != null) {
             patchDir = new File(dir);
+        } else {
+            patchDir = new File(bundleContext.getProperty("karaf.home"), "patches");
+            LOG.info("Can't find {} property, defaulting to {}", PATCH_LOCATION, patchDir.getCanonicalPath());
         }
         if (!patchDir.isDirectory()) {
             Utils.mkdirs(patchDir);

@@ -40,7 +40,7 @@
         <module>patch-core</module>
         <module>patch-commands</module>
         <module>patch-features</module>
-        <!--<module>patch-itests</module>-->
+        <module>patch-itests</module>
     </modules>
 
 </project>
