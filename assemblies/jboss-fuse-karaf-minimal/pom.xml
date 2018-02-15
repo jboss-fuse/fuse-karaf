@@ -53,15 +53,15 @@
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>framework</artifactId>
-            <classifier>features</classifier>
             <type>xml</type>
+            <classifier>features</classifier>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>standard</artifactId>
-            <classifier>features</classifier>
             <type>xml</type>
+            <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
         <!--
@@ -113,7 +113,6 @@
                 -->
                 <groupId>org.apache.karaf.tooling</groupId>
                 <artifactId>karaf-maven-plugin</artifactId>
-                <version>${version.org.apache.karaf}</version>
                 <executions>
                     <execution>
                         <id>process-resources</id>
@@ -152,8 +151,6 @@
                             pax-logging and pax-url-aether
                         -->
                         <feature>framework</feature>
-                        <!-- when "patch" feature is ready, it'll be used as startup feature -->
-                        <!--<feature>patch-core</feature>-->
                     </startupFeatures>
                     <bootFeatures>
                         <!-- feature:* commands -->
@@ -186,18 +183,15 @@
                         <feature>fuse-credential-store</feature>
                     </bootFeatures>
                     <installedFeatures>
+                        <feature>wrap</feature>
                         <feature>wrapper</feature>
                     </installedFeatures>
-                    <blacklistedBundles>
-                        <bundle>camel-karaf-commands;url="mvn:org.apache.camel.karaf/camel-karaf-commands/2.18.0-SNAPSHOT"</bundle>
-                        <bundle>jetty-http;url="mvn:org.eclipse.jetty/jetty-http/9.3.11.v20160721"</bundle>
-                        <bundle>jetty-all-server;url="mvn:org.eclipse.jetty.aggregate/jetty-all-server/8.1.14.v20131031"</bundle>
-                    </blacklistedBundles>
                     <blacklistedFeatures>
-                        <feature>pax-jetty</feature>
-                        <feature>pax-jetty-http2</feature>
-                        <feature>pax-http-jetty</feature>
+                        <feature>pax-*jetty*</feature>
                     </blacklistedFeatures>
+                    <blacklistedBundles>
+                        <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
+                    </blacklistedBundles>
                     <blacklistedRepositories />
                     <libraries>
                         <!--
@@ -241,6 +235,7 @@
                     <config>
                         <karaf.delay.console>true</karaf.delay.console>
                     </config>
+                    <generateConsistencyReport>${project.build.directory}/assembly/welcome-content</generateConsistencyReport>
                 </configuration>
             </plugin>
         </plugins>

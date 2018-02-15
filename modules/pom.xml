@@ -38,6 +38,7 @@
     <modules>
         <module>fuse-branding</module>
         <module>fuse-credential-store</module>
+        <module>fuse-patch</module>
     </modules>
 
 </project>

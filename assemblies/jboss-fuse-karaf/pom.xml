@@ -31,7 +31,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <camel.sap.bundle/>
+        <camel.sap.bundle />
     </properties>
 
     <name>JBoss Fuse :: Assemblies :: JBoss Fuse - Karaf distro</name>
@@ -62,6 +62,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.jboss.fuse.modules.patch</groupId>
+            <artifactId>patch-features</artifactId>
+            <type>xml</type>
+            <classifier>features</classifier>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>standard</artifactId>
             <type>xml</type>
@@ -71,8 +78,8 @@
         <dependency>
             <groupId>org.apache.karaf.features</groupId>
             <artifactId>enterprise</artifactId>
-            <classifier>features</classifier>
             <type>xml</type>
+            <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
         <dependency>
@@ -238,8 +245,7 @@
                             pax-logging and pax-url-aether
                         -->
                         <feature>framework</feature>
-                        <!-- when "patch" feature is ready, it'll be used as startup feature -->
-                        <!--<feature>patch-core</feature>-->
+                        <feature>patch-management</feature>
                     </startupFeatures>
                     <bootFeatures>
                         <!-- feature:* commands -->
@@ -310,6 +316,7 @@
                         <feature>transaction-manager-narayana</feature>
 
                         <feature>fuse-credential-store</feature>
+                        <feature>patch</feature>
                     </bootFeatures>
                     <installedFeatures>
                         <feature>wrap</feature>
@@ -433,9 +440,46 @@
                     <generateConsistencyReport>${project.build.directory}/assembly/welcome-content</generateConsistencyReport>
                 </configuration>
             </plugin>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-baseline</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptors>
+                                <descriptor>src/main/descriptors/baseline.xml</descriptor>
+                            </descriptors>
+                            <finalName>${project.artifactId}-${project.version}</finalName>
+                            <appendAssemblyId>true</appendAssemblyId>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>include-baseline</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <copy file="${project.build.directory}/${project.artifactId}-${project.version}-baseline.zip"
+                                        todir="${project.build.directory}/assembly/system/org/jboss/fuse/jboss-fuse-karaf/${project.version}" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
-    
+
     <profiles>
         <profile>
             <id>sap</id>

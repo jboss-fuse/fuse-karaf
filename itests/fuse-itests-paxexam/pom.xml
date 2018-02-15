@@ -146,6 +146,7 @@
                     <systemPropertyVariables />
                     <runOrder>alphabetical</runOrder>
                     <redirectTestOutputToFile>false</redirectTestOutputToFile>
+                    <forkedProcessExitTimeoutInSeconds>3</forkedProcessExitTimeoutInSeconds>
                 </configuration>
                 <executions>
                     <execution>
