@@ -125,7 +125,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     };
 
     private static final Pattern VERSION_PATTERN =
-            Pattern.compile("patch-management/(\\d+\\.\\d+\\.\\d+(?:\\.[^.]+)?)\\.jar");
+            Pattern.compile("patch-management/(\\d+\\.\\d+\\.\\d+(?:\\.[^. =]+)?)");
 
     private static final String MARKER_BASELINE_COMMIT_PATTERN = "[PATCH/baseline] Installing baseline-%s";
     private static final String MARKER_BASELINE_CHILD_COMMIT_PATTERN = "[PATCH/baseline] Installing baseline-child-%s";
