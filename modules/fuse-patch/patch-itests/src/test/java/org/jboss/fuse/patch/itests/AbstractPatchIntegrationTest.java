@@ -19,15 +19,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.PrivilegedActionException;
-import java.security.PrivilegedExceptionAction;
 import javax.inject.Inject;
-import javax.security.auth.Subject;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipArchiveOutputStream;
 import org.apache.commons.io.IOUtils;
-import org.apache.karaf.jaas.boot.principal.RolePrincipal;
 import org.apache.karaf.shell.api.console.Session;
 import org.jboss.fuse.itests.karaf.FuseKarafTestSupport;
 import org.jboss.fuse.patch.PatchService;
@@ -134,12 +130,6 @@ public abstract class AbstractPatchIntegrationTest extends FuseKarafTestSupport 
         File patch = new File(context.getProperty("fuse.patch.location"), name + ".zip");
 
         execute(session, String.format("patch:add %s", patch.toURI().toURL()));
-    }
-
-    protected Object execute(Session session, String command) throws PrivilegedActionException {
-        Subject subject = new Subject();
-        subject.getPrincipals().add(new RolePrincipal("admin"));
-        return Subject.doAs(subject, (PrivilegedExceptionAction<String>) () -> (String) session.execute(command));
     }
 
     protected void createPatchZipFiles() throws IOException {

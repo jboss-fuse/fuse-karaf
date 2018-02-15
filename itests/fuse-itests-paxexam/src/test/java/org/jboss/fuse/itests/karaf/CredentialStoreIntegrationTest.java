@@ -81,14 +81,14 @@ public class CredentialStoreIntegrationTest extends FuseKarafTestSupport {
 
     @Test
     public void shouldBeAbleToCreateCredentialStoreFromCommand() throws Exception {
-        session.execute("credential-store:create -a location=new.store -k password=\"super secret\" -k algorithm=masked-MD5-DES");
+        execute(session, "credential-store:create -a location=new.store -k password=\"super secret\" -k algorithm=masked-MD5-DES");
 
         assertTrue("new.store should exist", new File("new.store").isFile());
     }
 
     @Test
     public void shouldListCredentialStoreContentFromCommand() throws Exception {
-        session.execute("credential-store:list");
+        execute(session, "credential-store:list");
 
         assertTrue(new String(output.toByteArray()).contains("CS:key"));
     }
@@ -100,35 +100,35 @@ public class CredentialStoreIntegrationTest extends FuseKarafTestSupport {
 
     @Test
     public void shouldRemoveFromCredentialStoreFromCommand() throws Exception {
-        session.execute("credential-store:list");
+        execute(session, "credential-store:list");
 
         assertTrue(new String(output.toByteArray()).contains("CS:key"));
 
         output.reset();
 
-        session.execute("credential-store:remove -a key");
+        execute(session, "credential-store:remove -a key");
 
-        session.execute("credential-store:list");
+        execute(session, "credential-store:list");
 
         assertFalse(new String(output.toByteArray()).contains("CS:key"));
     }
 
     @Test
     public void shouldStoreInCredentialStoreFromCommand() throws Exception {
-        session.execute("credential-store:list");
+        execute(session, "credential-store:list");
 
         assertTrue(new String(output.toByteArray()).contains("CS:key"));
 
         output.reset();
 
-        session.execute("credential-store:store -a attribute2 -s secret");
+        execute(session, "credential-store:store -a attribute2 -s secret");
 
         assertTrue(new String(output.toByteArray())
                 .contains("Value stored in the credential store to reference it use: CS:attribute2"));
 
         output.reset();
 
-        session.execute("credential-store:list");
+        execute(session, "credential-store:list");
 
         assertTrue(new String(output.toByteArray()).contains("CS:attribute2"));
     }

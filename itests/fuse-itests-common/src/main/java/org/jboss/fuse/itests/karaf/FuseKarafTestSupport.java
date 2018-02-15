@@ -16,8 +16,13 @@
 package org.jboss.fuse.itests.karaf;
 
 import java.io.File;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
 import javax.inject.Inject;
+import javax.security.auth.Subject;
 
+import org.apache.karaf.jaas.boot.principal.RolePrincipal;
+import org.apache.karaf.shell.api.console.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -123,6 +128,12 @@ public class FuseKarafTestSupport {
      */
     protected boolean usePatching() {
         return false;
+    }
+
+    protected Object execute(Session session, String command) throws PrivilegedActionException {
+        Subject subject = new Subject();
+        subject.getPrincipals().add(new RolePrincipal("admin"));
+        return Subject.doAs(subject, (PrivilegedExceptionAction<String>) () -> (String) session.execute(command));
     }
 
 }
