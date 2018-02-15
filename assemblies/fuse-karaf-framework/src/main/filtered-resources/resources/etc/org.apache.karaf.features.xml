@@ -78,7 +78,7 @@
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.rhino/[1,2)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.rhino/${version.org.apache.servicemix.bundles.rhino}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/[1.1,1.2)"
-                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/${version.org.apache.servicemix.bundles.xpp3}1.1.4c_7" mode="maven" />
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/${version.org.apache.servicemix.bundles.xpp3}" mode="maven" />
         <bundle originalUri="mvn:org.apache.sshd/sshd-core/[1,2)"
                 replacement="mvn:org.apache.sshd/sshd-core/${version.org.apache.sshd}" mode="maven" />
         <bundle originalUri="mvn:org.atmosphere/atmosphere-runtime/[2.4,3)"
