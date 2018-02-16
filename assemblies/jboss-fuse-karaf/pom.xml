@@ -384,6 +384,10 @@
 
                         <!-- Tomcat -->
                         <feature>*tomcat*</feature>
+ 
+                        <!-- Spring-DM -->
+                        <feature>spring-dm</feature>
+                        <feature>spring-dm-web</feature>
 
                         <!-- Old Spring version -->
                         <feature>spring*/[3,4.3)</feature>
