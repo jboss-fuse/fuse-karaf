@@ -85,7 +85,7 @@
                 replacement="mvn:org.atmosphere/atmosphere-runtime/${version.org.atmosphere}" mode="maven" />
         <bundle originalUri="mvn:org.glassfish.web/javax.el/[2,3)"
                 replacement="mvn:org.glassfish.web/javax.el/${version.org.glassfish.web.javax.el}" mode="maven" />
-        <bundle originalUri="mvn:org.hibernate/hibernate-validator/[5.2,6)"
+        <bundle originalUri="mvn:org.hibernate/hibernate-validator/[5.2,5.3)"
                 replacement="mvn:org.hibernate/hibernate-validator/${version.org.hibernate.validator}" mode="maven" />
         <bundle originalUri="mvn:org.javassist/javassist/[3,4)"
                 replacement="mvn:org.javassist/javassist/${version.org.javassist}" mode="maven" />
