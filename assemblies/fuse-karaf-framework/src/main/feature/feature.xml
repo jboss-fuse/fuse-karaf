@@ -21,7 +21,6 @@
 
     <!-- References to dependent repositories -->
 
-    <repository>mvn:org.jboss.fuse.modules.patch/patch-features/${project.version}/xml/features</repository>
     <repository>mvn:org.apache.karaf.features/framework/${version.org.apache.karaf}/xml/features</repository>
     <repository>mvn:org.apache.karaf.features/standard/${version.org.apache.karaf}/xml/features</repository>
     <repository>mvn:org.apache.karaf.features/enterprise/${version.org.apache.karaf}/xml/features</repository>
