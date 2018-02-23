@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,7 +37,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.felix.utils.manifest.Attribute;
@@ -45,11 +48,13 @@ import org.apache.felix.utils.manifest.Directive;
 import org.apache.felix.utils.manifest.Parser;
 import org.apache.felix.utils.version.VersionRange;
 import org.apache.felix.utils.version.VersionTable;
+import org.apache.karaf.features.BootFinished;
 import org.apache.karaf.features.BundleInfo;
 import org.apache.karaf.features.Conditional;
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
 import org.apache.karaf.features.Repository;
+import org.apache.karaf.util.ThreadUtils;
 import org.apache.karaf.util.bundles.BundleUtils;
 import org.jboss.fuse.patch.PatchService;
 import org.jboss.fuse.patch.management.Artifact;
@@ -79,9 +84,11 @@ import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,11 +130,15 @@ public class PatchServiceImpl implements PatchService {
 
     private OSGiPatchHelper helper;
 
+    private BootDoneTracker bootTracker;
+    private ExecutorService pool;
+
     @Activate
     void activate(ComponentContext componentContext) throws IOException {
         // Use system bundle' bundle context to avoid running into
         // "Invalid BundleContext" exceptions when updating bundles
         bundleContext = componentContext.getBundleContext().getBundle(0).getBundleContext();
+        pool = Executors.newFixedThreadPool(1, ThreadUtils.namedThreadFactory("patch-service"));
 
         String dir = this.bundleContext.getProperty(PATCH_LOCATION);
         if (dir != null) {
@@ -149,162 +160,221 @@ public class PatchServiceImpl implements PatchService {
 
         load(true);
 
-        resumePendingPatchTasks();
+        bootTracker = new BootDoneTracker(bundleContext);
+        bootTracker.open();
+    }
+
+    @Deactivate
+    synchronized void deactivate() {
+        bootTracker.close();
+        pool.shutdownNow();
+        pool = null;
+    }
+
+    private class BootDoneTracker extends ServiceTracker<BootFinished, BootFinished> {
+
+        public BootDoneTracker(BundleContext context) {
+            super(context, BootFinished.class, null);
+        }
+
+        @Override
+        public BootFinished addingService(ServiceReference<BootFinished> reference) {
+            synchronized(PatchServiceImpl.this) {
+                if (pool != null) {
+                    // we may have pool shutdown, but we'll at least schedule the task
+                    LOG.info("Scheduling \"resume pending patch tasks\"");
+                    pool.submit(PatchServiceImpl.this::resumePendingPatchTasks);
+                }
+            }
+            return super.addingService(reference);
+        }
     }
 
     /**
      * Upon startup (activation), we check if there are any *.patch.pending files. if yes, we're finishing the
      * installation
      */
-    private void resumePendingPatchTasks() throws IOException {
-        File[] pendingPatches = patchDir.listFiles(pathname ->
-                pathname.exists() && pathname.getName().endsWith(".pending"));
-        if (pendingPatches == null || pendingPatches.length == 0) {
-            return;
-        }
-        for (File pending : pendingPatches) {
-            Pending what = Pending.valueOf(FileUtils.readFileToString(pending, "UTF-8"));
+    private void resumePendingPatchTasks() {
+        LOG.info("Performing \"resume pending patch tasks\"");
+        try {
+            File[] pendingPatches = patchDir.listFiles(pathname ->
+                    pathname.exists() && pathname.getName().endsWith(".pending"));
+            if (pendingPatches == null || pendingPatches.length == 0) {
+                return;
+            }
+            for (File pending : pendingPatches) {
+                Pending what = Pending.valueOf(FileUtils.readFileToString(pending, "UTF-8"));
 
-            String name = pending.getName().replaceFirst("\\.pending$", "");
-            if (patchManagement.isStandaloneChild()) {
-                if (name.endsWith("." + System.getProperty("karaf.name") + ".patch")) {
-                    name = name.replaceFirst("\\." + System.getProperty("karaf.name"), "");
-                } else {
-                    continue;
+                String name = pending.getName().replaceFirst("\\.pending$", "");
+                if (patchManagement.isStandaloneChild()) {
+                    if (name.endsWith("." + System.getProperty("karaf.name") + ".patch")) {
+                        name = name.replaceFirst("\\." + System.getProperty("karaf.name"), "");
+                    } else {
+                        continue;
+                    }
                 }
-            }
-            File patchFile = new File(pending.getParentFile(), name);
-            if (!patchFile.isFile()) {
-                System.out.println("Ignoring patch result file: " + patchFile.getName());
-                continue;
-            }
-            PatchData patchData = PatchData.load(new FileInputStream(patchFile));
-            Patch patch = patchManagement.loadPatch(new PatchDetailsRequest(patchData.getId()));
-
-            System.out.printf("Resume %s of %spatch \"%s\"%n",
-                    what == Pending.ROLLUP_INSTALLATION ? "installation" : "rollback",
-                    patch.getPatchData().isRollupPatch() ? "rollup " : "",
-                    patch.getPatchData().getId());
-
-            PatchResult result = patch.getResult();
-            if (patchManagement.isStandaloneChild()) {
-                result = result.getChildPatches().get(System.getProperty("karaf.name"));
-                if (result == null) {
+                File patchFile = new File(pending.getParentFile(), name);
+                if (!patchFile.isFile()) {
                     System.out.println("Ignoring patch result file: " + patchFile.getName());
                     continue;
                 }
-            }
-            // feature time
+                PatchData patchData = PatchData.load(new FileInputStream(patchFile));
+                Patch patch = patchManagement.loadPatch(new PatchDetailsRequest(patchData.getId()));
 
-            Set<String> newRepositories = new LinkedHashSet<>();
-            Set<String> features = new LinkedHashSet<>();
-            for (FeatureUpdate featureUpdate : result.getFeatureUpdates()) {
-                if (featureUpdate.getName() == null && featureUpdate.getPreviousRepository() != null) {
-                    // feature was not shipped by patch
-                    newRepositories.add(featureUpdate.getPreviousRepository());
-                } else if (featureUpdate.getNewRepository() == null) {
-                    // feature was not changed by patch
-                    newRepositories.add(featureUpdate.getPreviousRepository());
-                    features.add(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getPreviousVersion()));
-                } else {
-                    // feature was shipped by patch
-                    if (what == Pending.ROLLUP_INSTALLATION) {
-                        newRepositories.add(featureUpdate.getNewRepository());
-                        features.add(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getNewVersion()));
-                    } else {
+                System.out.printf("Resume %s of %spatch \"%s\"%n",
+                        what == Pending.ROLLUP_INSTALLATION ? "installation" : "rollback",
+                        patch.getPatchData().isRollupPatch() ? "rollup " : "",
+                        patch.getPatchData().getId());
+
+                PatchResult result = patch.getResult();
+                if (patchManagement.isStandaloneChild()) {
+                    result = result.getChildPatches().get(System.getProperty("karaf.name"));
+                    if (result == null) {
+                        System.out.println("Ignoring patch result file: " + patchFile.getName());
+                        continue;
+                    }
+                }
+                // feature time
+
+                Set<String> newRepositories = new LinkedHashSet<>();
+                Set<String> features = new LinkedHashSet<>();
+                for (FeatureUpdate featureUpdate : result.getFeatureUpdates()) {
+                    if (featureUpdate.getName() == null && featureUpdate.getPreviousRepository() != null) {
+                        // feature was not shipped by patch
+                        newRepositories.add(featureUpdate.getPreviousRepository());
+                    } else if (featureUpdate.getNewRepository() == null) {
+                        // feature was not changed by patch
                         newRepositories.add(featureUpdate.getPreviousRepository());
                         features.add(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getPreviousVersion()));
-                    }
-                }
-            }
-            for (String repo : newRepositories) {
-                System.out.println("Restoring feature repository: " + repo);
-                try {
-                    featuresService.addRepository(URI.create(repo));
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                    e.printStackTrace(System.err);
-                    System.err.flush();
-                }
-            }
-            for (String f : features) {
-                String[] fv = f.split("\\|");
-                System.out.printf("Restoring feature %s/%s%n", fv[0], fv[1]);
-                try {
-                    featuresService.installFeature(fv[0], fv[1]);
-                } catch (Exception e) {
-                    System.err.println(e.getMessage());
-                    e.printStackTrace(System.err);
-                    System.err.flush();
-                }
-            }
-
-            // bundle time
-
-            for (BundleUpdate update : result.getBundleUpdates()) {
-                if (!update.isIndependent()) {
-                    continue;
-                }
-                String location = null;
-                if (update.getNewVersion() == null) {
-                    System.out.printf("Restoring bundle %s from %s%n", update.getSymbolicName(), update.getPreviousLocation());
-                    location = update.getPreviousLocation();
-                } else {
-                    if (what == Pending.ROLLUP_INSTALLATION) {
-                        System.out.printf("Updating bundle %s from %s%n", update.getSymbolicName(), update.getNewLocation());
-                        location = update.getNewLocation();
                     } else {
-                        System.out.printf("Downgrading bundle %s from %s%n", update.getSymbolicName(), update.getPreviousLocation());
-                        location = update.getPreviousLocation();
+                        // feature was shipped by patch
+                        if (what == Pending.ROLLUP_INSTALLATION) {
+                            newRepositories.add(featureUpdate.getNewRepository());
+                            features.add(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getNewVersion()));
+                        } else {
+                            newRepositories.add(featureUpdate.getPreviousRepository());
+                            features.add(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getPreviousVersion()));
+                        }
                     }
                 }
-
+                System.out.println("Restoring feature repositories");
+                for (String repo : newRepositories) {
+                    try {
+                        URI repositoryUri = URI.create(repo);
+                        if (featuresService.getRepository(repositoryUri) == null) {
+                            System.out.println("Restoring feature repository: " + repo);
+                            featuresService.addRepository(repositoryUri);
+                        }
+                    } catch (Exception e) {
+                        System.err.println(e.getMessage());
+                        e.printStackTrace(System.err);
+                        System.err.flush();
+                    }
+                }
+                Set<String> installedFeatures = null;
                 try {
-                    Bundle b = bundleContext.installBundle(location);
-                    if (update.getStartLevel() > -1) {
-                        b.adapt(BundleStartLevel.class).setStartLevel(update.getStartLevel());
-                    }
-                    switch (update.getState()) {
-                        case Bundle.UNINSTALLED: // ?
-                        case Bundle.INSTALLED:
-                        case Bundle.STARTING:
-                        case Bundle.STOPPING:
-                            break;
-                        case Bundle.RESOLVED:
-                            // ?bundleContext.getBundle(0L).adapt(org.osgi.framework.wiring.FrameworkWiring.class).resolveBundles(...);
-                            break;
-                        case Bundle.ACTIVE:
-                            b.start();
-                            break;
-                    }
-                } catch (BundleException e) {
-                    System.err.println(" - " + e.getMessage());
-//                    e.printStackTrace(System.err);
+                    installedFeatures = Arrays.stream(featuresService.listInstalledFeatures())
+                            .map((f) -> String.format("%s|%s", f.getName(), f.getVersion()))
+                            .collect(Collectors.toSet());
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                    e.printStackTrace(System.err);
                     System.err.flush();
                 }
-            }
-
-            pending.delete();
-            System.out.printf("%spatch \"%s\" %s successfully%n",
-                    patch.getPatchData().isRollupPatch() ? "Rollup " : "",
-                    patchData.getId(),
-                    what == Pending.ROLLUP_INSTALLATION ? "installed" : "rolled back");
-            if (what == Pending.ROLLUP_ROLLBACK) {
-                List<String> bases = patch.getResult().getKarafBases();
-                bases.removeIf(s -> s.startsWith(System.getProperty("karaf.name")));
-                result.setPending(null);
-                patch.getResult().store();
-                if (patch.getResult().getKarafBases().size() == 0) {
-                    File file = new File(patchDir, patchData.getId() + ".patch.result");
-                    file.delete();
+                EnumSet<FeaturesService.Option> options = EnumSet.noneOf(FeaturesService.Option.class);
+                Set<String> toInstall = new LinkedHashSet<>();
+                System.out.println("Restoring features");
+                for (String f : features) {
+                    if (installedFeatures == null || !installedFeatures.contains(f)) {
+                        String[] fv = f.split("\\|");
+                        String fid = String.format("%s/%s", fv[0], fv[1]);
+                        System.out.printf("Restoring feature %s%n", fid);
+                        toInstall.add(fid);
+                    }
                 }
-                if (patchManagement.isStandaloneChild()) {
-                    File file = new File(patchDir, patchData.getId() + "." + System.getProperty("karaf.name") + ".patch.result");
-                    if (file.isFile()) {
+                try {
+                    if (!toInstall.isEmpty()) {
+                        featuresService.installFeatures(toInstall, options);
+                    }
+
+                    System.out.println("Refreshing features service");
+                    featuresService.refreshFeatures(options);
+                } catch (Exception e) {
+                    System.err.println(e.getMessage());
+                    e.printStackTrace(System.err);
+                    System.err.flush();
+                }
+
+                // bundle time
+
+                for (BundleUpdate update : result.getBundleUpdates()) {
+                    if (!update.isIndependent()) {
+                        continue;
+                    }
+                    String location = null;
+                    if (update.getNewVersion() == null) {
+                        System.out.printf("Restoring bundle %s from %s%n", update.getSymbolicName(), update.getPreviousLocation());
+                        location = update.getPreviousLocation();
+                    } else {
+                        if (what == Pending.ROLLUP_INSTALLATION) {
+                            System.out.printf("Updating bundle %s from %s%n", update.getSymbolicName(), update.getNewLocation());
+                            location = update.getNewLocation();
+                        } else {
+                            System.out.printf("Downgrading bundle %s from %s%n", update.getSymbolicName(), update.getPreviousLocation());
+                            location = update.getPreviousLocation();
+                        }
+                    }
+
+                    try {
+                        Bundle b = bundleContext.installBundle(location);
+                        if (update.getStartLevel() > -1) {
+                            b.adapt(BundleStartLevel.class).setStartLevel(update.getStartLevel());
+                        }
+                        switch (update.getState()) {
+                            case Bundle.UNINSTALLED: // ?
+                            case Bundle.INSTALLED:
+                            case Bundle.STARTING:
+                            case Bundle.STOPPING:
+                                break;
+                            case Bundle.RESOLVED:
+                                // ?bundleContext.getBundle(0L).adapt(org.osgi.framework.wiring.FrameworkWiring.class).resolveBundles(...);
+                                break;
+                            case Bundle.ACTIVE:
+                                b.start();
+                                break;
+                        }
+                    } catch (BundleException e) {
+                        System.err.println(" - " + e.getMessage());
+                        //                    e.printStackTrace(System.err);
+                        System.err.flush();
+                    }
+                }
+
+                pending.delete();
+                System.out.printf("%spatch \"%s\" %s successfully%n",
+                        patch.getPatchData().isRollupPatch() ? "Rollup " : "",
+                        patchData.getId(),
+                        what == Pending.ROLLUP_INSTALLATION ? "installed" : "rolled back");
+                System.out.flush();
+                if (what == Pending.ROLLUP_ROLLBACK) {
+                    List<String> bases = patch.getResult().getKarafBases();
+                    bases.removeIf(s -> s.startsWith(System.getProperty("karaf.name")));
+                    result.setPending(null);
+                    patch.getResult().store();
+                    if (patch.getResult().getKarafBases().size() == 0) {
+                        File file = new File(patchDir, patchData.getId() + ".patch.result");
                         file.delete();
                     }
+                    if (patchManagement.isStandaloneChild()) {
+                        File file = new File(patchDir, patchData.getId() + "." + System.getProperty("karaf.name") + ".patch.result");
+                        if (file.isFile()) {
+                            file.delete();
+                        }
+                    }
                 }
             }
+        } catch (IOException e) {
+            LOG.error("Error resuming a patch: " + e.getMessage(), e);
         }
     }
 
@@ -556,6 +626,8 @@ public class PatchServiceImpl implements PatchService {
                             boolean handlesFullRestart = Boolean.getBoolean("karaf.restart.jvm.supported");
                             if (handlesFullRestart) {
                                 System.out.println("Rollup patch " + patch.getPatchData().getId() + " installed. Restarting Karaf..");
+                                // KARAF-5179 - we need both properties set to true
+                                System.setProperty("karaf.restart", "true");
                                 System.setProperty("karaf.restart.jvm", "true");
                             } else {
                                 System.out.println("Rollup patch " + patch.getPatchData().getId() + " installed. Shutting down Karaf, please restart...");
