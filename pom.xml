@@ -152,7 +152,7 @@
         <version.org.ops4j.pax.logging>1.10.1</version.org.ops4j.pax.logging>
         <version.org.ops4j.pax.swissbox>1.8.3</version.org.ops4j.pax.swissbox>
         <version.org.ops4j.pax.url>2.5.4</version.org.ops4j.pax.url>
-        <version.org.ops4j.pax.web>6.1.1</version.org.ops4j.pax.web>
+        <version.org.ops4j.pax.web>6.1.2</version.org.ops4j.pax.web>
         <version.org.osgi>6.0.0</version.org.osgi>
         <version.org.osgi.compendium>5.0.0</version.org.osgi.compendium>
         <version.org.ow2.asm>6.0</version.org.ow2.asm>
@@ -163,7 +163,7 @@
 
         <!-- versions of Maven plugins -->
         <version.plugin.felix.maven-scr-plugin>1.26.0</version.plugin.felix.maven-scr-plugin>
-        <version.plugin.felix.maven-bundle-plugin>3.3.0</version.plugin.felix.maven-bundle-plugin>
+        <version.plugin.felix.maven-bundle-plugin>3.5.0</version.plugin.felix.maven-bundle-plugin>
         <version.plugin.mycila.license-maven-plugin>3.0</version.plugin.mycila.license-maven-plugin>
         <version.plugin.mojo.build-helper-maven-plugin>3.0.0</version.plugin.mojo.build-helper-maven-plugin>
         <version.plugin.mojo.properties-maven-plugin>1.0.0</version.plugin.mojo.properties-maven-plugin>
