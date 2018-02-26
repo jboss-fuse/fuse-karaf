@@ -348,7 +348,6 @@
                         <feature>pax-*jetty*</feature>
                         <feature>camel-jetty8</feature>
                         <feature>*openwebbeans*</feature>
-                        <feature>pax-jsf-support</feature>
                         <feature>camel-ignite</feature>
                         <feature>camel-ironmq</feature>
                         <feature>camel-chronicle</feature>
@@ -505,9 +504,9 @@
                         <groupId>org.fusesource</groupId>
                         <artifactId>camel-sap</artifactId>
                         <version>${version.org.fusesource.camel-sap}</version>
-                    <scope>provided</scope>
-                    <type>xml</type>
-                    <classifier>features</classifier>
+                        <scope>provided</scope>
+                        <type>xml</type>
+                        <classifier>features</classifier>
                     </dependency>
                 </dependencies>
             </dependencyManagement>
