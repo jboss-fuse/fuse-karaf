@@ -90,7 +90,8 @@ public class FuseKarafTestSupport {
                         // we'll override it
                         mavenBundle("org.apache.servicemix.bundles", "org.apache.servicemix.bundles.javax-inject").versionAsInProject(),
 
-                        mavenBundle("org.jboss.fuse.itests", "fuse-itests-common").versionAsInProject()
+                        mavenBundle("org.jboss.fuse.itests", "fuse-itests-common").versionAsInProject(),
+                        replaceConfigurationFile("etc/users.properties", new File("./target/test-classes/etc/users.properties"))
                 },
 
                 // logging configuration
