@@ -148,6 +148,7 @@ public class PatchServiceImplTest {
         when(sysBundleContext.getProperty("karaf.instances"))
                 .thenReturn(karaf.getCanonicalPath() + "/instances");
         when(sysBundleContext.getProperty("karaf.data")).thenReturn(karaf.getCanonicalPath() + "/data");
+        when(sysBundleContext.getProperty("karaf.etc")).thenReturn(karaf.getCanonicalPath() + "/etc");
 
         PatchManagement pm = new GitPatchManagementServiceImpl(bundleContext);
         ((GitPatchManagementServiceImpl) pm).setGitPatchRepository(repository);
@@ -270,6 +271,7 @@ public class PatchServiceImplTest {
                 .thenReturn(patches.toString());
         when(sysBundleContext.getProperty("karaf.default.repository")).thenReturn("system");
         when(sysBundleContext.getProperty("karaf.data")).thenReturn(patches.getParent() + "/data");
+        when(sysBundleContext.getProperty("karaf.etc")).thenReturn(karaf.getCanonicalPath() + "/etc");
         try {
             when(repository.getManagedPatch(anyString())).thenReturn(null);
             when(repository.findOrCreateMainGitRepository()).thenReturn(null);
@@ -336,6 +338,7 @@ public class PatchServiceImplTest {
         when(sysBundleContext.getProperty("karaf.instances"))
                 .thenReturn(karaf.getCanonicalPath() + "/instances");
         when(sysBundleContext.getProperty("karaf.data")).thenReturn(karaf.getCanonicalPath() + "/data");
+        when(sysBundleContext.getProperty("karaf.etc")).thenReturn(karaf.getCanonicalPath() + "/etc");
 
         PatchManagement pm = mockManagementService(bundleContext);
         ((GitPatchManagementServiceImpl) pm).setGitPatchRepository(repository);
@@ -402,6 +405,7 @@ public class PatchServiceImplTest {
         when(sysBundleContext.getProperty("karaf.instances"))
                 .thenReturn(karaf.getCanonicalPath() + "/instances");
         when(sysBundleContext.getProperty("karaf.default.repository")).thenReturn("system");
+        when(sysBundleContext.getProperty("karaf.etc")).thenReturn(karaf.getCanonicalPath() + "/etc");
         when(repository.getManagedPatch(anyString())).thenReturn(null);
         when(repository.findOrCreateMainGitRepository()).thenReturn(null);
 
@@ -472,6 +476,7 @@ public class PatchServiceImplTest {
         when(sysBundleContext.getProperty("karaf.instances"))
                 .thenReturn(karaf.getCanonicalPath() + "/instances");
         when(sysBundleContext.getProperty("karaf.default.repository")).thenReturn("system");
+        when(sysBundleContext.getProperty("karaf.etc")).thenReturn(karaf.getCanonicalPath() + "/etc");
 
         service = new PatchServiceImpl();
         setField(service, "patchManagement", pm);
@@ -551,6 +556,7 @@ public class PatchServiceImplTest {
         when(sysBundleContext.getProperty("karaf.instances"))
                 .thenReturn(karaf.getCanonicalPath() + "/instances");
         when(sysBundleContext.getProperty("karaf.data")).thenReturn(karaf.getCanonicalPath() + "/data");
+        when(sysBundleContext.getProperty("karaf.etc")).thenReturn(karaf.getCanonicalPath() + "/etc");
 
         PatchManagement pm = mockManagementService(bundleContext);
         ((GitPatchManagementServiceImpl) pm).setGitPatchRepository(repository);
@@ -636,6 +642,7 @@ public class PatchServiceImplTest {
         when(context.getProperty("karaf.home")).thenReturn("target/bundleUpdatesInPatch");
         when(context.getProperty("karaf.base")).thenReturn("target/bundleUpdatesInPatch");
         when(context.getProperty("karaf.data")).thenReturn("target/bundleUpdatesInPatch/data");
+        when(context.getProperty("karaf.etc")).thenReturn("target/bundleUpdatesInPatch/etc");
         when(context.getProperty("karaf.name")).thenReturn("root");
         when(context.getProperty("karaf.instances")).thenReturn("instances");
         when(context.getProperty("karaf.default.repository")).thenReturn("system");

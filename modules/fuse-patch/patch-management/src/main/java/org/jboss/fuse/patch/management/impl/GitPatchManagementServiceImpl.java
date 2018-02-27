@@ -33,6 +33,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -56,6 +57,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.apache.karaf.features.LocationPattern;
+import org.apache.karaf.features.internal.model.processing.BundleReplacements;
+import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
 import org.eclipse.jgit.api.CherryPickResult;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
@@ -106,10 +110,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
-import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.service.log.LogService;
 
-import static org.jboss.fuse.patch.management.Artifact.isSameButVersion;
 import static org.jboss.fuse.patch.management.Utils.*;
 
 /**
@@ -121,7 +123,7 @@ import static org.jboss.fuse.patch.management.Utils.*;
 public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchManagementService {
 
     private static final String[] MANAGED_DIRECTORIES = new String[] {
-            "bin", "etc", "lib", "welcome-content"
+            "bin", "etc", "lib", "quickstarts", "welcome-content"
     };
 
     private static final Pattern VERSION_PATTERN =
@@ -131,13 +133,13 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     private static final String MARKER_BASELINE_CHILD_COMMIT_PATTERN = "[PATCH/baseline] Installing baseline-child-%s";
 
     private static final String MARKER_BASELINE_RESET_OVERRIDES_PATTERN
-            = "[PATCH/baseline] baseline-%s - resetting etc/overrides.properties";
+            = "[PATCH/baseline] baseline-%s - resetting overrides";
     private static final String MARKER_BASELINE_REPLACE_PATCH_FEATURE_PATTERN
             = "[PATCH/baseline] baseline-%s - switching to patch feature repository %s";
 
     /* Patterns for rollup patch installation */
     private static final String MARKER_R_PATCH_INSTALLATION_PATTERN = "[PATCH] Installing rollup patch %s";
-    private static final String MARKER_R_PATCH_RESET_OVERRIDES_PATTERN = "[PATCH] Rollup patch %s - resetting etc/overrides.properties";
+    private static final String MARKER_R_PATCH_RESET_OVERRIDES_PATTERN = "[PATCH] Rollup patch %s - resetting overrides";
 
     /* Patterns for non-rollup patch installation */
     private static final String MARKER_P_PATCH_INSTALLATION_PREFIX = "[PATCH] Installing patch ";
@@ -150,7 +152,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     /** Commit message when applying user changes to managed directories */
     private static final String MARKER_USER_CHANGES_COMMIT = "[PATCH] Apply user changes";
 
-    private static final Pattern FEATURES_FILE = Pattern.compile(".+-features(?:-core)?$");
+    private static final Pattern FEATURES_FILE = Pattern.compile(".+(?:-features(?:-core)?|-karaf)$");
 
     private final BundleContext bundleContext;
     private final BundleContext systemContext;
@@ -169,8 +171,14 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     private File karafBase;
     // ${karaf.data}
     private File karafData;
+    // ${karaf.etc} (absolute)
+    private File karafEtc;
     // main patches directory at ${fuse.patch.location} (defaults to ${karaf.home}/patches)
     private File patchesDir;
+
+    // files to read feature processing instructions from - they do not have to exist
+    private String featureProcessing;
+    private String featureProcessingVersions;
 
     // latched when git repository is initialized
     private CountDownLatch initialized = new CountDownLatch(1);
@@ -197,6 +205,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         karafHome = new File(systemContext.getProperty("karaf.home"));
         karafBase = new File(systemContext.getProperty("karaf.base"));
         karafData = new File(systemContext.getProperty("karaf.data"));
+        karafEtc = new File(systemContext.getProperty("karaf.etc"));
 
         envService = new DefaultEnvService(systemContext, karafHome, karafBase);
         env = envService.determineEnvironmentType();
@@ -225,6 +234,28 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         GitPatchRepositoryImpl repository = new GitPatchRepositoryImpl(env, patchRepositoryLocation,
                 karafHome, karafBase, karafData, patchesDir);
         setGitPatchRepository(repository);
+
+        File featuresConfiguration = new File(karafEtc, "org.apache.karaf.features.cfg");
+        String featureProcessingLocation = null;
+        String featureProcessingVersionsLocation = null;
+        if (featuresConfiguration.isFile()) {
+            Properties props = new Properties();
+            try (FileInputStream fis = new FileInputStream(featuresConfiguration)) {
+                props.load(fis);
+            }
+            featureProcessingLocation = props.getProperty("featureProcessing");
+            featureProcessingVersionsLocation = props.getProperty("featureProcessingVersions");
+        }
+        if (featureProcessingLocation == null || !new File(karafEtc, featureProcessingLocation).isFile()) {
+            featureProcessing = "org.apache.karaf.features.xml";
+        } else {
+            featureProcessing = featureProcessingLocation;
+        }
+        if (featureProcessingVersionsLocation == null) {
+            featureProcessingVersions = "versions.properties";
+        } else {
+            featureProcessingVersions = featureProcessingVersionsLocation;
+        }
     }
 
     public GitPatchRepository getGitPatchRepository() {
@@ -387,9 +418,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     boolean skipRootDir = false;
                     for (Enumeration<ZipArchiveEntry> e = zf.getEntries(); e.hasMoreElements(); ) {
                         ZipArchiveEntry entry = e.nextElement();
-                        if (!skipRootDir && entry.isDirectory()
-                                && (entry.getName().startsWith("jboss-fuse-")
-                                || entry.getName().startsWith("jboss-a-mq-"))) {
+                        if (!skipRootDir && entry.isDirectory() && entry.getName().startsWith("jboss-fuse-karaf-")) {
                             skipRootDir = true;
                         }
                         if (entry.isDirectory() || entry.isUnixSymlink()) {
@@ -411,7 +440,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                                 // ENTESB-4600: try checking the target version of the patch
                                 Version version = Utils.findVersionInName(patchData.getId());
                                 if (version.getMajor() == 6 && version.getMinor() == 1) {
-                                    throw new PatchException("Can't install patch \"" + patchData.getId() + "\", it is released for version 6.1 of the product");
+                                    throw new PatchException("Can't install patch \"" + patchData.getId() + "\", it is released for version 6.x of the product");
                                 }
 
                                 patchData.setGenerated(false);
@@ -671,11 +700,9 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             // add the changes
             fork.add().addFilepattern(".").call();
 
-            // remove the deletes (without touching specially-managed etc/overrides.properties)
+            // remove the deletes
             for (String missing : fork.status().call().getMissing()) {
-                if (!"etc/overrides.properties".equals(missing)) {
-                    fork.rm().addFilepattern(missing).call();
-                }
+                fork.rm().addFilepattern(missing).call();
             }
 
             // record information about other "patches" included in added patch (e.g., Fuse patch
@@ -734,7 +761,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             switch (kind) {
                 case ROLLUP:
                     // create temporary branch from the current baseline - rollup patch installation is a rebase
-                    // of existing user changes on top of new baseline
+                    // of existing user changes on top of new baseline (more precisely - cherry pick)
                     RevTag currentBaseline = gitPatchRepository.findCurrentBaseline(fork);
                     installationBranch = gitPatchRepository.checkout(fork)
                             .setName(String.format("patch-install-%s", GitPatchRepository.TS.format(new Date())))
@@ -772,27 +799,29 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 case ROLLUP: {
                     Activator.log2(LogService.LOG_INFO, String.format("Installing rollup patch \"%s\"", patch.getPatchData().getId()));
 
-                    // we can install only one rollup patch within single transaction
+                    // We can install only one rollup patch within single transaction
                     // and it is equal to cherry-picking all user changes on top of transaction branch
-                    // after cherry-picking the commit from the rollup patch branch
-                    // rollup patches do their own update to startup.properties
-                    // we're operating on patch branch, HEAD of the patch branch points to the baseline
+                    // after cherry-picking the commit from the rollup patch branch.
+                    // Rollup patches do their own update to etc/startup.properties
+                    // We're operating on patch branch, HEAD of the patch branch points to the baseline
                     ObjectId since = fork.getRepository().resolve("HEAD^{commit}");
-                    // we'll pick all user changes between baseline and main patch branch without P installations
+                    // we'll pick all user changes between baseline and main patch branch
+                    // we'll consider all real user changes and some P-patch changes if HF-patches install newer
+                    // bundles than currently installed R-patch (very rare situation)
                     ObjectId to = fork.getRepository().resolve(gitPatchRepository.getMainBranchName() + "^{commit}");
                     Iterable<RevCommit> mainChanges = fork.log().addRange(since, to).call();
                     List<RevCommit> userChanges = new LinkedList<>();
                     // gather lines of HF patches - patches that have *only* bundle updates
                     // if any of HF patches provide newer version of artifact than currently installed R patch,
-                    // we will leave the relevant line in etc/overrides.properties
-                    List<String> hfChanges = new LinkedList<>();
+                    // we will leave the relevant line in etc/org.apache.karaf.features.xml
+                    List<PatchData> hfChanges = new LinkedList<>();
                     for (RevCommit rc : mainChanges) {
                         if (isUserChangeCommit(rc)) {
                             userChanges.add(rc);
                         } else {
                             String hfPatchId = isHfChangeCommit(rc);
                             if (hfPatchId != null) {
-                                hfChanges.addAll(gatherOverrides(hfPatchId, patch));
+                                hfChanges.add(gatherOverrides(hfPatchId, patch));
                             }
                         }
                     }
@@ -822,7 +851,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                             }
                         } else {
                             // hmm, we actually can't patch standalone child container then...
-                            Activator.log2(LogService.LOG_WARNING, String.format("Can't install rollup patch \"%s\" in admin container - no information about admin container patch", patch.getPatchData().getId()));
+                            Activator.log2(LogService.LOG_WARNING, String.format("Can't install rollup patch \"%s\" in instance:create-based container - no information about child container patch", patch.getPatchData().getId()));
                             return;
                         }
                     }
@@ -844,11 +873,15 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                                 .call();
                     }
 
-                    // next commit - reset overrides.properties - this is 2nd step of installing rollup patch
-                    // we are doing it even if the commit is going to be empty - this is the same step as after
-                    // creating initial baseline
-                    resetOverrides(fork.getRepository().getWorkTree(), hfChanges);
-                    fork.add().addFilepattern("etc/overrides.properties").call();
+                    // next commit - reset overrides - this is 2nd step of installing rollup patch
+                    // if there are hot fix patches applied before rollup patch and the changes are newer (very rare
+                    // situation), we have to add these overrides after patch' etc/org.apache.karaf.features.xml
+                    // we always remove etc/overrides.properties
+                    resetOverrides(fork, fork.getRepository().getWorkTree(), hfChanges);
+                    fork.add().addFilepattern("etc/" + featureProcessing).call();
+                    if (new File(fork.getRepository().getWorkTree(), "etc/" + featureProcessingVersions).isFile()) {
+                        fork.add().addFilepattern("etc/" + featureProcessingVersions).call();
+                    }
                     RevCommit c = gitPatchRepository.prepareCommit(fork,
                             String.format(MARKER_R_PATCH_RESET_OVERRIDES_PATTERN, patch.getPatchData().getId())).call();
 
@@ -880,12 +913,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                         // mechanism
                         File overrides = new File(fork.getRepository().getWorkTree(), "etc/overrides.properties");
                         if (overrides.isFile()) {
-                            // ENTESB-5849: if installing R patch after P patch that is HotFix and has newer
-                            // version of some bundles, overrides.properties should be kept
-                            if (!(hfChanges.size() > 0 && overrides.length() > 0)) {
-                                overrides.delete();
-                                fork.rm().addFilepattern("etc/overrides.properties").call();
-                            }
+                            overrides.delete();
+                            fork.rm().addFilepattern("etc/overrides.properties").call();
                         }
 
                         // if there's conflict here, prefer patch version (which is "ours" (first) in this case)
@@ -943,7 +972,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     // there are several files in ${karaf.home} that need to be changed together with patch
                     // commit, to make them reference updated bundles (paths, locations, ...)
                     updateFileReferences(fork, patch.getPatchData(), bundleUpdatesInThisPatch);
-                    updateOverrides(fork.getRepository().getWorkTree(), patch.getPatchData());
+                    updateOverrides(fork.getRepository().getWorkTree(), Collections.singletonList(patch.getPatchData()));
                     fork.add().addFilepattern(".").call();
 
                     // always commit non-rollup patch
@@ -951,6 +980,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                         String.format(MARKER_P_PATCH_INSTALLATION_PATTERN, patch.getPatchData().getId())).call();
 
                     // we may have unadded changes - when file mode is changed
+                    fork.reset().setMode(ResetCommand.ResetType.MIXED).call();
                     fork.reset().setMode(ResetCommand.ResetType.HARD).call();
 
                     // tag the installed patch (to easily rollback and to prevent another installation)
@@ -972,67 +1002,121 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     }
 
     /**
-     * <p>Updates existing <code>etc/overrides.properties</code> after installing single {@link PatchKind#NON_ROLLUP}
+     * <p>Updates existing <code>etc/org.apache.karaf.features.xml</code> after installing single {@link PatchKind#NON_ROLLUP}
      * patch.</p>
      * @param workTree
-     * @param patchData
+     * @param patches
      */
-    private void updateOverrides(File workTree, PatchData patchData) throws IOException {
-        File overrides = new File(workTree, "etc/overrides.properties");
-        List<String> currentOverrides = overrides.isFile() ? FileUtils.readLines(overrides, "UTF-8") : new LinkedList<String>();
+    private void updateOverrides(File workTree, List<PatchData> patches) throws IOException {
+        File overrides = new File(workTree, "etc/" + featureProcessing);
+        File versions = new File(workTree, "etc/" + featureProcessingVersions);
 
-        for (String bundle : patchData.getBundles()) {
-            Artifact artifact = mvnurlToArtifact(bundle, true);
-            if (artifact == null) {
-                continue;
-            }
+        // we need two different versions to detect whether the version is externalized in etc/versions.properties
+        FeaturesProcessing fp1, fp2;
+        if (overrides.isFile()) {
+            fp1 = InternalUtils.loadFeatureProcessing(overrides, versions);
+            fp2 = InternalUtils.loadFeatureProcessing(overrides, null);
+        } else {
+            fp1 = fp2 = new FeaturesProcessing();
+        }
+        List<BundleReplacements.OverrideBundle> br1 = fp1.getBundleReplacements().getOverrideBundles();
+        List<BundleReplacements.OverrideBundle> br2 = fp2.getBundleReplacements().getOverrideBundles();
 
-            // Compute patch bundle version and range
-            VersionRange range;
-            Version oVer = Utils.getOsgiVersion(artifact.getVersion());
-            String vr = patchData.getVersionRange(bundle);
-            String override;
-            if (vr != null && !vr.isEmpty()) {
-                override = bundle + ";range=" + vr;
-                range = new VersionRange(vr);
-            } else {
-                override = bundle;
-                Version v1 = new Version(oVer.getMajor(), oVer.getMinor(), 0);
-                Version v2 = new Version(oVer.getMajor(), oVer.getMinor() + 1, 0);
-                range = new VersionRange(VersionRange.LEFT_CLOSED, v1, v2, VersionRange.RIGHT_OPEN);
-            }
+        org.apache.felix.utils.properties.Properties props = null;
+        boolean propertyChanged = false;
+        if (versions.isFile()) {
+            props = new org.apache.felix.utils.properties.Properties(versions);
+        }
 
-            // Process overrides.properties
-            boolean matching = false;
-            boolean added = false;
-            for (int i = 0; i < currentOverrides.size(); i++) {
-                String line = currentOverrides.get(i).trim();
-                if (!line.isEmpty() && !line.startsWith("#")) {
-                    Artifact overrideArtifact = mvnurlToArtifact(line, true);
-                    if (overrideArtifact != null) {
-                        Version ver = Utils.getOsgiVersion(overrideArtifact.getVersion());
-                        if (isSameButVersion(artifact, overrideArtifact) && range.includes(ver)) {
-                            matching = true;
-                            if (ver.compareTo(oVer) < 0) {
-                                // Replace old override with the new one
-                                currentOverrides.set(i, override);
-                                added = true;
-                            }
-                        }
-                    }
+        for (PatchData patchData : patches) {
+            for (String bundle : patchData.getBundles()) {
+                Artifact artifact = mvnurlToArtifact(bundle, true);
+                if (artifact == null) {
+                    continue;
                 }
-            }
-            // If there was not matching bundles, add it
-            if (!matching) {
-                currentOverrides.add(override);
+
+                // Compute patch bundle version and range
+                Version oVer = Utils.getOsgiVersion(artifact.getVersion());
+                String vr = patchData.getVersionRange(bundle);
+                if (vr != null && !vr.isEmpty()) {
+                    artifact.setVersion(vr);
+                } else {
+                    Version v1 = new Version(oVer.getMajor(), oVer.getMinor(), 0);
+                    Version v2 = new Version(oVer.getMajor(), oVer.getMinor() + 1, 0);
+                    artifact.setVersion(new VersionRange(VersionRange.LEFT_CLOSED, v1, v2, VersionRange.RIGHT_OPEN).toString());
+                }
+
+                // features processing file may contain e.g.,:
+                // <bundle originalUri="mvn:org.jboss.fuse/fuse-zen/[1,2)/war"
+                //         replacement="mvn:org.jboss.fuse/fuse-zen/${version.test2}/war" mode="maven" />
+                // patch descriptor contains e.g.,:
+                // bundle.0 = mvn:org.jboss.fuse/fuse-zen/1.2.0/war
+                // bundle.0.range = [1.1,1.2)
+                //
+                // we will always match by replacement attribute, ignoring originalUri - the patch descriptor must be
+                // prepared correctly
+
+                int idx = 0;
+                BundleReplacements.OverrideBundle existing = null;
+                // we'll examine model with resolved property placeholders, but modify the other one
+                for (BundleReplacements.OverrideBundle override : br1) {
+                    LocationPattern lp = new LocationPattern(artifact.getCanonicalUri());
+                    if (lp.matches(override.getReplacement())) {
+                        // we've found existing override in current etc/org.apache.karaf.features.xml
+                        existing = br2.get(idx);
+                        break;
+                    }
+                    idx++;
+                }
+                if (existing == null) {
+                    existing = new BundleReplacements.OverrideBundle();
+                    br2.add(existing);
+                }
+                // either update existing override or configure a new one
+                existing.setMode(BundleReplacements.BundleOverrideMode.MAVEN);
+                existing.setOriginalUri(artifact.getCanonicalUri());
+                String replacement = existing.getReplacement();
+                if (replacement != null && replacement.contains("${")) {
+                    // assume that we have existing replacement="mvn:org.jboss.fuse/fuse-zen/${version.test2}/war"
+                    // so we can't change the replacement and instead we have to update properties
+                    String property = null;
+                    String value = null;
+
+                    if (replacement.startsWith("mvn:")) {
+                        LocationPattern existingReplacement = new LocationPattern(replacement);
+                        property = existingReplacement.getVersionString().substring(existingReplacement.getVersionString().indexOf("${") + 2);
+                        if (property.contains("}")) {
+                            // it should...
+                            property = property.substring(0, property.indexOf("}"));
+                        }
+
+                        LocationPattern newReplacement = new LocationPattern(bundle);
+                        value = newReplacement.getVersionString();
+                    } else {
+                        // non-mvn? then we can't determine the version from non-mvn: URI...
+                    }
+
+                    // we are not changing replacement - we'll have to update properties
+                    if (props != null && property != null) {
+                        props.setProperty(property, value);
+                        propertyChanged = true;
+                    }
+                } else {
+                    existing.setReplacement(bundle);
+                }
             }
         }
 
-        FileUtils.writeLines(overrides, currentOverrides, IOUtils.LINE_SEPARATOR_UNIX);
+
+        if (propertyChanged) {
+            props.save();
+        }
+
+        InternalUtils.saveFeatureProcessing(fp2, overrides, versions);
     }
 
     /**
-     * <p>Creates/truncates <code>etc/overrides.properties</code></p>
+     * <p>Removes <code>etc/overrides.properties</code> and possible changes <code>etc/org.apache.karaf.features.xml</code></p>
      * <p>Each baseline ships new feature repositories and from this point (or the point where new rollup patch
      * is installed) we should start with 0-sized overrides.properties in order to have easier non-rollup
      * patch installation - P-patch should not ADD overrides.properties - they have to only MODIFY it because
@@ -1041,14 +1125,16 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
      * @param karafHome
      * @throws IOException
      */
-    private void resetOverrides(File karafHome, List<String> overridesToKeep) throws IOException {
+    private void resetOverrides(Git git, File karafHome, List<PatchData> overridesToKeep) throws IOException {
         File overrides = new File(karafHome, "etc/overrides.properties");
         if (overrides.isFile()) {
+            // we just don't use etc/overrides.properties in Fuse 7/Karaf 4.2
             overrides.delete();
+            git.rm().addFilepattern("etc/overrides.properties");
         }
-        overrides.createNewFile();
         if (overridesToKeep != null && overridesToKeep.size() > 0) {
-            FileUtils.writeLines(overrides, overridesToKeep);
+            // we'll add/modify <bundleReplacements>/<bundle> entries in etc/org.apache.karaf.features.xml
+            updateOverrides(git.getRepository().getWorkTree(), overridesToKeep);
         }
     }
 
@@ -1154,7 +1240,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 case ROLLUP: {
                     Activator.log2(LogService.LOG_INFO, String.format("Rolling back rollup patch \"%s\"", patchData.getId()));
 
-                    // rolling back a rollup patch should rebase all user commits on top of current baseline
+                    // rolling back a rollup patch should rebase (cherry-pick) all user commits done after current baseline
                     // to previous baseline
                     RevTag currentBaseline = gitPatchRepository.findCurrentBaseline(fork);
                     RevCommit c1 = new RevWalk(fork.getRepository())
@@ -1777,16 +1863,24 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     /**
      * Returns list of bundle updates (maven coordinates) from HF/P patch that should be preserved during
      * installation of R patch
-     * @param hfPatchId ID of patch that was detected to be HF patch
-     * @param patch currently installed R patch
-     * @return
+     * @param hfPatchId ID of patch that was detected to be HF patch installed previously (before R patch just being installed)
+     * @param patch R patch which is currently being installed
+     * @return an artificial {@link PatchData} with a list of maven URIs for bundles that are newer in previous P-patches than the ones in currently installed R-patch
      */
-    private List<String> gatherOverrides(String hfPatchId, Patch patch) {
+    private PatchData gatherOverrides(String hfPatchId, Patch patch) {
         Patch hf = loadPatch(new PatchDetailsRequest(hfPatchId));
-        List<String> result = new LinkedList<>();
+        List<String> bundles = new LinkedList<>();
+        Map<String, String> ranges = new LinkedHashMap<>();
 
         if (hf != null && hf.getPatchData() != null) {
-            result.addAll(hf.getPatchData().getBundles());
+            for (String bundle : hf.getPatchData().getBundles()) {
+                bundles.add(bundle);
+                String versionRange = hf.getPatchData().getVersionRange(bundle);
+                if (versionRange != null && !versionRange.trim().equals("")) {
+                    ranges.put(bundle, versionRange);
+                }
+            }
+
 
             // leave only these artifacts that are in newer version than in R patch being installed
             if (patch != null && patch.getPatchData() != null) {
@@ -1806,7 +1900,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                             Version hfVersion = Utils.getOsgiVersion(hfPatchArtifact.getVersion());
                             Version rVersion = Utils.getOsgiVersion(cache.get(key).getVersion());
                             if (rVersion.compareTo(hfVersion) >= 0) {
-                                result.remove(bu);
+                                bundles.remove(bu);
+                                ranges.remove(bu);
                             }
                         }
                     }
@@ -1814,7 +1909,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             }
         }
 
-        return result;
+        return new PatchData(null, null, bundles, null, ranges, null, null);
     }
 
     /**
@@ -2258,12 +2353,11 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         }
 
         // each baseline ships new feature repositories and from this point (or the point where new rollup patch
-        // is installed) we should start with 0-sized overrides.properties in order to have easier non-rollup
-        // patch installation - no P-patch should ADD overrides.properties - they have to only MODIFY it because
-        // it's easier to revert such modification (in case P-patch is rolled back - probably in different order
-        // than it was installed)
-        resetOverrides(git.getRepository().getWorkTree(), Collections.emptyList());
-        git.add().addFilepattern("etc/overrides.properties").call();
+        // is installed) we should start with no additional overrides in org.apache.karaf.features.xml, in order
+        // to have easier non-rollup patch installation - no P-patch should ADD overrides.properties - they have to
+        // only MODIFY it because it's easier to revert such modification (in case P-patch is rolled back - probably
+        // in different order than it was installed)
+        resetOverrides(git, git.getRepository().getWorkTree(), Collections.emptyList());
         return gitPatchRepository.prepareCommit(git,
                 String.format(MARKER_BASELINE_RESET_OVERRIDES_PATTERN, version)).call();
     }
@@ -2345,7 +2439,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     }
 
     /**
-     * <p>Applies existing user changes in ${karaf.home}/{bin,etc,lib,welcome-content} directories to patch
+     * <p>Applies existing user changes in ${karaf.home}/{bin,etc,lib,quickstarts,welcome-content} directories to patch
      * management Git repository, doesn't modify ${karaf.home}</p>
      * <p>TODO: Maybe we should ask user whether the change was intended or not? blacklist some changes?</p>
      * @param git non-bare repository to perform the operation
@@ -2641,7 +2735,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     }
                     break;
                 case DELETE:
-                    Activator.log(LogService.LOG_DEBUG, "[PATCH-change] Deleting " + newPath);
+                    Activator.log(LogService.LOG_DEBUG, "[PATCH-change] Deleting " + oldPath);
                     if (oldPath.startsWith("lib/")) {
                         oldPath = "lib.next/" + oldPath.substring(4);
                         libDirectoryChanged = true;

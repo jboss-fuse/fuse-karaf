@@ -22,7 +22,7 @@ public class Artifact {
 
     private final String groupId;
     private final String artifactId;
-    private final String version;
+    private String version;
     private final String type;
     private final String classifier;
 
@@ -52,6 +52,10 @@ public class Artifact {
 
     public String getVersion() {
         return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 
     public String getType() {

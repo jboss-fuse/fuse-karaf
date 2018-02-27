@@ -16,6 +16,7 @@
 package org.jboss.fuse.patch.management;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Arrays;
@@ -25,6 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.karaf.features.internal.model.processing.BundleReplacements;
+import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
 import org.jboss.fuse.patch.management.impl.GitPatchManagementService;
 import org.jboss.fuse.patch.management.impl.GitPatchManagementServiceImpl;
 import org.jboss.fuse.patch.management.impl.GitPatchRepository;
@@ -38,6 +41,7 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.jboss.fuse.patch.management.impl.InternalUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.startlevel.BundleStartLevel;
@@ -241,10 +245,20 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-zen/1.2.0/war = 42"));
         assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-tranquility/1.2.3 = 42"));
 
-//        String etcOverridesProperties = FileUtils.readFileToString(new File(karafHome, "etc/overrides.properties"), "UTF-8");
-//        assertTrue(etcOverridesProperties.contains("mvn:org.jboss.fuse/fuse-tranquility/1.2.3\n"));
-//        assertTrue(etcOverridesProperties.contains("mvn:org.jboss.fuse/fuse-zen/1.2.0/war;range=[1.1,1.2)\n"));
-//        assertTrue(etcOverridesProperties.contains("mvn:org.jboss.fuse/fuse-zen/1.3.3/war\n"));
+        assertFalse(new File(karafHome, "etc/overrides.properties").exists());
+
+        FeaturesProcessing fp = InternalUtils.loadFeatureProcessing(karafHome);
+        List<BundleReplacements.OverrideBundle> bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertThat(bundles.size(), equalTo(3));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/1.2.0/war".equals(b.getReplacement())));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
 
         /* rollback time! */
 
@@ -260,10 +274,18 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         assertFalse(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-zen/1.1.44/war = 42"));
         assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-tranquility/1.2.3 = 42"));
 
-//        etcOverridesProperties = FileUtils.readFileToString(new File(karafHome, "etc/overrides.properties"), "UTF-8");
-//        assertTrue(etcOverridesProperties.contains("mvn:org.jboss.fuse/fuse-tranquility/1.2.3\n"));
-//        assertTrue(etcOverridesProperties.contains("mvn:org.jboss.fuse/fuse-zen/1.2.0/war;range=[1.1,1.2)\n"));
-//        assertTrue(etcOverridesProperties.contains("mvn:org.jboss.fuse/fuse-zen/1.3.3/war\n"));
+        fp = InternalUtils.loadFeatureProcessing(karafHome);
+        bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertThat(bundles.size(), equalTo(3));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/1.2.0/war".equals(b.getReplacement())));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
 
         Patch p6 = service.loadPatch(new PatchDetailsRequest("my-patch-6"));
         service.rollback(p6.getPatchData());
@@ -275,8 +297,140 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-zen/1.2.0/war = 42"));
         assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-tranquility/1.2.3 = 42"));
 
-//        etcOverridesProperties = FileUtils.readFileToString(new File(karafHome, "etc/overrides.properties"), "UTF-8");
-//        assertFalse(etcOverridesProperties.contains("mvn:org.jboss.fuse/fuse-zen/1.3.3/war\n"));
+        fp = InternalUtils.loadFeatureProcessing(karafHome);
+        bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertThat(bundles.size(), equalTo(2));
+        assertTrue(bundles.stream().noneMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
+
+        repository.closeRepository(fork, true);
+    }
+
+    @Test
+    public void installThreeNonRollupPatchesWithExternalizedVersionsProperties() throws IOException, GitAPIException {
+        initializationPerformedBaselineDistributionFoundInSystem();
+        try (FileOutputStream fos = new FileOutputStream(new File(karafHome, "etc/org.apache.karaf.features.xml"))) {
+            FileUtils.copyFile(new File("src/test/resources/processing/oakf.2.xml"), fos);
+        }
+        FileUtils.write(new File(karafHome, "etc/versions.properties"), "version.zen = 1.1.9\n", "UTF-8");
+
+        // prepare some ZIP patches
+        preparePatchZip("src/test/resources/content/patch1", "target/karaf/patches/source/patch-1.zip", false);
+        preparePatchZip("src/test/resources/content/patch5", "target/karaf/patches/source/patch-5.zip", false);
+        preparePatchZip("src/test/resources/content/patch6", "target/karaf/patches/source/patch-6.zip", false);
+
+        PatchManagement service = (PatchManagement) pm;
+        PatchData patchData1 = service.fetchPatches(new File("target/karaf/patches/source/patch-1.zip").toURI().toURL()).get(0);
+        Patch patch1 = service.trackPatch(patchData1);
+        PatchData patchData5 = service.fetchPatches(new File("target/karaf/patches/source/patch-5.zip").toURI().toURL()).get(0);
+        Patch patch5 = service.trackPatch(patchData5);
+        PatchData patchData6 = service.fetchPatches(new File("target/karaf/patches/source/patch-6.zip").toURI().toURL()).get(0);
+        Patch patch6 = service.trackPatch(patchData6);
+
+        GitPatchRepository repository = ((GitPatchManagementServiceImpl) pm).getGitPatchRepository();
+        Git fork = repository.cloneRepository(repository.findOrCreateMainGitRepository(), true);
+
+        assertTrue(FileUtils.readFileToString(new File(karafHome, "etc/versions.properties"), "UTF-8").contains("version.zen = 1.1.9"));
+
+        String tx = service.beginInstallation(PatchKind.NON_ROLLUP);
+
+        List<BundleUpdate> patch1Updates = new LinkedList<>();
+        patch1Updates.add(BundleUpdate.from("mvn:org.jboss.fuse/fuse-tranquility/1.2.0")
+                .to("mvn:org.jboss.fuse/fuse-tranquility/1.2.3"));
+        service.install(tx, patch1, patch1Updates);
+
+        List<BundleUpdate> patch5Updates = new LinkedList<>();
+        patch5Updates.add(BundleUpdate.from("mvn:org.jboss.fuse/fuse-zen/1.1.44/war")
+                .to("mvn:org.jboss.fuse/fuse-zen/1.2.0/war"));
+        service.install(tx, patch5, patch5Updates);
+
+        List<BundleUpdate> patch6Updates = new LinkedList<>();
+        patch6Updates.add(BundleUpdate.from("mvn:org.jboss.fuse/fuse-zen/1.2.4/war")
+                .to("mvn:org.jboss.fuse/fuse-zen/1.3.0/war"));
+        service.install(tx, patch6, patch6Updates);
+
+        service.commitInstallation(tx);
+
+        String binAdmin = FileUtils.readFileToString(new File(karafHome, "bin/instance"), "UTF-8");
+        assertTrue(binAdmin.contains("system/org/jboss/fuse/fuse-tranquility/1.2.3/fuse-tranquility-1.2.3.jar"));
+
+        String etcStartupProperties = FileUtils.readFileToString(new File(karafHome, "etc/startup.properties"), "UTF-8");
+        // version from patch-5 should be chosen, because there's 1.1.44->1.2.0
+        assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-zen/1.2.0/war = 42"));
+        assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-tranquility/1.2.3 = 42"));
+
+        assertFalse(new File(karafHome, "etc/overrides.properties").exists());
+
+        FeaturesProcessing fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        List<BundleReplacements.OverrideBundle> bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertThat(bundles.size(), equalTo(3));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/${version.zen}/war".equals(b.getReplacement())));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
+        assertTrue(FileUtils.readFileToString(new File(karafHome, "etc/versions.properties"), "UTF-8").contains("version.zen = 1.2.0"));
+
+        /* rollback time! */
+
+        Patch p5 = service.loadPatch(new PatchDetailsRequest("my-patch-5"));
+        service.rollback(p5.getPatchData());
+
+        binAdmin = FileUtils.readFileToString(new File(karafHome, "bin/instance"), "UTF-8");
+        assertTrue(binAdmin.contains("system/org/jboss/fuse/fuse-tranquility/1.2.3/fuse-tranquility-1.2.3.jar"));
+
+        etcStartupProperties = FileUtils.readFileToString(new File(karafHome, "etc/startup.properties"), "UTF-8");
+        // rollback wasn't successful
+        assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-zen/1.2.0/war = 42"));
+        assertFalse(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-zen/1.1.44/war = 42"));
+        assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-tranquility/1.2.3 = 42"));
+
+        fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertThat(bundles.size(), equalTo(3));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/${version.zen}/war".equals(b.getReplacement())));
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
+        assertTrue(FileUtils.readFileToString(new File(karafHome, "etc/versions.properties"), "UTF-8").contains("version.zen = 1.2.0"));
+
+        Patch p6 = service.loadPatch(new PatchDetailsRequest("my-patch-6"));
+        service.rollback(p6.getPatchData());
+
+        binAdmin = FileUtils.readFileToString(new File(karafHome, "bin/instance"), "UTF-8");
+        assertTrue(binAdmin.contains("system/org/jboss/fuse/fuse-tranquility/1.2.3/fuse-tranquility-1.2.3.jar"));
+
+        etcStartupProperties = FileUtils.readFileToString(new File(karafHome, "etc/startup.properties"), "UTF-8");
+        assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-zen/1.2.0/war = 42"));
+        assertTrue(etcStartupProperties.contains("mvn\\:org.jboss.fuse/fuse-tranquility/1.2.3 = 42"));
+
+        fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertThat(bundles.size(), equalTo(2));
+        assertTrue(bundles.stream().noneMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
+
+        // after rolling back patch 6 we can rollback patch 5
+        p5 = service.loadPatch(new PatchDetailsRequest("my-patch-5"));
+        service.rollback(p5.getPatchData());
+
+        fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertTrue(bundles.stream().anyMatch((b) ->
+                "mvn:org.jboss.fuse/fuse-zen/[1.1,1.1.9)/war".equals(b.getOriginalUri())
+                        && "mvn:org.jboss.fuse/fuse-zen/${version.zen}/war".equals(b.getReplacement())));
+        assertTrue(FileUtils.readFileToString(new File(karafHome, "etc/versions.properties"), "UTF-8").contains("version.zen = 1.1.9"));
 
         repository.closeRepository(fork, true);
     }
@@ -297,8 +451,8 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         repository.closeRepository(fork, true);
 
         // overrides.properties as after installing P patch with old mechanism
-//        String etcOverridesProperties = FileUtils.readFileToString(new File(karafHome, "etc/overrides.properties"), "UTF-8");
-//        assertThat(etcOverridesProperties, equalTo("mvn:org.jboss.fuse/fuse-oceans/1.4.2\n"));
+        String etcOverridesProperties = FileUtils.readFileToString(new File(karafHome, "etc/overrides.properties"), "UTF-8");
+        assertThat(etcOverridesProperties, equalTo("mvn:org.jboss.fuse/fuse-oceans/1.4.2\n"));
 
         PatchManagement service = (PatchManagement) pm;
         PatchData patchData1 = service.fetchPatches(new File("target/karaf/patches/source/patch-1.zip").toURI().toURL()).get(0);
@@ -310,12 +464,17 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         service.install(tx, patch1, null);
         service.commitInstallation(tx);
 
-//        assertTrue("There should be etc/overrides.properties after installing non-rollup patch",
-//                new File(karafHome, "etc/overrides.properties").exists());
-//        // overrides.properties as after installing P patch with new mechanism
-//        etcOverridesProperties = FileUtils.readFileToString(new File(karafHome, "etc/overrides.properties"), "UTF-8");
-//        assertThat(etcOverridesProperties, equalTo("mvn:org.jboss.fuse/fuse-oceans/1.4.2\n" +
-//                "mvn:org.jboss.fuse/fuse-tranquility/1.2.3\n"));
+        assertTrue("There should be no changes to etc/overrides.properties after installing non-rollup patch",
+                new File(karafHome, "etc/overrides.properties").exists());
+        // overrides.properties as after installing P patch with new mechanism
+        etcOverridesProperties = FileUtils.readFileToString(new File(karafHome, "etc/overrides.properties"), "UTF-8");
+        assertThat(etcOverridesProperties, equalTo("mvn:org.jboss.fuse/fuse-oceans/1.4.2\n"));
+
+        // override from P-Patch should go to etc/org.apache.karaf.features.xml
+        FeaturesProcessing fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        List<BundleReplacements.OverrideBundle> bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertThat(bundles.size(), equalTo(1));
+        assertThat(bundles.get(0).getReplacement(), equalTo("mvn:org.jboss.fuse/fuse-tranquility/1.2.3"));
 
         fork = repository.cloneRepository(repository.findOrCreateMainGitRepository(), true);
 
@@ -346,12 +505,14 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
      */
     @Test
     public void installPPatchHotFixPPatchAndThenRPatch() throws IOException, GitAPIException {
-        initializationPerformedBaselineDistributionFoundInSystem();
+        freshKarafStandaloneDistro();
+        preparePatchZip("src/test/resources/baselines/baseline5", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        validateInitialGitRepository();
 
         // prepare some ZIP patches
         preparePatchZip("src/test/resources/content/patch1", "target/karaf/patches/source/patch-1.zip", false);
         preparePatchZip("src/test/resources/content/patch2", "target/karaf/patches/source/patch-2.zip", false);
-        preparePatchZip("src/test/resources/content/patch4", "target/karaf/patches/source/patch-4.zip", false);
+        preparePatchZip("src/test/resources/content/patch9", "target/karaf/patches/source/patch-9.zip", false);
 
         GitPatchRepository repository = ((GitPatchManagementServiceImpl) pm).getGitPatchRepository();
 
@@ -360,8 +521,8 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         Patch patch1 = service.trackPatch(patchData1);
         PatchData patchData2 = service.fetchPatches(new File("target/karaf/patches/source/patch-2.zip").toURI().toURL()).get(0);
         Patch patch2 = service.trackPatch(patchData2);
-        PatchData patchData4 = service.fetchPatches(new File("target/karaf/patches/source/patch-4.zip").toURI().toURL()).get(0);
-        Patch patch4 = service.trackPatch(patchData4);
+        PatchData patchData9 = service.fetchPatches(new File("target/karaf/patches/source/patch-9.zip").toURI().toURL()).get(0);
+        Patch patch9 = service.trackPatch(patchData9);
 
         String tx = service.beginInstallation(PatchKind.NON_ROLLUP);
         service.install(tx, patch1, null);
@@ -371,11 +532,14 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         service.install(tx, patch2, null);
         service.commitInstallation(tx);
 
-//        assertTrue("There should be etc/overrides.properties after installing non-rollup patches",
-//                new File(karafHome, "etc/overrides.properties").exists());
-//        // overrides.properties as after installing P patches with new mechanism
-//        String etcOverridesProperties = FileUtils.readFileToString(new File(karafHome, "etc/overrides.properties"), "UTF-8");
-//        assertThat(etcOverridesProperties, equalTo("mvn:org.jboss.fuse/fuse-tranquility/1.2.5\n"));
+        assertFalse("There should be no etc/overrides.properties after installing non-rollup patches",
+                new File(karafHome, "etc/overrides.properties").exists());
+        FeaturesProcessing fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        List<BundleReplacements.OverrideBundle> bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertThat(bundles.size(), equalTo(3));
+        assertThat(bundles.get(0).getReplacement(), equalTo("mvn:org.jboss.fuse/fuse-observations/3.2"));
+        assertThat(bundles.get(1).getReplacement(), equalTo("mvn:org.jboss.fuse/fuse-temporary-workaround/2.2.1"));
+        assertThat(bundles.get(2).getReplacement(), equalTo("mvn:org.jboss.fuse/fuse-tranquility/1.2.5"));
 
         Git fork = repository.cloneRepository(repository.findOrCreateMainGitRepository(), true);
 
@@ -386,7 +550,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         repository.closeRepository(fork, true);
 
         tx = service.beginInstallation(PatchKind.ROLLUP);
-        service.install(tx, patch4, null);
+        service.install(tx, patch9, null);
         service.commitInstallation(tx);
 
         fork = repository.cloneRepository(repository.findOrCreateMainGitRepository(), true);
@@ -394,11 +558,14 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         assertFalse(repository.containsTag(fork, "patch-my-patch-2"));
         assertTrue(repository.containsTag(fork, "baseline-7.0.0.redhat-002"));
 
-//        assertTrue("There still should be etc/overrides.properties after installing rollup patch",
-//                new File(karafHome, "etc/overrides.properties").exists());
-//        // overrides.properties as after installing R patch with new mechanism
-//        etcOverridesProperties = FileUtils.readFileToString(new File(karafHome, "etc/overrides.properties"), "UTF-8");
-//        assertThat(etcOverridesProperties, equalTo("mvn:org.jboss.fuse/fuse-tranquility/1.2.5\n"));
+        assertFalse("There still should be no etc/overrides.properties after installing rollup patch",
+                new File(karafHome, "etc/overrides.properties").exists());
+        // features processing should be conflict-resolved (R-patch version and P-patch version).
+        // newer version of fuse-tranquility (from P-Patch) should win
+        fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        bundles = fp.getBundleReplacements().getOverrideBundles();
+        assertThat(bundles.size(), equalTo(2));
+        assertThat(bundles.get(1).getReplacement(), equalTo("mvn:org.jboss.fuse/fuse-tranquility/1.2.5"));
 
         repository.closeRepository(fork, true);
     }
@@ -667,7 +834,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
                 "[PATCH] Apply user changes",
                 "[PATCH] Apply user changes",
                 "[PATCH] Apply user changes",
-                "[PATCH] Rollup patch patch-4 - resetting etc/overrides.properties",
+                "[PATCH] Rollup patch patch-4 - resetting overrides",
                 "[PATCH] Installing rollup patch patch-4");
 
         int n = 0;
@@ -682,6 +849,68 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         assertTrue(repository.containsTag(fork, "patch-management"));
         assertTrue(repository.containsTag(fork, "baseline-7.0.0"));
         assertTrue(repository.containsTag(fork, "baseline-7.0.0.redhat-002"));
+    }
+
+    @Test
+    public void installRollupPatchWithFeatureProcessingConflicts() throws IOException, GitAPIException {
+        freshKarafStandaloneDistro();
+        GitPatchRepository repository = patchManagement("baseline5");
+        PatchManagement management = (PatchManagement) pm;
+
+        Git fork = repository.cloneRepository(repository.findOrCreateMainGitRepository(), true);
+        // conflicting user change to critical "etc/org.apache.karaf.features.xml" file
+        FileUtils.copyFile(new File("src/test/resources/processing/oakf.3.xml"),
+                new File(fork.getRepository().getWorkTree(), "etc/org.apache.karaf.features.xml"));
+        ((GitPatchManagementServiceImpl)pm).applyUserChanges(fork); // non-conflicting
+        repository.closeRepository(fork, true);
+
+        preparePatchZip("src/test/resources/content/patch9", "target/karaf/patches/source/patch-9.zip", false);
+        List<PatchData> patches = management.fetchPatches(new File("target/karaf/patches/source/patch-9.zip").toURI().toURL());
+        Patch patch = management.trackPatch(patches.get(0));
+
+        String tx = management.beginInstallation(PatchKind.ROLLUP);
+        management.install(tx, patch, null);
+
+        @SuppressWarnings("unchecked")
+        Map<String, Git> transactions = (Map<String, Git>) getField(management, "pendingTransactions");
+        assertThat(transactions.size(), equalTo(1));
+        fork = transactions.values().iterator().next();
+
+        ObjectId since = fork.getRepository().resolve("baseline-7.0.0^{commit}");
+        ObjectId to = fork.getRepository().resolve(tx);
+        Iterable<RevCommit> commits = fork.log().addRange(since, to).call();
+        // only one "user change", because we had two conflicts with new baseline - they were resolved
+        // by picking what already comes from rollup patch ("ours"):
+        /*
+         * Problem with applying the change 657f11c4b65bb7893a2b82f888bb9731a6d5f7d0:
+         *  - bin/start: BOTH_MODIFIED
+         * Choosing "ours" change
+         * Problem with applying the change d9272b97582582f4b056f7170130ec91fc21aeac:
+         *  - bin/start: BOTH_MODIFIED
+         * Choosing "ours" change
+         */
+        List<String> commitList = Arrays.asList(
+                "[PATCH] Apply user changes",
+                "[PATCH] Apply user changes",
+                "[PATCH] Rollup patch patch-9 - resetting overrides",
+                "[PATCH] Installing rollup patch patch-9");
+
+        int n = 0;
+        for (RevCommit c : commits) {
+            String msg = c.getShortMessage();
+            assertThat(msg, equalTo(commitList.get(n++)));
+        }
+
+        assertThat(n, equalTo(commitList.size()));
+
+        assertThat(fork.tagList().call().size(), equalTo(3));
+        assertTrue(repository.containsTag(fork, "patch-management"));
+        assertTrue(repository.containsTag(fork, "baseline-7.0.0"));
+        assertTrue(repository.containsTag(fork, "baseline-7.0.0.redhat-002"));
+
+        String rPatchVersion = FileUtils.readFileToString(new File("src/test/resources/content/patch9/etc/org.apache.karaf.features.xml"), "UTF-8");
+        String afterPatching = FileUtils.readFileToString(new File(fork.getRepository().getWorkTree(), "etc/org.apache.karaf.features.xml"), "UTF-8");
+        assertEquals(rPatchVersion, afterPatching);
     }
 
     @Test

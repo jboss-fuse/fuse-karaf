@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.commons.io.IOUtils;
-
 /**
  * <p>Information about patch ZIP content - static part of patch information before it is added and installed.</p>
  * <p>The information from the descriptor is immutable - it isn't altered by patch management after retrieving the
@@ -135,7 +133,15 @@ public class PatchData {
             bundles.add(bundle);
 
             if (props.containsKey(key + "." + RANGE)) {
-                ranges.put(bundle, props.getProperty(key + "." + RANGE));
+                String range = props.getProperty(key + "." + RANGE);
+                range = range.trim();
+                while (range.startsWith("\"") || range.startsWith("'")) {
+                    range = range.substring(1);
+                }
+                while (range.endsWith("\"") || range.endsWith("'")) {
+                    range = range.substring(0, range.length() - 1);
+                }
+                ranges.put(bundle, range);
             }
         }
 
