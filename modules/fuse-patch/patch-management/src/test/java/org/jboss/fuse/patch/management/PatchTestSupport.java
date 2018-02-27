@@ -67,6 +67,7 @@ public abstract class PatchTestSupport {
         properties.setProperty("karaf.home", karafHome.getCanonicalPath());
         properties.setProperty("karaf.base", karafBase.getCanonicalPath());
         properties.setProperty("karaf.data", karafBase.getCanonicalPath() + File.separator + "data");
+        properties.setProperty("karaf.etc", karafBase.getCanonicalPath() + File.separator + "etc");
         properties.setProperty("karaf.default.repository", "system");
         properties.setProperty("fuse.patch.location", new File(karafHome, "patches").getCanonicalPath());
 

@@ -59,6 +59,7 @@ public class ProtectedTest {
         when(context.getProperty("karaf.home")).thenReturn("target/ProtectedTest-karaf");
         when(context.getProperty("karaf.base")).thenReturn("target/ProtectedTest-karaf");
         when(context.getProperty("karaf.data")).thenReturn("target/ProtectedTest-karaf/data");
+        when(context.getProperty("karaf.etc")).thenReturn("target/ProtectedTest-karaf/etc");
     }
 
     @Test

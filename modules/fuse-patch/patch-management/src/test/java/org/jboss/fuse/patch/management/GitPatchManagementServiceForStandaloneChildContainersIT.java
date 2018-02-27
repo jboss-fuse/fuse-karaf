@@ -176,7 +176,7 @@ public class GitPatchManagementServiceForStandaloneChildContainersIT extends Pat
                 "[PATCH] Apply user changes",
                 "[PATCH] Apply user changes",
                 "[PATCH] Apply user changes",
-                "[PATCH] Rollup patch patch-7 - resetting etc/overrides.properties",
+                "[PATCH] Rollup patch patch-7 - resetting overrides",
                 "[PATCH/baseline] Installing baseline-child-4.2.0.redhat-700002");
 
         int n = 0;
