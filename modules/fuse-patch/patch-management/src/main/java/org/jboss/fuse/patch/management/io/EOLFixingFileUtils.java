@@ -113,7 +113,11 @@ public class EOLFixingFileUtils {
             File dstFile = new File(destDir, srcFile.getName());
             if (exclusionList == null || !exclusionList.contains(srcFile.getCanonicalPath())) {
                 if (srcFile.isDirectory()) {
-                    doCopyDirectory(srcFile, baseDestDir, dstFile, exclusionList, onlyModified);
+                    String path = Utils.relative(baseDestDir, dstFile);
+                    if (!(path.startsWith("quickstarts") && path.endsWith("target"))) {
+                        // we really don't need to track user changes to official quickstarts/ directory
+                        doCopyDirectory(srcFile, baseDestDir, dstFile, exclusionList, onlyModified);
+                    }
                 } else {
                     if (onlyModified && dstFile.exists()) {
                         long crc1 = Utils.checksum(new FileInputStream(srcFile));
