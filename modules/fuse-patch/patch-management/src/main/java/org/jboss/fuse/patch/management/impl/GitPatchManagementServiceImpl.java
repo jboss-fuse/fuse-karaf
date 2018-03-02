@@ -2879,6 +2879,52 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         return env == EnvType.STANDALONE_CHILD;
     }
 
+    @Override
+    public void delete(Patch patch) throws PatchException {
+        try {
+            awaitInitialization();
+        } catch (InterruptedException e) {
+            throw new PatchException("Patch management system is not ready yet");
+        }
+
+        Git fork = null;
+        try {
+            Git mainRepository = gitPatchRepository.findOrCreateMainGitRepository();
+            // prepare single fork for all the below operations
+            fork = gitPatchRepository.cloneRepository(mainRepository, true);
+
+            // we don't actually have to delete baselines for root and child containers - even if deleted patch
+            // will be added again, baselines won't change even if added again.
+            // and there could be problems if patched root container was used to create child container -
+            // from the point of view of the child there's no patch installed.
+
+            // the only thing we need to do (assuming the patch:update command itself checked that the patch
+            // isn't actually installed) is to delete patch branch
+
+            String patchBranch = "patch-" + patch.getPatchData().getId();
+            fork.branchDelete().setBranchNames(patchBranch).call();
+
+            fork.push()
+                    .setRefSpecs(new RefSpec()
+                            .setSource(null)
+                            .setDestination("refs/heads/" + patchBranch))
+                    .call();
+
+            if (patch.getPatchData().getPatchDirectory() != null) {
+                FileUtils.deleteDirectory(patch.getPatchData().getPatchDirectory());
+            }
+            FileUtils.deleteQuietly(new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch"));
+
+            mainRepository.gc().call();
+        } catch (IOException | GitAPIException e) {
+            throw new PatchException(e.getMessage(), e);
+        } finally {
+            if (fork != null) {
+                gitPatchRepository.closeRepository(fork, true);
+            }
+        }
+    }
+
     /**
      * If <code>backupDir</code> exists, restore bundle data from this location and place in Felix bundle cache
      * @param dataCache data cache location (by default: <code>${karaf.home}/data/cache</code>)
