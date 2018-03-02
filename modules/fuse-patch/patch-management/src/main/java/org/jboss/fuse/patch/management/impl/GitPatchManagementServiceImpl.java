@@ -33,6 +33,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -1343,6 +1345,39 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                                             .setSource(null)
                                             .setDestination("refs/tags/" + entry.getKey()))
                                     .call();
+
+                            // and remove karaf base from tracked patch result, or even remove the result itself
+                            String patchId = entry.getKey().substring("patch-".length());
+                            Patch patch = loadPatch(new PatchDetailsRequest(patchId));
+                            if (patch.getResult() != null) {
+                                boolean removed = false;
+                                for (Iterator<String> iterator = patch.getResult().getKarafBases().iterator(); iterator.hasNext(); ) {
+                                    String base = iterator.next();
+                                    if (base.contains("|")) {
+                                        String[] kb = base.split("\\s*\\|\\s*");
+                                        String containerId = kb[0];
+                                        if (System.getProperty("karaf.name", "").equals(containerId)) {
+                                            iterator.remove();
+                                            removed = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (removed) {
+                                    if (patch.getResult().getKarafBases().size() == 0) {
+                                        // just remove the result entirely
+                                        new File(patch.getPatchData().getPatchLocation(), patchId + ".patch.result").delete();
+                                    } else {
+                                        patch.getResult().store();
+                                    }
+                                    if (isStandaloneChild()) {
+                                        File file = new File(patch.getPatchData().getPatchLocation(), patchId + "." + System.getProperty("karaf.name") + ".patch.result");
+                                        if (file.isFile()) {
+                                            file.delete();
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -2662,6 +2697,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         if (overrides.exists() && overrides.length() == 0) {
             FileUtils.deleteQuietly(overrides);
         }
+        FileUtils.deleteQuietly(new File(karafBase, "patch-info.txt"));
 
         if (restartFileInstall && fileInstall != null) {
             try {
@@ -2753,6 +2789,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             // lib.next directory might not be needed.
             FileUtils.deleteDirectory(new File(karafBase, "lib.next"));
         }
+
+        FileUtils.deleteQuietly(new File(karafBase, "patch-info.txt"));
     }
 
     @Override

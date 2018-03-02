@@ -1316,12 +1316,24 @@ public class PatchServiceImpl implements PatchService {
                 } catch (Exception e) {
                     throw new PatchException("Unable to rollback patch " + patch.getPatchData().getId() + ": " + e.getMessage(), e);
                 }
-                patch.setResult(null);
-                File file = new File(patchDir, result.getPatchData().getId() + ".patch.result");
-                if (isStandaloneChild) {
-                    file = new File(patchDir, result.getPatchData().getId() + "." + System.getProperty("karaf.name") + ".patch.result");
+                try {
+                    List<String> bases = patch.getResult().getKarafBases();
+                    bases.removeIf(s -> s.startsWith(System.getProperty("karaf.name")));
+                    patch.getResult().store();
+                    if (patch.getResult().getKarafBases().size() == 0) {
+                        File file = new File(patchDir, result.getPatchData().getId() + ".patch.result");
+                        file.delete();
+                        patch.setResult(null);
+                    }
+                    if (patchManagement.isStandaloneChild()) {
+                        File file = new File(patchDir, result.getPatchData().getId() + "." + System.getProperty("karaf.name") + ".patch.result");
+                        if (file.isFile()) {
+                            file.delete();
+                        }
+                    }
+                } catch (Exception e) {
+                    LOG.warn("Problem updating metadata for patch \"" + patch.getPatchData().getId() + "\": " + e.getMessage());
                 }
-                file.delete();
             });
         }
     }
