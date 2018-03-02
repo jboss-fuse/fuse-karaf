@@ -33,6 +33,8 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -1343,6 +1345,39 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                                             .setSource(null)
                                             .setDestination("refs/tags/" + entry.getKey()))
                                     .call();
+
+                            // and remove karaf base from tracked patch result, or even remove the result itself
+                            String patchId = entry.getKey().substring("patch-".length());
+                            Patch patch = loadPatch(new PatchDetailsRequest(patchId));
+                            if (patch.getResult() != null) {
+                                boolean removed = false;
+                                for (Iterator<String> iterator = patch.getResult().getKarafBases().iterator(); iterator.hasNext(); ) {
+                                    String base = iterator.next();
+                                    if (base.contains("|")) {
+                                        String[] kb = base.split("\\s*\\|\\s*");
+                                        String containerId = kb[0];
+                                        if (System.getProperty("karaf.name", "").equals(containerId)) {
+                                            iterator.remove();
+                                            removed = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (removed) {
+                                    if (patch.getResult().getKarafBases().size() == 0) {
+                                        // just remove the result entirely
+                                        new File(patch.getPatchData().getPatchLocation(), patchId + ".patch.result").delete();
+                                    } else {
+                                        patch.getResult().store();
+                                    }
+                                    if (isStandaloneChild()) {
+                                        File file = new File(patch.getPatchData().getPatchLocation(), patchId + "." + System.getProperty("karaf.name") + ".patch.result");
+                                        if (file.isFile()) {
+                                            file.delete();
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -2662,6 +2697,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         if (overrides.exists() && overrides.length() == 0) {
             FileUtils.deleteQuietly(overrides);
         }
+        FileUtils.deleteQuietly(new File(karafBase, "patch-info.txt"));
 
         if (restartFileInstall && fileInstall != null) {
             try {
@@ -2753,6 +2789,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             // lib.next directory might not be needed.
             FileUtils.deleteDirectory(new File(karafBase, "lib.next"));
         }
+
+        FileUtils.deleteQuietly(new File(karafBase, "patch-info.txt"));
     }
 
     @Override
@@ -2839,6 +2877,52 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     @Override
     public boolean isStandaloneChild() {
         return env == EnvType.STANDALONE_CHILD;
+    }
+
+    @Override
+    public void delete(Patch patch) throws PatchException {
+        try {
+            awaitInitialization();
+        } catch (InterruptedException e) {
+            throw new PatchException("Patch management system is not ready yet");
+        }
+
+        Git fork = null;
+        try {
+            Git mainRepository = gitPatchRepository.findOrCreateMainGitRepository();
+            // prepare single fork for all the below operations
+            fork = gitPatchRepository.cloneRepository(mainRepository, true);
+
+            // we don't actually have to delete baselines for root and child containers - even if deleted patch
+            // will be added again, baselines won't change even if added again.
+            // and there could be problems if patched root container was used to create child container -
+            // from the point of view of the child there's no patch installed.
+
+            // the only thing we need to do (assuming the patch:update command itself checked that the patch
+            // isn't actually installed) is to delete patch branch
+
+            String patchBranch = "patch-" + patch.getPatchData().getId();
+            fork.branchDelete().setBranchNames(patchBranch).call();
+
+            fork.push()
+                    .setRefSpecs(new RefSpec()
+                            .setSource(null)
+                            .setDestination("refs/heads/" + patchBranch))
+                    .call();
+
+            if (patch.getPatchData().getPatchDirectory() != null) {
+                FileUtils.deleteDirectory(patch.getPatchData().getPatchDirectory());
+            }
+            FileUtils.deleteQuietly(new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch"));
+
+            mainRepository.gc().call();
+        } catch (IOException | GitAPIException e) {
+            throw new PatchException(e.getMessage(), e);
+        } finally {
+            if (fork != null) {
+                gitPatchRepository.closeRepository(fork, true);
+            }
+        }
     }
 
     /**

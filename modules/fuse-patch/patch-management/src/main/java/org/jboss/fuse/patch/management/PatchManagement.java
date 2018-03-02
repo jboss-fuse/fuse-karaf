@@ -102,4 +102,10 @@ public interface PatchManagement {
      */
     boolean isStandaloneChild();
 
+    /**
+     * Deletes patch which should not be installed
+     * @param patch
+     */
+    void delete(Patch patch) throws PatchException;
+
 }

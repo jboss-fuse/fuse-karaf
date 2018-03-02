@@ -18,6 +18,7 @@ package org.jboss.fuse.patch.management;
 import java.io.File;
 
 import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
+import org.apache.karaf.features.internal.service.FeaturesProcessingSerializer;
 import org.jboss.fuse.patch.management.impl.InternalUtils;
 import org.junit.Test;
 
@@ -36,6 +37,19 @@ public class FeatureProcessingTest {
                 .isEqualTo("mvn:org.jboss.fuse.test/test-2/${version.test2}");
         assertThat(fp2.getBundleReplacements().getOverrideBundles().get(1).getReplacement())
                 .isEqualTo("mvn:org.jboss.fuse.test/test-2/1.3");
+    }
+
+    @Test
+    public void writeProcessingInstructions() {
+        FeaturesProcessing fp1 = InternalUtils.loadFeatureProcessing(new File("src/test/resources/processing/oakf.1.xml"),
+                null);
+
+        fp1.getBlacklistedBundles().add("mvn:x/y");
+        fp1.getBlacklistedFeatures().add(new FeaturesProcessing.BlacklistedFeature("f", "1"));
+
+        FeaturesProcessingSerializer serializer = new FeaturesProcessingSerializer();
+        serializer.write(fp1, System.out);
+        System.out.flush();
     }
 
 }

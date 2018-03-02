@@ -158,32 +158,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>unpack</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>unpack</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <artifactItems>
-                        <artifactItem>
-                            <groupId>org.jboss.fuse</groupId>
-                            <artifactId>quickstarts</artifactId>
-                            <version>${project.version}</version>
-                        </artifactItem>
-                    </artifactItems>
-                    <excludes>
-                        META-INF/**
-                    </excludes>
-                    <outputDirectory>${project.build.directory}/assembly/quickstarts</outputDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
                 <!--
                     karaf-maven-plugin defines 3 "stages" related 1:1 with Maven scopes:
                      - <scope>compile</scope>  : stage = Startup
@@ -441,6 +415,48 @@
                         <karaf.delay.console>true</karaf.delay.console>
                     </config>
                     <generateConsistencyReport>${project.build.directory}/assembly/welcome-content</generateConsistencyReport>
+                </configuration>
+                <dependencies>
+                    <!--
+                        These two will make etc/org.apache.karaf.features.xml serialized using the same StAX provider
+                        as when used in Fuse itself during patching - making patch changes more maintainable and clean
+                    -->
+                    <dependency>
+                        <groupId>org.codehaus.woodstox</groupId>
+                        <artifactId>stax2-api</artifactId>
+                        <version>${version.org.codehaus.woodstox.stax2-api}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.woodstox</groupId>
+                        <artifactId>woodstox-core-asl</artifactId>
+                        <version>${version.org.codehaus.woodstox.core}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <artifactItems>
+                        <artifactItem>
+                            <groupId>org.jboss.fuse</groupId>
+                            <artifactId>quickstarts</artifactId>
+                            <version>${project.version}</version>
+                        </artifactItem>
+                    </artifactItems>
+                    <excludes>
+                        META-INF/**
+                    </excludes>
+                    <outputDirectory>${project.build.directory}/assembly/quickstarts</outputDirectory>
                 </configuration>
             </plugin>
             <plugin>

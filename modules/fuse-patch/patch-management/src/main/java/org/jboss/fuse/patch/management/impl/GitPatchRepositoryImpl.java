@@ -252,6 +252,8 @@ public class GitPatchRepositoryImpl implements GitPatchRepository {
         config.setString("remote", "origin", "fetch", "+refs/heads/*:refs/remotes/origin/*");
         config.save();
 
+        FileUtils.write(new File(fork.getRepository().getDirectory(), "info/exclude"), "quickstarts/**/target/\n", "UTF-8");
+
         if (fetchAndCheckout) {
             fork.fetch()
                     .setRemote("origin")
