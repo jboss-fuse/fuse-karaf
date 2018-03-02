@@ -416,6 +416,22 @@
                     </config>
                     <generateConsistencyReport>${project.build.directory}/assembly/welcome-content</generateConsistencyReport>
                 </configuration>
+                <dependencies>
+                    <!--
+                        These two will make etc/org.apache.karaf.features.xml serialized using the same StAX provider
+                        as when used in Fuse itself during patching - making patch changes more maintainable and clean
+                    -->
+                    <dependency>
+                        <groupId>org.codehaus.woodstox</groupId>
+                        <artifactId>stax2-api</artifactId>
+                        <version>${version.org.codehaus.woodstox.stax2-api}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.woodstox</groupId>
+                        <artifactId>woodstox-core-asl</artifactId>
+                        <version>${version.org.codehaus.woodstox.core}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

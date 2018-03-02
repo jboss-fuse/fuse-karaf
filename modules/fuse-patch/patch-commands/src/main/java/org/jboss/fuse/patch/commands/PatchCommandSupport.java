@@ -17,6 +17,7 @@ package org.jboss.fuse.patch.commands;
 
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.lifecycle.Reference;
@@ -72,8 +73,16 @@ public abstract class PatchCommandSupport implements Action {
      * @param listBundles
      */
     protected void display(Iterable<Patch> patches, boolean listBundles) {
-        int l1 = "[name]".length(), l2 = "[installed]".length(), l3 = "[description]".length();
-        for (Patch patch : patches) {
+        int l1 = "[name]".length();
+        int l2 = "[installed]".length();
+        int l3 = "[rollup]".length();
+        int l4 = "[description]".length();
+
+        List<Patch> sorted = new ArrayList<>();
+        patches.forEach(sorted::add);
+        sorted.sort(Comparator.comparing(p -> p.getPatchData().getId()));
+
+        for (Patch patch : sorted) {
             if (patch.getPatchData().getId().length() > l1) {
                 l1 = patch.getPatchData().getId().length();
             }
@@ -98,40 +107,34 @@ public abstract class PatchCommandSupport implements Action {
                     }
                 }
             }
-            String desc = patch.getPatchData().getDescription() != null ? patch.getPatchData().getDescription() : "";
-            if (desc.length() > l3) {
-                l3 = desc.length();
+            String desc = patch.getPatchData().getDescription() != null && !"".equals(patch.getPatchData().getDescription().trim())
+                    ? patch.getPatchData().getDescription()
+                    : patch.getPatchData().getId();
+            if (desc.length() > l4) {
+                l4 = desc.length();
             }
         }
 
-        System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s", "[name]", "[installed]", "[description]"));
-        for (Patch patch : patches) {
-            String desc = patch.getPatchData().getDescription() != null ? patch.getPatchData().getDescription() : "";
+        System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", "[name]", "[installed]", "[rollup]", "[description]"));
+        for (Patch patch : sorted) {
+            String desc = patch.getPatchData().getDescription() != null && !"".equals(patch.getPatchData().getDescription().trim())
+                    ? patch.getPatchData().getDescription() : patch.getPatchData().getId();
             String installed = Boolean.toString(patch.isInstalled());
-            boolean fabric = false;
+            String rollup = Boolean.toString(patch.getPatchData().isRollupPatch());
             if (patch.getResult() != null) {
-                if (patch.getResult().getVersions().size() > 0) {
-                    installed = "Version " + patch.getResult().getVersions().get(0);
-                    fabric = true;
-                } else if (patch.getResult().getKarafBases().size() > 0) {
+                if (patch.getResult().getKarafBases().size() > 0) {
                     String kbt = patch.getResult().getKarafBases().get(0);
                     String[] kb = kbt.split("\\s*\\|\\s*");
                     installed = kb[0];
                 }
             }
-            System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s", patch.getPatchData().getId(),
-                    installed, desc));
-            if (fabric && patch.getResult() != null && patch.getResult().getVersions().size() > 1) {
-                for (String v : patch.getResult().getVersions().subList(1, patch.getResult().getVersions().size())) {
-                    System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s", " ",
-                            "Version " + v, " "));
-                }
-            }
-            if (!fabric && patch.getResult() != null && patch.getResult().getKarafBases().size() > 1) {
+            System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", patch.getPatchData().getId(),
+                    installed, rollup, desc));
+            if (patch.getResult() != null && patch.getResult().getKarafBases().size() > 1) {
                 for (String kbt : patch.getResult().getKarafBases().subList(1, patch.getResult().getKarafBases().size())) {
                     String[] kb = kbt.split("\\s*\\|\\s*");
-                    System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s", " ",
-                            kb[0], " "));
+                    System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", " ",
+                            kb[0], " ", " "));
                 }
             }
 
