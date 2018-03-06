@@ -59,6 +59,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.karaf.features.LocationPattern;
 import org.apache.karaf.features.internal.model.processing.BundleReplacements;
+import org.apache.karaf.features.internal.model.processing.FeatureReplacements;
 import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
 import org.eclipse.jgit.api.CherryPickResult;
 import org.eclipse.jgit.api.CreateBranchCommand;
@@ -307,6 +308,18 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         if (patchDirectory.exists() && patchDirectory.isDirectory()) {
             // not every descriptor downloaded may be a ZIP file, not every patch has content
             data.setPatchDirectory(patchDirectory);
+
+            File featureOverridesLocation = new File(patchDirectory, "org.apache.karaf.features.xml");
+            if (featureOverridesLocation.isFile()) {
+                // This patch file ships additional feature overrides - let's unmarshall them, so we have
+                // them available during all patch operations
+                try {
+                    FeaturesProcessing featureOverrides = InternalUtils.loadFeatureProcessing(featureOverridesLocation, null);
+                    data.setFeatureOverrides(featureOverrides.getFeatureReplacements().getReplacements());
+                } catch (Exception e) {
+                    Activator.log(LogService.LOG_WARNING, "Problem loading org.apache.karaf.features.xml from patch " + data.getId() + ": " + e.getMessage());
+                }
+            }
         }
         data.setPatchLocation(patchesDir);
 
@@ -1006,7 +1019,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
 
     /**
      * <p>Updates existing <code>etc/org.apache.karaf.features.xml</code> after installing single {@link PatchKind#NON_ROLLUP}
-     * patch.</p>
+     * patch. Both bundle and feature replacements are taken into account.</p>
      * @param workTree
      * @param patches
      */
@@ -1109,8 +1122,26 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     existing.setReplacement(bundle);
                 }
             }
-        }
 
+            // feature overrides
+            File featureOverridesLocation = new File(patchData.getPatchDirectory(), "org.apache.karaf.features.xml");
+            if (featureOverridesLocation.isFile()) {
+                FeaturesProcessing featureOverrides = InternalUtils.loadFeatureProcessing(featureOverridesLocation, null);
+                Map<String, FeatureReplacements.OverrideFeature> patchedFeatures = new LinkedHashMap<>();
+                List<FeatureReplacements.OverrideFeature> mergedOverrides = new LinkedList<>();
+                featureOverrides.getFeatureReplacements().getReplacements()
+                        .forEach(of -> patchedFeatures.put(of.getFeature().getId(), of));
+                fp2.getFeatureReplacements().getReplacements().forEach(of -> {
+                    FeatureReplacements.OverrideFeature override = patchedFeatures.remove(of.getFeature().getId());
+                    mergedOverrides.add(override == null ? of : override);
+                });
+                // add remaining
+                mergedOverrides.addAll(patchedFeatures.values());
+
+                fp2.getFeatureReplacements().getReplacements().clear();
+                fp2.getFeatureReplacements().getReplacements().addAll(mergedOverrides);
+            }
+        }
 
         if (propertyChanged) {
             props.save();

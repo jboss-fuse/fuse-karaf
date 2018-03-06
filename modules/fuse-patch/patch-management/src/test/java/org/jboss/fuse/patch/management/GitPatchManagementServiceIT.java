@@ -29,6 +29,7 @@ import java.util.Properties;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
 import org.apache.karaf.features.internal.model.processing.BundleReplacements;
+import org.apache.karaf.features.internal.model.processing.FeatureReplacements;
 import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
@@ -495,6 +496,48 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
                 new File(karafHome, "etc/overrides.properties").exists());
 
         repository.closeRepository(fork, true);
+    }
+
+    @Test
+    public void installPPatchWithFeatures() throws IOException, GitAPIException {
+        freshKarafStandaloneDistro();
+        try (FileOutputStream fos = new FileOutputStream(new File(karafHome, "etc/org.apache.karaf.features.xml"))) {
+            FileUtils.copyFile(new File("src/test/resources/baselines/baseline6/etc/org.apache.karaf.features.xml"), fos);
+        }
+        preparePatchZip("src/test/resources/baselines/baseline6", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        validateInitialGitRepository();
+
+        // prepare some ZIP patches
+        preparePatchZip("src/test/resources/content/patch10", "target/karaf/patches/source/patch-10.zip", false);
+
+        PatchManagement service = (PatchManagement) pm;
+        PatchData patchData10 = service.fetchPatches(new File("target/karaf/patches/source/patch-10.zip").toURI().toURL()).get(0);
+        Patch patch10 = service.trackPatch(patchData10);
+
+        // before patching:
+        FeaturesProcessing fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        List<FeatureReplacements.OverrideFeature> features = fp.getFeatureReplacements().getReplacements();
+        assertThat(features.size(), equalTo(2));
+        assertThat(features.get(0).getFeature().getBundles().size(), equalTo(1));
+        assertThat(features.get(0).getFeature().getBundles().get(0).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils/0.9"));
+        assertThat(features.get(1).getFeature().getBundles().size(), equalTo(1));
+        assertThat(features.get(1).getFeature().getBundles().get(0).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils/0.9"));
+
+        String tx = service.beginInstallation(PatchKind.NON_ROLLUP);
+        service.install(tx, patch10, null);
+        service.commitInstallation(tx);
+
+        // override from P-Patch should go to etc/org.apache.karaf.features.xml - both bundle and feature overrides
+        fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        List<BundleReplacements.OverrideBundle> bundles = fp.getBundleReplacements().getOverrideBundles();
+        features = fp.getFeatureReplacements().getReplacements();
+        assertThat(bundles.size(), equalTo(2)); // unchanged
+        assertThat(features.size(), equalTo(2));
+        assertThat(features.get(0).getFeature().getBundles().size(), equalTo(2));
+        assertThat(features.get(0).getFeature().getBundles().get(0).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils/1.0"));
+        assertThat(features.get(0).getFeature().getBundles().get(1).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils-extra/1.1"));
+        assertThat(features.get(1).getFeature().getBundles().size(), equalTo(1));
+        assertThat(features.get(1).getFeature().getBundles().get(0).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils/0.9"));
     }
 
     /**

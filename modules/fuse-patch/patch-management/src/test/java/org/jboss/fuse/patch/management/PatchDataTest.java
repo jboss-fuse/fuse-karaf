@@ -66,7 +66,7 @@ public class PatchDataTest {
     public void persistPatchResult() throws IOException {
         PatchData pd = new PatchData("otherid");
         pd.setPatchLocation(new File("target"));
-        PatchResult res = new PatchResult(pd, false, 42L, null, null);
+        PatchResult res = new PatchResult(pd, false, 42L, null, null, null);
         res.getVersions().add("1.0");
         res.getVersions().add("1.1");
 
@@ -88,13 +88,13 @@ public class PatchDataTest {
         PatchData pd = new PatchData("otherid");
         pd.setPatchLocation(new File("target"));
         pd.setPatchLocation(new File("target"));
-        PatchResult res = new PatchResult(pd, false, 42L, null, null);
+        PatchResult res = new PatchResult(pd, false, 42L, null, null, null);
         res.getVersions().add("1.0");
         res.getVersions().add("1.1");
-        PatchResult resa = new PatchResult(pd, false, 42L, null, null, res);
+        PatchResult resa = new PatchResult(pd, false, 42L, null, null, null, res);
         resa.getVersions().add("2.0");
         resa.getVersions().add("2.1");
-        PatchResult resb = new PatchResult(pd, false, 42L, null, null, res);
+        PatchResult resb = new PatchResult(pd, false, 42L, null, null, null, res);
         resb.getVersions().add("3.0");
         resb.getVersions().add("3.1");
         res.addChildResult("c1", resa);
@@ -120,7 +120,7 @@ public class PatchDataTest {
     public void persistPatchResultOnWindows() throws IOException {
         PatchData pd = new PatchData("otherid");
         pd.setPatchLocation(new File("target"));
-        PatchResult res = new PatchResult(pd, false, 42L, null, null);
+        PatchResult res = new PatchResult(pd, false, 42L, null, null, null);
         BundleUpdate bu = new BundleUpdate("C__Dev_jboss-fuse", null, null,
                 "6.2.1", "wrap:jardir:C:\\Dev\\jboss-fuse-6.2.1.redhat-076\\etc\\auth$Bundle-SymbolicName=C:\\Dev\\jboss-fuse&Bundle-Version=6.2.1");
         res.getBundleUpdates().add(bu);

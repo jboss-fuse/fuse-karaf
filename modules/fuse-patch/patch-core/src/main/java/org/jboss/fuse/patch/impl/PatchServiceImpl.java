@@ -492,6 +492,8 @@ public class PatchServiceImpl implements PatchService {
             // [feature name|updateable-version] -> newest update for the feature out of all installed patches
             final Map<String, FeatureUpdate> updatesForFeatureKeys = new LinkedHashMap<>();
 
+            final List<String> overridesForFeatureKeys = new LinkedList<>();
+
             // symbolic name -> version -> location
             final BundleVersionHistory history = createBundleVersionHistory();
 
@@ -507,11 +509,18 @@ public class PatchServiceImpl implements PatchService {
             // runtime info is prepared to apply runtime changes and static info is prepared to update KARAF_HOME files
             for (Patch patch : patches) {
                 List<FeatureUpdate> featureUpdatesInThisPatch = null;
+                List<String> featureOverridesInThisPatch = null;
                 if (kind == PatchKind.ROLLUP) {
                     // list of feature updates for the current patch
                     featureUpdatesInThisPatch = featureUpdatesInPatch(patch, updatesForFeatureKeys, kind);
 
                     helper.sortFeatureUpdates(featureUpdatesInThisPatch);
+                } else {
+                    // list of feature overrides (new Karaf 4.2 feature override mechanism)
+                    // this is collected for the purpose of summary, not to collect information needed
+                    // for actual override
+                    featureOverridesInThisPatch = featureOverridesInPatch(patch, kind);
+                    overridesForFeatureKeys.addAll(featureOverridesInThisPatch);
                 }
 
                 // list of bundle updates for the current patch - for ROLLUP patch, we minimize the list of bundles
@@ -538,12 +547,12 @@ public class PatchServiceImpl implements PatchService {
                         // ENTESB-5120: "result" is actually a result of patch installation in root container
                         // we need dedicated result for admin:create based child container
                         PatchResult childResult = new PatchResult(patch.getPatchData(), simulate, System.currentTimeMillis(),
-                                bundleUpdatesInThisPatch, featureUpdatesInThisPatch, result);
+                                bundleUpdatesInThisPatch, featureUpdatesInThisPatch, featureOverridesInThisPatch, result);
                         result.addChildResult(System.getProperty("karaf.name"), childResult);
                     }
                 } else {
                     result = new PatchResult(patch.getPatchData(), simulate, System.currentTimeMillis(),
-                            bundleUpdatesInThisPatch, featureUpdatesInThisPatch);
+                            bundleUpdatesInThisPatch, featureUpdatesInThisPatch, featureOverridesInThisPatch);
                 }
                 result.getKarafBases().add(String.format("%s | %s",
                         System.getProperty("karaf.name"), System.getProperty("karaf.base")));
@@ -580,7 +589,11 @@ public class PatchServiceImpl implements PatchService {
                 }
             }
 
-            Presentation.displayFeatureUpdates(updatesForFeatureKeys.values(), true);
+            if (kind == PatchKind.ROLLUP) {
+                Presentation.displayFeatureUpdates(updatesForFeatureKeys.values(), true);
+            } else {
+                Presentation.displayFeatureOverrides(overridesForFeatureKeys, true);
+            }
 
             // effectively, we will update all the bundles from this list - even if some bundles will be "updated"
             // as part of feature installation
@@ -665,6 +678,14 @@ public class PatchServiceImpl implements PatchService {
                     try {
                         // update bundles
                         applyChanges(bundleUpdateLocations);
+
+                        for (String featureOverride : overridesForFeatureKeys) {
+                            System.out.println("overriding feature: " + featureOverride);
+                        }
+                        if (overridesForFeatureKeys.size() > 0) {
+                            System.out.println("refreshing features");
+                            featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                        }
 
                         // persist results of all installed patches
                         for (Patch patch : patches) {
@@ -1146,6 +1167,23 @@ public class PatchServiceImpl implements PatchService {
     }
 
     /**
+     * Returns a list of feature identifiers specified in P-Patch' {@code org.apache.karaf.features.xml}
+     * @param patch
+     * @param updatesForFeatureKeys
+     * @param kind
+     * @return
+     */
+    private List<String> featureOverridesInPatch(Patch patch, PatchKind kind) throws Exception {
+        List<String> overridesInThisPatch = new LinkedList<>();
+
+        if (patch.getPatchData() != null && patch.getPatchData().getFeatureOverrides() != null) {
+            overridesInThisPatch.addAll(patch.getPatchData().getFeatureOverrides());
+        }
+
+        return overridesInThisPatch;
+    }
+
+    /**
      * If patch contains migrator bundle, install it by dropping to <code>deploy</code> directory.
      * @param patch
      * @throws IOException
@@ -1314,6 +1352,14 @@ public class PatchServiceImpl implements PatchService {
             Executors.newSingleThreadExecutor().execute(() -> {
                 try {
                     applyChanges(toUpdate);
+
+                    for (String featureOverride : result.getFeatureOverrides()) {
+                        System.out.println("removing overriden feature: " + featureOverride);
+                    }
+                    if (result.getFeatureOverrides().size() > 0) {
+                        System.out.println("refreshing features");
+                        featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                    }
                 } catch (Exception e) {
                     throw new PatchException("Unable to rollback patch " + patch.getPatchData().getId() + ": " + e.getMessage(), e);
                 }
