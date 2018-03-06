@@ -25,19 +25,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
-import org.jboss.fuse.patch.management.Utils;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.jboss.fuse.patch.management.Utils;
 
 /**
  * <p>Selected methods of {@link FileUtils} which, when copying files, use {@link EOLFixingFileOutputStream}</p>
  * <p>See: <a href="http://commons.apache.org/proper/commons-io/">Commons-IO</a></p>
  */
-public class EOLFixingFileUtils {
+public final class EOLFixingFileUtils {
 
     public static final long ONE_KB = 1024;
     public static final long ONE_MB = ONE_KB * ONE_KB;
     private static final long FILE_COPY_BUFFER_SIZE = ONE_MB * 30;
+
+    private EOLFixingFileUtils() { }
 
     /**
      * Just like {@link FileUtils#copyDirectory(File, File)}, but this version is aware of target <em>base</em>, so
@@ -91,7 +92,7 @@ public class EOLFixingFileUtils {
                 throw new IOException("Destination '" + destDir + "' exists but is not a directory");
             }
         } else {
-            for (int i=0; i<10; i++) {
+            for (int i = 0; i < 10; i++) {
                 if (!destDir.exists() && !destDir.mkdirs()) {
                     try {
                         Thread.sleep(250);

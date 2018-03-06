@@ -24,9 +24,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
 import org.jboss.fuse.patch.management.Utils;
 import org.jboss.fuse.patch.management.impl.Activator;
-import org.apache.commons.io.FileUtils;
 import org.osgi.service.log.LogService;
 
 /**

@@ -20,11 +20,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.jboss.fuse.patch.management.BundleUpdate;
 import org.jboss.fuse.patch.management.PatchData;
 import org.jboss.fuse.patch.management.PatchResult;
 import org.jboss.fuse.patch.management.Pending;
-import org.apache.commons.io.FileUtils;
 import org.jboss.fuse.patch.management.Utils;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,7 +52,7 @@ public class FileBackupTest {
         boolean created = karafHome.mkdirs();
         assertTrue(created);
 
-        Bundle[] b3_7 = new Bundle[5];
+        Bundle[] b37 = new Bundle[5];
         String[] symbolicNames = new String[] {
                 "com.irrelevant.services",
                 "org.apache.karaf.features.core",
@@ -67,16 +67,16 @@ public class FileBackupTest {
                 new Version(1, 1, 0),
                 new Version(1, 6, 7)
         };
-        for (int i=3; i<=7; i++) {
-            b3_7[i - 3] = mock(Bundle.class);
-            when(b3_7[i - 3].getBundleId()).thenReturn((long) i);
-            when(b3_7[i - 3].getSymbolicName()).thenReturn(symbolicNames[i - 3]);
-            when(b3_7[i - 3].getVersion()).thenReturn(versions[i - 3]);
+        for (int i = 3; i <= 7; i++) {
+            b37[i - 3] = mock(Bundle.class);
+            when(b37[i - 3].getBundleId()).thenReturn((long) i);
+            when(b37[i - 3].getSymbolicName()).thenReturn(symbolicNames[i - 3]);
+            when(b37[i - 3].getVersion()).thenReturn(versions[i - 3]);
         }
-        when(b3_7[0].getDataFile("")).thenReturn(new File(karafHome, "data/cache/bundle3/data"));
-        when(b3_7[1].getDataFile("")).thenReturn(new File(karafHome, "data/cache/bundle4/data"));
-        when(b3_7[2].getDataFile("")).thenReturn(new File(karafHome, "data/cache/bundle5/data"));
-        when(b3_7[4].getDataFile("")).thenReturn(new File(karafHome, "data/cache/bundle7/data"));
+        when(b37[0].getDataFile("")).thenReturn(new File(karafHome, "data/cache/bundle3/data"));
+        when(b37[1].getDataFile("")).thenReturn(new File(karafHome, "data/cache/bundle4/data"));
+        when(b37[2].getDataFile("")).thenReturn(new File(karafHome, "data/cache/bundle5/data"));
+        when(b37[4].getDataFile("")).thenReturn(new File(karafHome, "data/cache/bundle7/data"));
 
         Utils.mkdirs(new File(karafHome, "data/cache/bundle3/data/x"));
         Utils.mkdirs(new File(karafHome, "data/cache/bundle4/data/x/y"));
@@ -85,7 +85,7 @@ public class FileBackupTest {
         Utils.mkdirs(new File(karafHome, "data/cache/bundle7/data"));
 
         when(sys.getProperty("org.osgi.framework.storage")).thenReturn(new File(karafHome, "data/cache").getCanonicalPath());
-        when(sys.getBundles()).thenReturn(b3_7);
+        when(sys.getBundles()).thenReturn(b37);
     }
 
     @Test

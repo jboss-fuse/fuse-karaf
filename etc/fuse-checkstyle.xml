@@ -89,7 +89,9 @@
         <!-- See http://checkstyle.sf.net/config_naming.html -->
         <module name="ConstantName" />
         <module name="LocalFinalVariableName" />
-        <module name="LocalVariableName" />
+        <module name="LocalVariableName">
+            <property name="format" value="^_?[a-z][a-zA-Z0-9]*$" />
+        </module>
         <module name="MemberName" />
         <module name="MethodName" />
         <module name="PackageName" />
@@ -111,12 +113,14 @@
         <module name="ImportOrder">
             <property name="groups" value="java,javax" />
             <property name="ordered" value="true" />
+            <property name="separated" value="true" />
+            <property name="option" value="bottom" />
         </module>
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
         <module name="ExecutableStatementCount">
-            <property name="max" value="100" />
+            <property name="max" value="200" />
         </module>
         <module name="LineLength">
             <property name="max" value="200" />
@@ -127,7 +131,7 @@
             <property name="countEmpty" value="false" />
         </module>
         <module name="ParameterNumber">
-            <property name="max" value="7" />
+            <property name="max" value="9" />
         </module>
         <module name="AnonInnerLength">
             <property name="max" value="200" />
@@ -180,8 +184,10 @@
 
         <module name="PackageDeclaration" />
         <module name="DeclarationOrder" />
-        <module name="ParameterAssignment" />
-        <module name="ExplicitInitialization" />
+        <!--<module name="ParameterAssignment" />-->
+        <module name="ExplicitInitialization">
+            <property name="onlyObjectReferences" value="true" />
+        </module>
         <module name="DefaultComesLast" />
         <module name="FallThrough" />
         <module name="MultipleVariableDeclarations" />
@@ -200,7 +206,7 @@
         <module name="IllegalInstantiation" />
         <!--<module name="InnerAssignment" />-->
         <!--<module name="MagicNumber" />-->
-        <module name="MissingSwitchDefault" />
+        <!--<module name="MissingSwitchDefault" />-->
         <module name="SimplifyBooleanExpression" />
         <module name="SimplifyBooleanReturn" />
         <module name="StringLiteralEquality" />
@@ -212,6 +218,7 @@
         <module name="HideUtilityClassConstructor" />
         <module name="InterfaceIsType" />
         <module name="VisibilityModifier">
+            <property name="allowPublicFinalFields" value="true" />
             <property name="protectedAllowed" value="true" />
             <property name="packageAllowed" value="true" />
             <property name="ignoreAnnotationCanonicalNames" value="org.junit.Rule, org.junit.ClassRule, com.google.common.annotations.VisibleForTesting, org.assertj.core.util.VisibleForTesting" />
@@ -228,7 +235,7 @@
         <!-- See http://checkstyle.sf.net/config_misc.html -->
         <module name="ArrayTypeStyle" />
         <!--<module name="FinalParameters" />-->
-        <module name="TodoComment" />
+        <!--<module name="TodoComment" />-->
         <module name="UpperEll" />
 
         <!--Assert statement may have side effects:-->

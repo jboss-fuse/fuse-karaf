@@ -31,10 +31,10 @@ public class PatchDataTest {
 
     @Test
     public void readPatchDataFromDescriptor() throws IOException {
-        String sb = "id = myid\n" +
-                "bundle.0 = org/jboss/fuse/fuse-api/1.0/fuse-api-1.0.jar\n" +
-                "bundle.1 = org/jboss/fuse/fuse-web/1.0/fuse-web-1.0.war\n" +
-                "bundle.count = 2";
+        String sb = "id = myid\n"
+                + "bundle.0 = org/jboss/fuse/fuse-api/1.0/fuse-api-1.0.jar\n"
+                + "bundle.1 = org/jboss/fuse/fuse-web/1.0/fuse-web-1.0.war\n"
+                + "bundle.count = 2";
         File patchFile = new File("target/patch-descriptor-1.patch");
         FileUtils.write(patchFile, sb, "UTF-8");
         Properties props = new Properties();
@@ -121,7 +121,8 @@ public class PatchDataTest {
         PatchData pd = new PatchData("otherid");
         pd.setPatchLocation(new File("target"));
         PatchResult res = new PatchResult(pd, false, 42L, null, null);
-        BundleUpdate bu = new BundleUpdate("C__Dev_jboss-fuse", null, null, "6.2.1", "wrap:jardir:C:\\Dev\\jboss-fuse-6.2.1.redhat-076\\etc\\auth$Bundle-SymbolicName=C:\\Dev\\jboss-fuse&Bundle-Version=6.2.1");
+        BundleUpdate bu = new BundleUpdate("C__Dev_jboss-fuse", null, null,
+                "6.2.1", "wrap:jardir:C:\\Dev\\jboss-fuse-6.2.1.redhat-076\\etc\\auth$Bundle-SymbolicName=C:\\Dev\\jboss-fuse&Bundle-Version=6.2.1");
         res.getBundleUpdates().add(bu);
 
         File result = new File("target/patch-descriptor-3.patch.result");
@@ -130,7 +131,8 @@ public class PatchDataTest {
 
         PatchResult pr = PatchResult.load(pd, new FileInputStream(result));
 
-        assertThat(pr.getBundleUpdates().get(0).getPreviousLocation(), equalTo("wrap:jardir:C:\\Dev\\jboss-fuse-6.2.1.redhat-076\\etc\\auth$Bundle-SymbolicName=C:\\Dev\\jboss-fuse&Bundle-Version=6.2.1"));
+        assertThat(pr.getBundleUpdates().get(0).getPreviousLocation(),
+                equalTo("wrap:jardir:C:\\Dev\\jboss-fuse-6.2.1.redhat-076\\etc\\auth$Bundle-SymbolicName=C:\\Dev\\jboss-fuse&Bundle-Version=6.2.1"));
     }
 
 }

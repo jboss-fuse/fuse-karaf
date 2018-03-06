@@ -20,13 +20,15 @@ package org.eclipse.jgit.errors;
  *
  * @see org.eclipse.jgit.revwalk.filter.RevFilter
  */
-public class StopWalkException extends RuntimeException {
-	private static final long serialVersionUID = 1L;
+public final class StopWalkException extends RuntimeException {
 
-	/** Singleton instance for throwing within a filter. */
-	public static final StopWalkException INSTANCE = new StopWalkException();
+    /** Singleton instance for throwing within a filter. */
+    public static final org.eclipse.jgit.errors.StopWalkException INSTANCE = new org.eclipse.jgit.errors.StopWalkException();
 
-	private StopWalkException() {
-		super(null, null, false, false);
-	}
+    private static final long serialVersionUID = 1L;
+
+    private StopWalkException() {
+        super(null, null, false, false);
+    }
+
 }

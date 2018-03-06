@@ -29,8 +29,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static java.lang.Integer.parseInt;
-
 import org.jboss.fuse.credential.store.karaf.util.ProtectionType.CredentialSourceHandler;
 import org.wildfly.security.auth.server.IdentityCredentials;
 import org.wildfly.security.credential.PasswordCredential;
@@ -45,6 +43,8 @@ import org.wildfly.security.password.spec.IteratedPasswordAlgorithmSpec;
 import org.wildfly.security.password.spec.IteratedSaltedPasswordAlgorithmSpec;
 import org.wildfly.security.password.spec.MaskedPasswordAlgorithmSpec;
 import org.wildfly.security.password.spec.MaskedPasswordSpec;
+
+import static java.lang.Integer.parseInt;
 
 /**
  * {@link CredentialSourceHandler} implementation for masked password Credential store protection.

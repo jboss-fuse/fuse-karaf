@@ -23,8 +23,8 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jboss.fuse.patch.management.impl.Activator;
 import org.apache.commons.io.FileUtils;
+import org.jboss.fuse.patch.management.impl.Activator;
 import org.osgi.service.log.LogService;
 
 /**
@@ -118,8 +118,8 @@ public class SetEnvResolver implements Resolver {
     }
 
     private static class NumLitValue {
-        public long value;
-        public String literal;
+        public final long value;
+        public final String literal;
 
         public NumLitValue(long value, String literal) {
             this.value = value;

@@ -22,7 +22,6 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.fuse.patch.management.ManagedPatch;
 import org.eclipse.jgit.api.CheckoutCommand;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
@@ -31,6 +30,7 @@ import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevTag;
 import org.eclipse.jgit.transport.PushResult;
+import org.jboss.fuse.patch.management.ManagedPatch;
 
 /**
  * <p>Interface for low-level git patch repository operations.</p>

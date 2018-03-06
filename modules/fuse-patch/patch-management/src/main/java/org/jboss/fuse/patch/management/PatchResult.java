@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.jboss.fuse.patch.management.impl.Activator;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.ParseException;
+import org.jboss.fuse.patch.management.impl.Activator;
 import org.osgi.service.log.LogService;
 
 /**
@@ -72,7 +72,7 @@ public class PatchResult {
     private long date;
 
     // whether this result is not ready yet - there are some tasks left to be done after restart
-    private Pending pending = null;
+    private Pending pending;
 
     private List<BundleUpdate> bundleUpdates = new LinkedList<>();
     private List<FeatureUpdate> featureUpdates = new LinkedList<>();
@@ -166,7 +166,8 @@ public class PatchResult {
             String nl = props.getProperty(prefix + NEW_LOCATION);
             String ov = props.getProperty(prefix + OLD_VERSION);
             String ol = props.getProperty(prefix + OLD_LOCATION);
-            int state = -1, startLevel = -1;
+            int state = -1;
+            int startLevel = -1;
             String _state = props.getProperty(prefix + STATE);
             if (_state != null && !"".equals(_state)) {
                 try {

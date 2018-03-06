@@ -43,7 +43,9 @@ public abstract class PatchCommandSupport implements Action {
     protected abstract void doExecute(PatchService service) throws Exception;
 
     protected void display(PatchResult result) {
-        int l1 = "[name]".length(), l2 = "[old]".length(), l3 = "[new]".length();
+        int l1 = "[name]".length();
+        int l2 = "[old]".length();
+        int l3 = "[new]".length();
         for (BundleUpdate update : result.getBundleUpdates()) {
             if (update.getSymbolicName() != null && stripSymbolicName(update.getSymbolicName()).length() > l1) {
                 l1 = stripSymbolicName(update.getSymbolicName()).length();

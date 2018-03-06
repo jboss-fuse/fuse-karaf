@@ -23,12 +23,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.io.FileUtils;
 import org.jboss.fuse.patch.management.BackupService;
 import org.jboss.fuse.patch.management.BundleUpdate;
 import org.jboss.fuse.patch.management.PatchResult;
 import org.jboss.fuse.patch.management.Pending;
 import org.jboss.fuse.patch.management.Utils;
-import org.apache.commons.io.FileUtils;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogService;

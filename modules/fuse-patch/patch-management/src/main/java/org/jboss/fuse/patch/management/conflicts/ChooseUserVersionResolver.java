@@ -18,8 +18,8 @@ package org.jboss.fuse.patch.management.conflicts;
 import java.io.File;
 import java.io.IOException;
 
-import org.jboss.fuse.patch.management.impl.Activator;
 import org.apache.commons.io.FileUtils;
+import org.jboss.fuse.patch.management.impl.Activator;
 import org.osgi.service.log.LogService;
 
 public class ChooseUserVersionResolver implements Resolver {

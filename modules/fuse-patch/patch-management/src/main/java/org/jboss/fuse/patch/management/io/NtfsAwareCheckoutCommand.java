@@ -33,7 +33,7 @@ public class NtfsAwareCheckoutCommand extends CheckoutCommand {
     @Override
     public Ref call() throws GitAPIException {
         JGitInternalException lastException = null;
-        for (int i=0; i<5; i++) {
+        for (int i = 0; i < 5; i++) {
             try {
                 return super.call();
             } catch (JGitInternalException e) {

@@ -18,6 +18,7 @@ package org.jboss.fuse.itests.karaf;
 import java.io.File;
 import java.security.PrivilegedActionException;
 import java.security.PrivilegedExceptionAction;
+
 import javax.inject.Inject;
 import javax.security.auth.Subject;
 

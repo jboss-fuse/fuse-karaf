@@ -33,9 +33,6 @@ import org.jboss.fuse.patch.management.PatchManagement;
 @Command(scope = "patch", name = "show", description = "Display information about added/installed patch")
 public class ShowCommand extends PatchCommandSupport {
 
-    @Reference
-    private PatchManagement patchManagement;
-
     @Argument(name = "PATCH", description = "name of the patch to display", required = true, multiValued = false)
     @Completion(PatchCompleter.class)
     String patchId;
@@ -49,10 +46,13 @@ public class ShowCommand extends PatchCommandSupport {
     @Option(name = "--diff", description = "Display unified diff of files modified in a patch (without the files in ${karaf.home}/system)")
     boolean diff;
 
+    @Reference
+    private PatchManagement patchManagement;
+
     @Override
     protected void doExecute(PatchService service) throws Exception {
         Patch patch = patchManagement.loadPatch(new PatchDetailsRequest(patchId, bundles, files, diff));
-        
+
         if (patch == null) {
             throw new PatchException("Patch '" + patchId + "' not found");
         }

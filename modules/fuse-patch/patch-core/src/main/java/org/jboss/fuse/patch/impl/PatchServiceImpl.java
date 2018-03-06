@@ -98,7 +98,7 @@ import static org.jboss.fuse.patch.management.Utils.stripSymbolicName;
 @Component(immediate = true, service = PatchService.class)
 public class PatchServiceImpl implements PatchService {
 
-    public static Logger LOG = LoggerFactory.getLogger(PatchServiceImpl.class);
+    public static final Logger LOG = LoggerFactory.getLogger(PatchServiceImpl.class);
 
     private static final String ID = "id";
     private static final String DESCRIPTION = "description";
@@ -179,7 +179,7 @@ public class PatchServiceImpl implements PatchService {
 
         @Override
         public BootFinished addingService(ServiceReference<BootFinished> reference) {
-            synchronized(PatchServiceImpl.this) {
+            synchronized (PatchServiceImpl.this) {
                 if (pool != null) {
                     // we may have pool shutdown, but we'll at least schedule the task
                     LOG.info("Scheduling \"resume pending patch tasks\"");
@@ -274,7 +274,7 @@ public class PatchServiceImpl implements PatchService {
                 Set<String> installedFeatures = null;
                 try {
                     installedFeatures = Arrays.stream(featuresService.listInstalledFeatures())
-                            .map((f) -> String.format("%s|%s", f.getName(), f.getVersion()))
+                            .map(f -> String.format("%s|%s", f.getName(), f.getVersion()))
                             .collect(Collectors.toSet());
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
@@ -1070,7 +1070,8 @@ public class PatchServiceImpl implements PatchService {
                         // Merge result
                         FeatureUpdate oldUpdate = updatesForFeatureKeys.get(key);
                         if (oldUpdate != null) {
-                            Version upv = null, newV = null;
+                            Version upv = null;
+                            Version newV = null;
                             if (oldUpdate.getNewVersion() != null) {
                                 upv = VersionTable.getVersion(oldUpdate.getNewVersion());
                             }
@@ -1527,7 +1528,7 @@ public class PatchServiceImpl implements PatchService {
         }
         // Second pass: for each bundle, check if there is any unresolved optional package that could be resolved
         Map<Bundle, List<Clause>> imports = new HashMap<Bundle, List<Clause>>();
-        for (Iterator<Bundle> it = bundles.iterator(); it.hasNext(); ) {
+        for (Iterator<Bundle> it = bundles.iterator(); it.hasNext();) {
             Bundle b = it.next();
             String importsStr = b.getHeaders().get(Constants.IMPORT_PACKAGE);
             List<Clause> importsList = getOptionalImports(importsStr);
@@ -1552,10 +1553,10 @@ public class PatchServiceImpl implements PatchService {
                 }
             }
         }
-        for (Iterator<Bundle> it = bundles.iterator(); it.hasNext(); ) {
+        for (Iterator<Bundle> it = bundles.iterator(); it.hasNext();) {
             Bundle b = it.next();
             List<Clause> importsList = imports.get(b);
-            for (Iterator<Clause> itpi = importsList.iterator(); itpi.hasNext(); ) {
+            for (Iterator<Clause> itpi = importsList.iterator(); itpi.hasNext();) {
                 Clause pi = itpi.next();
                 boolean matching = false;
                 for (Clause pe : exports) {
@@ -1607,7 +1608,8 @@ public class PatchServiceImpl implements PatchService {
      * @return kind of patches in the set
      */
     private PatchKind checkConsistency(Collection<Patch> patches) throws PatchException {
-        boolean hasP = false, hasR = false;
+        boolean hasP = false;
+        boolean hasR = false;
         for (Patch patch : patches) {
             if (patch.getPatchData().isRollupPatch()) {
                 if (hasR) {

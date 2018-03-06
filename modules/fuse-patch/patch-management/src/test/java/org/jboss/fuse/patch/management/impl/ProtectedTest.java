@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
 public class ProtectedTest {
 
     private File gitDir;
-    private Git git = null;
+    private Git git;
     private BundleContext context;
 
     @Before
