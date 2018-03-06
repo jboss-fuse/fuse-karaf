@@ -27,9 +27,12 @@ public class ListCommand extends PatchCommandSupport {
     @Option(name = "--bundles", description = "Display the list of bundles for each patch")
     boolean bundles;
 
+    @Option(name = "--short", description = "Display less information")
+    boolean less;
+
     @Override
     protected void doExecute(PatchService service) throws Exception {
-        display(service.getPatches(), bundles);
+        display(service.getPatches(), bundles, less);
     }
 
 }

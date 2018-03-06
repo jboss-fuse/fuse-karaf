@@ -81,7 +81,7 @@ public class PatchBundlesCommandIntegrationTest extends AbstractPatchIntegration
             String result = null;
             try {
                 output.reset();
-                session.execute("patch:list");
+                session.execute("patch:list --short");
             } catch (Exception exception) {
                 // when we're updating patch-core, we may use stale patch:list service. Try again then before timeout.
                 continue;

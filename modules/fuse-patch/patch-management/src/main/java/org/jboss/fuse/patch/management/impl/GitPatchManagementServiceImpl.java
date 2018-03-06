@@ -1351,7 +1351,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                             // and remove karaf base from tracked patch result, or even remove the result itself
                             String patchId = entry.getKey().substring("patch-".length());
                             Patch patch = loadPatch(new PatchDetailsRequest(patchId));
-                            if (patch.getResult() != null) {
+                            if (patch != null && patch.getResult() != null) {
                                 boolean removed = false;
                                 for (Iterator<String> iterator = patch.getResult().getKarafBases().iterator(); iterator.hasNext();) {
                                     String base = iterator.next();
