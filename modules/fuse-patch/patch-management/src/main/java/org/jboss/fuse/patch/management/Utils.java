@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,13 +38,12 @@ import java.util.zip.CRC32;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.felix.utils.version.VersionCleaner;
-import org.apache.karaf.features.internal.service.FeaturesProcessingSerializer;
 import org.jboss.fuse.patch.management.impl.Activator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Version;
 import org.osgi.service.log.LogService;
 
-public class Utils {
+public final class Utils {
 
     private static final Pattern SYMBOLIC_NAME_PATTERN = Pattern.compile("([^;: ]+)(.*)");
     private static final Pattern KARAF_PACKAGE_VERSION = Pattern.compile(".+;version=\"([^\"]+)\"");
@@ -70,25 +68,33 @@ public class Utils {
 
         Set<PosixFilePermission> result = new HashSet<>();
         int shortMode = Integer.parseInt(numeric, 8);
-        if ((shortMode & 0400) == 0400)
+        if ((shortMode & 0400) == 0400) {
             result.add(PosixFilePermission.OWNER_READ);
+        }
 //        if ((shortMode & 0200) == 0200)
         // it was tricky ;)
         result.add(PosixFilePermission.OWNER_WRITE);
-        if ((shortMode & 0100) == 0100)
+        if ((shortMode & 0100) == 0100) {
             result.add(PosixFilePermission.OWNER_EXECUTE);
-        if ((shortMode & 0040) == 0040)
+        }
+        if ((shortMode & 0040) == 0040) {
             result.add(PosixFilePermission.GROUP_READ);
-        if ((shortMode & 0020) == 0020)
+        }
+        if ((shortMode & 0020) == 0020) {
             result.add(PosixFilePermission.GROUP_WRITE);
-        if ((shortMode & 0010) == 0010)
+        }
+        if ((shortMode & 0010) == 0010) {
             result.add(PosixFilePermission.GROUP_EXECUTE);
-        if ((shortMode & 0004) == 0004)
+        }
+        if ((shortMode & 0004) == 0004) {
             result.add(PosixFilePermission.OTHERS_READ);
-        if ((shortMode & 0002) == 0002)
+        }
+        if ((shortMode & 0002) == 0002) {
             result.add(PosixFilePermission.OTHERS_WRITE);
-        if ((shortMode & 0001) == 0001)
+        }
+        if ((shortMode & 0001) == 0001) {
             result.add(PosixFilePermission.OTHERS_EXECUTE);
+        }
 
         return result;
     }
@@ -187,19 +193,19 @@ public class Utils {
      */
     public static String pathToMvnurl(String path) {
         String[] p = path.split("/");
-        if (p.length >= 4 && p[p.length-1].startsWith(p[p.length-3] + "-" + p[p.length-2])) {
-            String artifactId = p[p.length-3];
-            String version = p[p.length-2];
+        if (p.length >= 4 && p[p.length - 1].startsWith(p[p.length - 3] + "-" + p[p.length - 2])) {
+            String artifactId = p[p.length - 3];
+            String version = p[p.length - 2];
             String classifier;
             String type;
             String artifactIdVersion = artifactId + "-" + version;
             StringBuilder sb = new StringBuilder();
-            if (p[p.length-1].charAt(artifactIdVersion.length()) == '-') {
-                classifier = p[p.length-1].substring(artifactIdVersion.length() + 1, p[p.length-1].lastIndexOf('.'));
+            if (p[p.length - 1].charAt(artifactIdVersion.length()) == '-') {
+                classifier = p[p.length - 1].substring(artifactIdVersion.length() + 1, p[p.length - 1].lastIndexOf('.'));
             } else {
                 classifier = null;
             }
-            type = p[p.length-1].substring(p[p.length-1].lastIndexOf('.') + 1);
+            type = p[p.length - 1].substring(p[p.length - 1].lastIndexOf('.') + 1);
             sb.append("mvn:");
             for (int j = 0; j < p.length - 3; j++) {
                 if (j > 0) {
@@ -303,7 +309,6 @@ public class Utils {
         throw new IllegalArgumentException("Bad maven url: " + resourceLocation);
     }
 
-
     /**
      * Strips symbolic name from directives.
      * @param symbolicName
@@ -348,17 +353,17 @@ public class Utils {
         if (vt.length < 4) {
             try {
                 int _v = Integer.parseInt(vt[vt.length - 1]);
-                for (int i=0; i<vt.length; i++) {
+                for (int i = 0; i < vt.length; i++) {
                     v123[i] = Integer.parseInt(vt[i]);
                 }
             } catch (NumberFormatException e) {
-                for (int i=0; i<vt.length-1; i++) {
+                for (int i = 0; i < vt.length - 1; i++) {
                     v123[i] = Integer.parseInt(vt[i]);
                 }
                 v4 = vt[vt.length - 1];
             }
         } else {
-            for (int i=0; i<3; i++) {
+            for (int i = 0; i < 3; i++) {
                 v123[i] = Integer.parseInt(vt[i]);
             }
             v4 = vt[vt.length - 1];
@@ -373,7 +378,7 @@ public class Utils {
      * @param bundleUpdatesInThisPatch
      * @return
      */
-    public static Map<String,String> collectLocationUpdates(List<BundleUpdate> bundleUpdatesInThisPatch) {
+    public static Map<String, String> collectLocationUpdates(List<BundleUpdate> bundleUpdatesInThisPatch) {
         LinkedHashMap<String, String> locationUpdates = new LinkedHashMap<>();
         if (bundleUpdatesInThisPatch != null) {
             for (BundleUpdate update : bundleUpdatesInThisPatch) {
@@ -442,7 +447,7 @@ public class Utils {
      * @param newVersion
      * @param packages
      */
-    public static void updateKarafPackageVersion(File configProperties, String newVersion, String ... packages) {
+    public static void updateKarafPackageVersion(File configProperties, String newVersion, String... packages) {
         BufferedReader reader = null;
         StringWriter sw = new StringWriter();
         try {
@@ -452,9 +457,8 @@ public class Utils {
                 for (String pkg : packages) {
                     Matcher matcher = KARAF_PACKAGE_VERSION.matcher(line);
                     if (line.contains(pkg + ";version=") && matcher.find()) {
-                        line = line.substring(0, matcher.start(1)) +
-                                newVersion +
-                                line.substring(matcher.end(1));
+                        line = line.substring(0, matcher.start(1))
+                                + newVersion + line.substring(matcher.end(1));
                     }
                 }
                 sw.append(line).append("\n");

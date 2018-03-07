@@ -79,7 +79,7 @@
         <version.org.apache.activemq.artemis>2.0.0.amq-700011-redhat-1</version.org.apache.activemq.artemis>
         <version.org.apache.camel>2.21.0.fuse-000033</version.org.apache.camel>
         <version.org.apache.cxf>3.1.11.fuse-000176</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-000184</version.org.apache.karaf>
+        <version.org.apache.karaf>4.2.0.redhat-700-SNAPSHOT</version.org.apache.karaf>
         <version.org.fusesource.camel-sap>7.0.0.fuse-000146</version.org.fusesource.camel-sap>
         <version.extra>2.21.0.fuse-000008</version.extra>
 
@@ -1139,9 +1139,9 @@
                                  <requirePluginVersions>
                                      <banSnapshots>${enforcer.pluginVersions.banSnapshots}</banSnapshots>
                                  </requirePluginVersions>
-                                 <requireReleaseDeps>
-                                     <onlyWhenRelease>true</onlyWhenRelease>
-                                 </requireReleaseDeps>
+                                 <!--<requireReleaseDeps>-->
+                                     <!--<onlyWhenRelease>true</onlyWhenRelease>-->
+                                 <!--</requireReleaseDeps>-->
                                  <requireMavenVersion>
                                      <version>[3.3.9,4)</version>
                                  </requireMavenVersion>

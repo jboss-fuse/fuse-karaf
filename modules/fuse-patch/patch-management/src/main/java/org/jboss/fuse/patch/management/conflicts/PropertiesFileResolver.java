@@ -21,8 +21,8 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jboss.fuse.patch.management.impl.Activator;
 import org.apache.felix.utils.properties.Properties;
+import org.jboss.fuse.patch.management.impl.Activator;
 import org.osgi.service.log.LogService;
 
 /**
@@ -56,7 +56,7 @@ public class PropertiesFileResolver implements ResolverEx {
             // first let's iterate over what we have in selected base - we may already find new properties in
             // incoming change vs. base version
             Set<String> keys = new HashSet<>();
-            for (Enumeration<?> e = result.propertyNames(); e.hasMoreElements(); ) {
+            for (Enumeration<?> e = result.propertyNames(); e.hasMoreElements();) {
                 keys.add((String) e.nextElement());
             }
             for (String key : keys) {
@@ -97,10 +97,10 @@ public class PropertiesFileResolver implements ResolverEx {
             // but we want to preserve layout of properties file from user (it may have user comments for example)
             // we will handle only properties added in "otherSource"
             keys.clear();
-            for (Enumeration<?> e = otherSource.propertyNames(); e.hasMoreElements(); ) {
+            for (Enumeration<?> e = otherSource.propertyNames(); e.hasMoreElements();) {
                 keys.add((String) e.nextElement());
             }
-            for (Enumeration<?> e = result.propertyNames(); e.hasMoreElements(); ) {
+            for (Enumeration<?> e = result.propertyNames(); e.hasMoreElements();) {
                 String key = (String) e.nextElement();
                 keys.remove(key);
             }

@@ -24,7 +24,6 @@ import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.jboss.fuse.patch.PatchService;
 import org.jboss.fuse.patch.commands.completers.UninstallPatchCompleter;
-import org.jboss.fuse.patch.management.ManagedPatch;
 import org.jboss.fuse.patch.management.Patch;
 import org.jboss.fuse.patch.management.PatchDetailsRequest;
 import org.jboss.fuse.patch.management.PatchException;
@@ -38,12 +37,12 @@ public class DeleteCommand extends PatchCommandSupport {
     @Reference
     BundleContext bundleContext;
 
-    @Reference
-    private PatchManagement patchManagement;
-
     @Argument(name = "PATCH", description = "name of the patch to delete", required = true, multiValued = false)
     @Completion(UninstallPatchCompleter.class)
     String patchId;
+
+    @Reference
+    private PatchManagement patchManagement;
 
     @Override
     protected void doExecute(PatchService service) throws Exception {
@@ -56,7 +55,7 @@ public class DeleteCommand extends PatchCommandSupport {
         if (patch.getResult() != null && patch.getResult().getKarafBases().size() > 0) {
             throw new PatchException("Patch '" + patchId + "' can't be deleted, as it's installed in these containers: "
                     + patch.getResult().getKarafBases().stream()
-                    .map((kb) -> kb.contains("|") ? kb.split("\\s*\\|\\s*")[0] : kb)
+                    .map(kb -> kb.contains("|") ? kb.split("\\s*\\|\\s*")[0] : kb)
                     .collect(Collectors.joining(", ")));
         }
 

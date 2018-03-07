@@ -23,7 +23,7 @@ import java.util.Properties;
 import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
 import org.apache.karaf.features.internal.service.FeaturesProcessingSerializer;
 
-public class InternalUtils {
+public final class InternalUtils {
 
     private InternalUtils() { }
 

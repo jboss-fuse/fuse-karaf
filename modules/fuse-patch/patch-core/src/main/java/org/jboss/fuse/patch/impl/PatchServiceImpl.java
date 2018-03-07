@@ -98,7 +98,7 @@ import static org.jboss.fuse.patch.management.Utils.stripSymbolicName;
 @Component(immediate = true, service = PatchService.class)
 public class PatchServiceImpl implements PatchService {
 
-    public static Logger LOG = LoggerFactory.getLogger(PatchServiceImpl.class);
+    public static final Logger LOG = LoggerFactory.getLogger(PatchServiceImpl.class);
 
     private static final String ID = "id";
     private static final String DESCRIPTION = "description";
@@ -179,7 +179,7 @@ public class PatchServiceImpl implements PatchService {
 
         @Override
         public BootFinished addingService(ServiceReference<BootFinished> reference) {
-            synchronized(PatchServiceImpl.this) {
+            synchronized (PatchServiceImpl.this) {
                 if (pool != null) {
                     // we may have pool shutdown, but we'll at least schedule the task
                     LOG.info("Scheduling \"resume pending patch tasks\"");
@@ -274,7 +274,7 @@ public class PatchServiceImpl implements PatchService {
                 Set<String> installedFeatures = null;
                 try {
                     installedFeatures = Arrays.stream(featuresService.listInstalledFeatures())
-                            .map((f) -> String.format("%s|%s", f.getName(), f.getVersion()))
+                            .map(f -> String.format("%s|%s", f.getName(), f.getVersion()))
                             .collect(Collectors.toSet());
                 } catch (Exception e) {
                     System.err.println(e.getMessage());
@@ -492,6 +492,8 @@ public class PatchServiceImpl implements PatchService {
             // [feature name|updateable-version] -> newest update for the feature out of all installed patches
             final Map<String, FeatureUpdate> updatesForFeatureKeys = new LinkedHashMap<>();
 
+            final List<String> overridesForFeatureKeys = new LinkedList<>();
+
             // symbolic name -> version -> location
             final BundleVersionHistory history = createBundleVersionHistory();
 
@@ -507,11 +509,18 @@ public class PatchServiceImpl implements PatchService {
             // runtime info is prepared to apply runtime changes and static info is prepared to update KARAF_HOME files
             for (Patch patch : patches) {
                 List<FeatureUpdate> featureUpdatesInThisPatch = null;
+                List<String> featureOverridesInThisPatch = null;
                 if (kind == PatchKind.ROLLUP) {
                     // list of feature updates for the current patch
                     featureUpdatesInThisPatch = featureUpdatesInPatch(patch, updatesForFeatureKeys, kind);
 
                     helper.sortFeatureUpdates(featureUpdatesInThisPatch);
+                } else {
+                    // list of feature overrides (new Karaf 4.2 feature override mechanism)
+                    // this is collected for the purpose of summary, not to collect information needed
+                    // for actual override
+                    featureOverridesInThisPatch = featureOverridesInPatch(patch, kind);
+                    overridesForFeatureKeys.addAll(featureOverridesInThisPatch);
                 }
 
                 // list of bundle updates for the current patch - for ROLLUP patch, we minimize the list of bundles
@@ -538,12 +547,12 @@ public class PatchServiceImpl implements PatchService {
                         // ENTESB-5120: "result" is actually a result of patch installation in root container
                         // we need dedicated result for admin:create based child container
                         PatchResult childResult = new PatchResult(patch.getPatchData(), simulate, System.currentTimeMillis(),
-                                bundleUpdatesInThisPatch, featureUpdatesInThisPatch, result);
+                                bundleUpdatesInThisPatch, featureUpdatesInThisPatch, featureOverridesInThisPatch, result);
                         result.addChildResult(System.getProperty("karaf.name"), childResult);
                     }
                 } else {
                     result = new PatchResult(patch.getPatchData(), simulate, System.currentTimeMillis(),
-                            bundleUpdatesInThisPatch, featureUpdatesInThisPatch);
+                            bundleUpdatesInThisPatch, featureUpdatesInThisPatch, featureOverridesInThisPatch);
                 }
                 result.getKarafBases().add(String.format("%s | %s",
                         System.getProperty("karaf.name"), System.getProperty("karaf.base")));
@@ -580,7 +589,11 @@ public class PatchServiceImpl implements PatchService {
                 }
             }
 
-            Presentation.displayFeatureUpdates(updatesForFeatureKeys.values(), true);
+            if (kind == PatchKind.ROLLUP) {
+                Presentation.displayFeatureUpdates(updatesForFeatureKeys.values(), true);
+            } else {
+                Presentation.displayFeatureOverrides(overridesForFeatureKeys, true);
+            }
 
             // effectively, we will update all the bundles from this list - even if some bundles will be "updated"
             // as part of feature installation
@@ -665,6 +678,14 @@ public class PatchServiceImpl implements PatchService {
                     try {
                         // update bundles
                         applyChanges(bundleUpdateLocations);
+
+                        for (String featureOverride : overridesForFeatureKeys) {
+                            System.out.println("overriding feature: " + featureOverride);
+                        }
+                        if (overridesForFeatureKeys.size() > 0) {
+                            System.out.println("refreshing features");
+                            featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                        }
 
                         // persist results of all installed patches
                         for (Patch patch : patches) {
@@ -1070,7 +1091,8 @@ public class PatchServiceImpl implements PatchService {
                         // Merge result
                         FeatureUpdate oldUpdate = updatesForFeatureKeys.get(key);
                         if (oldUpdate != null) {
-                            Version upv = null, newV = null;
+                            Version upv = null;
+                            Version newV = null;
                             if (oldUpdate.getNewVersion() != null) {
                                 upv = VersionTable.getVersion(oldUpdate.getNewVersion());
                             }
@@ -1142,6 +1164,23 @@ public class PatchServiceImpl implements PatchService {
                 }
             }
         }
+    }
+
+    /**
+     * Returns a list of feature identifiers specified in P-Patch' {@code org.apache.karaf.features.xml}
+     * @param patch
+     * @param updatesForFeatureKeys
+     * @param kind
+     * @return
+     */
+    private List<String> featureOverridesInPatch(Patch patch, PatchKind kind) throws Exception {
+        List<String> overridesInThisPatch = new LinkedList<>();
+
+        if (patch.getPatchData() != null && patch.getPatchData().getFeatureOverrides() != null) {
+            overridesInThisPatch.addAll(patch.getPatchData().getFeatureOverrides());
+        }
+
+        return overridesInThisPatch;
     }
 
     /**
@@ -1313,6 +1352,14 @@ public class PatchServiceImpl implements PatchService {
             Executors.newSingleThreadExecutor().execute(() -> {
                 try {
                     applyChanges(toUpdate);
+
+                    for (String featureOverride : result.getFeatureOverrides()) {
+                        System.out.println("removing overriden feature: " + featureOverride);
+                    }
+                    if (result.getFeatureOverrides().size() > 0) {
+                        System.out.println("refreshing features");
+                        featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                    }
                 } catch (Exception e) {
                     throw new PatchException("Unable to rollback patch " + patch.getPatchData().getId() + ": " + e.getMessage(), e);
                 }
@@ -1527,7 +1574,7 @@ public class PatchServiceImpl implements PatchService {
         }
         // Second pass: for each bundle, check if there is any unresolved optional package that could be resolved
         Map<Bundle, List<Clause>> imports = new HashMap<Bundle, List<Clause>>();
-        for (Iterator<Bundle> it = bundles.iterator(); it.hasNext(); ) {
+        for (Iterator<Bundle> it = bundles.iterator(); it.hasNext();) {
             Bundle b = it.next();
             String importsStr = b.getHeaders().get(Constants.IMPORT_PACKAGE);
             List<Clause> importsList = getOptionalImports(importsStr);
@@ -1552,10 +1599,10 @@ public class PatchServiceImpl implements PatchService {
                 }
             }
         }
-        for (Iterator<Bundle> it = bundles.iterator(); it.hasNext(); ) {
+        for (Iterator<Bundle> it = bundles.iterator(); it.hasNext();) {
             Bundle b = it.next();
             List<Clause> importsList = imports.get(b);
-            for (Iterator<Clause> itpi = importsList.iterator(); itpi.hasNext(); ) {
+            for (Iterator<Clause> itpi = importsList.iterator(); itpi.hasNext();) {
                 Clause pi = itpi.next();
                 boolean matching = false;
                 for (Clause pe : exports) {
@@ -1607,7 +1654,8 @@ public class PatchServiceImpl implements PatchService {
      * @return kind of patches in the set
      */
     private PatchKind checkConsistency(Collection<Patch> patches) throws PatchException {
-        boolean hasP = false, hasR = false;
+        boolean hasP = false;
+        boolean hasR = false;
         for (Patch patch : patches) {
             if (patch.getPatchData().isRollupPatch()) {
                 if (hasR) {

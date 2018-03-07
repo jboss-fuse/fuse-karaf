@@ -17,14 +17,12 @@ package org.jboss.fuse.patch.management.conflicts;
 
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import org.apache.felix.utils.properties.Properties;
 import org.jboss.fuse.patch.management.Artifact;
 import org.jboss.fuse.patch.management.Utils;
-import org.apache.felix.utils.properties.Properties;
 import org.osgi.framework.Version;
 
 public class KarafFeaturesPropertiesFileResolver extends PropertiesFileResolver {
@@ -43,7 +41,7 @@ public class KarafFeaturesPropertiesFileResolver extends PropertiesFileResolver 
         if ("featuresBoot".equals(key)) {
             String featuresFromPatch = firstProperties.get(key);
             Map<String, String> featureNamesFromPatch = new LinkedHashMap<>();
-            Arrays.stream(featuresFromPatch.split("\\s*,\\s*")).forEach((fv) -> {
+            Arrays.stream(featuresFromPatch.split("\\s*,\\s*")).forEach(fv -> {
                 if (fv.contains("/")) {
                     featureNamesFromPatch.put(fv.split("/")[0], fv);
                 } else {
@@ -52,7 +50,7 @@ public class KarafFeaturesPropertiesFileResolver extends PropertiesFileResolver 
             });
             String currentFeatures = secondProperties.get(key);
             Map<String, String> currentFeatureNames = new LinkedHashMap<>();
-            Arrays.stream(currentFeatures.split("\\s*,\\s*")).forEach((fv) -> {
+            Arrays.stream(currentFeatures.split("\\s*,\\s*")).forEach(fv -> {
                 if (fv.contains("/")) {
                     currentFeatureNames.put(fv.split("/")[0], fv);
                 } else {
@@ -138,7 +136,7 @@ public class KarafFeaturesPropertiesFileResolver extends PropertiesFileResolver 
      * @param uriStringsFromPatch
      * @return
      */
-    private Map<String,Artifact> uris(List<String> uriStringsFromPatch) {
+    private Map<String, Artifact> uris(List<String> uriStringsFromPatch) {
         Map<String, Artifact> result = new LinkedHashMap<>();
         for (String uri : uriStringsFromPatch) {
             Artifact a = Utils.mvnurlToArtifact(uri, true);

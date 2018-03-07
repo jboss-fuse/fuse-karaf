@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+
 import javax.inject.Inject;
 
 import org.apache.karaf.shell.api.console.Session;
@@ -80,7 +81,7 @@ public class PatchBundlesCommandIntegrationTest extends AbstractPatchIntegration
             String result = null;
             try {
                 output.reset();
-                session.execute("patch:list");
+                session.execute("patch:list --short");
             } catch (Exception exception) {
                 // when we're updating patch-core, we may use stale patch:list service. Try again then before timeout.
                 continue;

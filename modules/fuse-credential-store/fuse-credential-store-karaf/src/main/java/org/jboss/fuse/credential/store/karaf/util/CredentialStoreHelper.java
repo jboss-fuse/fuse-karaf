@@ -25,14 +25,13 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static java.lang.System.getenv;
-
 import org.jboss.fuse.credential.store.karaf.Defaults;
 import org.wildfly.security.credential.source.CredentialSource;
 import org.wildfly.security.credential.store.CredentialStore;
 import org.wildfly.security.credential.store.CredentialStore.ProtectionParameter;
 import org.wildfly.security.credential.store.impl.KeyStoreCredentialStore;
 
+import static java.lang.System.getenv;
 import static org.jboss.fuse.credential.store.karaf.util.EnvironmentHelper.attributesFromEnvironment;
 
 /**

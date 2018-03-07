@@ -21,15 +21,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import org.jboss.fuse.patch.management.impl.GitPatchManagementService;
-import org.jboss.fuse.patch.management.impl.GitPatchManagementServiceImpl;
-import org.jboss.fuse.patch.management.impl.GitPatchRepository;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.jboss.fuse.patch.management.impl.GitPatchManagementService;
+import org.jboss.fuse.patch.management.impl.GitPatchManagementServiceImpl;
+import org.jboss.fuse.patch.management.impl.GitPatchRepository;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -58,7 +58,8 @@ public class GitPatchManagementServiceForStandaloneChildContainersIT extends Pat
 
         // root container's part - initialization of baselines
         freshKarafStandaloneDistro();
-        FileUtils.copyFile(new File("src/test/resources/karaf2/system/org/apache/karaf/instance/org.apache.karaf.instance.core/4.2.0.redhat-700001/org.apache.karaf.instance.core-4.2.0.redhat-700001.jar"),
+        FileUtils.copyFile(
+                new File("src/test/resources/karaf2/system/org/apache/karaf/instance/org.apache.karaf.instance.core/4.2.0.redhat-700001/org.apache.karaf.instance.core-4.2.0.redhat-700001.jar"),
                 new File(karafHome, "system/org/apache/karaf/instance/org.apache.karaf.instance.core/4.2.0.redhat-700001/org.apache.karaf.instance.core-4.2.0.redhat-700001.jar"));
         preparePatchZip("src/test/resources/baselines/baseline3", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
 

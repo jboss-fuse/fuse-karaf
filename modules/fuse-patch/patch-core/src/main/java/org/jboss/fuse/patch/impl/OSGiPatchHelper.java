@@ -35,7 +35,6 @@ import java.util.jar.Manifest;
 
 import org.jboss.fuse.patch.management.FeatureUpdate;
 import org.jboss.fuse.patch.management.Utils;
-import org.apache.karaf.features.FeaturesService;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;

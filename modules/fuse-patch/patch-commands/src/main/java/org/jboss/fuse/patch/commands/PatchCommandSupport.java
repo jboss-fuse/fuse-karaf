@@ -43,7 +43,9 @@ public abstract class PatchCommandSupport implements Action {
     protected abstract void doExecute(PatchService service) throws Exception;
 
     protected void display(PatchResult result) {
-        int l1 = "[name]".length(), l2 = "[old]".length(), l3 = "[new]".length();
+        int l1 = "[name]".length();
+        int l2 = "[old]".length();
+        int l3 = "[new]".length();
         for (BundleUpdate update : result.getBundleUpdates()) {
             if (update.getSymbolicName() != null && stripSymbolicName(update.getSymbolicName()).length() > l1) {
                 l1 = stripSymbolicName(update.getSymbolicName()).length();
@@ -73,6 +75,17 @@ public abstract class PatchCommandSupport implements Action {
      * @param listBundles
      */
     protected void display(Iterable<Patch> patches, boolean listBundles) {
+        display(patches, listBundles, false);
+    }
+
+    /**
+     * Displays a list of {@link Patch patches} in short format. Each {@link Patch#getManagedPatch()} is already
+     * tracked.
+     * @param patches
+     * @param listBundles
+     * @param lessInformation
+     */
+    protected void display(Iterable<Patch> patches, boolean listBundles, boolean lessInformation) {
         int l1 = "[name]".length();
         int l2 = "[installed]".length();
         int l3 = "[rollup]".length();
@@ -115,7 +128,11 @@ public abstract class PatchCommandSupport implements Action {
             }
         }
 
-        System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", "[name]", "[installed]", "[rollup]", "[description]"));
+        if (!lessInformation) {
+            System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", "[name]", "[installed]", "[rollup]", "[description]"));
+        } else {
+            System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l4 + "s", "[name]", "[installed]", "[description]"));
+        }
         for (Patch patch : sorted) {
             String desc = patch.getPatchData().getDescription() != null && !"".equals(patch.getPatchData().getDescription().trim())
                     ? patch.getPatchData().getDescription() : patch.getPatchData().getId();
@@ -128,13 +145,23 @@ public abstract class PatchCommandSupport implements Action {
                     installed = kb[0];
                 }
             }
-            System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", patch.getPatchData().getId(),
-                    installed, rollup, desc));
+            if (!lessInformation) {
+                System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", patch.getPatchData().getId(),
+                        installed, rollup, desc));
+            } else {
+                System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l4 + "s", patch.getPatchData().getId(),
+                        installed, desc));
+            }
             if (patch.getResult() != null && patch.getResult().getKarafBases().size() > 1) {
                 for (String kbt : patch.getResult().getKarafBases().subList(1, patch.getResult().getKarafBases().size())) {
                     String[] kb = kbt.split("\\s*\\|\\s*");
-                    System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", " ",
-                            kb[0], " ", " "));
+                    if (!lessInformation) {
+                        System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", " ",
+                                kb[0], " ", " "));
+                    } else {
+                        System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l4 + "s", " ",
+                                kb[0], " "));
+                    }
                 }
             }
 

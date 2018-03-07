@@ -25,9 +25,9 @@ import java.util.Date;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.jboss.fuse.patch.management.PatchData;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.jboss.fuse.patch.management.PatchData;
 import org.jboss.fuse.patch.management.Utils;
 
 /**

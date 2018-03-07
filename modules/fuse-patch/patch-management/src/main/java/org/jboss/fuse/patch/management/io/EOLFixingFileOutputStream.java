@@ -23,27 +23,15 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import org.jboss.fuse.patch.management.Utils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
+import org.jboss.fuse.patch.management.Utils;
 
 /**
  * {@link FileOutputStream} replacement which ensures that for critical files (inside <code>bin</code> or
  * <code>etc</code> dirs), each text file ends with new line (or \r\n in case of *.bat).
  */
 public class EOLFixingFileOutputStream extends FileOutputStream {
-
-    private boolean needsChecking = false;
-    private boolean probablyNeedsFixing = false;
-    private String EOL = "\n";
-    private int EOLLength = 1;
-    private long additionalBytes = 0L;
-    private boolean fixCRLF;
-
-    private boolean lineConversionMode = false;
-    private ByteArrayOutputStream conversionBuffer = null;
-
-    private volatile boolean closed = false;
 
     private static final Set<String> IMPORTANT_DIRECTORIES = new HashSet<>(Arrays.asList(
             "bin", "etc", "welcome-content"
@@ -52,6 +40,18 @@ public class EOLFixingFileOutputStream extends FileOutputStream {
     private static final Set<String> IMPORTANT_EXTENSIONS = new HashSet<>(Arrays.asList(
             "md", "properties", "xml", "json", "txt", "cfg", "config", "html", "xslt"
     ));
+
+    private boolean needsChecking = false;
+    private boolean probablyNeedsFixing = false;
+    private String eol = "\n";
+    private int eolLength = 1;
+    private long additionalBytes = 0L;
+    private boolean fixCRLF;
+
+    private boolean lineConversionMode = false;
+    private ByteArrayOutputStream conversionBuffer;
+
+    private volatile boolean closed = false;
 
     /**
      * Creates an enhanced {@link FileOutputStream} that writes to a file residing inside <code>targetDirectory</code>
@@ -82,8 +82,8 @@ public class EOLFixingFileOutputStream extends FileOutputStream {
                     }
                 }
                 if (path.endsWith(".bat")) {
-                    EOL = "\r\n";
-                    EOLLength = 2;
+                    eol = "\r\n";
+                    eolLength = 2;
                 }
             }
         }
@@ -103,9 +103,9 @@ public class EOLFixingFileOutputStream extends FileOutputStream {
             if (!needsChecking) {
                 return;
             }
-            if (EOLLength == 2 && len >= 2 && b[off + len - 2] != (byte) '\r' && b[off + len - 1] != (byte) '\n') {
+            if (eolLength == 2 && len >= 2 && b[off + len - 2] != (byte) '\r' && b[off + len - 1] != (byte) '\n') {
                 probablyNeedsFixing = true;
-            } else if (EOLLength == 1 && len >= 1 && b[off + len - 1] != (byte) '\n') {
+            } else if (eolLength == 1 && len >= 1 && b[off + len - 1] != (byte) '\n') {
                 probablyNeedsFixing = true;
             } else {
                 probablyNeedsFixing = false;
@@ -135,7 +135,7 @@ public class EOLFixingFileOutputStream extends FileOutputStream {
             super.write(buffer.toByteArray());
         } else {
             if (needsChecking && probablyNeedsFixing) {
-                if (EOL.length() == 2) {
+                if (eol.length() == 2) {
                     super.write(new byte[] { (byte) '\r', (byte) '\n' }, 0, 2);
                     additionalBytes = 2L;
                 } else {

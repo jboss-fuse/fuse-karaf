@@ -34,22 +34,24 @@ public class Activator implements BundleActivator {
 
     public static final int PATCH_MANAGEMENT_START_LEVEL = 2;
 
+    private static volatile ServiceTracker logServiceTracker;
+    private static Bundle bundle;
+
+    private final Object serviceAccess = new Object();
+
     private FrameworkStartLevel sl;
     private int activatedAt = 0;
 
     private GitPatchManagementService patchManagementService;
-    private final Object serviceAccess = new Object();
 
     // version of this bundle started from etc/startup.properties
     private Version startupVersion;
     private StartLevelNotificationFrameworkListener startLevelNotificationFrameworkListener;
 
-    private static Bundle bundle;
     private BundleContext systemContext;
     private ServiceRegistration<PatchManagement> patchManagementRegistration;
     private ServiceRegistration<BackupService> backupServiceRegistration;
 
-    private volatile static ServiceTracker logServiceTracker = null;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -180,17 +182,19 @@ public class Activator implements BundleActivator {
         // level as a string
         StringBuffer buf = new StringBuffer();
         switch (level) {
-            case (LogService.LOG_DEBUG):
+            case LogService.LOG_DEBUG:
                 buf.append("DEBUG: ");
                 break;
-            case (LogService.LOG_INFO):
+            case LogService.LOG_INFO:
                 buf.append("INFO : ");
                 break;
-            case (LogService.LOG_WARNING):
+            case LogService.LOG_WARNING:
                 buf.append("WARN : ");
                 break;
-            case (LogService.LOG_ERROR):
+            case LogService.LOG_ERROR:
                 buf.append("ERROR: ");
+                break;
+            default:
                 break;
         }
 

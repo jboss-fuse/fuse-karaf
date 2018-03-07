@@ -604,11 +604,11 @@ public class PatchServiceImplTest {
     public void testVersionHistory() {
         // the same bundle has been patched twice
         Patch patch1 = new Patch(new PatchData("patch1", "First patch", null, null, null, null, null), null);
-        patch1.setResult(new PatchResult(patch1.getPatchData(), true, System.currentTimeMillis(), new LinkedList<org.jboss.fuse.patch.management.BundleUpdate>(), null));
+        patch1.setResult(new PatchResult(patch1.getPatchData(), true, System.currentTimeMillis(), new LinkedList<org.jboss.fuse.patch.management.BundleUpdate>(), null, null));
         patch1.getResult().getBundleUpdates().add(new BundleUpdate("my-bsn", "1.1.0", "mvn:groupId/my-bsn/1.1.0",
                 "1.0.0", "mvn:groupId/my-bsn/1.0.0"));
         Patch patch2 = new Patch(new PatchData("patch2", "Second patch", null, null, null, null, null), null);
-        patch2.setResult(new PatchResult(patch1.getPatchData(), true, System.currentTimeMillis(), new LinkedList<org.jboss.fuse.patch.management.BundleUpdate>(), null));
+        patch2.setResult(new PatchResult(patch1.getPatchData(), true, System.currentTimeMillis(), new LinkedList<org.jboss.fuse.patch.management.BundleUpdate>(), null, null));
         patch2.getResult().getBundleUpdates().add(new BundleUpdate("my-bsn;directive1=true", "1.2.0", "mvn:groupId/my-bsn/1.2.0",
                 "1.1.0", "mvn:groupId/my-bsn/1.1.0"));
         Map<String, Patch> patches = new HashMap<String, Patch>();

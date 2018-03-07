@@ -26,13 +26,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.karaf.features.internal.model.processing.BundleReplacements;
-import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
-import org.jboss.fuse.patch.management.impl.GitPatchManagementService;
-import org.jboss.fuse.patch.management.impl.GitPatchManagementServiceImpl;
-import org.jboss.fuse.patch.management.impl.GitPatchRepository;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.SystemUtils;
+import org.apache.karaf.features.internal.model.processing.BundleReplacements;
+import org.apache.karaf.features.internal.model.processing.FeatureReplacements;
+import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -41,6 +39,9 @@ import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.jboss.fuse.patch.management.impl.GitPatchManagementService;
+import org.jboss.fuse.patch.management.impl.GitPatchManagementServiceImpl;
+import org.jboss.fuse.patch.management.impl.GitPatchRepository;
 import org.jboss.fuse.patch.management.impl.InternalUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -250,13 +251,13 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         FeaturesProcessing fp = InternalUtils.loadFeatureProcessing(karafHome);
         List<BundleReplacements.OverrideBundle> bundles = fp.getBundleReplacements().getOverrideBundles();
         assertThat(bundles.size(), equalTo(3));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/1.2.0/war".equals(b.getReplacement())));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
 
@@ -277,13 +278,13 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         fp = InternalUtils.loadFeatureProcessing(karafHome);
         bundles = fp.getBundleReplacements().getOverrideBundles();
         assertThat(bundles.size(), equalTo(3));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/1.2.0/war".equals(b.getReplacement())));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
 
@@ -300,7 +301,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         fp = InternalUtils.loadFeatureProcessing(karafHome);
         bundles = fp.getBundleReplacements().getOverrideBundles();
         assertThat(bundles.size(), equalTo(2));
-        assertTrue(bundles.stream().noneMatch((b) ->
+        assertTrue(bundles.stream().noneMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
 
@@ -365,13 +366,13 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         FeaturesProcessing fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
         List<BundleReplacements.OverrideBundle> bundles = fp.getBundleReplacements().getOverrideBundles();
         assertThat(bundles.size(), equalTo(3));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/${version.zen}/war".equals(b.getReplacement())));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
         assertTrue(FileUtils.readFileToString(new File(karafHome, "etc/versions.properties"), "UTF-8").contains("version.zen = 1.2.0"));
@@ -393,13 +394,13 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
         bundles = fp.getBundleReplacements().getOverrideBundles();
         assertThat(bundles.size(), equalTo(3));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/${version.zen}/war".equals(b.getReplacement())));
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
         assertTrue(FileUtils.readFileToString(new File(karafHome, "etc/versions.properties"), "UTF-8").contains("version.zen = 1.2.0"));
@@ -417,7 +418,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
         bundles = fp.getBundleReplacements().getOverrideBundles();
         assertThat(bundles.size(), equalTo(2));
-        assertTrue(bundles.stream().noneMatch((b) ->
+        assertTrue(bundles.stream().noneMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/1.3.3/war".equals(b.getReplacement())));
 
@@ -427,7 +428,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
 
         fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
         bundles = fp.getBundleReplacements().getOverrideBundles();
-        assertTrue(bundles.stream().anyMatch((b) ->
+        assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.1,1.1.9)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/${version.zen}/war".equals(b.getReplacement())));
         assertTrue(FileUtils.readFileToString(new File(karafHome, "etc/versions.properties"), "UTF-8").contains("version.zen = 1.1.9"));
@@ -495,6 +496,48 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
                 new File(karafHome, "etc/overrides.properties").exists());
 
         repository.closeRepository(fork, true);
+    }
+
+    @Test
+    public void installPPatchWithFeatures() throws IOException, GitAPIException {
+        freshKarafStandaloneDistro();
+        try (FileOutputStream fos = new FileOutputStream(new File(karafHome, "etc/org.apache.karaf.features.xml"))) {
+            FileUtils.copyFile(new File("src/test/resources/baselines/baseline6/etc/org.apache.karaf.features.xml"), fos);
+        }
+        preparePatchZip("src/test/resources/baselines/baseline6", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        validateInitialGitRepository();
+
+        // prepare some ZIP patches
+        preparePatchZip("src/test/resources/content/patch10", "target/karaf/patches/source/patch-10.zip", false);
+
+        PatchManagement service = (PatchManagement) pm;
+        PatchData patchData10 = service.fetchPatches(new File("target/karaf/patches/source/patch-10.zip").toURI().toURL()).get(0);
+        Patch patch10 = service.trackPatch(patchData10);
+
+        // before patching:
+        FeaturesProcessing fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        List<FeatureReplacements.OverrideFeature> features = fp.getFeatureReplacements().getReplacements();
+        assertThat(features.size(), equalTo(2));
+        assertThat(features.get(0).getFeature().getBundles().size(), equalTo(1));
+        assertThat(features.get(0).getFeature().getBundles().get(0).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils/0.9"));
+        assertThat(features.get(1).getFeature().getBundles().size(), equalTo(1));
+        assertThat(features.get(1).getFeature().getBundles().get(0).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils/0.9"));
+
+        String tx = service.beginInstallation(PatchKind.NON_ROLLUP);
+        service.install(tx, patch10, null);
+        service.commitInstallation(tx);
+
+        // override from P-Patch should go to etc/org.apache.karaf.features.xml - both bundle and feature overrides
+        fp = InternalUtils.loadFeatureProcessing(new File(karafHome, "etc/org.apache.karaf.features.xml"), null);
+        List<BundleReplacements.OverrideBundle> bundles = fp.getBundleReplacements().getOverrideBundles();
+        features = fp.getFeatureReplacements().getReplacements();
+        assertThat(bundles.size(), equalTo(2)); // unchanged
+        assertThat(features.size(), equalTo(2));
+        assertThat(features.get(0).getFeature().getBundles().size(), equalTo(2));
+        assertThat(features.get(0).getFeature().getBundles().get(0).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils/1.0"));
+        assertThat(features.get(0).getFeature().getBundles().get(1).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils-extra/1.1"));
+        assertThat(features.get(1).getFeature().getBundles().size(), equalTo(1));
+        assertThat(features.get(1).getFeature().getBundles().get(0).getLocation(), equalTo("mvn:org.jboss.fuse/fuse-utils/0.9"));
     }
 
     /**
@@ -617,7 +660,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         List<DiffEntry> patchDiff = repository.diff(fork, baselineCommit, patchCommit);
         int changes = SystemUtils.IS_OS_WINDOWS ? 7 : 8;
         assertThat("patch-4 should lead to " + changes + " changes", patchDiff.size(), equalTo(changes));
-        for (Iterator<DiffEntry> iterator = patchDiff.iterator(); iterator.hasNext(); ) {
+        for (Iterator<DiffEntry> iterator = patchDiff.iterator(); iterator.hasNext();) {
             DiffEntry de = iterator.next();
             if ("bin/start".equals(de.getNewPath()) && de.getChangeType() == DiffEntry.ChangeType.MODIFY) {
                 iterator.remove();

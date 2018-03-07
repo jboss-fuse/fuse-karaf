@@ -29,13 +29,9 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jboss.fuse.patch.management.EnvType;
-import org.jboss.fuse.patch.management.ManagedPatch;
-import org.jboss.fuse.patch.management.Utils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.eclipse.jgit.api.CheckoutCommand;
-import org.jboss.fuse.patch.management.io.NtfsAwareCheckoutCommand;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.CreateBranchCommand;
 import org.eclipse.jgit.api.Git;
@@ -58,6 +54,10 @@ import org.eclipse.jgit.transport.TagOpt;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
+import org.jboss.fuse.patch.management.EnvType;
+import org.jboss.fuse.patch.management.ManagedPatch;
+import org.jboss.fuse.patch.management.Utils;
+import org.jboss.fuse.patch.management.io.NtfsAwareCheckoutCommand;
 import org.osgi.framework.Version;
 
 /**

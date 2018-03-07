@@ -18,7 +18,6 @@ package org.jboss.fuse.patch.management.impl;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -33,7 +32,6 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -61,6 +59,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.karaf.features.LocationPattern;
 import org.apache.karaf.features.internal.model.processing.BundleReplacements;
+import org.apache.karaf.features.internal.model.processing.FeatureReplacements;
 import org.apache.karaf.features.internal.model.processing.FeaturesProcessing;
 import org.eclipse.jgit.api.CherryPickResult;
 import org.eclipse.jgit.api.CreateBranchCommand;
@@ -156,6 +155,13 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
 
     private static final Pattern FEATURES_FILE = Pattern.compile(".+(?:-features(?:-core)?|-karaf)$");
 
+    /* patch installation support */
+
+    protected Map<String, Git> pendingTransactions = new HashMap<>();
+    protected Map<String, PatchKind> pendingTransactionsTypes = new HashMap<>();
+
+    protected Map<String, BundleListener> pendingPatchesListeners = new HashMap<>();
+
     private final BundleContext bundleContext;
     private final BundleContext systemContext;
 
@@ -187,13 +193,6 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
 
     // synchronization of "ensuring" operation, where git repository status is verified and (possibly) changed
     private Lock ensuringLock = new ReentrantLock();
-
-    /* patch installation support */
-
-    protected Map<String, Git> pendingTransactions = new HashMap<>();
-    protected Map<String, PatchKind> pendingTransactionsTypes = new HashMap<>();
-
-    protected Map<String, BundleListener> pendingPatchesListeners = new HashMap<>();
 
     /**
      * <p>Creates patch management service</p>
@@ -309,6 +308,18 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         if (patchDirectory.exists() && patchDirectory.isDirectory()) {
             // not every descriptor downloaded may be a ZIP file, not every patch has content
             data.setPatchDirectory(patchDirectory);
+
+            File featureOverridesLocation = new File(patchDirectory, "org.apache.karaf.features.xml");
+            if (featureOverridesLocation.isFile()) {
+                // This patch file ships additional feature overrides - let's unmarshall them, so we have
+                // them available during all patch operations
+                try {
+                    FeaturesProcessing featureOverrides = InternalUtils.loadFeatureProcessing(featureOverridesLocation, null);
+                    data.setFeatureOverrides(featureOverrides.getFeatureReplacements().getReplacements());
+                } catch (Exception e) {
+                    Activator.log(LogService.LOG_WARNING, "Problem loading org.apache.karaf.features.xml from patch " + data.getId() + ": " + e.getMessage());
+                }
+            }
         }
         data.setPatchLocation(patchesDir);
 
@@ -359,6 +370,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                             break;
                         case DELETE:
                             patch.getManagedPatch().getFilesRemoved().add(oldPath);
+                            break;
+                        default:
                             break;
                     }
                 }
@@ -418,7 +431,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 try {
                     List<ZipArchiveEntry> otherResources = new LinkedList<>();
                     boolean skipRootDir = false;
-                    for (Enumeration<ZipArchiveEntry> e = zf.getEntries(); e.hasMoreElements(); ) {
+                    for (Enumeration<ZipArchiveEntry> e = zf.getEntries(); e.hasMoreElements();) {
                         ZipArchiveEntry entry = e.nextElement();
                         if (!skipRootDir && entry.isDirectory() && entry.getName().startsWith("jboss-fuse-karaf-")) {
                             skipRootDir = true;
@@ -593,7 +606,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     public static void unpack(File zipFile, File targetDirectory, int skipInitialDirectories) throws IOException {
 
         try (ZipFile zf = new ZipFile(zipFile)) {
-            for (Enumeration<ZipArchiveEntry> e = zf.getEntries(); e.hasMoreElements(); ) {
+            for (Enumeration<ZipArchiveEntry> e = zf.getEntries(); e.hasMoreElements();) {
                 ZipArchiveEntry entry = e.nextElement();
                 String name = entry.getName();
                 int skip = skipInitialDirectories;
@@ -853,7 +866,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                             }
                         } else {
                             // hmm, we actually can't patch standalone child container then...
-                            Activator.log2(LogService.LOG_WARNING, String.format("Can't install rollup patch \"%s\" in instance:create-based container - no information about child container patch", patch.getPatchData().getId()));
+                            Activator.log2(LogService.LOG_WARNING,
+                                    String.format("Can't install rollup patch \"%s\" in instance:create-based container - no information about child container patch", patch.getPatchData().getId()));
                             return;
                         }
                     }
@@ -1005,7 +1019,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
 
     /**
      * <p>Updates existing <code>etc/org.apache.karaf.features.xml</code> after installing single {@link PatchKind#NON_ROLLUP}
-     * patch.</p>
+     * patch. Both bundle and feature replacements are taken into account.</p>
      * @param workTree
      * @param patches
      */
@@ -1014,7 +1028,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         File versions = new File(workTree, "etc/" + featureProcessingVersions);
 
         // we need two different versions to detect whether the version is externalized in etc/versions.properties
-        FeaturesProcessing fp1, fp2;
+        FeaturesProcessing fp1;
+        FeaturesProcessing fp2;
         if (overrides.isFile()) {
             fp1 = InternalUtils.loadFeatureProcessing(overrides, versions);
             fp2 = InternalUtils.loadFeatureProcessing(overrides, null);
@@ -1107,8 +1122,26 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     existing.setReplacement(bundle);
                 }
             }
-        }
 
+            // feature overrides
+            File featureOverridesLocation = new File(patchData.getPatchDirectory(), "org.apache.karaf.features.xml");
+            if (featureOverridesLocation.isFile()) {
+                FeaturesProcessing featureOverrides = InternalUtils.loadFeatureProcessing(featureOverridesLocation, null);
+                Map<String, FeatureReplacements.OverrideFeature> patchedFeatures = new LinkedHashMap<>();
+                List<FeatureReplacements.OverrideFeature> mergedOverrides = new LinkedList<>();
+                featureOverrides.getFeatureReplacements().getReplacements()
+                        .forEach(of -> patchedFeatures.put(of.getFeature().getId(), of));
+                fp2.getFeatureReplacements().getReplacements().forEach(of -> {
+                    FeatureReplacements.OverrideFeature override = patchedFeatures.remove(of.getFeature().getId());
+                    mergedOverrides.add(override == null ? of : override);
+                });
+                // add remaining
+                mergedOverrides.addAll(patchedFeatures.values());
+
+                fp2.getFeatureReplacements().getReplacements().clear();
+                fp2.getFeatureReplacements().getReplacements().addAll(mergedOverrides);
+            }
+        }
 
         if (propertyChanged) {
             props.save();
@@ -1349,9 +1382,9 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                             // and remove karaf base from tracked patch result, or even remove the result itself
                             String patchId = entry.getKey().substring("patch-".length());
                             Patch patch = loadPatch(new PatchDetailsRequest(patchId));
-                            if (patch.getResult() != null) {
+                            if (patch != null && patch.getResult() != null) {
                                 boolean removed = false;
-                                for (Iterator<String> iterator = patch.getResult().getKarafBases().iterator(); iterator.hasNext(); ) {
+                                for (Iterator<String> iterator = patch.getResult().getKarafBases().iterator(); iterator.hasNext();) {
                                     String base = iterator.next();
                                     if (base.contains("|")) {
                                         String[] kb = base.split("\\s*\\|\\s*");
@@ -1492,7 +1525,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         if (result.getStatus() == CherryPickResult.CherryPickStatus.CONFLICTING) {
             Activator.log2(LogService.LOG_WARNING, "Problem with applying the change " + commit.getName() + ":");
 
-            String choose = null, backup = null;
+            String choose = null;
+            String backup = null;
             switch (kind) {
                 case ROLLUP:
                     choose = !preferNew ? "change from patch" : "custom change";
@@ -1508,7 +1542,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         }
     }
 
-    private void handleConflict(File patchDirectory, Git fork, boolean preferNew, String cpPrefix, boolean performBackup, String choose, String backup, boolean rollback) throws GitAPIException, IOException {
+    private void handleConflict(File patchDirectory, Git fork, boolean preferNew, String cpPrefix,
+                                boolean performBackup, String choose, String backup, boolean rollback) throws GitAPIException, IOException {
         Map<String, IndexDiff.StageState> conflicts = fork.status().call().getConflictingStageState();
         DirCache cache = fork.getRepository().readDirCache();
         // path -> [oursObjectId, baseObjectId, theirsObjectId]
@@ -1559,7 +1594,9 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 // But because we have custom resolver, we use "preferNew" flag to check which STAGE points to patch'
                 // version and we select this patch' version of conflicting file as less important file inside
                 // custom resolver
-                File base = null, first = null, second = null;
+                File base = null;
+                File first = null;
+                File second = null;
                 try {
                     ObjectLoader loader = null;
                     if (entry.getValue()[1] != null) {
@@ -1725,7 +1762,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
          *  - org.apache.karaf.version;version="4.2.0.redhat-xxx", \
          *  - org.apache.karaf.version;version="4.2.0.redhat-700-SNAPSHOT",\
          *  - org.apache.karaf.jaas.boot.principal;uses:=javax.security.auth;version="4.2.0.redhat-700-SNAPSHOT",\
-         *  - org.apache.karaf.jaas.boot;uses:="javax.security.auth,javax.security.auth.callback,javax.security.auth.login,javax.security.auth.spi,org.osgi.framework";version="4.2.0.redhat-700-SNAPSHOT",\
+         *  - org.apache.karaf.jaas.boot;uses:="javax.security.auth,javax.security.auth.callback,...,javax.security.auth.spi,org.osgi.framework";version="4.2.0.redhat-700-SNAPSHOT",\
          *  these are the versions exported from lib/karaf.jar and this may be changed by non-rollup patch too...
          *
          * etc/startup.properties:
@@ -1767,7 +1804,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             } else if (file.startsWith("lib/boot/org.apache.karaf.jaas.boot-") && file.endsWith(".jar")) {
                 // update:
                 //  - org.apache.karaf.jaas.boot.principal;uses:=javax.security.auth;version="4.2.0.redhat-700-SNAPSHOT",\
-                //  - org.apache.karaf.jaas.boot;uses:="javax.security.auth,javax.security.auth.callback,javax.security.auth.login,javax.security.auth.spi,org.osgi.framework";version="4.2.0.redhat-700-SNAPSHOT",\
+                //  - org.apache.karaf.jaas.boot;uses:="javax.security.auth,...,javax.security.auth.login,javax.security.auth.spi,org.osgi.framework";version="4.2.0.redhat-700-SNAPSHOT",\
                 String newVersion = getBundleVersion(new File(fork.getRepository().getWorkTree(), file));
                 updateKarafPackageVersion(configProperties, newVersion,
                         "org.apache.karaf.jaas.boot",
@@ -2081,8 +2118,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     location = " in " + fork.getRepository().getConfig().getString("remote", "origin", "url");
                 }
                 fork.getRepository().getConfig().getString("remote", "origin", "url");
-                Activator.log(LogService.LOG_INFO, "Tag \"" + tagName + "\" is not available" + location +
-                        ", alignment will be performed later.");
+                Activator.log(LogService.LOG_INFO, "Tag \"" + tagName + "\" is not available" + location
+                        + ", alignment will be performed later.");
                 return false;
             }
         }
@@ -2283,7 +2320,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     private void unzipKarafInstanceJar(File artifact, File targetDirectory) throws IOException {
         String prefix = "org/apache/karaf/instance/resources/";
         try (ZipFile zf = new ZipFile(artifact)) {
-            for (Enumeration<ZipArchiveEntry> e = zf.getEntries(); e.hasMoreElements(); ) {
+            for (Enumeration<ZipArchiveEntry> e = zf.getEntries(); e.hasMoreElements();) {
                 ZipArchiveEntry entry = e.nextElement();
                 String name = entry.getName();
                 if (!name.startsWith(prefix)) {

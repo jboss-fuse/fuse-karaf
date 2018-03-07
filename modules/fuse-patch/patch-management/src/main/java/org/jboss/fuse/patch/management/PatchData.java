@@ -27,6 +27,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.karaf.features.internal.model.processing.FeatureReplacements;
+
 /**
  * <p>Information about patch ZIP content - static part of patch information before it is added and installed.</p>
  * <p>The information from the descriptor is immutable - it isn't altered by patch management after retrieving the
@@ -76,6 +78,10 @@ public class PatchData {
     private Map<String, String> versionRanges;
 
     private List<String> requirements;
+
+    // if patch ships /org.apache.karaf.features.xml file (valid only for P-Patches), it means we can
+    // override features
+    private List<FeatureReplacements.OverrideFeature> featureOverrides = new LinkedList<>();
 
     // TODO: ↓
     private Map<String, Long> fileSizes = new HashMap<>();
@@ -289,6 +295,20 @@ public class PatchData {
      */
     public void setPatchLocation(File patchLocation) {
         this.patchLocation = patchLocation;
+    }
+
+    public List<String> getFeatureOverrides() {
+        List<String> overrides = new LinkedList<>();
+        if (featureOverrides != null) {
+            featureOverrides
+                    .forEach(of -> overrides.add(of.getFeature().getId()));
+        }
+        return overrides;
+    }
+
+    // internal method - FeatureReplacements.OverrideFeature is not exported from the bundle
+    public void setFeatureOverrides(List<FeatureReplacements.OverrideFeature> featureOverrides) {
+        this.featureOverrides = featureOverrides;
     }
 
 }

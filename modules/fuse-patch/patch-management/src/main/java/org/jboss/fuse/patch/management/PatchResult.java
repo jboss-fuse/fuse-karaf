@@ -29,9 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.jboss.fuse.patch.management.impl.Activator;
 import org.apache.commons.io.FileUtils;
 import org.apache.http.ParseException;
+import org.jboss.fuse.patch.management.impl.Activator;
 import org.osgi.service.log.LogService;
 
 /**
@@ -60,6 +60,8 @@ public class PatchResult {
     private static final String FEATURE_NEW_REPOSITORY = "new-repository";
     private static final String FEATURE_OLD_REPOSITORY = "old-repository";
 
+    private static final String FEATURE_OVERRIDES = "feature-override";
+
     private static final String VERSIONS = "version";
 
     private static final String KARAF_BASE = "base";
@@ -72,10 +74,11 @@ public class PatchResult {
     private long date;
 
     // whether this result is not ready yet - there are some tasks left to be done after restart
-    private Pending pending = null;
+    private Pending pending;
 
     private List<BundleUpdate> bundleUpdates = new LinkedList<>();
     private List<FeatureUpdate> featureUpdates = new LinkedList<>();
+    private List<String> featureOverrides = new LinkedList<>();
     private List<String> versions = new LinkedList<>();
     private List<String> karafBases = new LinkedList<>();
 
@@ -88,12 +91,12 @@ public class PatchResult {
     }
 
     public PatchResult(PatchData patchData, boolean simulation, long date,
-                       List<BundleUpdate> bundleUpdates, List<FeatureUpdate> featureUpdates) {
-        this(patchData, simulation, date, bundleUpdates, featureUpdates, null);
+                       List<BundleUpdate> bundleUpdates, List<FeatureUpdate> featureUpdates, List<String> featureOverrides) {
+        this(patchData, simulation, date, bundleUpdates, featureUpdates, featureOverrides, null);
     }
 
     public PatchResult(PatchData patchData, boolean simulation, long date,
-                       List<BundleUpdate> bundleUpdates, List<FeatureUpdate> featureUpdates,
+                       List<BundleUpdate> bundleUpdates, List<FeatureUpdate> featureUpdates, List<String> featureOverrides,
                        PatchResult parent) {
         this.patchData = patchData;
         this.simulation = simulation;
@@ -103,6 +106,9 @@ public class PatchResult {
         }
         if (featureUpdates != null) {
             this.featureUpdates.addAll(featureUpdates);
+        }
+        if (featureOverrides != null) {
+            this.featureOverrides.addAll(featureOverrides);
         }
         this.parent = parent;
     }
@@ -166,7 +172,8 @@ public class PatchResult {
             String nl = props.getProperty(prefix + NEW_LOCATION);
             String ov = props.getProperty(prefix + OLD_VERSION);
             String ol = props.getProperty(prefix + OLD_LOCATION);
-            int state = -1, startLevel = -1;
+            int state = -1;
+            int startLevel = -1;
             String _state = props.getProperty(prefix + STATE);
             if (_state != null && !"".equals(_state)) {
                 try {
@@ -199,6 +206,13 @@ public class PatchResult {
             fupdates.add(new FeatureUpdate(n, or, ov, nr, nv));
         }
 
+        List<String> foverrides = new ArrayList<>();
+        count = Integer.parseInt(props.getProperty(FEATURE_OVERRIDES + "." + COUNT, "0"));
+        for (int i = 0; i < count; i++) {
+            String n = props.getProperty(FEATURE_OVERRIDES + "." + Integer.toString(i));
+            foverrides.add(n);
+        }
+
         List<String> versions = new ArrayList<>();
         count = Integer.parseInt(props.getProperty(VERSIONS + "." + COUNT, "0"));
         for (int i = 0; i < count; i++) {
@@ -211,7 +225,7 @@ public class PatchResult {
             karafBases.add(props.getProperty(KARAF_BASE + "." + Integer.toString(i)));
         }
 
-        final PatchResult result = new PatchResult(patchData, false, date, bupdates, fupdates);
+        final PatchResult result = new PatchResult(patchData, false, date, bupdates, fupdates, foverrides);
         result.getVersions().addAll(versions);
         result.getKarafBases().addAll(karafBases);
 
@@ -319,6 +333,13 @@ public class PatchResult {
             i++;
         }
 
+        pw.write(FEATURE_OVERRIDES + "." + COUNT + " = " + Integer.toString(getFeatureOverrides().size()) + "\n");
+        i = 0;
+        for (String override : getFeatureOverrides()) {
+            pw.write(FEATURE_OVERRIDES + "." + Integer.toString(i) + " = " + override + "\n");
+            i++;
+        }
+
         pw.write(VERSIONS + "." + COUNT + " = " + Integer.toString(getVersions().size()) + "\n");
         i = 0;
         for (String version : getVersions()) {
@@ -372,6 +393,10 @@ public class PatchResult {
 
     public List<FeatureUpdate> getFeatureUpdates() {
         return featureUpdates;
+    }
+
+    public List<String> getFeatureOverrides() {
+        return featureOverrides;
     }
 
     public PatchData getPatchData() {

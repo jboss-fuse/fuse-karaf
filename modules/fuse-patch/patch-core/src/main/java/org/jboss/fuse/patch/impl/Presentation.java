@@ -16,6 +16,7 @@
 package org.jboss.fuse.patch.impl;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
@@ -176,20 +177,25 @@ public abstract class Presentation {
             }
         }
         toRemove.removeAll(toKeep);
-        System.out.printf("========== Repositories to remove (%d):%n", toRemove.size());
-        for (String repo : toRemove) {
-            System.out.println(" - " + repo);
+        if (toRemove.size() > 0) {
+            System.out.printf("========== Repositories to remove (%d):%n", toRemove.size());
+            for (String repo : toRemove) {
+                System.out.println(" - " + repo);
+            }
         }
-        System.out.printf("========== Repositories to add (%d):%n", toAdd.size());
-        for (String repo : toAdd) {
-            System.out.println(" - " + repo);
+        if (toAdd.size() > 0) {
+            System.out.printf("========== Repositories to add (%d):%n", toAdd.size());
+            for (String repo : toAdd) {
+                System.out.println(" - " + repo);
+            }
         }
-        System.out.printf("========== Repositories to keep (%d):%n", toKeep.size());
-        for (String repo : toKeep) {
-            System.out.println(" - " + repo);
+        if (toKeep.size() > 0) {
+            System.out.printf("========== Repositories to keep (%d):%n", toKeep.size());
+            for (String repo : toKeep) {
+                System.out.println(" - " + repo);
+            }
         }
 
-        System.out.printf("========== Features to (%s):%n", install ? "update" : "downgrade");
         int l1 = "[name]".length();
         int l2 = "[version]".length();
         int l3 = install ? "[new version]".length() : "[previous version]".length();
@@ -222,14 +228,34 @@ public abstract class Presentation {
             }
             map.put(fu.getName(), fu);
         }
-        System.out.printf("%-" + l1 + "s   %-" + l2 + "s   %-" + l3 + "s%n",
-                "[name]", "[version]", install ? "[new version]" : "[previous version]");
-        for (FeatureUpdate fu : map.values()) {
+        if (map.size() > 0) {
+            System.out.printf("========== Features to %s (%d):%n", install ? "update" : "downgrade", map.size());
             System.out.printf("%-" + l1 + "s   %-" + l2 + "s   %-" + l3 + "s%n",
-                    fu.getName(),
-                    install ? fu.getPreviousVersion() : fu.getNewVersion() == null ? "<reinstall>" : fu.getNewVersion(),
-                    install ? fu.getNewVersion() == null ? "<reinstall>" : fu.getNewVersion() : fu.getPreviousVersion()
-            );
+                    "[name]", "[version]", install ? "[new version]" : "[previous version]");
+            for (FeatureUpdate fu : map.values()) {
+                System.out.printf("%-" + l1 + "s   %-" + l2 + "s   %-" + l3 + "s%n",
+                        fu.getName(),
+                        install ? fu.getPreviousVersion() : fu.getNewVersion() == null ? "<reinstall>" : fu.getNewVersion(),
+                        install ? fu.getNewVersion() == null ? "<reinstall>" : fu.getNewVersion() : fu.getPreviousVersion()
+                );
+            }
+        }
+
+        System.out.flush();
+    }
+
+    /**
+     * Prints information about feature overrides included in {@link org.jboss.fuse.patch.management.PatchKind#NON_ROLLUP P-Patch}
+     * @param overridesForFeatureKeys
+     * @param install
+     */
+    public static void displayFeatureOverrides(List<String> overridesForFeatureKeys, boolean install) {
+        Set<String> features = new TreeSet<>(overridesForFeatureKeys);
+        if (features.size() > 0) {
+            System.out.printf("========== Features to override (%s) (%d):%n", install ? "installation" : "rollback", features.size());
+            System.out.println("[name/version]");
+
+            features.forEach(System.out::println);
         }
 
         System.out.flush();

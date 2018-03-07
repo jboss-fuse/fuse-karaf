@@ -17,6 +17,7 @@ package org.jboss.fuse.quickstarts.cxf.rest.secure;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;

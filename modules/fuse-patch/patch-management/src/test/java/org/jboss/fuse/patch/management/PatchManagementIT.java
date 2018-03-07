@@ -19,9 +19,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.jboss.fuse.patch.management.impl.GitPatchManagementServiceImpl;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.jboss.fuse.patch.management.impl.GitPatchManagementServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 

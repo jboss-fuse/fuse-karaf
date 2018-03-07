@@ -19,6 +19,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.PrintStream;
+
 import javax.inject.Inject;
 
 import org.apache.karaf.shell.api.console.Session;
