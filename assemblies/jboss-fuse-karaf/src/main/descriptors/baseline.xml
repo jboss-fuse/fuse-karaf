@@ -30,7 +30,7 @@
         <!-- Take files from the assembled, but not archived custom Karaf distro -->
         <fileSet>
             <directory>target/assembly</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory></outputDirectory>
             <includes>
                 <include>etc/**</include>
                 <include>lib/**</include>
@@ -43,7 +43,7 @@
         <!-- Copy over bin/* scripts separately to get the correct file mode -->
         <fileSet>
             <directory>target/assembly</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory></outputDirectory>
             <includes>
                 <include>bin/*.bat</include>
                 <include>bin/contrib/*</include>
@@ -52,7 +52,7 @@
         </fileSet>
         <fileSet>
             <directory>target/assembly</directory>
-            <outputDirectory>/</outputDirectory>
+            <outputDirectory></outputDirectory>
             <includes>
                 <include>bin/*</include>
             </includes>

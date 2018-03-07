@@ -97,6 +97,36 @@
                 replacement="mvn:org.jgroups/jgroups/${version.org.jgroups3}" mode="maven" />
         <bundle originalUri="mvn:org.yaml/snakeyaml/[1,2)"
                 replacement="mvn:org.yaml/snakeyaml/${version.org.yaml.snakeyaml}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-buffer/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-buffer/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-codec/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-codec/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-codec-http/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-codec-http/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-common/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-common/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-handler/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-handler/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-resolver/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-resolver/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-transport/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-transport/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-transport-native-epoll/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-transport-native-epoll/${version.io.netty}" mode="maven" />
+        <!-- difference between camel-amqp and artemis-amqp - please verify -->
+        <bundle originalUri="wrap:mvn:org.apache.qpid/qpid-jms-client/0.22.*"
+                replacement="mvn:org.apache.qpid/qpid-jms-client/${version.org.apache.qpid.qpid-jms-client}" mode="maven" />
+        <bundle originalUri="wrap:mvn:org.apache.qpid/proton-j/0.*"
+                replacement="mvn:org.apache.qpid/proton-j/${version.org.apache.qpid.proton-j}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.qpid/qpid-jms-client/[0.22,1)"
+                replacement="mvn:org.apache.qpid/qpid-jms-client/${version.org.apache.qpid.qpid-jms-client}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.qpid/proton-j/[0.20,1)"
+                replacement="mvn:org.apache.qpid/proton-j/${version.org.apache.qpid.proton-j}" mode="maven" />
+        <bundle originalUri="mvn:javax.mail/mail/[1.4,1.5)"
+                replacement="mvn:com.sun.mail/javax.mail/${version.com.sun.mail}" mode="maven" />
+        <!-- temporary change -->
+        <bundle originalUri="wrap:mvn:org.jboss.xnio/xnio-api/3.*"
+                replacement="mvn:org.jboss.xnio/xnio-api/${version.org.jboss.xnio}" mode="maven" />
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
