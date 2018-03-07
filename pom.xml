@@ -22,7 +22,7 @@
 
     <groupId>org.jboss.fuse</groupId>
     <artifactId>jboss-fuse-parent</artifactId>
-    <version>7.0.0.redhat-SNAPSHOT</version>
+    <version>7.0.0.fuse-000159</version>
     <packaging>pom</packaging>
 
     <name>JBoss Fuse :: Parent</name>
@@ -75,12 +75,12 @@
         -->
 
         <!-- versions of "subprojects" of JBoss Fuse -->
-        <version.io.hawt>2.0.0.fuse-000117</version.io.hawt>
-        <version.org.apache.activemq.artemis>2.4.0.amq-710004-redhat-1</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.21.0.fuse-000051</version.org.apache.camel>
-        <version.org.apache.cxf>3.1.11.fuse-000195</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-000188</version.org.apache.karaf>
-        <version.org.fusesource.camel-sap>7.0.0.fuse-000183</version.org.fusesource.camel-sap>
+        <version.io.hawt>2.0.0.fuse-000138</version.io.hawt>
+        <version.org.apache.activemq.artemis>2.4.0</version.org.apache.activemq.artemis>
+        <version.org.apache.camel>2.21.0.fuse-000052</version.org.apache.camel>
+        <version.org.apache.cxf>3.1.11.fuse-000196</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.0.fuse-000189</version.org.apache.karaf>
+        <version.org.fusesource.camel-sap>7.0.0.fuse-000184</version.org.fusesource.camel-sap>
         <version.org.apache-extras.camel-extra>2.21.0.fuse-000028</version.org.apache-extras.camel-extra>
 
         <!-- versions of normal dependencies of JBoss Fuse -->
