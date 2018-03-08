@@ -113,6 +113,10 @@
                 replacement="mvn:io.netty/netty-transport/${version.io.netty}" mode="maven" />
         <bundle originalUri="mvn:io.netty/netty-transport-native-epoll/[4.1,4.2)"
                 replacement="mvn:io.netty/netty-transport-native-epoll/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-transport-native-kqueue/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-transport-native-kqueue/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-transport-native-unix-common/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-transport-native-unix-common/${version.io.netty}" mode="maven" />
         <!-- difference between camel-amqp and artemis-amqp - please verify -->
         <bundle originalUri="wrap:mvn:org.apache.qpid/qpid-jms-client/0.22.*"
                 replacement="mvn:org.apache.qpid/qpid-jms-client/${version.org.apache.qpid.qpid-jms-client}" mode="maven" />
