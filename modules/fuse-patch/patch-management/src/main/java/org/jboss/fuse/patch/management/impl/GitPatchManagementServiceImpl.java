@@ -315,7 +315,12 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 // them available during all patch operations
                 try {
                     FeaturesProcessing featureOverrides = InternalUtils.loadFeatureProcessing(featureOverridesLocation, null);
-                    data.setFeatureOverrides(featureOverrides.getFeatureReplacements().getReplacements());
+                    List<String> overrides = new LinkedList<>();
+                    if (featureOverrides.getFeatureReplacements().getReplacements() != null) {
+                        featureOverrides.getFeatureReplacements().getReplacements()
+                                .forEach(of -> overrides.add(of.getFeature().getId()));
+                    }
+                    data.setFeatureOverrides(overrides);
                 } catch (Exception e) {
                     Activator.log(LogService.LOG_WARNING, "Problem loading org.apache.karaf.features.xml from patch " + data.getId() + ": " + e.getMessage());
                 }
