@@ -33,6 +33,8 @@
                 replacement="mvn:com.google.guava/guava/${version.com.google.guava16}" mode="maven" />
         <bundle originalUri="mvn:com.google.guava/guava/[19,20)"
                 replacement="mvn:com.google.guava/guava/${version.com.google.guava19}" mode="maven" />
+        <bundle originalUri="mvn:com.google.guava/guava/[20,21)"
+                replacement="mvn:com.google.guava/guava/${version.com.google.guava20}" mode="maven" />
         <bundle originalUri="mvn:com.ning/async-http-client/[1.9,2)"
                 replacement="mvn:com.ning/async-http-client/${version.com.ning.async-http-client}" mode="maven" />
         <bundle originalUri="mvn:io.dropwizard.metrics/metrics-core/[3.1,3.2)"
