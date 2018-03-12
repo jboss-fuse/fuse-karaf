@@ -694,6 +694,14 @@ public class PatchServiceImpl implements PatchService {
                         // persist results of all installed patches
                         for (Patch patch : patches) {
                             PatchResult result = results.get(patch.getPatchData().getId());
+
+                            System.out.printf("Summary of patch %s:%n", patch.getPatchData().getId());
+                            PatchReport report = patch.getResult().getReport();
+                            System.out.printf(" - Bundles updated: %d%n", report.getUpdatedBundles());
+                            System.out.printf(" - Features updated: %d%n", report.getUpdatedFeatures());
+                            System.out.printf(" - Features overriden: %d%n", report.getOverridenFeatures());
+                            System.out.flush();
+
                             result.store();
                         }
                     } catch (Exception e) {
