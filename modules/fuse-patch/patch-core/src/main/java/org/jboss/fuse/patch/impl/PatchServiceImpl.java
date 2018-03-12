@@ -655,6 +655,7 @@ public class PatchServiceImpl implements PatchService {
                         cleanCache.createNewFile();
                         Thread.currentThread().setContextClassLoader(bundleContext.getBundle(0L).adapt(BundleWiring.class).getClassLoader());
                         bundleContext.getBundle(0L).stop();
+                        // stop/shutdown occurs on another thread
                     }
                 } else {
                     System.out.println("Simulation only - no files and runtime data will be modified.");
@@ -1270,6 +1271,8 @@ public class PatchServiceImpl implements PatchService {
                         boolean handlesFullRestart = Boolean.getBoolean("karaf.restart.jvm.supported");
                         if (handlesFullRestart) {
                             System.out.println("Rollup patch " + patch.getPatchData().getId() + " rolled back. Restarting Karaf..");
+                            // KARAF-5179 - we need both properties set to true
+                            System.setProperty("karaf.restart", "true");
                             System.setProperty("karaf.restart.jvm", "true");
                         } else {
                             System.out.println("Rollup patch " + patch.getPatchData().getId() + " rolled back. Shutting down Karaf, please restart...");
@@ -1282,6 +1285,7 @@ public class PatchServiceImpl implements PatchService {
                     File karafData = new File(bundleContext.getProperty("karaf.data"));
                     File cleanCache = new File(karafData, "clean_cache");
                     cleanCache.createNewFile();
+                    Thread.currentThread().setContextClassLoader(bundleContext.getBundle(0L).adapt(BundleWiring.class).getClassLoader());
                     bundleContext.getBundle(0L).stop();
                     // stop/shutdown occurs on another thread
                     return;

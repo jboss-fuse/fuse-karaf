@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
@@ -34,6 +35,7 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
@@ -162,8 +164,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
 
     protected Map<String, BundleListener> pendingPatchesListeners = new HashMap<>();
 
-    private final BundleContext bundleContext;
-    private final BundleContext systemContext;
+    private BundleContext bundleContext;
+    private BundleContext systemContext;
 
     private EnvType env = EnvType.UNKNOWN;
 
@@ -193,6 +195,10 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
 
     // synchronization of "ensuring" operation, where git repository status is verified and (possibly) changed
     private Lock ensuringLock = new ReentrantLock();
+
+    public GitPatchManagementServiceImpl() throws IOException {
+
+    }
 
     /**
      * <p>Creates patch management service</p>
@@ -571,7 +577,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 patchData.getBundles().add(name);
             } else if ("xml".equals(extension) && FEATURES_FILE.matcher(fileName).matches()) {
                 patchData.getFeatureFiles().add(name);
-            } else {
+            } else if (name != null) {
                 // must be a config, a POM (irrelevant) or other maven artifact (like ZIP)
                 patchData.getOtherArtifacts().add(name);
             }
@@ -1358,6 +1364,27 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                         }
 
                         gitPatchRepository.prepareCommit(fork, userChange.getFullMessage()).call();
+                    }
+
+                    // rollback should not lead to restoration of old patch management features
+                    String productVersion = determineVersion(fork.getRepository().getWorkTree());
+                    File featuresCfg = new File(fork.getRepository().getWorkTree(), "etc/org.apache.karaf.features.cfg");
+                    if (featuresCfg.isFile()) {
+                        if (setCurrentPatchManagementVersion(featuresCfg, productVersion)) {
+                            // artificial updates to etc/startup.properties
+                            String pmNew = String.format("mvn:org.jboss.fuse.modules.patch/patch-management/%s", bundleContext.getBundle().getVersion().toString());
+                            String pmOld = String.format("mvn:org.jboss.fuse.modules.patch/patch-management/%s", productVersion);
+                            BundleUpdate update = new BundleUpdate(null, null, pmNew, null, pmOld);
+                            List<BundleUpdate> patchManagementUpdates = Collections.singletonList(update);
+                            updateReferences(fork, "etc/startup.properties", "", Utils.collectLocationUpdates(patchManagementUpdates));
+
+                            fork.add()
+                                    .addFilepattern("etc/org.apache.karaf.features.cfg")
+                                    .addFilepattern("etc/startup.properties")
+                                    .call();
+                            gitPatchRepository.prepareCommit(fork, String.format(MARKER_BASELINE_REPLACE_PATCH_FEATURE_PATTERN,
+                                    productVersion, bundleContext.getBundle().getVersion().toString())).call();
+                        }
                     }
 
                     gitPatchRepository.push(fork);
@@ -2395,28 +2422,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         // baseline
         File featuresCfg = new File(git.getRepository().getWorkTree(), "etc/org.apache.karaf.features.cfg");
         if (featuresCfg.isFile()) {
-            boolean needsRewriting = false;
-            List<String> lines = FileUtils.readLines(featuresCfg, "UTF-8");
-            List<String> newVersion = new LinkedList<>();
-            for (String line : lines) {
-                if (!line.contains("mvn:org.jboss.fuse.modules.patch/patch-features/") || productVersion == null) {
-                    newVersion.add(line);
-                } else {
-                    // use version of current bundle, so rolling back to that baseline won't bring us
-                    // to old patch management
-                    String newLine = line.replace(productVersion, bundleContext.getBundle().getVersion().toString());
-                    newVersion.add(newLine);
-                    if (!line.equals(newLine)) {
-                        needsRewriting = true;
-                    }
-                }
-            }
-            if (needsRewriting) {
-                StringBuilder sb = new StringBuilder();
-                for (String newLine : newVersion) {
-                    sb.append(newLine).append("\n");
-                }
-                FileUtils.write(featuresCfg, sb.toString(), "UTF-8");
+            if (setCurrentPatchManagementVersion(featuresCfg, productVersion)) {
                 git.add()
                         .addFilepattern("etc/org.apache.karaf.features.cfg")
                         .call();
@@ -2437,6 +2443,47 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         resetOverrides(git, git.getRepository().getWorkTree(), Collections.emptyList());
         return gitPatchRepository.prepareCommit(git,
                 String.format(MARKER_BASELINE_RESET_OVERRIDES_PATTERN, version)).call();
+    }
+
+    /**
+     * Ensures that {@code etc/org.apache.karaf.features.cfg} and {@code etc/startup.properties} reference
+     * current version of patch management bundles and features
+     */
+    public boolean setCurrentPatchManagementVersion(File featuresCfg, String oldVersion) throws IOException {
+        boolean needsRewriting = false;
+        List<String> lines = FileUtils.readLines(featuresCfg, "UTF-8");
+        List<String> newVersion = new LinkedList<>();
+        // in first iteration we'll record references to old patch management features and repositories
+        // in Fuse 6, featuresBoot contained only feature names. In Fuse 7 versions are used too
+        String prefix = "mvn:org.jboss.fuse.modules.patch/patch-features/";
+        for (String line : lines) {
+            if (oldVersion == null || !line.contains(prefix)) {
+                newVersion.add(line);
+            } else {
+                // use version of current bundle, so rolling back to that baseline won't bring us
+                // to old patch management
+                String newLine = line.replace(oldVersion, bundleContext.getBundle().getVersion().toString());
+                newVersion.add(newLine);
+                if (!line.equals(newLine)) {
+                    needsRewriting = true;
+                }
+            }
+        }
+        if (needsRewriting) {
+            StringBuilder sb = new StringBuilder();
+            for (String newLine : newVersion) {
+                if (newLine.contains("patch/" + oldVersion)) {
+                    newLine = newLine.replace("patch/" + oldVersion, "patch/" + bundleContext.getBundle().getVersion().toString());
+                }
+                if (newLine.contains("patch-management/" + oldVersion)) {
+                    newLine = newLine.replace("patch-management/" + oldVersion, "patch-management/" + bundleContext.getBundle().getVersion().toString());
+                }
+                sb.append(newLine).append("\n");
+            }
+            FileUtils.write(featuresCfg, sb.toString(), "UTF-8");
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -2955,7 +3002,9 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             if (patch.getPatchData().getPatchDirectory() != null) {
                 FileUtils.deleteDirectory(patch.getPatchData().getPatchDirectory());
             }
+            FileUtils.deleteQuietly(new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".datafiles"));
             FileUtils.deleteQuietly(new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch"));
+            FileUtils.deleteQuietly(new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch.result.html"));
 
             mainRepository.gc().call();
         } catch (IOException | GitAPIException e) {

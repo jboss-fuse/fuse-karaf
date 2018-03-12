@@ -230,7 +230,7 @@ public class PatchResult {
         result.getKarafBases().addAll(karafBases);
 
         // load child patch results
-        if (processChildren) {
+        if (processChildren && patchData.getPatchLocation() != null) {
             patchData.getPatchLocation().listFiles(pathname -> {
                 if (!pathname.isFile()) {
                     return false;
