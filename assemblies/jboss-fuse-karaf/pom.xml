@@ -222,6 +222,8 @@
                         <feature>patch-management</feature>
                     </startupFeatures>
                     <bootFeatures>
+                        <!-- wrap: protocol -->
+                        <feature>wrap</feature>
                         <!-- feature:* commands -->
                         <feature>feature</feature>
                         <!-- bundle:* commands -->
@@ -293,7 +295,6 @@
                         <feature>patch</feature>
                     </bootFeatures>
                     <installedFeatures>
-                        <feature>wrap</feature>
                         <feature>wrapper</feature>
 
                         <!-- Include some widely used features to be ready to install offline -->
