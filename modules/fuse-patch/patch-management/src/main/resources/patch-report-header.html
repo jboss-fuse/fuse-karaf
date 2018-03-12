@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <style>
+    body { margin: 0; padding: 0 }
+
+    table.compare { table-layout: fixed; width: 100% }
+    div.header { font-size: 1.3em; font-family: monospace }
+    .side { padding: 5px; vertical-align: top }
+    .side.right { border-left: 1px solid #ccc }
+    .side .content { margin: 3px; padding: 3px; font-family: monospace; overflow-x: scroll }
+    .side .content.empty { overflow-x: auto }
+    div.edit { white-space: pre; margin: 0 0 0 5px; padding: 0 0 0 5px }
+    .content>.edit { margin: 0 }
+    .edit.unchanged { border-left: 4px solid #ccc }
+    .edit.added { border-left: 4px solid #7f7 }
+    .edit.removed { border-left: 4px solid #f77 }
+    .edit.changed { border-left: 4px solid #77f }
+    .side>div.header { font-weight: bold; font-size: 1.3em; text-align: center }
+    .expand {
+      display: inline-block; margin-right: 1em; border: 1px solid #ccc; width: 1.2em; height: 1.2em; padding-bottom: 0.2em;
+      border-radius: 3px; text-align: center; cursor: pointer; background-color: #eee
+    }
+    .table { display: none }
+
+    .menu { background-color: black; padding: 1em; position: fixed; top: 0; width: 100%; box-sizing: border-box; border-top: 3px solid #C82E2E }
+    .menu div.info { color: white; font-weight: bold; display: inline-block; margin-right: 3em; font-size: 1.3em }
+    .menu div.bt {
+      display: inline-block; border: 1px solid white; border-radius: 3px; padding: 2px 5px; background-color: #ddd;
+      cursor: pointer; margin-right: 0.3em
+    }
+    .file { margin: 5px }
+
+    .file.original .edit.added { display: none }
+    .file.original .edit { border-left-width: 0; margin-left: 0; padding-left: 0 }
+    .file.changed .edit.removed { display: none }
+    .file.changed .edit { border-left-width: 0; margin-left: 0; padding-left: 0 }
+    h1.header {
+      border-left: 3px solid #C82E2E; border-bottom: 1px solid black; font-size: 1.5em;
+      padding-left: 0.5em; margin: 1em 5px 0.5em
+    }
+    div.summary { margin: 5px }
+    table.summary { border-width: 0; table-layout: fixed; border-collapse: collapse }
+    table.summary td { border: 1px solid #ccc; margin: 0; padding: 0.2em 0.5em }
+    table.summary td.f { font-weight: bold }
+  </style>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      var buttons = document.querySelectorAll("div.expand");
+      for (var i = 0; i < buttons.length; ++i) {
+        buttons.item(i).addEventListener("click", function (ev) {
+          var table = ev.target.parentNode.parentNode.querySelector("div.table");
+          if (table.style.display === 'none') {
+            table.style.display = 'block';
+            ev.target.innerHTML = '–';
+          } else {
+            table.style.display = 'none';
+            ev.target.innerHTML = '+';
+          }
+        });
+      }
+      document.getElementById("bt-original").addEventListener("click", function () {
+        var files = document.querySelectorAll("div.file");
+        for (var i = 0; i < files.length; ++i) {
+          files.item(i).setAttribute("class", "file original");
+        }
+      });
+      document.getElementById("bt-changed").addEventListener("click", function () {
+        var files = document.querySelectorAll("div.file");
+        for (var i = 0; i < files.length; ++i) {
+          files.item(i).setAttribute("class", "file changed");
+        }
+      });
+      document.getElementById("bt-diff").addEventListener("click", function () {
+        var files = document.querySelectorAll("div.file");
+        for (var i = 0; i < files.length; ++i) {
+          files.item(i).setAttribute("class", "file");
+        }
+      });
+    });
+  </script>
+</head>
+<body>
+<div class="menu">
+  <div class="info">Patch summary: @PATCH_ID@</div>
+  <div class="bt" id="bt-original">See original version</div>
+  <div class="bt" id="bt-changed">See changed version</div>
+  <div class="bt" id="bt-diff">See diff</div>
+</div>
+<div class="menu" style="visibility: hidden; position: static">
+  <div>&nbsp;</div>
+</div>
+<h1 class="header">
+  <div>Summary</div>
+</h1>
+<div class="summary">

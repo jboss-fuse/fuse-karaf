@@ -17,11 +17,15 @@ package org.jboss.fuse.patch.management.conflicts;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api.CherryPickResult;
 import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.MergeCommand;
@@ -36,12 +40,19 @@ import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.AbbreviatedObjectId;
 import org.eclipse.jgit.lib.IndexDiff;
+import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.ObjectReader;
+import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.treewalk.CanonicalTreeParser;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import org.jboss.fuse.patch.management.Patch;
+import org.jboss.fuse.patch.management.PatchData;
+import org.jboss.fuse.patch.management.PatchKind;
+import org.jboss.fuse.patch.management.PatchResult;
 import org.jboss.fuse.patch.management.PatchTestSupport;
 import org.jboss.fuse.patch.management.impl.GitPatchManagementService;
+import org.jboss.fuse.patch.management.impl.GitPatchManagementServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.osgi.framework.startlevel.BundleStartLevel;
@@ -86,6 +97,83 @@ public class GitConflictResolutionIT extends PatchTestSupport {
         Map<String, IndexDiff.StageState> conflicts = git.status().call().getConflictingStageState();
         assertThat(conflicts.size(), equalTo(1));
         assertThat(conflicts.get("etc/org.ops4j.pax.logging.cfg"), equalTo(IndexDiff.StageState.BOTH_MODIFIED));
+    }
+
+    @Test
+    public void cherryPickConflict() throws Exception {
+        prepareChanges2();
+        RevWalk rw = new RevWalk(git.getRepository());
+
+        git.checkout().setName("custom").setCreateBranch(false).call();
+        ObjectId commit = git.getRepository().resolve("patched");
+        CherryPickResult result = git.cherryPick().include(commit)
+                .call();
+
+        RevCommit cMaster = rw.parseCommit(git.getRepository().resolve("master"));
+        RevCommit cCustom = rw.parseCommit(git.getRepository().resolve("custom"));
+        RevCommit cPatched = rw.parseCommit(git.getRepository().resolve("patched"));
+
+        assertThat(result.getStatus(), equalTo(CherryPickResult.CherryPickStatus.CONFLICTING));
+
+        Map<String, IndexDiff.StageState> conflicts = git.status().call().getConflictingStageState();
+        assertThat(conflicts.size(), equalTo(2));
+        assertThat(conflicts.get("etc/org.ops4j.pax.logging.cfg"), equalTo(IndexDiff.StageState.BOTH_MODIFIED));
+        assertThat(conflicts.get("etc/file.properties"), equalTo(IndexDiff.StageState.BOTH_MODIFIED));
+
+        new GitPatchManagementServiceImpl().handleCherryPickConflict(null, git, result,
+                git.getRepository().parseCommit(commit), true, PatchKind.NON_ROLLUP, "x", false, false);
+        RevCommit cMerged = git.commit().setMessage("resolved").call();
+
+        // we have 4 commits (7349224 is a custom change that's conflicting with "patched" branch):
+        /*
+           * 92a9ad8 - (HEAD -> custom) resolved
+           * 7349224 - custom etc/org.ops4j.pax.logging.cfg
+           | * 5777547 - (patched) patched etc/org.ops4j.pax.logging.cfg
+           |/
+           * 306f328 - (master) original etc/org.ops4j.pax.logging.cfg
+         */
+        FileWriter writer = new FileWriter("target/report.html");
+        PatchData pd = new PatchData("my-patch-id2");
+        PatchResult patchResult = PatchResult.load(pd, getClass().getResourceAsStream("/conflicts/example1/jboss-fuse-karaf-7.0.0.fuse-000160.patch.result"));
+        DiffUtils.generateDiffReport(new Patch(pd, null), patchResult, git, new HashSet<>(),
+                cMaster, cCustom, cPatched, cMerged, writer);
+        writer.close();
+    }
+
+    @Test
+    public void reportForXml() throws Exception {
+        prepareChanges3();
+        RevWalk rw = new RevWalk(git.getRepository());
+
+        git.checkout().setName("custom").setCreateBranch(false).call();
+        ObjectId commit = git.getRepository().resolve("patched");
+        CherryPickResult result = git.cherryPick().include(commit)
+                .call();
+
+        RevCommit cMaster = rw.parseCommit(git.getRepository().resolve("master"));
+        RevCommit cCustom = rw.parseCommit(git.getRepository().resolve("custom"));
+        RevCommit cPatched = rw.parseCommit(git.getRepository().resolve("patched"));
+
+        new GitPatchManagementServiceImpl().handleCherryPickConflict(null, git, result,
+                git.getRepository().parseCommit(commit), true, PatchKind.NON_ROLLUP, "x", false, false);
+        RevCommit cMerged = git.commit().setMessage("resolved").call();
+
+        // we have 4 commits (7349224 is a custom change that's conflicting with "patched" branch):
+        /*
+           * 92a9ad8 - (HEAD -> custom) resolved
+           * 7349224 - custom etc/org.ops4j.pax.logging.cfg
+           | * 5777547 - (patched) patched etc/org.ops4j.pax.logging.cfg
+           |/
+           * 306f328 - (master) original etc/org.ops4j.pax.logging.cfg
+         */
+        FileWriter writer = new FileWriter("target/report2.html");
+        PatchData pd = new PatchData("my-patch-id2");
+        PatchResult patchResult = PatchResult.load(pd, getClass().getResourceAsStream("/conflicts/example1/jboss-fuse-karaf-7.0.0.fuse-000160.patch.result"));
+        Set<String> conflicts = new HashSet<>();
+        conflicts.add("etc/maven-settings.xml");
+        DiffUtils.generateDiffReport(new Patch(pd, null), patchResult, git, conflicts,
+                cMaster, cCustom, cPatched, cMerged, writer);
+        writer.close();
     }
 
     @Test
@@ -188,6 +276,54 @@ public class GitConflictResolutionIT extends PatchTestSupport {
                 new File(git.getRepository().getWorkTree(), "etc/org.ops4j.pax.logging.cfg"));
         git.add().addFilepattern(".").call();
         commit("custom etc/org.ops4j.pax.logging.cfg").call();
+    }
+
+    private void prepareChanges2() throws IOException, GitAPIException {
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example1/org.ops4j.pax.logging.base.cfg"),
+                new File(git.getRepository().getWorkTree(), "etc/org.ops4j.pax.logging.cfg"));
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example2/file.base.properties"),
+                new File(git.getRepository().getWorkTree(), "etc/file.properties"));
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example3/org.apache.karaf.features.after-create.cfg"),
+                new File(git.getRepository().getWorkTree(), "etc/org.apache.karaf.features.cfg"));
+        git.add().addFilepattern(".").call();
+        commit("original").call();
+
+        git.checkout().setCreateBranch(true).setStartPoint("master").setName("custom").call();
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example1/org.ops4j.pax.logging.custom.cfg"),
+                new File(git.getRepository().getWorkTree(), "etc/org.ops4j.pax.logging.cfg"));
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example2/file.custom.properties"),
+                new File(git.getRepository().getWorkTree(), "etc/file.properties"));
+        git.add().addFilepattern(".").call();
+        commit("custom change").call();
+
+        git.checkout().setCreateBranch(true).setStartPoint("master").setName("patched").call();
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example1/org.ops4j.pax.logging.patched.cfg"),
+                new File(git.getRepository().getWorkTree(), "etc/org.ops4j.pax.logging.cfg"));
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example2/file.patched.properties"),
+                new File(git.getRepository().getWorkTree(), "etc/file.properties"));
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example3/org.apache.karaf.features.patched.cfg"),
+                new File(git.getRepository().getWorkTree(), "etc/org.apache.karaf.features.cfg"));
+        git.add().addFilepattern(".").call();
+        commit("patched change").call();
+    }
+
+    private void prepareChanges3() throws IOException, GitAPIException {
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example3/maven-settings.base.xml"),
+                new File(git.getRepository().getWorkTree(), "etc/maven-settings.xml"));
+        git.add().addFilepattern(".").call();
+        commit("original").call();
+
+        git.checkout().setCreateBranch(true).setStartPoint("master").setName("custom").call();
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example3/maven-settings.custom.xml"),
+                new File(git.getRepository().getWorkTree(), "etc/maven-settings.xml"));
+        git.add().addFilepattern(".").call();
+        commit("custom change").call();
+
+        git.checkout().setCreateBranch(true).setStartPoint("master").setName("patched").call();
+        FileUtils.copyFile(new File("src/test/resources/conflicts/example3/maven-settings.patched.xml"),
+                new File(git.getRepository().getWorkTree(), "etc/maven-settings.xml"));
+        git.add().addFilepattern(".").call();
+        commit("patched change").call();
     }
 
     private CommitCommand commit(String message) {
