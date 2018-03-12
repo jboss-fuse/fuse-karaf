@@ -100,6 +100,7 @@ import org.jboss.fuse.patch.management.PatchResult;
 import org.jboss.fuse.patch.management.Pending;
 import org.jboss.fuse.patch.management.Utils;
 import org.jboss.fuse.patch.management.conflicts.ConflictResolver;
+import org.jboss.fuse.patch.management.conflicts.DiffUtils;
 import org.jboss.fuse.patch.management.conflicts.PropertiesFileResolver;
 import org.jboss.fuse.patch.management.conflicts.Resolver;
 import org.jboss.fuse.patch.management.conflicts.ResolverEx;
@@ -115,6 +116,7 @@ import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 import org.osgi.service.log.LogService;
 
+import static org.eclipse.jgit.lib.IndexDiff.StageState.BOTH_MODIFIED;
 import static org.jboss.fuse.patch.management.Utils.*;
 
 /**
@@ -820,6 +822,14 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         transactionIsValid(transaction, patch);
 
         Git fork = pendingTransactions.get(transaction);
+
+        // for report preparation purposes
+        RevWalk walk = new RevWalk(fork.getRepository());
+        RevCommit reportCommitBase;
+        RevCommit reportCommitOurs;
+        RevCommit reportCommitPatch;
+        RevCommit reportCommitResolved;
+
         try {
             switch (pendingTransactionsTypes.get(transaction)) {
                 case ROLLUP: {
@@ -831,10 +841,15 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     // Rollup patches do their own update to etc/startup.properties
                     // We're operating on patch branch, HEAD of the patch branch points to the baseline
                     ObjectId since = fork.getRepository().resolve("HEAD^{commit}");
+                    reportCommitBase = walk.parseCommit(since);
                     // we'll pick all user changes between baseline and main patch branch
                     // we'll consider all real user changes and some P-patch changes if HF-patches install newer
                     // bundles than currently installed R-patch (very rare situation)
                     ObjectId to = fork.getRepository().resolve(gitPatchRepository.getMainBranchName() + "^{commit}");
+
+                    // Custom changes: since..to
+                    reportCommitOurs = walk.parseCommit(to);
+
                     Iterable<RevCommit> mainChanges = fork.log().addRange(since, to).call();
                     List<RevCommit> userChanges = new LinkedList<>();
                     // gather lines of HF patches - patches that have *only* bundle updates
@@ -912,6 +927,9 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     RevCommit c = gitPatchRepository.prepareCommit(fork,
                             String.format(MARKER_R_PATCH_RESET_OVERRIDES_PATTERN, patch.getPatchData().getId())).call();
 
+                    // R-patch changes: since..c
+                    reportCommitPatch = walk.parseCommit(c);
+
                     if (env == EnvType.STANDALONE) {
                         // tag the new rollup patch as new baseline
                         String newFuseVersion = determineVersion(fork.getRepository().getWorkTree());
@@ -927,6 +945,11 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     ListIterator<RevCommit> it = userChanges.listIterator(userChanges.size());
                     int prefixSize = Integer.toString(userChanges.size()).length();
                     int count = 1;
+
+                    // when there are not user changes, the "resolved" point will be just after cherryPicking patch
+                    // commit. If there are user changes - these will be latest
+                    reportCommitResolved = c;
+                    Set<String> conflicts = new LinkedHashSet<>();
 
                     while (it.hasPrevious()) {
                         RevCommit userChange = it.previous();
@@ -945,8 +968,11 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                         }
 
                         // if there's conflict here, prefer patch version (which is "ours" (first) in this case)
-                        handleCherryPickConflict(patch.getPatchData().getPatchDirectory(), fork, result, userChange,
+                        Set<String> conflicting = handleCherryPickConflict(patch.getPatchData().getPatchDirectory(), fork, result, userChange,
                                 false, PatchKind.ROLLUP, prefix, true, false);
+                        if (conflicting != null) {
+                            conflicts.addAll(conflicting);
+                        }
 
                         // always commit even empty changes - to be able to restore user changes when rolling back
                         // rollup patch.
@@ -955,7 +981,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                         // commit id (from patches/patch-id.backup/number-commit directory)
                         String newMessage = userChange.getFullMessage() + "\n\n";
                         newMessage += prefix;
-                        gitPatchRepository.prepareCommit(fork, newMessage).call();
+                        reportCommitResolved = gitPatchRepository.prepareCommit(fork, newMessage).call();
 
                         // we may have unadded changes - when file mode is changed
                         fork.reset().setMode(ResetCommand.ResetType.HARD).call();
@@ -964,7 +990,6 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     // finally - let's get rid of all the tags related to non-rollup patches installed between
                     // previous baseline and previous HEAD, because installing rollup patch makes all previous P
                     // patches obsolete
-                    RevWalk walk = new RevWalk(fork.getRepository());
                     RevCommit c1 = walk.parseCommit(since);
                     RevCommit c2 = walk.parseCommit(to);
                     Map<String, RevTag> tags = gitPatchRepository.findTagsBetween(fork, c1, c2);
@@ -978,6 +1003,17 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                                     .call();
                         }
                     }
+
+                    // we have 4 commits and we can now prepare the report
+                    File reportFile = new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch.result.html");
+                    try (FileWriter writer = new FileWriter(reportFile)) {
+                        DiffUtils.generateDiffReport(patch, patch.getResult(), fork, conflicts,
+                                reportCommitBase, reportCommitOurs, reportCommitPatch, reportCommitResolved,
+                                writer);
+                    } catch (Exception e) {
+                        Activator.log(LogService.LOG_WARNING, "Problem generatic patch report for patch " + patch.getPatchData().getId() + ": " + e.getMessage());
+                    }
+
                     break;
                 }
                 case NON_ROLLUP: {
@@ -1549,8 +1585,9 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
      * @param cpPrefix prefix for a cherry-pick to have nice backup directory names.
      * @param performBackup if <code>true</code>, we backup rejected version (should be false during rollback of patches)
      * @param rollback is the resolution performed during patch rollback?
+     * @return set of paths that had conflicts during cherry-pick
      */
-    protected void handleCherryPickConflict(File patchDirectory, Git fork, CherryPickResult result, RevCommit commit,
+    public Set<String> handleCherryPickConflict(File patchDirectory, Git fork, CherryPickResult result, RevCommit commit,
                                             boolean preferNew, PatchKind kind, String cpPrefix, boolean performBackup,
                                             boolean rollback)
             throws GitAPIException, IOException {
@@ -1570,16 +1607,19 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     break;
             }
 
-            handleConflict(patchDirectory, fork, preferNew, cpPrefix, performBackup, choose, backup, rollback);
+            return handleConflict(patchDirectory, fork, preferNew, cpPrefix, performBackup, choose, backup, rollback);
         }
+
+        return null;
     }
 
-    private void handleConflict(File patchDirectory, Git fork, boolean preferNew, String cpPrefix,
+    private Set<String> handleConflict(File patchDirectory, Git fork, boolean preferNew, String cpPrefix,
                                 boolean performBackup, String choose, String backup, boolean rollback) throws GitAPIException, IOException {
         Map<String, IndexDiff.StageState> conflicts = fork.status().call().getConflictingStageState();
         DirCache cache = fork.getRepository().readDirCache();
         // path -> [oursObjectId, baseObjectId, theirsObjectId]
         Map<String, ObjectId[]> threeWayMerge = new HashMap<>();
+        Set<String> conflictingFiles = new LinkedHashSet<>();
 
         // collect conflicts info
         for (int i = 0; i < cache.getEntryCount(); i++) {
@@ -1676,6 +1716,9 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     }
 
                     if (resolved != null) {
+                        // we have resolution done by custom resolver
+                        conflictingFiles.add(entry.getKey());
+
                         FileUtils.write(new File(fork.getRepository().getWorkTree(), entry.getKey()), resolved, "UTF-8");
                         fork.add().addFilepattern(entry.getKey()).call();
                     }
@@ -1694,6 +1737,11 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             if (resolved == null) {
                 // automatic conflict resolution
                 String message = String.format(" - %s (%s): Choosing %s", entry.getKey(), conflicts.get(entry.getKey()), choose);
+
+                if (conflicts.get(entry.getKey()) == BOTH_MODIFIED) {
+                    // from the report point of view, we care about real conflicts
+                    conflictingFiles.add(entry.getKey());
+                }
 
                 ObjectLoader loader = null;
                 ObjectLoader loaderForBackup = null;
@@ -1765,6 +1813,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 }
             }
         }
+
+        return conflictingFiles;
     }
 
     /**

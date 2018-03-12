@@ -23,6 +23,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -85,6 +86,7 @@ public class PatchResult {
     // transient
     private Map<String, PatchResult> childPatches = new HashMap<>();
     private PatchResult parent;
+    private PatchReport report;
 
     public PatchResult(PatchData patchData) {
         this.patchData = patchData;
@@ -417,6 +419,29 @@ public class PatchResult {
 
     public List<String> getKarafBases() {
         return karafBases;
+    }
+
+    public PatchReport getReport() {
+        if (report == null) {
+            report = new PatchReport();
+
+            long bundleUpdates = this.bundleUpdates.stream()
+                    .filter(bu -> bu.getNewLocation() != null && !bu.getNewLocation().equals(bu.getPreviousLocation()))
+                    .count();
+            long featureUpdates = this.featureUpdates.stream()
+                    .filter(fu -> fu.getNewVersion() != null && !fu.getNewVersion().equals(fu.getPreviousVersion()))
+                    .count();
+            long featureOverrides = this.featureOverrides.size();
+
+            report.setId(getPatchData().getId());
+            report.setRollup(patchData.isRollupPatch());
+            report.setTimestamp(new Date(this.date));
+            report.setUpdatedBundles(bundleUpdates);
+            report.setUpdatedFeatures(featureUpdates);
+            report.setOverridenFeatures(featureOverrides);
+        }
+
+        return report;
     }
 
 }

@@ -67,6 +67,7 @@ import org.jboss.fuse.patch.management.PatchDetailsRequest;
 import org.jboss.fuse.patch.management.PatchException;
 import org.jboss.fuse.patch.management.PatchKind;
 import org.jboss.fuse.patch.management.PatchManagement;
+import org.jboss.fuse.patch.management.PatchReport;
 import org.jboss.fuse.patch.management.PatchResult;
 import org.jboss.fuse.patch.management.Pending;
 import org.jboss.fuse.patch.management.Utils;
@@ -92,7 +93,6 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.jboss.fuse.patch.management.Utils.mvnurlToArtifact;
 import static org.jboss.fuse.patch.management.Utils.stripSymbolicName;
 
 @Component(immediate = true, service = PatchService.class)
@@ -355,7 +355,15 @@ public class PatchServiceImpl implements PatchService {
                         patch.getPatchData().isRollupPatch() ? "Rollup " : "",
                         patchData.getId(),
                         what == Pending.ROLLUP_INSTALLATION ? "installed" : "rolled back");
-                System.out.flush();
+                if (what == Pending.ROLLUP_INSTALLATION) {
+                    System.out.printf("Summary of patch %s:%n", patch.getPatchData().getId());
+                    PatchReport report = patch.getResult().getReport();
+                    System.out.printf(" - Bundles updated: %d%n", report.getUpdatedBundles());
+                    System.out.printf(" - Features updated: %d%n", report.getUpdatedFeatures());
+                    System.out.printf(" - Features overriden: %d%n", report.getOverridenFeatures());
+                    System.out.printf("Detailed report: %s%n", new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch.result.html").getCanonicalPath());
+                    System.out.flush();
+                }
                 if (what == Pending.ROLLUP_ROLLBACK) {
                     List<String> bases = patch.getResult().getKarafBases();
                     bases.removeIf(s -> s.startsWith(System.getProperty("karaf.name")));
@@ -530,15 +538,6 @@ public class PatchServiceImpl implements PatchService {
                         bundleUpdateLocations, history, updatesForBundleKeys, kind, coreBundles,
                         featureUpdatesInThisPatch);
 
-                // each patch may change files, we're not updating the main files yet - it'll be done when
-                // install transaction is committed
-                patchManagement.install(transaction, patch, bundleUpdatesInThisPatch);
-
-                // each patch may ship a migrator
-                if (!simulate) {
-                    installMigratorBundle(patch);
-                }
-
                 // prepare patch result before doing runtime changes
                 PatchResult result = null;
                 if (patch.getResult() != null) {
@@ -557,6 +556,11 @@ public class PatchServiceImpl implements PatchService {
                 result.getKarafBases().add(String.format("%s | %s",
                         System.getProperty("karaf.name"), System.getProperty("karaf.base")));
                 results.put(patch.getPatchData().getId(), result);
+                patch.setResult(result);
+
+                // each patch may change files, we're not updating the main files yet - it'll be done when
+                // install transaction is committed
+                patchManagement.install(transaction, patch, bundleUpdatesInThisPatch);
             }
 
             // We don't have to update bundles that are uninstalled anyway when uninstalling features we
@@ -606,7 +610,6 @@ public class PatchServiceImpl implements PatchService {
                     if (patches.size() == 1) {
                         Patch patch = patches.iterator().next();
                         PatchResult result = results.get(patch.getPatchData().getId());
-                        patch.setResult(result);
 
                         // backup all datafiles of all bundles - we we'll backup configadmin configurations in
                         // single shot
@@ -691,7 +694,6 @@ public class PatchServiceImpl implements PatchService {
                         // persist results of all installed patches
                         for (Patch patch : patches) {
                             PatchResult result = results.get(patch.getPatchData().getId());
-                            patch.setResult(result);
                             result.store();
                         }
                     } catch (Exception e) {
@@ -1182,23 +1184,6 @@ public class PatchServiceImpl implements PatchService {
         }
 
         return overridesInThisPatch;
-    }
-
-    /**
-     * If patch contains migrator bundle, install it by dropping to <code>deploy</code> directory.
-     * @param patch
-     * @throws IOException
-     */
-    private void installMigratorBundle(Patch patch) throws IOException {
-        if (patch.getPatchData().getMigratorBundle() != null) {
-            Artifact artifact = mvnurlToArtifact(patch.getPatchData().getMigratorBundle(), true);
-            if (artifact != null) {
-                // Copy it to the deploy dir
-                File src = new File(repository, artifact.getPath());
-                File target = new File(Utils.getDeployDir(karafHome), artifact.getArtifactId() + ".jar");
-                FileUtils.copyFile(src, target);
-            }
-        }
     }
 
     static class MultiMap<K, V> {
