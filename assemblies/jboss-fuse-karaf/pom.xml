@@ -320,6 +320,7 @@
                         <feature>camel-jpa</feature>
                     </installedFeatures>
                     <blacklistedFeatures>
+                        <feature>httplite</feature>
                         <feature>jetty/[8,9)</feature>
                         <feature>pax-*jetty*</feature>
                         <feature>camel-jetty8</feature>
