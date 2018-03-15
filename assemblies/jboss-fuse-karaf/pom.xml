@@ -338,6 +338,7 @@
                         <feature>camel-jboss6</feature>
                         <feature>camel-rcode</feature>
                         <feature>camel-spring-neo4j</feature>
+                        <feature>camel-spring-security</feature>
                         <feature>camel-virtualbox</feature>
                         <feature>camel-vtdxml</feature>
                         <feature>camel-wmq</feature>
