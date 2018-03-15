@@ -328,6 +328,7 @@
                         <feature>camel-ignite</feature>
                         <feature>camel-ironmq</feature>
                         <feature>camel-chronicle</feature>
+                        <feature>camel-consul</feature>
                         <feature>camel-openstack</feature>
                         <feature>camel-db4o</feature>
                         <feature>camel-esper</feature>
