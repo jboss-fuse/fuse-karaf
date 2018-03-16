@@ -134,7 +134,7 @@ public class GitConflictResolutionIT extends PatchTestSupport {
          */
         FileWriter writer = new FileWriter("target/report.html");
         PatchData pd = new PatchData("my-patch-id2");
-        PatchResult patchResult = PatchResult.load(pd, getClass().getResourceAsStream("/conflicts/example1/jboss-fuse-karaf-7.0.0.fuse-000160.patch.result"));
+        PatchResult patchResult = PatchResult.load(pd, getClass().getResourceAsStream("/conflicts/example1/fuse-karaf-7.0.0.fuse-000160.patch.result"));
         DiffUtils.generateDiffReport(new Patch(pd, null), patchResult, git, new HashSet<>(),
                 cMaster, cCustom, cPatched, cMerged, writer);
         writer.close();
@@ -168,7 +168,7 @@ public class GitConflictResolutionIT extends PatchTestSupport {
          */
         FileWriter writer = new FileWriter("target/report2.html");
         PatchData pd = new PatchData("my-patch-id2");
-        PatchResult patchResult = PatchResult.load(pd, getClass().getResourceAsStream("/conflicts/example1/jboss-fuse-karaf-7.0.0.fuse-000160.patch.result"));
+        PatchResult patchResult = PatchResult.load(pd, getClass().getResourceAsStream("/conflicts/example1/fuse-karaf-7.0.0.fuse-000160.patch.result"));
         Set<String> conflicts = new HashSet<>();
         conflicts.add("etc/maven-settings.xml");
         DiffUtils.generateDiffReport(new Patch(pd, null), patchResult, git, conflicts,

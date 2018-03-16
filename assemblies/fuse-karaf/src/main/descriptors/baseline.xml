@@ -24,7 +24,7 @@
         <format>zip</format>
     </formats>
 
-    <baseDirectory>jboss-fuse-karaf-baseline-${version}</baseDirectory>
+    <baseDirectory>fuse-karaf-baseline-${version}</baseDirectory>
 
     <fileSets>
         <!-- Take files from the assembled, but not archived custom Karaf distro -->

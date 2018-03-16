@@ -96,13 +96,13 @@
 
         <dependency>
             <groupId>org.jboss.fuse</groupId>
-            <artifactId>jboss-fuse-karaf-minimal</artifactId>
+            <artifactId>fuse-karaf-minimal</artifactId>
             <scope>test</scope>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.jboss.fuse</groupId>
-            <artifactId>jboss-fuse-karaf</artifactId>
+            <artifactId>fuse-karaf</artifactId>
             <scope>test</scope>
             <type>zip</type>
         </dependency>

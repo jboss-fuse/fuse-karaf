@@ -342,7 +342,7 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
-                <artifactId>jboss-fuse-karaf-minimal</artifactId>
+                <artifactId>fuse-karaf-minimal</artifactId>
                 <version>${project.version}</version>
                 <type>zip</type>
                 <exclusions>
@@ -358,7 +358,7 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
-                <artifactId>jboss-fuse-karaf</artifactId>
+                <artifactId>fuse-karaf</artifactId>
                 <version>${project.version}</version>
                 <type>zip</type>
                 <exclusions>

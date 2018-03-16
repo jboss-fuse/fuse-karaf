@@ -117,11 +117,11 @@ public class FuseKarafTestSupport {
     }
 
     public Option[] configurationFull() {
-        return baseConfiguration(fuseDistroUrl("jboss-fuse-karaf"));
+        return baseConfiguration(fuseDistroUrl("fuse-karaf"));
     }
 
     public Option[] configurationMinimal() {
-        return baseConfiguration(fuseDistroUrl("jboss-fuse-karaf-minimal"));
+        return baseConfiguration(fuseDistroUrl("fuse-karaf-minimal"));
     }
 
     /**

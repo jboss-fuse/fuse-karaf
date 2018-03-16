@@ -446,7 +446,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     boolean skipRootDir = false;
                     for (Enumeration<ZipArchiveEntry> e = zf.getEntries(); e.hasMoreElements();) {
                         ZipArchiveEntry entry = e.nextElement();
-                        if (!skipRootDir && entry.isDirectory() && entry.getName().startsWith("jboss-fuse-karaf-")) {
+                        if (!skipRootDir && entry.isDirectory() && entry.getName().startsWith("fuse-karaf-")) {
                             skipRootDir = true;
                         }
                         if (entry.isDirectory() || entry.isUnixSymlink()) {
@@ -2293,14 +2293,14 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         File baselineDistribution = null;
 
         // the preferred location of baseline for standalone Red Hat Fuse
-        String location = systemRepo.getCanonicalPath() + "/org/jboss/fuse/jboss-fuse-karaf/%1$s/jboss-fuse-karaf-%1$s-baseline.zip";
+        String location = systemRepo.getCanonicalPath() + "/org/jboss/fuse/fuse-karaf/%1$s/fuse-karaf-%1$s-baseline.zip";
         location = String.format(location, currentFuseVersion);
         if (new File(location).isFile()) {
             baselineDistribution = new File(location);
             Activator.log(LogService.LOG_INFO, "Found baseline distribution: " + baselineDistribution.getCanonicalPath());
         } else {
             // fallback/test location
-            location = patchesDir.getCanonicalPath() + "/jboss-fuse-karaf-%1$s-baseline.zip";
+            location = patchesDir.getCanonicalPath() + "/fuse-karaf-%1$s-baseline.zip";
             location = String.format(location, currentFuseVersion);
             if (new File(location).isFile()) {
                 baselineDistribution = new File(location);
