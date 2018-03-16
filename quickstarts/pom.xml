@@ -25,13 +25,13 @@
     <version>7.0.0.redhat-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Quickstarts :: quickstarts</name>
+    <name>Red Hat Fuse :: Quickstarts :: quickstarts</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <!-- versions of "subprojects" of JBoss Fuse -->
+        <!-- versions of "subprojects" of Red Hat Fuse -->
         <version.org.apache.cxf>3.1.11.fuse-000198</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.0.fuse-000190</version.org.apache.karaf>
 

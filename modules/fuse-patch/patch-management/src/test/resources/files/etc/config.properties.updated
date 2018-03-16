@@ -415,9 +415,9 @@ karaf.delay.console = true
 #
 #karaf.systemd.enabled=true
 
-########## JBoss Fuse properties ##########
+########## Red Hat Fuse properties ##########
 
-karaf.startup.message = JBoss Fuse starting up. Press Enter to open the shell now...
+karaf.startup.message = Red Hat Fuse starting up. Press Enter to open the shell now...
 karaf.bootstrap.log = ${karaf.data}/log/fuse.log
 
 #

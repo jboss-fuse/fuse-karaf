@@ -31,7 +31,7 @@
     <artifactId>fuse-itests-paxexam</artifactId>
     <packaging>jar</packaging>
 
-    <name>JBoss Fuse :: Fuse Integration Tests :: PAX-Exam tests</name>
+    <name>Red Hat Fuse :: Fuse Integration Tests :: PAX-Exam tests</name>
 
     <dependencies>
 

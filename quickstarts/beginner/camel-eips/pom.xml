@@ -29,7 +29,7 @@
     <artifactId>beginner-camel-eips</artifactId>
     <packaging>bundle</packaging>
 
-    <name>JBoss Fuse :: Quickstarts :: camel-eips</name>
+    <name>Red Hat Fuse :: Quickstarts :: camel-eips</name>
     <description>Camel using mutliple EIPs into a single solution</description>
 
     <dependencies>

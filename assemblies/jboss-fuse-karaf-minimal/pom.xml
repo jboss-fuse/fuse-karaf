@@ -30,7 +30,7 @@
     <artifactId>jboss-fuse-karaf-minimal</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Assemblies :: JBoss Fuse - Karaf minimal distro</name>
+    <name>Red Hat Fuse :: Assemblies :: Red Hat Fuse - Karaf minimal distro</name>
 
     <dependencies>
         <!--

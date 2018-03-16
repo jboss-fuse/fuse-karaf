@@ -29,7 +29,7 @@
     <artifactId>cxf</artifactId>
     <packaging>pom</packaging>
     
-    <name>JBoss Fuse :: Quickstarts :: cxf</name>
+    <name>Red Hat Fuse :: Quickstarts :: cxf</name>
 
     <modules>
         <module>camel-cxf-code-first</module>

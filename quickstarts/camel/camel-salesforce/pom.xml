@@ -29,14 +29,14 @@
     <artifactId>camel-salesforce</artifactId>
     <packaging>bundle</packaging>
 
-    <name>JBoss Fuse :: Quickstarts :: camel-salesforce</name>
+    <name>Red Hat Fuse :: Quickstarts :: camel-salesforce</name>
     <description>Camel Olingo2 OData Example</description>
     <url>https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-salesforce</url>
 
     <dependencies>
         <!--
          For this example, we will be using the OSGi Blueprint XML syntax for Apache Camel.
-         The camel-blueprint bundle is installed in JBoss Fuse by default,
+         The camel-blueprint bundle is installed in Red Hat Fuse by default,
          so we are setting the dependency's scope to 'provided'.
        -->
         <dependency>

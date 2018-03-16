@@ -31,7 +31,7 @@
     <artifactId>fuse-itests-common</artifactId>
     <packaging>bundle</packaging>
 
-    <name>JBoss Fuse :: Fuse Integration Tests :: Common</name>
+    <name>Red Hat Fuse :: Fuse Integration Tests :: Common</name>
 
     <dependencies>
 

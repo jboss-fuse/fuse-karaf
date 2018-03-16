@@ -29,7 +29,7 @@
     <artifactId>beginner-camel-errorhandler</artifactId>
     <packaging>bundle</packaging>
     
-    <name>JBoss Fuse :: Quickstarts :: camel-errorhandler</name>
+    <name>Red Hat Fuse :: Quickstarts :: camel-errorhandler</name>
     <description>Error handling with Camel</description>
 
     <dependencies>

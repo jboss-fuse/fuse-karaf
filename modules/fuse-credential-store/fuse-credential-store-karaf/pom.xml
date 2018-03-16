@@ -31,7 +31,7 @@
     <artifactId>fuse-credential-store-karaf</artifactId>
     <packaging>bundle</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules :: Fuse Credential Store :: Karaf support</name>
+    <name>Red Hat Fuse :: Fuse Modules :: Fuse Credential Store :: Karaf support</name>
     <description>OSGI Bundle containing support for WildFly Elytron Credential Store for Apache Karaf</description>
 
     <dependencies>

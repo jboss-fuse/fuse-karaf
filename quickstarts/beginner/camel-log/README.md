@@ -20,7 +20,7 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 
 Build and Deploy the Quickstart
@@ -28,8 +28,8 @@ Build and Deploy the Quickstart
 
 1. Change your working directory to `camel-log` directory.
 2. Run `mvn clean install` to build the quickstart.
-3. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-4. In the JBoss Fuse console, enter the following command:
+3. Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+4. In the Red Hat Fuse console, enter the following command:
 
         bundle:install -s mvn:org.jboss.fuse.quickstarts/beginner-camel-log/${project.version}
 5. Fuse should give you an id when the bundle is deployed

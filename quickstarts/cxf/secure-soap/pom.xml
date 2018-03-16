@@ -29,7 +29,7 @@
     <artifactId>cxf-secure-soap</artifactId>
     <packaging>bundle</packaging>
     
-    <name>JBoss Fuse :: Quickstarts :: secure-soap</name>
+    <name>Red Hat Fuse :: Quickstarts :: secure-soap</name>
     <description>Secure SOAP example using JAXWS with WS-Security</description>
 
     <properties>

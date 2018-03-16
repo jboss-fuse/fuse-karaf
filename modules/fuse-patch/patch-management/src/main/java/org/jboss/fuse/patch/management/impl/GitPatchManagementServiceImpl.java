@@ -2292,7 +2292,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         File systemRepo = getSystemRepository(karafHome, systemContext);
         File baselineDistribution = null;
 
-        // the preferred location of baseline for standalone JBoss Fuse
+        // the preferred location of baseline for standalone Red Hat Fuse
         String location = systemRepo.getCanonicalPath() + "/org/jboss/fuse/jboss-fuse-karaf/%1$s/jboss-fuse-karaf-%1$s-baseline.zip";
         location = String.format(location, currentFuseVersion);
         if (new File(location).isFile()) {

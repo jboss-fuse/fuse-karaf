@@ -31,7 +31,7 @@
     <artifactId>fuse-patch</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch</name>
+    <name>Red Hat Fuse :: Fuse Modules :: Fuse Patch</name>
     <description>Parent POM for standalone Fuse Patch support</description>
 
     <modules>

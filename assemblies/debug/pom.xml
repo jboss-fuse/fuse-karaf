@@ -31,7 +31,7 @@
     <artifactId>debug</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Assemblies :: Debugging support</name>
+    <name>Red Hat Fuse :: Assemblies :: Debugging support</name>
 
     <dependencies>
 

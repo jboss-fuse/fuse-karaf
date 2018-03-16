@@ -31,7 +31,7 @@
     <artifactId>fuse-branding</artifactId>
     <packaging>jar</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules :: Branding</name>
+    <name>Red Hat Fuse :: Fuse Modules :: Branding</name>
 
     <build>
         <resources>

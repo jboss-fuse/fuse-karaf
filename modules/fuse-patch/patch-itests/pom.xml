@@ -31,7 +31,7 @@
     <artifactId>patch-itests</artifactId>
     <packaging>jar</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch :: Integration Tests</name>
+    <name>Red Hat Fuse :: Fuse Modules :: Fuse Patch :: Integration Tests</name>
 
     <!-- Properties -->
     <properties>

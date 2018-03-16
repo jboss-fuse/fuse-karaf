@@ -20,7 +20,7 @@ In studying this quick start you will learn:
 
 For more information see:
 
-* <https://access.redhat.com/documentation/red-hat-jboss-fuse> for more information about using JBoss Fuse
+* <https://access.redhat.com/documentation/red-hat-jboss-fuse> for more information about using Red Hat Fuse
 
 System requirements
 -------------------
@@ -28,15 +28,15 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 Build and Deploy the Quickstart
 -------------------------------
 
 1. Change your working directory to `rest` directory.
 2. Run `mvn clean install` to build the quickstart.
-3. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-4. In the JBoss Fuse console, enter the following command:
+3. Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+4. In the Red Hat Fuse console, enter the following command:
 
         bundle:install -s mvn:org.jboss.fuse.quickstarts/cxf-rest/${project.version}
 

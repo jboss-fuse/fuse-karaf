@@ -29,7 +29,7 @@
     <artifactId>camel-quickstarts</artifactId>
     <packaging>pom</packaging>
     
-    <name>JBoss Fuse :: Quickstarts :: camel</name>
+    <name>Red Hat Fuse :: Quickstarts :: camel</name>
 
     <modules>
         <module>camel-box</module>

@@ -1,10 +1,10 @@
 image:https://img.shields.io/badge/stack%20overflow-jbossfuse-red.svg?colorB=cc0000[link="https://stackoverflow.com/questions/tagged/jbossfuse"]
 
-= JBoss Fuse
+= Red Hat Fuse
 :toc:
 :icons: font
 
-Red Hat JBoss Fuse is a lightweight, flexible integration platform that enables rapid integration
+Red Hat Fuse is a lightweight, flexible integration platform that enables rapid integration
 across the extended enterprise—on-premise or in the cloud.
 
 Based on Apache Camel, Fuse leverages pattern-based integration, a rich connector catalog, and extensive
@@ -12,7 +12,7 @@ data transformation capabilities to enables users to integrate anything.
 
 == Development Process
 
-There are two ways of building JBoss Fuse 7:
+There are two ways of building Red Hat Fuse 7:
 
 * using Jenkins pipeline
 * using plain old Maven

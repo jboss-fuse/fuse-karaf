@@ -1,9 +1,9 @@
 camel-sap: Demonstrates using the camel-sap components
 ======================================================
-Author: William Collins - JBoss Fuse Team  
+Author: William Collins - Red Hat Fuse Team  
 Level: Beginner  
 Technologies: Camel, SAP  
-Summary: This quickstart demonstrates how to use the JBoss Fuse SAP camel components in Camel in order to integrate with SAP  
+Summary: This quickstart demonstrates how to use the Red Hat Fuse SAP camel components in Camel in order to integrate with SAP  
 Target Product: Fuse  
 Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-sap>  
 
@@ -11,7 +11,7 @@ Source: <https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/
 What is it?  
 -----------  
 
-This quick start shows how to integrate Apache Camel with SAP using the JBoss Fuse SAP Camel components.  
+This quick start shows how to integrate Apache Camel with SAP using the Red Hat Fuse SAP Camel components.  
 
 This quick start provides two camel routes:
 
@@ -21,17 +21,17 @@ This quick start provides two camel routes:
 
 In studying this quick start you will learn:
 
-* How to use the JBoss Fuse SAP Camel components to send requests to SAP. 
-* How to use the JBoss Fuse SAP Camel components to handle requests from SAP. 
+* How to use the Red Hat Fuse SAP Camel components to send requests to SAP. 
+* How to use the Red Hat Fuse SAP Camel components to handle requests from SAP. 
 * How to configure connections used by the components.
-* How to configure the Fuse runtime environment in order to deploy the JBoss Fuse SAP Camel components.
+* How to configure the Fuse runtime environment in order to deploy the Red Hat Fuse SAP Camel components.
 
 For more information see:
 
 [comment]: <> (TODO Update to Fuse 7 docs once they are available)
 
-* <https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/apache_camel_component_reference/sap> for more information about the JBoss Fuse SAP Camel components 
-* <https://access.redhat.com/documentation/red-hat-jboss-fuse> for more information about using JBoss Fuse
+* <https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/apache_camel_component_reference/sap> for more information about the Red Hat Fuse SAP Camel components 
+* <https://access.redhat.com/documentation/red-hat-jboss-fuse> for more information about using Red Hat Fuse
 
 System requirements
 -------------------
@@ -40,7 +40,7 @@ Before building and running this quick start you will need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 * SAP JCo3 and IDoc3 libraries (sapjco3.jar, sapidoc3.jar and JCo native library for your OS platform)
 * SAP instance with [Flight Data Application](http://help.sap.com/saphelp_erp60_sp/helpdata/en/db/7c623cf568896be10000000a11405a/content.htm) setup.
 
@@ -49,8 +49,8 @@ Configuring the Quickstart for your environment
 
 To configure the quick start for your environment: 
 
-1. Deploy the JCo3 library jar and native library (for your platform) and IDoc3 library jar to the `lib` folder of your JBoss Fuse installation.  
-2. Copy the `org.osgi.framework.system.packages.extra` property from the configuration properties file (`etc\config.properties`) to the custom properties file (`etc/custom.properties`) of your JBoss Fuse installation and append the following packages to the `org.osgi.framework.system.packages.extra` property:  
+1. Deploy the JCo3 library jar and native library (for your platform) and IDoc3 library jar to the `lib` folder of your Red Hat Fuse installation.  
+2. Copy the `org.osgi.framework.system.packages.extra` property from the configuration properties file (`etc\config.properties`) to the custom properties file (`etc/custom.properties`) of your Red Hat Fuse installation and append the following packages to the `org.osgi.framework.system.packages.extra` property:  
 
 > org.osgi.framework.system.packages.extra = \  
 >..., \  
@@ -144,14 +144,14 @@ To build and run the quick start:
 
 1. Change your working directory to the `quickstarts/camel/camel-sap` directory.
 * Run `mvn clean install` to build the quick start.
-* In your JBoss Fuse installation directory run, `./bin/fuse` to start the JBoss Fuse runtime.
-* In the JBoss Fuse console, run `bundle:install -s mvn:org.fusesource/camel-sap/${version.org.fusesource.camel-sap}` to install the JBoss Fuse SAP Camel components. Note the bundle number for the component bundle returned by this command.  
-* In the JBoss Fuse console, run `bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-sap/${project.version}` to install the quick start. Note the bundle number for the quick start returned by this command.  
-* In the JBoss Fuse console, run `log:tail` to monitor the JBoss Fuse log.
+* In your Red Hat Fuse installation directory run, `./bin/fuse` to start the Red Hat Fuse runtime.
+* In the Red Hat Fuse console, run `bundle:install -s mvn:org.fusesource/camel-sap/${version.org.fusesource.camel-sap}` to install the Red Hat Fuse SAP Camel components. Note the bundle number for the component bundle returned by this command.  
+* In the Red Hat Fuse console, run `bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-sap/${project.version}` to install the quick start. Note the bundle number for the quick start returned by this command.  
+* In the Red Hat Fuse console, run `log:tail` to monitor the Red Hat Fuse log.
 
 To send an outbound request to SAP:
 * Copy the request file (`src/data/request.xml`) in the project to the input directory(`work/camel-sap/input`) of the quick start route.
-* In the JBoss Fuse console observe the request sent and the response returned by the endpoint.
+* In the Red Hat Fuse console observe the request sent and the response returned by the endpoint.
 
 To handle an inbound request from SAP:
 * Copy the response file (`src/data/response.xml`) in the project to the data directory(`work/camel-sap/data`) of the quick start route.
@@ -162,9 +162,9 @@ To handle an inbound request from SAP:
 Stopping and Uninstalling the Quickstart
 ----------------------------------------
 
-To uninstall the quick start and stop the JBoss Fuse run-time perform the following in the JBoss Fuse console:
+To uninstall the quick start and stop the Red Hat Fuse run-time perform the following in the Red Hat Fuse console:
 
-1. Enter Ctrl-c to stop monitoring the JBoss Fuse log.
+1. Enter Ctrl-c to stop monitoring the Red Hat Fuse log.
 * Run `bundle:uninstall <quickstart-bundle-number>` providing the bundle number for the quick start bundle. 
 * Run `bundle:uninstall <camel-sap-bundle-number>` providing the bundle number for the component bundle. 
-* Run `bundle:shutdown -f` to shutdown the JBoss Fuse runtime.
+* Run `bundle:shutdown -f` to shutdown the Red Hat Fuse runtime.

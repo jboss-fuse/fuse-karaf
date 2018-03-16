@@ -22,7 +22,7 @@ In studying this quick start you will learn:
 
 For more information see:
 
-* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using Red Hat Fuse
 
 System requirements
 -------------------
@@ -30,7 +30,7 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 
 Build and Deploy the Quickstart
@@ -40,8 +40,8 @@ To build the quick start:
 
 1.Change your working directory to `soap` directory.
 2. Run `mvn clean install` to build the quickstart.
-3. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-4. In the JBoss Fuse console, enter the following command:
+3. Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+4. In the Red Hat Fuse console, enter the following command:
 
         bundle:install -s mvn:org.jboss.fuse.quickstarts/cxf-soap/${project.version}
 
@@ -73,7 +73,7 @@ to the WSDL file for the web service:
 
 You can also use "cxf:list-endpoints" in Fuse to check the state of all CXF web services like this 
 
-    JBossFuse:karaf@root> cxf:list-endpoints
+    Fuse:karaf@root> cxf:list-endpoints
     
     |Name                |  State  |  Address    |       BusID                                      |
     |:------------------:|:-------:|:-----------:|:------------------------------------------------:|
@@ -116,7 +116,7 @@ By default CXF Servlet is assigned a '/cxf' alias. You can change it in a couple
 
         org.apache.cxf.servlet.context=/custom
    
-   In this way, JBoss Fuse will load the cfg when the CXF Servlet is reloaded, you can restart the CXF bundle to load the change.
+   In this way, Red Hat Fuse will load the cfg when the CXF Servlet is reloaded, you can restart the CXF bundle to load the change.
 
 2. Use shell config commands, for example:
 
@@ -124,7 +124,7 @@ By default CXF Servlet is assigned a '/cxf' alias. You can change it in a couple
         config:property-set org.apache.cxf.servlet.context /custom
         config:update
 
-    JBoss Fuse will create org.apache.cxf.osgi.cfg file in the /etc directory and and set the entry as we did in the first way after the commands are run, you need to restart the CXF bundle to load the change.
+    Red Hat Fuse will create org.apache.cxf.osgi.cfg file in the /etc directory and and set the entry as we did in the first way after the commands are run, you need to restart the CXF bundle to load the change.
     
 Undeploy the Bundle
 -------------------

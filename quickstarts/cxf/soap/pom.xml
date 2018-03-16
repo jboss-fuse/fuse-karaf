@@ -30,7 +30,7 @@
     <artifactId>cxf-soap</artifactId>
     <packaging>bundle</packaging>
     
-    <name>JBoss Fuse :: Quickstarts :: soap</name>
+    <name>Red Hat Fuse :: Quickstarts :: soap</name>
     <description>SOAP example using JAXWS</description>
 
     <properties>

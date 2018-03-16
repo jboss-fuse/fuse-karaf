@@ -20,9 +20,9 @@ It also uses Salesforce streaming API to receive notifications for record update
 In studying this quick start you will learn:
 
 * how to define a Camel route using the Blueprint XML syntax
-* how to build and deploy an OSGi bundle in JBoss Fuse
-* how to use JSON data format in JBoss Fuse
-* how to use OSGi config admin in JBoss Fuse
+* how to build and deploy an OSGi bundle in Red Hat Fuse
+* how to use JSON data format in Red Hat Fuse
+* how to use OSGi config admin in Red Hat Fuse
 * how to use the Camel Salesforce component
 
 For more information see:
@@ -30,7 +30,7 @@ For more information see:
 [comment]: <> (TODO Update to Fuse 7 docs once they are available)
 
 * https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/apache_camel_component_reference/idu-salesforce for more information about the Camel Salesforce component
-* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using Red Hat Fuse
 
 System requirements
 -------------------
@@ -39,7 +39,7 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 Build and Deploy the Quickstart
 -------------------------
@@ -65,12 +65,12 @@ Build and Deploy the Quickstart
   password=Salesforce password with security token
 
 * Run `mvn -Pgenerate-pojos clean install` to build the quickstart.
-* Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-* Copy the configuration file org.jboss.fuse.quickstarts.salesforce.cfg to the etc/ directory of your Red Hat JBoss Fuse installation:
+* Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+* Copy the configuration file org.jboss.fuse.quickstarts.salesforce.cfg to the etc/ directory of your Red Hat Red Hat Fuse installation:
 
   InstallDir/etc/org.jboss.fuse.quickstarts.salesforce.cfg
 
-* In the JBoss Fuse console, enter the following commands:
+* In the Red Hat Fuse console, enter the following commands:
 
         feature:install camel-salesforce
         bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-salesforce/${project.version}
@@ -88,7 +88,7 @@ Use the bundle
 
 To use the application be sure to have deployed the quickstart in Fuse as described above. 
 
-1. As soon as the Camel route has been started, you will see a directory `work/camel-salesforce/input` in your JBoss Fuse installation.
+1. As soon as the Camel route has been started, you will see a directory `work/camel-salesforce/input` in your Red Hat Fuse installation.
 2. Copy the files you find in this quick start's `src/main/resources/data` directory to the newly created `work/camel-salesforce/input` directory.
 3. Use `log:display` to check out the business logging.
         Receiving file cheese1.json
@@ -103,7 +103,7 @@ To use the application be sure to have deployed the quickstart in Fuse as descri
         Created cheese Asiago with result success=true and errors=[]
         Created cheese Blue with result success=true and errors=[]
         Created cheese Gruyere with result success=true and errors=[]
-4. In a few moments Salesforce should send streaming notifications, which are written to the directory 'work/camel-salesforce/output' in your JBoss Fuse installation.
+4. In a few moments Salesforce should send streaming notifications, which are written to the directory 'work/camel-salesforce/output' in your Red Hat Fuse installation.
 5. Use `log:display` to check out the business logging for these notifications.
         Received created notification for Asiago
         Done writing notification to file Asiago.json

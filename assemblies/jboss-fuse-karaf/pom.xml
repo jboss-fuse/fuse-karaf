@@ -34,7 +34,7 @@
         <camel.sap.bundle />
     </properties>
 
-    <name>JBoss Fuse :: Assemblies :: JBoss Fuse - Karaf distro</name>
+    <name>Red Hat Fuse :: Assemblies :: Fuse - Karaf distro</name>
 
     <dependencies>
         <!--

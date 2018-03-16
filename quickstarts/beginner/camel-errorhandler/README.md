@@ -18,7 +18,7 @@ Additionally, it will show you how to add exception handling routines for dealin
 In studying this quick start you will learn:
 
 * how to define a Camel route using the Blueprint XML syntax
-* how to build and deploy an OSGi bundle in JBoss Fuse
+* how to build and deploy an OSGi bundle in Red Hat Fuse
 * how to define a default error handler to your Camel context
 * how to define exception-specific error handling routines
 
@@ -29,7 +29,7 @@ This example picks up XML files, and depending on the error that occurs during p
 For more information see:
 
 * http://www.enterpriseintegrationpatterns.com/DeadLetterChannel.html for the Dead Letter Channel EIP
-* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using Red Hat Fuse
 
 
 System requirements
@@ -39,7 +39,7 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 
 Build and Deploy the Quickstart
@@ -47,8 +47,8 @@ Build and Deploy the Quickstart
 
 1. Change your working directory to `camel-errorhandler` directory.
 2. Run `mvn clean install` to build the quickstart.
-3. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-4. In the JBoss Fuse console, enter the following command:
+3. Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+4. In the Red Hat Fuse console, enter the following command:
 
         bundle:install -s mvn:org.jboss.fuse.quickstarts/beginner-camel-errorhandler/${project.version}
 
@@ -64,7 +64,7 @@ Use the bundle
 
 To use the application be sure to have deployed the quickstart in Fuse as described above. Successful deployment will create and start a Camel route in Fuse.
 
-1. As soon as the Camel route has been started, you will see a directory `work/errors/input` in your JBoss Fuse installation.
+1. As soon as the Camel route has been started, you will see a directory `work/errors/input` in your Red Hat Fuse installation.
 2. Copy the file you find in this quick start's `src/main/fuse/data` directory to the newly created
 `work/errors/input` directory.
 4. Wait a few moments and you will find the files in directories under `work/errors`:
