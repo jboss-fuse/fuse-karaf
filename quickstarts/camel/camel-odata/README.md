@@ -22,7 +22,7 @@ to create records in the TripPinservice.
 In studying this quick start you will learn:
 
 * how to define a Camel route using the Blueprint XML syntax
-* how to build and deploy an OSGi bundle in JBoss Fuse
+* how to build and deploy an OSGi bundle in Red Hat Fuse
 * how to use read a file and convert it to a String
 * how to use the Camel Olingo4 component for OData
 
@@ -31,7 +31,7 @@ For more information see:
 [comment]: <> (TODO Update to Fuse 7 docs once they are available)
 
 * https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/apache_camel_component_reference/idu-olingo2 for more information about the Camel Olingo2 component
-* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using Red Hat Fuse
 
 System requirements
 -------------------
@@ -40,15 +40,15 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 Build and Deploy the Quickstart
 -------------------------
 
 * Change your working directory to `camel-odata` directory.
 * Run `mvn clean install` to build the quickstart.
-* Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-* In the JBoss Fuse console, enter the following commands:
+* Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+* In the Red Hat Fuse console, enter the following commands:
 
         feature:install camel-olingo4
         bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-odata/${project.version}
@@ -66,7 +66,7 @@ Use the bundle
 
 To use the application be sure to have deployed the quickstart in Fuse as described above. 
 
-1. As soon as the Camel route has been started, you will see a directory `work/camel-odata/input` in your JBoss Fuse installation.
+1. As soon as the Camel route has been started, you will see a directory `work/camel-odata/input` in your Red Hat Fuse installation.
 2. Copy the files you find in this quick start's `src/main/resources/data` directory to the newly created `work/camel-odata/input`
 directory.
 3. Use `log:display` to check out the business logging.

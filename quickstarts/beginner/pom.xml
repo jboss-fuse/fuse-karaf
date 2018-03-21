@@ -30,7 +30,7 @@
     <artifactId>beginner</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Quickstarts :: beginner</name>
+    <name>Red Hat Fuse :: Quickstarts :: beginner</name>
 
     <modules>
         <module>camel-cbr</module>

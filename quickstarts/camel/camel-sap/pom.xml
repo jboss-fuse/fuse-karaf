@@ -29,13 +29,13 @@
 	<artifactId>camel-sap</artifactId>
 	<packaging>bundle</packaging>
 
-	<name>JBoss Fuse :: Quickstarts :: camel-sap</name>
+	<name>Red Hat Fuse :: Quickstarts :: camel-sap</name>
 	<description>SAP Camel Components Example</description>
 	<url>https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel/camel-sap</url>
 
 	<properties>
 		<fuse.osgi.symbolic.name>org.jboss.fuse.quickstarts.camel-sap</fuse.osgi.symbolic.name>
-		<fuse.osgi.bundle.name>JBoss Fuse :: Quickstarts :: camel-sap</fuse.osgi.bundle.name>
+		<fuse.osgi.bundle.name>Red Hat Fuse :: Quickstarts :: camel-sap</fuse.osgi.bundle.name>
 		<fuse.osgi.import>*</fuse.osgi.import>
 		<fuse.osgi.export>org.jboss.fuse.quickstarts.sap;version=${project.version},
 			org.jboss.fuse.quickstarts.sap.bean;version=${project.version},

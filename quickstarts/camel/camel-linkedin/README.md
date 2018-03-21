@@ -19,8 +19,8 @@ This quick start combines use of the Camel LinkedIn component to search companie
 In studying this quick start you will learn:
 
 * how to define a Camel route using the Blueprint XML syntax
-* how to build and deploy an OSGi bundle in JBoss Fuse
-* how to use OSGi config admin in JBoss Fuse
+* how to build and deploy an OSGi bundle in Red Hat Fuse
+* how to use OSGi config admin in Red Hat Fuse
 * how to use the Camel LinkedIn component
 
 For more information see:
@@ -28,7 +28,7 @@ For more information see:
 [comment]: <> (TODO Update to Fuse 7 docs once they are available)
 
 * https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/apache_camel_component_reference/idu-linkedin for more information about the Camel LinkedIn component
-* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using Red Hat Fuse
 
 System requirements
 -------------------
@@ -37,15 +37,15 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 Build and Deploy the Quickstart
 -------------------------
 
 1. Change your working directory to `camel-linkedin` directory.
 * Run `mvn clean install` to build the quickstart.
-* Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-* Create the following configuration file in the etc/ directory of your Red Hat JBoss Fuse installation:
+* Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+* Create the following configuration file in the etc/ directory of your Red Hat Fuse installation:
 
   InstallDir/etc/org.jboss.fuse.quickstarts.camel.linkedin.cfg
   Edit the org.jboss.fuse.quickstarts.camel.linkedin.cfg file with a text editor and add the following contents:
@@ -55,7 +55,7 @@ Build and Deploy the Quickstart
   clientId=<LinkedIn client id>
   clientSecret=<LinkedIn client secret>
 
-* In the JBoss Fuse console, enter the following commands:
+* In the Red Hat Fuse console, enter the following commands:
 
         feature:install camel-linkedin
         bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-linkedin/${project.version}
@@ -73,7 +73,7 @@ Use the bundle
 
 To use the application be sure to have deployed the quickstart in Fuse as described above. 
 
-1. As soon as the Camel route has been started, you will see a directory `work/camel-linkedin/output` in your JBoss Fuse installation.
+1. As soon as the Camel route has been started, you will see a directory `work/camel-linkedin/output` in your Red Hat Fuse installation.
 2. Wait a few moments and you will see the LinkedIn user's connections downloaded to your the companies.txt file.
 The route will continue polling LinkedIn every 15 minutes and overwrite the output file.
 3. Use `log:display` to check out the business logging.

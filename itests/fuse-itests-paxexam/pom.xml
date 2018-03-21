@@ -31,7 +31,7 @@
     <artifactId>fuse-itests-paxexam</artifactId>
     <packaging>jar</packaging>
 
-    <name>JBoss Fuse :: Fuse Integration Tests :: PAX-Exam tests</name>
+    <name>Red Hat Fuse :: Fuse Integration Tests :: PAX-Exam tests</name>
 
     <dependencies>
 
@@ -96,13 +96,13 @@
 
         <dependency>
             <groupId>org.jboss.fuse</groupId>
-            <artifactId>jboss-fuse-karaf-minimal</artifactId>
+            <artifactId>fuse-karaf-minimal</artifactId>
             <scope>test</scope>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.jboss.fuse</groupId>
-            <artifactId>jboss-fuse-karaf</artifactId>
+            <artifactId>fuse-karaf</artifactId>
             <scope>test</scope>
             <type>zip</type>
         </dependency>

@@ -21,7 +21,7 @@ In studying this quick start you will learn:
 
 For more information see:
 
-* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using Red Hat Fuse
 
 System requirements
 -------------------
@@ -29,16 +29,16 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 Build and Deploy the Quickstart
 -------------------------------
 
 1. Change your working directory to `secure-rest` directory.
 2. Run `mvn clean install` to build the quickstart.
-3. Verify `etc/users.properties` from the JBoss Fuse installation contains the following 'admin' user configured: `admin=admin,admin` (it is commented by default)
-4. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-5. In the JBoss Fuse console, enter the following command:
+3. Verify `etc/users.properties` from the Red Hat Fuse installation contains the following 'admin' user configured: `admin=admin,admin` (it is commented by default)
+4. Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+5. In the Red Hat Fuse console, enter the following command:
 
         bundle:install -s mvn:org.jboss.fuse.quickstarts/cxf-secure-rest/${project.version}
 
@@ -125,7 +125,7 @@ You can define additional users in the JAAS realm in two ways:
 
             myuser = mysecretpassword
 
-2. Using the `jaas:` commands in the JBoss Fuse console:
+2. Using the `jaas:` commands in the Red Hat Fuse console:
 
             jaas:manage --realm karaf --index 1
             jaas:useradd myuser mysecretpassword

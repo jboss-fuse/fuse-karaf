@@ -29,7 +29,7 @@
     <artifactId>camel-box</artifactId>
     <packaging>bundle</packaging>
     
-    <name>JBoss Fuse :: Quickstarts :: camel-box</name>
+    <name>Red Hat Fuse :: Quickstarts :: camel-box</name>
     <description>Camel Box.com Example</description>
     <url>https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-box</url>
 
@@ -40,7 +40,7 @@
         </dependency>
          <!--
           For this example, we will be using the OSGi Blueprint XML syntax for Apache Camel.
-          The camel-blueprint bundle is installed in JBoss Fuse by default,
+          The camel-blueprint bundle is installed in Red Hat Fuse by default,
           so we are setting the dependency's scope to 'provided'.
         -->
         <dependency>

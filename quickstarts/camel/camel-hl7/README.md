@@ -14,15 +14,15 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 Build and Deploy the Quickstart
 -------------------------------
 
 1. Change your working directory to `camel-hl7` directory.
 2. Run `mvn clean install` to build the quickstart.
-3. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-4. In the JBoss Fuse console, enter the following commands:
+3. Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+4. In the Red Hat Fuse console, enter the following commands:
 
        feature:install camel-hl7 camel-netty4 camel-groovy
        bundle:install -s mvn:org.jboss.fuse.quickstarts/camel-hl7/${project.version}
@@ -34,14 +34,14 @@ Build and Deploy the Quickstart
    your bundle should be present at the end of the list
 
 
-7. To see what is happening within the JBoss Fuse server, you can continuously view the log (tail) with the following command
+7. To see what is happening within the Red Hat Fuse server, you can continuously view the log (tail) with the following command
 
        log:tail
 
 File Based Test
 ---------------
 
-1. As soon as the Camel route has been started, you will see a directory `work/camel-hl7/input` in your JBoss Fuse installation.
+1. As soon as the Camel route has been started, you will see a directory `work/camel-hl7/input` in your Red Hat Fuse installation.
 2. Copy the files you find in this quickstart's `src/main/resources/data` directory to the newly created `work/camel-hl7/input`
 directory. There are two example files - valid.hl7 and invalid.hl7
 3. If the message is valid, you will see successful response in log:

@@ -32,11 +32,11 @@
     <!--<packaging>kar</packaging>-->
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Assemblies :: Features :: Framework</name>
+    <name>Red Hat Fuse :: Assemblies :: Features :: Framework</name>
 
     <description>
         In Apache Karaf there's org.apache.karaf.features:base and org.apache.karaf.features:framework
-        In JBoss Fuse both are combined in single "framework KAR", which contains all fundamental resources.
+        In Red Hat Fuse both are combined in single "framework KAR", which contains all fundamental resources.
         These resources include:
         - bin scripts
         - libs (ext, boot, endorsed)

@@ -29,7 +29,7 @@
     <artifactId>beginner-camel-log</artifactId>
     <packaging>bundle</packaging>
 
-    <name>JBoss Fuse :: Quickstarts :: camel-log</name>
+    <name>Red Hat Fuse :: Quickstarts :: camel-log</name>
     <description>Camel Log Example</description>
 
     <dependencies>

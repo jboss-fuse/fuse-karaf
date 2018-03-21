@@ -45,7 +45,7 @@ public class CredentialStoreStartupFailureIntegrationTest {
         @Configuration
         public Option[] config() {
             MavenUrlReference fuseDistro = maven()
-                    .groupId("org.jboss.fuse").artifactId("jboss-fuse-karaf-minimal")
+                    .groupId("org.jboss.fuse").artifactId("fuse-karaf-minimal")
                     .type("zip").versionAsInProject();
 
             return options(

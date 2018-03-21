@@ -29,8 +29,8 @@
     <artifactId>cxf-rest</artifactId>
     <packaging>bundle</packaging>
   
-    <name>JBoss Fuse :: Quickstarts :: rest</name>
-    <description>RESTful WebService Example using JAX-RS with JBoss Fuse</description>
+    <name>Red Hat Fuse :: Quickstarts :: rest</name>
+    <description>RESTful WebService Example using JAX-RS with Red Hat Fuse</description>
 
     <properties>
         <skipTests>true</skipTests>

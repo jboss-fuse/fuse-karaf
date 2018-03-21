@@ -29,7 +29,7 @@
     <artifactId>custom-distro</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Quickstarts :: custom distro</name>
+    <name>Red Hat Fuse :: Quickstarts :: custom distro</name>
 
     <properties>
       <version.net.java.dev.jna>4.4.0</version.net.java.dev.jna>
