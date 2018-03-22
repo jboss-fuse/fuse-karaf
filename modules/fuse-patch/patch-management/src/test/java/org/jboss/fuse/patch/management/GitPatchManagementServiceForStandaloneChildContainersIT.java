@@ -61,7 +61,7 @@ public class GitPatchManagementServiceForStandaloneChildContainersIT extends Pat
         FileUtils.copyFile(
                 new File("src/test/resources/karaf2/system/org/apache/karaf/instance/org.apache.karaf.instance.core/4.2.0.redhat-700001/org.apache.karaf.instance.core-4.2.0.redhat-700001.jar"),
                 new File(karafHome, "system/org/apache/karaf/instance/org.apache.karaf.instance.core/4.2.0.redhat-700001/org.apache.karaf.instance.core-4.2.0.redhat-700001.jar"));
-        preparePatchZip("src/test/resources/baselines/baseline3", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        preparePatchZip("src/test/resources/baselines/baseline3", "target/karaf/system/org/jboss/fuse/fuse-karaf/7.0.0/fuse-karaf-7.0.0-baseline.zip", true);
 
         pm = new GitPatchManagementServiceImpl(bundleContext);
         pm.start();

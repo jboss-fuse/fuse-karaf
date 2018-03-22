@@ -96,8 +96,10 @@ public abstract class AbstractPatchIntegrationTest extends FuseKarafTestSupport 
         Patch patch = service.getPatch(name);
         service.install(patch, false, false);
 
+        patch = service.getPatch(name);
         long start = System.currentTimeMillis();
         while (!patch.isInstalled() && System.currentTimeMillis() - start < TIMEOUT) {
+            patch = service.getPatch(name);
             Thread.sleep(100);
         }
         if (!patch.isInstalled()) {
@@ -110,8 +112,10 @@ public abstract class AbstractPatchIntegrationTest extends FuseKarafTestSupport 
         Patch patch = service.getPatch(name);
         service.rollback(patch, false, false);
 
+        patch = service.getPatch(name);
         long start = System.currentTimeMillis();
         while (patch.isInstalled() && System.currentTimeMillis() - start < TIMEOUT) {
+            patch = service.getPatch(name);
             Thread.sleep(100);
         }
         if (patch.isInstalled()) {

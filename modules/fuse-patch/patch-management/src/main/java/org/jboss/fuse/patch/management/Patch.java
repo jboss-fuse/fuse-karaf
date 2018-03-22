@@ -37,7 +37,7 @@ public class Patch {
 
     public boolean isInstalled() {
         boolean inThisContainer = result != null && result.getVersions().size() == 0;
-        if (inThisContainer) {
+        if (result != null && inThisContainer) {
             // ENTESB-5682: let's handle *.patch.result created by earlier versions of patch-management, where
             // we didn't store list of bases in standalone mode. Simply existence of *.patch.result file meant
             // "patch is installed"
