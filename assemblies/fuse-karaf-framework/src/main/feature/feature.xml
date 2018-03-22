@@ -30,7 +30,7 @@
     <repository>mvn:org.apache.activemq/artemis-features/${version.org.apache.activemq.artemis}/xml/features</repository>
     <repository>mvn:io.hawt/hawtio-karaf/${version.io.hawt}/xml/features</repository>
 
-    <!-- JBoss Fuse Karaf features -->
+    <!-- Red Hat Fuse Karaf features -->
 
     <feature name="fuse-credential-store" description="fuse-credential-store" version="${project.version}">
         <bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-credential-store-karaf/${project.version}</bundle>

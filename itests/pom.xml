@@ -31,7 +31,7 @@
     <artifactId>fuse-itests</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Fuse Integration Tests</name>
+    <name>Red Hat Fuse :: Fuse Integration Tests</name>
 
     <description>Integration tests for Fuse/Karaf</description>
 

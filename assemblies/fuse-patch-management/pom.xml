@@ -31,7 +31,7 @@
     <artifactId>fuse-patch-management</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Assemblies :: Patch Management</name>
+    <name>Red Hat Fuse :: Assemblies :: Patch Management</name>
 
     <dependencies>
         <dependency>

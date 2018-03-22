@@ -29,11 +29,10 @@
     <artifactId>custom-distro</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Quickstarts :: custom distro</name>
+    <name>Red Hat Fuse :: Quickstarts :: custom distro</name>
 
     <properties>
       <version.net.java.dev.jna>4.4.0</version.net.java.dev.jna>
-      <!--<version.org.apache.karaf>4.2.0-700.fuse-000007</version.org.apache.karaf>-->
       <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
       <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
       <version.org.apache.servicemix.bundles.xerces>2.11.0_1</version.org.apache.servicemix.bundles.xerces>

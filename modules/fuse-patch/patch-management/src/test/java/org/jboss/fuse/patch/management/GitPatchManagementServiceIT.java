@@ -111,7 +111,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
     @Test
     public void initializationPerformedBaselineDistributionFoundInPatches() throws IOException, GitAPIException {
         freshKarafStandaloneDistro();
-        preparePatchZip("src/test/resources/baselines/baseline1", "target/karaf/patches/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        preparePatchZip("src/test/resources/baselines/baseline1", "target/karaf/patches/fuse-karaf-7.0.0-baseline.zip", true);
         validateInitialGitRepository();
         // check one more time - should not do anything harmful
         validateInitialGitRepository();
@@ -120,7 +120,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
     @Test
     public void initializationPerformedBaselineDistributionFoundInSystem() throws IOException, GitAPIException {
         freshKarafStandaloneDistro();
-        preparePatchZip("src/test/resources/baselines/baseline1", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        preparePatchZip("src/test/resources/baselines/baseline1", "target/karaf/system/org/jboss/fuse/fuse-karaf/7.0.0/fuse-karaf-7.0.0-baseline.zip", true);
         validateInitialGitRepository();
         // check one more time - should not do anything harmful
         validateInitialGitRepository();
@@ -140,7 +140,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         freshKarafStandaloneDistro();
         String line = String.format("mvn:org.jboss.fuse.modules.patch/patch-management/%s=2\n", version);
         FileUtils.write(new File(karafHome, "etc/startup.properties"), line, "UTF-8", true);
-        preparePatchZip("src/test/resources/baselines/baseline1", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        preparePatchZip("src/test/resources/baselines/baseline1", "target/karaf/system/org/jboss/fuse/fuse-karaf/7.0.0/fuse-karaf-7.0.0-baseline.zip", true);
         validateInitialGitRepository();
     }
 
@@ -504,7 +504,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         try (FileOutputStream fos = new FileOutputStream(new File(karafHome, "etc/org.apache.karaf.features.xml"))) {
             FileUtils.copyFile(new File("src/test/resources/baselines/baseline6/etc/org.apache.karaf.features.xml"), fos);
         }
-        preparePatchZip("src/test/resources/baselines/baseline6", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        preparePatchZip("src/test/resources/baselines/baseline6", "target/karaf/system/org/jboss/fuse/fuse-karaf/7.0.0/fuse-karaf-7.0.0-baseline.zip", true);
         validateInitialGitRepository();
 
         // prepare some ZIP patches
@@ -549,7 +549,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
     @Test
     public void installPPatchHotFixPPatchAndThenRPatch() throws IOException, GitAPIException {
         freshKarafStandaloneDistro();
-        preparePatchZip("src/test/resources/baselines/baseline5", "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        preparePatchZip("src/test/resources/baselines/baseline5", "target/karaf/system/org/jboss/fuse/fuse-karaf/7.0.0/fuse-karaf-7.0.0-baseline.zip", true);
         validateInitialGitRepository();
 
         // prepare some ZIP patches
@@ -1373,7 +1373,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
      * @throws IOException
      */
     private GitPatchRepository patchManagement(String baseline) throws IOException, GitAPIException {
-        preparePatchZip("src/test/resources/baselines/" + baseline, "target/karaf/system/org/jboss/fuse/jboss-fuse-karaf/7.0.0/jboss-fuse-karaf-7.0.0-baseline.zip", true);
+        preparePatchZip("src/test/resources/baselines/" + baseline, "target/karaf/system/org/jboss/fuse/fuse-karaf/7.0.0/fuse-karaf-7.0.0-baseline.zip", true);
         pm = new GitPatchManagementServiceImpl(bundleContext);
         pm.start();
         pm.ensurePatchManagementInitialized();

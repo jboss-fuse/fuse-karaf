@@ -29,7 +29,7 @@
     <artifactId>cxf-secure-rest</artifactId>
     <packaging>bundle</packaging>
     
-    <name>JBoss Fuse :: Quickstarts :: secure-rest</name>
+    <name>Red Hat Fuse :: Quickstarts :: secure-rest</name>
     <description>Secure Restful Web Services Example using JAX-RS Basic Authentication with Fuse</description>
 
     <properties>

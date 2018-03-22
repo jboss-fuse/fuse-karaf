@@ -31,7 +31,7 @@
     <artifactId>patch-core</artifactId>
     <packaging>bundle</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch :: Core</name>
+    <name>Red Hat Fuse :: Fuse Modules :: Fuse Patch :: Core</name>
     <description>OSGi bundle with patch service implementation</description>
 
     <dependencies>

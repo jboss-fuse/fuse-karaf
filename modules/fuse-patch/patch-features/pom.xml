@@ -31,7 +31,7 @@
     <artifactId>patch-features</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch :: Features</name>
+    <name>Red Hat Fuse :: Fuse Modules :: Fuse Patch :: Features</name>
     <description>Patch Karaf Features</description>
 
     <dependencies>

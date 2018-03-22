@@ -1,5 +1,5 @@
 # generated file, do not modify
-# Installation results for patch "jboss-fuse-karaf-7.0.0.fuse-000160"
+# Installation results for patch "fuse-karaf-7.0.0.fuse-000160"
 date = 1520589714120
 update.count = 233
 update.0.symbolic-name = com.google.guava
@@ -2114,4 +2114,4 @@ feature-update.103.old-repository = mvn:org.apache.aries.jpa/jpa-features/2.6.1/
 feature-override.count = 0
 version.count = 0
 base.count = 1
-base.0 = root | /data/servers/jboss-fuse-karaf-7.0.0.fuse-000151
+base.0 = root | /data/servers/fuse-karaf-7.0.0.fuse-000151

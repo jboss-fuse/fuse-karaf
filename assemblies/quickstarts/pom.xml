@@ -30,7 +30,7 @@
     <artifactId>quickstarts</artifactId>
     <packaging>jar</packaging>
 
-    <name>JBoss Fuse :: Assemblies :: Quickstarts</name>
+    <name>Red Hat Fuse :: Assemblies :: Quickstarts</name>
 
     <dependencies>
         <dependency>

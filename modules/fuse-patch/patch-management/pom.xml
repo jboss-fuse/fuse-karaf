@@ -31,7 +31,7 @@
     <artifactId>patch-management</artifactId>
     <packaging>bundle</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch :: Patch Management</name>
+    <name>Red Hat Fuse :: Fuse Modules :: Fuse Patch :: Patch Management</name>
     <description>OSGi bundle which implements git-based patch management</description>
 
     <dependencies>

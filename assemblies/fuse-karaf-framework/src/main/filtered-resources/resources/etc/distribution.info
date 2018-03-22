@@ -4,4 +4,4 @@
 # about the current versions.
 #
 karafVersion = ${version.org.apache.karaf}
-name = JBoss Fuse 7
+name = Red Hat Fuse 7

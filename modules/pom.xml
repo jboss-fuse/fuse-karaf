@@ -31,9 +31,9 @@
     <artifactId>fuse-modules</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules</name>
+    <name>Red Hat Fuse :: Fuse Modules</name>
 
-    <description>Additional components for JBoss Fuse (commands, services, libraries, etc.)</description>
+    <description>Additional components for Red Hat Fuse (commands, services, libraries, etc.)</description>
 
     <modules>
         <module>fuse-branding</module>

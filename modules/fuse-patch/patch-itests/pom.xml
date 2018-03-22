@@ -31,7 +31,7 @@
     <artifactId>patch-itests</artifactId>
     <packaging>jar</packaging>
 
-    <name>JBoss Fuse :: Fuse Modules :: Fuse Patch :: Integration Tests</name>
+    <name>Red Hat Fuse :: Fuse Modules :: Fuse Patch :: Integration Tests</name>
 
     <!-- Properties -->
     <properties>
@@ -126,13 +126,13 @@
 
         <dependency>
             <groupId>org.jboss.fuse</groupId>
-            <artifactId>jboss-fuse-karaf-minimal</artifactId>
+            <artifactId>fuse-karaf-minimal</artifactId>
             <scope>test</scope>
             <type>zip</type>
         </dependency>
         <dependency>
             <groupId>org.jboss.fuse</groupId>
-            <artifactId>jboss-fuse-karaf</artifactId>
+            <artifactId>fuse-karaf</artifactId>
             <scope>test</scope>
             <type>zip</type>
         </dependency>
@@ -271,7 +271,7 @@
                                         <include name="version.properties" />
                                     </fileset>
                                 </copy>
-                                <zip destfile="${karaf.home}/../patches/jboss-fuse-karaf-7.0.0-baseline.zip">
+                                <zip destfile="${karaf.home}/../patches/fuse-karaf-7.0.0-baseline.zip">
                                     <fileset dir="${karaf.home}/../patches" >
                                         <include name="_baseline-root/**" />
                                     </fileset>

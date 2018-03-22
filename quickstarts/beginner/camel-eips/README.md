@@ -29,7 +29,7 @@ Finally, we want to filter out the orders that contain more than 100 animals and
 In studying this example you will learn:
 
 * how to define a Camel route using the Blueprint XML syntax
-* how to build and deploy an OSGi bundle in JBoss Fuse
+* how to build and deploy an OSGi bundle in Red Hat Fuse
 * how to combine multiple Enterprise Integration Patterns to create an integration solution
 * how to use the Wiretap EIP to copy messages as they pass through a route
 * how to use the Splitter EIP to split large messages into smaller ones
@@ -45,7 +45,7 @@ For more information see:
 * http://www.enterpriseintegrationpatterns.com/WireTap.html
 * http://www.enterpriseintegrationpatterns.com/Filter.html
 * http://www.enterpriseintegrationpatterns.com/Sequencer.html
-* https://access.redhat.com/documentation/en/red-hat-jboss-fuse for more information about using JBoss Fuse
+* https://access.redhat.com/documentation/en/red-hat-jboss-fuse for more information about using Red Hat Fuse
 
 
 System requirements
@@ -55,7 +55,7 @@ Before building and running this example you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 
 
 Build and Deploy the Quickstart
@@ -63,8 +63,8 @@ Build and Deploy the Quickstart
 
 1. Change your working directory to `camel-eips` directory.
 2. Run `mvn clean install` to build the quickstart.
-3. Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
-4. In the JBoss Fuse console, enter the following command:
+3. Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+4. In the Red Hat Fuse console, enter the following command:
 
         bundle:install -s mvn:org.jboss.fuse.quickstarts/beginner-camel-eips/${project.version}
 
@@ -80,7 +80,7 @@ Use the bundle
 
 To use the application be sure to have deployed the quickstart in Fuse as described above. Successful deployment will create and start a Camel route in Fuse.
 
-1. As soon as the Camel route has been started, you will see a directory `work/eip/input` in your JBoss Fuse installation.
+1. As soon as the Camel route has been started, you will see a directory `work/eip/input` in your Red Hat Fuse installation.
 2. Copy the file you find in this example's `src/main/fuse/data` directory to the newly created `work/eip/input`
 directory.
 3. Wait a few moments and you will find multiple files organized by geographical region under `work/eip/output`:

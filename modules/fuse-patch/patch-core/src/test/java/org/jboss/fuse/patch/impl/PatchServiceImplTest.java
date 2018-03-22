@@ -384,7 +384,6 @@ public class PatchServiceImplTest {
 
         PatchResult result = service.install(patch, true);
         assertNotNull(result);
-        assertNull(patch.getResult());
         assertTrue(result.isSimulation());
 
         //
@@ -595,7 +594,6 @@ public class PatchServiceImplTest {
 
         PatchResult result = service.install(patch, true);
         assertNotNull(result);
-        assertNull(patch.getResult());
         assertEquals(1, result.getBundleUpdates().size());
         assertTrue(result.isSimulation());
     }

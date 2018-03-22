@@ -31,14 +31,14 @@
     <artifactId>assemblies</artifactId>
     <packaging>pom</packaging>
 
-    <name>JBoss Fuse :: Assemblies</name>
+    <name>Red Hat Fuse :: Assemblies</name>
 
     <modules>
         <module>fuse-karaf-framework</module>
         <module>fuse-patch-management</module>
         <module>quickstarts</module>
-        <module>jboss-fuse-karaf-minimal</module>
-        <module>jboss-fuse-karaf</module>
+        <module>fuse-karaf-minimal</module>
+        <module>fuse-karaf</module>
     </modules>
 
     <profiles>
