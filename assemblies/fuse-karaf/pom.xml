@@ -475,8 +475,10 @@
 					<organizationURL>http://redhat.com</organizationURL>
 					<preamble>In addition to the Red Hat products, this disk contains certain third party software or components ("Third Party Components"), which are bundled as separate files or modules and separately licensed to you by said third parties. This file contains a listing of all NOTICE/NOTICE.txt files included with the Third Party Component jars in this distribution of Fuse ESB. Please see the dependencies.txt file for the complete listing of Third Party Components and their attributed license agreements. Your use of the Third Party Components is subject to the terms and conditions set forth in the applicable third party license agreement. The Third Party Components are provided by Red Hat, Inc. solely on an "AS IS" basis, without any warranty. Red Hat, Inc. disclaims all warranties and indemnities with respect to the Third Party Components, express or implied, and assumes no liability with respect to the Third Party Components. You acknowledge that the authors of the Third Party Components have no obligation to provide support to you for the Third Party Components. You hereby undertake to comply with all licenses related to the applicable Third Party Components. All third party license agreements are contained in the licenses directory of </preamble>
 					<listDependencies>true</listDependencies>
+                    <licensesConfigFile>${project.basedir}/src/license/licenses.xml</licensesConfigFile>
+                    <generateLicensesXml>true</generateLicensesXml>					
 					<extraDependencies>org.apache.servicemix.bundles:org.apache.servicemix.bundles.xerces:${version.org.apache.servicemix.bundles.xerces},org.apache.servicemix.bundles:org.apache.servicemix.bundles.xalan:${version.org.apache.servicemix.bundles.xalan},org.apache.servicemix.specs:org.apache.servicemix.specs.activator:${version.org.apache.servicemix.specs},org.apache.servicemix.specs:org.apache.servicemix.specs.jaxp-api-1.4:${version.org.apache.servicemix.specs},org.apache.servicemix.specs:org.apache.servicemix.specs.jaxws-api-2.2:${version.org.apache.servicemix.specs}</extraDependencies>
-					<noticeSupplements>shared/notice-supplements.xml</noticeSupplements>
+					<noticeSupplements>${basedir}/src/main/resources/notice-supplements.xml</noticeSupplements>
 					<repositories>${project.build.directory}/assembly/system</repositories>
 					<defaultParent>org.apache:apache:18</defaultParent>
 				</configuration>
@@ -489,7 +491,53 @@
 						</goals>
 					</execution>
 				</executions>
-			</plugin>            
+			</plugin>     
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>xml-maven-plugin</artifactId>
+				<version>1.0.1</version>
+				<inherited>false</inherited>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.servicemix</groupId>
+						<artifactId>servicemix-saxon</artifactId>
+						<version>2013.01</version>
+					</dependency>
+				</dependencies>
+
+				<executions>
+					<execution>
+						<id>generate-licenses-html</id>
+						<goals>
+							<goal>transform</goal>
+						</goals>
+						<phase>prepare-package</phase>
+						<configuration>
+							<transformationSets>
+								<transformationSet>
+									<dir>${basedir}/target/target/maven-jboss-license-plugin</dir>
+									<includes>
+										<include>licenses.xml</include>
+									</includes>
+									<stylesheet>${basedir}/src/license/licenses.xsl</stylesheet>
+									<outputDir>${basedir}/target/target/maven-jboss-license-plugin</outputDir>
+									<fileMappers>
+										<fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+											<targetExtension>.html</targetExtension>
+										</fileMapper>
+									</fileMappers>                                            
+									<parameters>
+										<parameter>
+											<name>version</name>
+											<value>${project.version}</value>
+										</parameter>
+									</parameters>                                        
+								</transformationSet>
+							</transformationSets>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>			       
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
