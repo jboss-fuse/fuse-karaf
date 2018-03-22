@@ -478,6 +478,7 @@
 					<extraDependencies>org.apache.servicemix.bundles:org.apache.servicemix.bundles.xerces:${version.org.apache.servicemix.bundles.xerces},org.apache.servicemix.bundles:org.apache.servicemix.bundles.xalan:${version.org.apache.servicemix.bundles.xalan},org.apache.servicemix.specs:org.apache.servicemix.specs.activator:${version.org.apache.servicemix.specs},org.apache.servicemix.specs:org.apache.servicemix.specs.jaxp-api-1.4:${version.org.apache.servicemix.specs},org.apache.servicemix.specs:org.apache.servicemix.specs.jaxws-api-2.2:${version.org.apache.servicemix.specs}</extraDependencies>
 					<noticeSupplements>shared/notice-supplements.xml</noticeSupplements>
 					<repositories>${project.build.directory}/assembly/system</repositories>
+					<defaultParent>org.apache:apache:18</defaultParent>
 				</configuration>
 				<executions>
 					<execution>
