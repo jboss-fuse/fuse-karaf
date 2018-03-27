@@ -374,6 +374,10 @@
 
                         <!-- Artemis broker -->
                         <feature>artemis</feature>
+
+                        <!-- Jclouds -->
+                        <feature>jclouds-chef</feature>
+                        <feature>jclouds-commands</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
