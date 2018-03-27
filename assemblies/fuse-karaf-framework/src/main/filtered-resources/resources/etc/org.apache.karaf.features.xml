@@ -130,6 +130,9 @@
                 replacement="mvn:org.apache.qpid/proton-j/${version.org.apache.qpid.proton-j}" mode="maven" />
         <bundle originalUri="mvn:javax.mail/mail/[1.4,1.5)"
                 replacement="mvn:com.sun.mail/javax.mail/${version.com.sun.mail}" mode="maven" />
+        <!-- repackaged version of pax-transx-tm-narayana -->
+        <bundle originalUri="mvn:org.ops4j.pax.transx/pax-transx-tm-narayana/[0.2,1)"
+                replacement="mvn:org.jboss.fuse.modules/fuse-pax-transx-tm-narayana/${project.version}" mode="maven" />
         <!-- temporary change -->
         <bundle originalUri="wrap:mvn:org.jboss.xnio/xnio-api/3.*"
                 replacement="mvn:org.jboss.xnio/xnio-api/${version.org.jboss.xnio}" mode="maven" />
