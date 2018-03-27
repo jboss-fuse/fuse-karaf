@@ -151,7 +151,7 @@
         <version.org.javassist>3.21.0-GA</version.org.javassist>
         <version.org.jboss.logging>3.3.1.Final-redhat-1</version.org.jboss.logging>
         <version.org.jboss.modules>1.5.2.Final</version.org.jboss.modules>
-        <version.org.jboss.narayana>5.5.30.Final-redhat-1</version.org.jboss.narayana>
+        <version.org.jboss.narayana>5.5.31.Final-redhat-1</version.org.jboss.narayana>
         <version.org.jboss.xnio>3.3.8.Final</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.mockito>2.13.0</version.org.mockito>
@@ -159,6 +159,7 @@
         <version.org.ops4j.pax.exam>4.11.0</version.org.ops4j.pax.exam>
         <version.org.ops4j.pax.logging>1.10.1</version.org.ops4j.pax.logging>
         <version.org.ops4j.pax.swissbox>1.8.3</version.org.ops4j.pax.swissbox>
+        <version.org.ops4j.pax.transx>0.2.0</version.org.ops4j.pax.transx>
         <version.org.ops4j.pax.url>2.5.4</version.org.ops4j.pax.url>
         <version.org.ops4j.pax.web>6.1.2</version.org.ops4j.pax.web>
         <version.org.osgi>6.0.0</version.org.osgi>
@@ -231,7 +232,7 @@
             </snapshots>
         </repository>
         <repository>
-            <!-- For Narayana 5.5.30.Final-redhat-1 -->
+            <!-- For Narayana 5.5.31.Final-redhat-1 -->
             <id>jb-eap-7.1-brew</id>
             <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.1-rhel-7-maven-build/latest/maven</url>
             <releases>
@@ -646,6 +647,17 @@
                 <version>${version.org.apache.servicemix.specs}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.spring-beans</artifactId>
+                <version>${version.org.apache.servicemix.bundles.spring}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.spring-tx</artifactId>
+                <version>${version.org.apache.servicemix.bundles.spring}</version>
+            </dependency>
+
             <!-- OPS4J dependencies -->
 
             <dependency>
@@ -669,6 +681,22 @@
                 <version>${version.org.ops4j.pax.swissbox}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.ops4j.pax.transx</groupId>
+                <artifactId>pax-transx-tm-core</artifactId>
+                <version>${version.org.ops4j.pax.transx}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.transx</groupId>
+                <artifactId>pax-transx-tm-narayana</artifactId>
+                <version>${version.org.ops4j.pax.transx}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.ops4j.pax.transx</groupId>
+                <artifactId>pax-transx-tm-narayana</artifactId>
+                <version>${version.org.ops4j.pax.transx}</version>
+                <classifier>sources</classifier>
+            </dependency>
             <dependency>
                 <groupId>org.ops4j.pax.web</groupId>
                 <artifactId>pax-web-undertow</artifactId>
@@ -732,6 +760,26 @@
                 <groupId>org.jboss.modules</groupId>
                 <artifactId>jboss-modules</artifactId>
                 <version>${version.org.jboss.modules}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.narayana.jta</groupId>
+                <artifactId>narayana-jta</artifactId>
+                <version>${version.org.jboss.narayana}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.narayana.osgi</groupId>
+                <artifactId>narayana-osgi-jta</artifactId>
+                <version>${version.org.jboss.narayana}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.narayana.jts</groupId>
+                <artifactId>narayana-jts-integration</artifactId>
+                <version>${version.org.jboss.narayana}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.narayana.arjunacore</groupId>
+                <artifactId>arjuna</artifactId>
+                <version>${version.org.jboss.narayana}</version>
             </dependency>
             <dependency>
                 <groupId>org.wildfly.common</groupId>
