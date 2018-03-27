@@ -66,15 +66,15 @@ Use the bundle
 
 To use the application be sure to have deployed the quickstart in Fuse as described above. 
 
-1. As soon as the Camel route has been started, you will see a directory `work/camel-odata/input` in your Red Hat Fuse installation.
-2. Copy the files you find in this quick start's `src/main/resources/data` directory to the newly created `work/camel-odata/input`
+1. As soon as the Camel route has been started, you will see a directory `work/odata/input` in your Red Hat Fuse installation.
+2. Copy the files you find in this quick start's `src/main/resources/data` directory to the newly created `work/odata/input`
 directory.
 3. Use `log:display` to check out the business logging.
 
 ```
 2017-11-29 15:46:22,524 | INFO  | nt Dispatcher: 1 | BlueprintCamelContext            | 62 - org.apache.camel.camel-core - 2.21.0.SNAPSHOT | Apache Camel 2.21.0-SNAPSHOT (CamelContext: odata4-example-context) started in 0.102 seconds
-2017-11-29 15:46:23,528 | INFO  | work/odata/input | odata-route                      | 62 - org.apache.camel.camel-core - 2.21.0.SNAPSHOT | Receiving file person2json
-2017-11-29 15:46:23,528 | INFO  | work/odata/input | odata-route                      | 62 - org.apache.camel.camel-core - 2.21.0.SNAPSHOT | Sending file person2json to OData Test Service
+2017-11-29 15:46:23,528 | INFO  | work/odata/input | odata-route                      | 62 - org.apache.camel.camel-core - 2.21.0.SNAPSHOT | Receiving file person2.json
+2017-11-29 15:46:23,528 | INFO  | work/odata/input | odata-route                      | 62 - org.apache.camel.camel-core - 2.21.0.SNAPSHOT | Sending file person2.json to OData Test Service
 2017-11-29 15:46:24,317 | INFO  | work/odata/input | odata-route                      | 62 - org.apache.camel.camel-core - 2.21.0.SNAPSHOT | Receiving file person1.json
 2017-11-29 15:46:24,317 | INFO  | work/odata/input | odata-route                      | 62 - org.apache.camel.camel-core - 2.21.0.SNAPSHOT | Sending file person1.json to OData Test Service
 2017-11-29 15:46:24,665 | INFO  | I/O dispatcher 1 | odata-route                      | 62 - org.apache.camel.camel-core - 2.21.0.SNAPSHOT | Done creating person with properties [ClientPropertyImpl{name=UserName, value=jdoe, annotations=[]}, ClientPropertyImpl{name=FirstName, value=John, annotations=[]}, ClientPropertyImpl{name=LastName, value=Doe, annotations=[]}, ClientPropertyImpl{name=MiddleName, value=, annotations=[]}, ClientPropertyImpl{name=Gender, value=Male, annotations=[]}, ClientPropertyImpl{name=Age, value=, annotations=[]}, ClientPropertyImpl{name=Emails, value=ClientCollectionValueImpl [values=[]super[AbstractClientValue [typeName=null]]], annotations=[]}, ClientPropertyImpl{name=FavoriteFeature, value=Feature1, annotations=[]}, ClientPropertyImpl{name=Features, value=ClientCollectionValueImpl [values=[]super[AbstractClientValue [typeName=null]]], annotations=[]}, ClientPropertyImpl{name=AddressInfo, value=ClientCollectionValueImpl [values=[]super[AbstractClientValue [typeName=null]]], annotations=[]}, ClientPropertyImpl{name=HomeAddress, value=, annotations=[]}]
