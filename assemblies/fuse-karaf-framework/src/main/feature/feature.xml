@@ -29,6 +29,7 @@
     <repository>mvn:org.apache.cxf.karaf/apache-cxf/${version.org.apache.cxf}/xml/features</repository>
     <repository>mvn:org.apache.activemq/artemis-features/${version.org.apache.activemq.artemis}/xml/features</repository>
     <repository>mvn:io.hawt/hawtio-karaf/${version.io.hawt}/xml/features</repository>
+    <repository>mvn:org.ops4j.pax.keycloak/pax-keycloak-features/${version.org.ops4j.pax.keycloak}/xml/features</repository>
 
     <!-- Red Hat Fuse Karaf features -->
 
