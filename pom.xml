@@ -80,7 +80,7 @@
         <version.org.apache.camel>2.21.0.fuse-000062</version.org.apache.camel>
         <version.org.apache.cxf>3.1.11.fuse-000206</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.0.fuse-000197</version.org.apache.karaf>
-        <version.org.fusesource.camel-sap>7.0.0.fuse-000196</version.org.fusesource.camel-sap>
+        <version.org.fusesource.camel-sap>7.0.0.fuse-000199</version.org.fusesource.camel-sap>
         <version.org.apache-extras.camel-extra>2.21.0.fuse-000039</version.org.apache-extras.camel-extra>
 
         <!-- versions of normal dependencies of Red Hat Fuse -->
@@ -826,6 +826,14 @@
                 <artifactId>jackson-module-jsonSchema</artifactId>
                 <version>${version.com.fasterxml.jackson.module}</version>
                 <optional>true</optional>
+            </dependency>
+            <dependency>
+                <groupId>org.fusesource</groupId>
+                <artifactId>activemq-karaf</artifactId>
+                <version>${version.org.fusesource.camel-sap}</version>
+                <type>xml</type>
+                <classifier>features</classifier>
+                <scope>runtime</scope>
             </dependency>
             <dependency>
                 <groupId>io.hawt</groupId>
