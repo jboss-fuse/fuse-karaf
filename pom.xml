@@ -130,14 +130,16 @@
         <version.org.apache.servicemix.bundles.jasypt>1.9.2_1</version.org.apache.servicemix.bundles.jasypt>
         <version.org.apache.servicemix.bundles.javax-inject>1_2</version.org.apache.servicemix.bundles.javax-inject>
         <version.org.apache.servicemix.bundles.jsch>0.1.54_1</version.org.apache.servicemix.bundles.jsch>
-        <version.org.apache.servicemix.bundles.reflections>0.9.11_1</version.org.apache.servicemix.bundles.reflections>
+        <version.org.apache.servicemix.bundles.reflections>0.9.11_2</version.org.apache.servicemix.bundles.reflections>
         <version.org.apache.servicemix.bundles.rhino>1.7.7.1_1</version.org.apache.servicemix.bundles.rhino>
         <version.org.apache.servicemix.bundles.spring>4.3.14.RELEASE_1</version.org.apache.servicemix.bundles.spring>
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
         <version.org.apache.servicemix.bundles.xerces>2.11.0_1</version.org.apache.servicemix.bundles.xerces>
         <version.org.apache.servicemix.bundles.xpp3>1.1.4c_7</version.org.apache.servicemix.bundles.xpp3>
+        <version.org.apache.servicemix.bundles.javax-el>3.0.0_1</version.org.apache.servicemix.bundles.javax-el>
         <version.org.apache.servicemix.specs>2.9.0</version.org.apache.servicemix.specs>
+        <version.org.apache.servicemix.specs.javax-el>3.0.0_1</version.org.apache.servicemix.specs.javax-el>
         <version.org.apache.sshd>1.7.0</version.org.apache.sshd>
         <version.org.assertj>3.8.0</version.org.assertj>
         <version.org.atmosphere>2.4.16</version.org.atmosphere>
