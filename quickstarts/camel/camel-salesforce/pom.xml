@@ -30,7 +30,7 @@
     <packaging>bundle</packaging>
 
     <name>Red Hat Fuse :: Quickstarts :: camel-salesforce</name>
-    <description>Camel Olingo2 OData Example</description>
+    <description>Camel Salesforce Example</description>
     <url>https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-salesforce</url>
 
     <dependencies>
