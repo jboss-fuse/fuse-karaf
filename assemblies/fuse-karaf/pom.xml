@@ -124,6 +124,13 @@
             <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.fusesource</groupId>
+            <artifactId>activemq-karaf</artifactId>
+            <type>xml</type>
+            <classifier>features</classifier>
+            <scope>runtime</scope>
+        </dependency>
         <!--
             dependencies with "bundle" or "jar" type will be used as startup (scope=compile), boot (scope=runtime) or
             installed (scope=provided) bundles in karaf-maven-plugin
@@ -318,6 +325,7 @@
                         <feature>camel-bindy</feature>
                         <feature>camel-sql</feature>
                         <feature>camel-jpa</feature>
+                        <feature>camel-activemq</feature>
                     </installedFeatures>
                     <blacklistedFeatures>
                         <feature>httplite</feature>
