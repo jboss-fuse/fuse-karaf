@@ -87,7 +87,7 @@ Exit the Karaf container again by issuing `logout`:
 
 And run the Karaf again specifying the reference to your secret instead of the value:
 
-    $ EXTRA_JAVA_OPTS="-Djavax.net.ssl.keyStorePassword=CR:javax.net.ssl.keyStorePassword" bin/karaf
+    $ EXTRA_JAVA_OPTS="-Djavax.net.ssl.keyStorePassword=CS:javax.net.ssl.keyStorePassword" bin/karaf
 
 And the value of `javax.net.ssl.keyStorePassword` when accessed using `System::getProperty` should contain the
 string `"don't panic"`.
