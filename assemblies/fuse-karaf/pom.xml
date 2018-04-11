@@ -357,6 +357,7 @@
                         <!-- deprecated components -->
                         <feature>camel-context</feature>
                         <feature>camel-cache</feature>
+                        <feature>camel-elasticsearch5</feature>
                         <feature>camel-hdfs</feature>
                         <feature>camel-http</feature>
                         <feature>camel-ibatis</feature>
