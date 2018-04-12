@@ -1,0 +1,66 @@
+// Asciidoctor attributes
+
+:toc: left
+:sectnums:
+:sectnumlevels: 3
+:!linkcss:
+:source-highlighter: highlightjs
+:data-uri:
+
+// custom attributes
+
+:f7: Red Hat Fuse 7
+
+= Fuse 7 persistence quickstarts
+
+`quickstarts/persistence` examples show different aspects of persistence management in {f7}.
+
+This complex topic is divided into several subprojects and examples.
+
+== Persistence manual
+`quickstarts/persistence/manual` Maven project is a collection of Asciidoc documents that can be processed into HTML documentation
+containing in-depth information about JDBC, JMS, transactions, data source management, configuration etc.
+
+This documentation can be built using:
+[listing,options="nowrap"]
+----
+$ cd quickstarts/persistence/manual
+$ mvn clean process-resources
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -----------------< org.jboss.fuse.quickstarts:manual >------------------
+[INFO] Building Red Hat Fuse :: Quickstarts :: persistence :: manual 7.0.0.fuse-000171
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+...
+[INFO] Rendered */quickstarts/persistence/manual/src/main/asciidoc/index.adoc
+----
+
+Final documentation can be found in `quickstarts/persistence/manual/target/generated-docs/index.html`.
+
+== Database and configuration scripts
+
+`quickstarts/persistence/databases` directory contains different scripts and examples which are not itself part of Maven artifact:
+
+* `scripts` contains SQL scripts, referred to from chapter 1 of the manual (_Database configuration_)
+
+* `cm` contains sample Configuration Admin factory configuration that may be used to configure JDBC connection pool
+using `pax-jdbc` features
+
+* `blueprints` contains sample Blueprint XML files that may be dropped directly to `$FUSE_HOME/deploy` directory
+(after configuring docker-based databases) or used as reference examples for normal OSGi bundles
+
+== Standalone example
+
+`standalone-xa` Maven project contains JUnit tests showing some code-only examples:
+
+* `StandaloneTxManagerTest` shows how to configure Narayana Transaction Manager and use it in canonical JTA example with XA recovery
+
+* `StandaloneXADataAccessTest` shows how DBCP2 connections pools may be configured in Java™ code. This example's
+goal is to clear confusion between database-specific and generic instances of `javax.sql.(XA)DataSource` interface implementations.
+
+== JavaEE example
+
+`javaee-xa` is not OSGi related, but presents _canonical_ example of using JTA and JDBC APIs inside standard Servlet.
+This example requires configuration of sample data sources inside Red Hat EAP server. The configuration details
+are not presented in this quickstarts - only the API usage is shown.

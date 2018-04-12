@@ -11,7 +11,7 @@
 
 :f7: Red Hat Fuse 7
 
-= Fuse 7 persistence quickstarts
+= Fuse 7 persistence manual
 
 Welcome to Fuse 7 quickstarts showing various Java™ persistence mechanisms.
 
