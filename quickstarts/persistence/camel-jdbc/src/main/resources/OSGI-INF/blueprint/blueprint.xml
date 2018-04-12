@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<!--
+
+     Copyright 2005-2018 Red Hat, Inc.
+
+     Red Hat licenses this file to you under the Apache License, version
+     2.0 (the "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+     implied.  See the License for the specific language governing
+     permissions and limitations under the License.
+
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.3.0"
+        xsi:schemaLocation="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.3.0 http://aries.apache.org/schemas/blueprint-cm/blueprint-cm-1.3.0.xsd
+             http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
+             http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprint/camel-blueprint.xsd">
+
+
+    <!--
+        OSGi blueprint property placeholder
+    -->
+    <cm:property-placeholder id="placeholder" persistent-id="fuse.quickstarts.camel.jdbc" update-strategy="reload">
+        <cm:default-properties>
+            <cm:property name="jdbc.url" value="jdbc:postgresql://localhost:5432/reportdb" />
+            <cm:property name="jdbc.user" value="fuse" />
+            <cm:property name="jdbc.password" value="fuse" />
+        </cm:default-properties>
+    </cm:property-placeholder>
+
+    <!--
+        Database-specific, non-pooling, non-enlisting javax.sql.DataSource
+        With non-xa scenario, we don't need database-specific data source, as both org.postgresql.ds.PGSimpleDataSource
+        and org.apache.commons.dbcp2.BasicDataSource simply use Diver.connect()
+    -->
+    <!--<bean id="postgresql" class="org.postgresql.ds.PGSimpleDataSource">-->
+        <!--<property name="url" value="${jdbc.url}" />-->
+        <!--<property name="user" value="${jdbc.user}" />-->
+        <!--<property name="password" value="${jdbc.password}" />-->
+        <!--<property name="currentSchema" value="report" />-->
+        <!--<property name="connectTimeout" value="5" />-->
+    <!--</bean>-->
+
+    <!--
+        Non database-specific, generic, pooling, non enlisting, non xa-aware javax.sql.DataSource
+    -->
+    <bean id="reportdbPool" class="org.apache.commons.dbcp2.BasicDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="minIdle" value="3" />
+        <property name="maxTotal" value="10" />
+        <property name="validationQuery" value="select schema_name, schema_owner from information_schema.schemata" />
+    </bean>
+
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/blueprint">
+
+        <!--
+            Route which will execute the select query every 20s and display result in the log
+        -->
+        <route id="trigger-database">
+            <from uri="timer://webinar?delay=3000&amp;period=20000" />
+            <setBody>
+                <constant>select * from report.incident</constant>
+            </setBody>
+            <to uri="jdbc:reportdbPool" />
+            <split>
+                <simple>${body}</simple>
+                <log message="*** Select all : ${body}" />
+            </split>
+        </route>
+
+        <!--
+            Route which will execute the select query when a file will be poll from
+            data directory. this file contains the keys of the incidents to be find
+            and display result in the log
+        -->
+        <route id="key-from-file">
+            <from uri="file://data/camel-jdbc" />
+            <split>
+                <tokenize token="," />
+                <setBody>
+                    <simple>select * from report.incident where id = '${body}'</simple>
+                </setBody>
+                <log message=">>> SQL Query : ${body}" />
+                <to uri="jdbc:reportdbPool" />
+                <log message=">>> Select using key : ${body}" />
+            </split>
+        </route>
+
+    </camelContext>
+
+</blueprint>
