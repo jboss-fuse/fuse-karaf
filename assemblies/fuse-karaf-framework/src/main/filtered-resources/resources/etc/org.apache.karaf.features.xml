@@ -140,6 +140,8 @@
         <!-- temporary change -->
         <bundle originalUri="wrap:mvn:org.jboss.xnio/xnio-api/3.*"
                 replacement="mvn:org.jboss.xnio/xnio-api/${version.org.jboss.xnio}" mode="maven" />
+        <bundle originalUri="mvn:org.ops4j.pax.url/pax-url-war/[2.5,2.6)/jar/uber"
+                replacement="mvn:org.ops4j.pax.url/pax-url-war/${version.org.ops4j.pax.url}/jar/uber" mode="maven" />
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
