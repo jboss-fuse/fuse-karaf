@@ -1,0 +1,38 @@
+// Asciidoctor attributes
+
+:toc: left
+:sectnums:
+:sectnumlevels: 3
+:!linkcss:
+:source-highlighter: highlightjs
+:data-uri:
+
+// custom attributes
+
+:f7: Red Hat Fuse 7
+
+= Fuse 7 persistence quickstarts
+
+Welcome to Fuse 7 quickstarts showing various Java™ persistence mechanisms.
+
+Persistence quickstarts include simple examples using Camel routes with single databases, combinations of JMS
+and JDBC access and XA/non-XA examples.
+
+:leveloffset: +1
+
+include::01-database.adoc[]
+
+include::02-jdbc.adoc[]
+
+include::03-datasources.adoc[]
+//
+//include::04-message-broker.adoc[]
+//
+//include::05-connection-factories.adoc[]
+//
+//include::06-transaction-management.adoc[]
+
+:leveloffset: -1
+
+- - -
+[small]#Generated with Asciidoctor {asciidoctor-version} on {docdatetime}.#

@@ -162,6 +162,7 @@
         <version.org.mockito>2.13.0</version.org.mockito>
         <version.org.ops4j.base>1.5.0</version.org.ops4j.base>
         <version.org.ops4j.pax.exam>4.11.0</version.org.ops4j.pax.exam>
+        <version.org.ops4j.pax.jdbc>1.2.1</version.org.ops4j.pax.jdbc>
         <version.org.ops4j.pax.keycloak>0.2.0</version.org.ops4j.pax.keycloak>
         <version.org.ops4j.pax.logging>1.10.1</version.org.ops4j.pax.logging>
         <version.org.ops4j.pax.swissbox>1.8.3</version.org.ops4j.pax.swissbox>
@@ -176,13 +177,15 @@
         <version.org.wildfly.common>1.2.0.Beta3</version.org.wildfly.common>
         <version.org.wildfly.security.elytron>1.1.0.Beta22</version.org.wildfly.security.elytron>
 
-        <!-- versions of Maven plugins -->
+        <!-- versions of Maven plugins (and their important dependencies) -->
+        <version.plugin.asciidoctor-maven-plugin>1.5.6</version.plugin.asciidoctor-maven-plugin>
         <version.plugin.felix.maven-scr-plugin>1.26.0</version.plugin.felix.maven-scr-plugin>
         <version.plugin.felix.maven-bundle-plugin>3.5.0</version.plugin.felix.maven-bundle-plugin>
         <version.plugin.mycila.license-maven-plugin>3.0</version.plugin.mycila.license-maven-plugin>
         <version.plugin.mojo.build-helper-maven-plugin>3.0.0</version.plugin.mojo.build-helper-maven-plugin>
         <version.plugin.mojo.properties-maven-plugin>1.0.0</version.plugin.mojo.properties-maven-plugin>
         <version.plugin.servicemix.depends-maven-plugin>1.4.0</version.plugin.servicemix.depends-maven-plugin>
+        <!-- Plugins from org.apache.maven.plugins -->
         <version.plugin.maven-antrun-plugin>1.8</version.plugin.maven-antrun-plugin>
         <version.plugin.maven-assembly-plugin>3.1.0</version.plugin.maven-assembly-plugin>
         <version.plugin.maven-checkstyle-plugin>2.17</version.plugin.maven-checkstyle-plugin>
@@ -740,6 +743,21 @@
                 <artifactId>apache-salesforce</artifactId>
                 <version>${version.org.apache.camel}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>apache-blueprint</artifactId>
+                <version>${version.org.apache.camel}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>apache-jdbc</artifactId>
+                <version>${version.org.apache.camel}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>apache-sql</artifactId>
+                <version>${version.org.apache.camel}</version>
+            </dependency>
 
             <!-- Camel-extra dependencies -->
 
@@ -870,6 +888,12 @@
                 <groupId>org.ops4j.pax.web</groupId>
                 <artifactId>pax-web-jsp</artifactId>
                 <version>${version.org.ops4j.pax.web}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.ops4j.pax.jdbc</groupId>
+                <artifactId>pax-jdbc</artifactId>
+                <version>${version.org.ops4j.pax.jdbc}</version>
             </dependency>
 
             <dependency>
@@ -1291,6 +1315,12 @@
                     <version>${version.plugin.mycila.license-maven-plugin}</version>
                 </plugin>
 
+                <plugin>
+                    <groupId>org.asciidoctor</groupId>
+                    <artifactId>asciidoctor-maven-plugin</artifactId>
+                    <version>${version.plugin.asciidoctor-maven-plugin}</version>
+                </plugin>
+
             </plugins>
         </pluginManagement>
 
@@ -1439,6 +1469,7 @@
                                 <include>**/*.xml</include>
                                 <include>**/*.wsdl</include>
                                 <include>**/*.cfg</include>
+                                <include>**/*.sql</include>
                                 <include>**/*.properties</include>
                                 <include>**/bin/fuse*</include>
                             </includes>
