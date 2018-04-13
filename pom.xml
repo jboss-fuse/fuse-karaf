@@ -490,7 +490,7 @@
             </dependency>
 
             <dependency>
-                <groupId>org.apache.activemq</groupId>
+                <groupId>org.fusesource</groupId>
                 <artifactId>activemq-client-osgi</artifactId>
                 <version>${version.org.fusesource.activemq-client-osgi}</version>
             </dependency>
