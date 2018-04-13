@@ -80,6 +80,7 @@
         <version.org.apache.camel>2.21.0.fuse-000067</version.org.apache.camel>
         <version.org.apache.cxf>3.1.11.fuse-000224</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.0.fuse-000216</version.org.apache.karaf>
+        <version.org.fusesource.activemq-client-osgi>7.0.0.fuse-000201</version.org.fusesource.activemq-client-osgi>
         <version.org.fusesource.camel-sap>7.0.0.fuse-000201</version.org.fusesource.camel-sap>
         <version.org.apache-extras.camel-extra>2.21.0.fuse-000044</version.org.apache-extras.camel-extra>
 
@@ -477,6 +478,23 @@
                 <groupId>org.apache.felix</groupId>
                 <artifactId>org.apache.felix.gogo.runtime</artifactId>
                 <version>${version.org.apache.felix.gogo}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.activemq</groupId>
+                <artifactId>artemis-jms-client</artifactId>
+                <version>${version.org.apache.activemq.artemis}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.qpid</groupId>
+                <artifactId>qpid-jms-client</artifactId>
+                <version>${version.org.apache.qpid.qpid-jms-client}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.fusesource</groupId>
+                <artifactId>activemq-client-osgi</artifactId>
+                <version>${version.org.fusesource.activemq-client-osgi}</version>
             </dependency>
 
             <dependency>
