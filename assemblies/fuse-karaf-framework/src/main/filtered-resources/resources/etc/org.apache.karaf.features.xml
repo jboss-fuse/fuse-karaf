@@ -51,8 +51,10 @@
                 replacement="mvn:io.undertow/undertow-core/${version.io.undertow}" mode="maven" />
         <bundle originalUri="wrap:mvn:io.undertow/undertow-servlet/*"
                 replacement="mvn:io.undertow/undertow-servlet/${version.io.undertow}" mode="maven" />
-        <bundle originalUri="mvn:javax.el/javax.el-api/[2.2,3]"
-                replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.specs.javax-el}" mode="maven" />
+        <bundle originalUri="mvn:javax.el/javax.el-api/[2.2,3)"
+                replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-2.2.5/${version.org.apache.servicemix.specs.javax-el2}" mode="maven" />
+        <bundle originalUri="mvn:javax.el/javax.el-api/[3,4)"
+                replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.specs.javax-el3}" mode="maven" />
         <bundle originalUri="mvn:joda-time/joda-time/[2.9,3)"
                 replacement="mvn:joda-time/joda-time/${version.joda-time}" mode="maven" />
         <bundle originalUri="mvn:org.apache.commons/commons-lang3/[3,4)"
@@ -85,8 +87,10 @@
                 replacement="mvn:org.apache.sshd/sshd-core/${version.org.apache.sshd}" mode="maven" />
         <bundle originalUri="mvn:org.atmosphere/atmosphere-runtime/[2.4,3)"
                 replacement="mvn:org.atmosphere/atmosphere-runtime/${version.org.atmosphere}" mode="maven" />
-        <bundle originalUri="mvn:org.glassfish.web/javax.el/[2,3]"
-                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el}" mode="maven" />
+        <bundle originalUri="mvn:org.glassfish.web/javax.el/[2,3)"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el2}" mode="maven" />
+        <bundle originalUri="mvn:org.glassfish.web/javax.el/[3,4)"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el3}" mode="maven" />
         <bundle originalUri="mvn:org.hibernate/hibernate-validator/[5.2,5.3)"
                 replacement="mvn:org.hibernate/hibernate-validator/${version.org.hibernate.validator}" mode="maven" />
         <bundle originalUri="mvn:org.javassist/javassist/[3,4)"
