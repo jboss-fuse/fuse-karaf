@@ -115,6 +115,17 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <!-- For Artemis -->
+            <id>jb-amq-7-brew</id>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-amq-7-build/latest/maven/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <pluginRepositories>

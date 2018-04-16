@@ -59,6 +59,105 @@ using `pax-jdbc` features
 * `StandaloneXADataAccessTest` shows how DBCP2 connections pools may be configured in Java™ code. This example's
 goal is to clear confusion between database-specific and generic instances of `javax.sql.(XA)DataSource` interface implementations.
 
+* `StandaloneWMQ9AccessTest` shows _canonical_ methods for accessing IBM MQ 9 broker. Because IBM MQ drivers are not accessible
+via Maven Central repository, code examples use Spring configuration and there's special `wmq9` Maven profile
+with `system`-scoped dependency. When running this example, we have to specify a property for the location
+of MQ drivers.
++
+[listing,options="nowrap"]
+----
+$ ls -la /data/downloads/ibm.com/IBM\ MQ/9.0.5.0-IBM-MQ-Install-Java-All/JavaSE/
+total 12732
+drwxrwxr-x. 2 ggrzybek ggrzybek    4096 04-13 16:20 .
+drwxrwxr-x. 5 ggrzybek ggrzybek    4096 04-13 16:22 ..
+-rw-rw-r--. 1 ggrzybek ggrzybek  775948 04-13 16:20 bcpkix-jdk15on-157.jar
+-rw-rw-r--. 1 ggrzybek ggrzybek 3759724 04-13 16:20 bcprov-jdk15on-157.jar
+-rw-rw-r--. 1 ggrzybek ggrzybek 8278943 04-13 16:20 com.ibm.mq.allclient.jar
+-rw-rw-r--. 1 ggrzybek ggrzybek   43698 04-13 16:20 com.ibm.mq.traceControl.jar
+-rw-rw-r--. 1 ggrzybek ggrzybek   22769 04-13 16:20 fscontext.jar
+-rw-rw-r--. 1 ggrzybek ggrzybek   58349 04-13 16:20 jms.jar
+-rw-rw-r--. 1 ggrzybek ggrzybek   77116 04-13 16:20 providerutil.jar
+
+$ pwd
+/home/ggrzybek/sources/github.com/jboss-fuse/fuse-karaf/quickstarts/persistence
+
+$ mvn clean test -Pquickstarts-test -Pwmq9 -f standalone-xa/ -Dmq9library.path='/data/downloads/ibm.com/IBM MQ/9.0.5.0-IBM-MQ-Install-Java-All/JavaSE' -Dtest=StandaloneWMQ9AccessTest
+[INFO] Scanning for projects...
+[INFO]
+[INFO] --------------< org.jboss.fuse.quickstarts:standalone-xa >--------------
+[INFO] Building Red Hat Fuse :: Quickstarts :: persistence :: standalone transaction support 7.0.0.fuse-000171
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ standalone-xa ---
+[INFO] Deleting /data/sources/github.com/jboss-fuse/fuse-karaf/quickstarts/persistence/standalone-xa/target
+[INFO]
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ standalone-xa ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory /data/sources/github.com/jboss-fuse/fuse-karaf/quickstarts/persistence/standalone-xa/src/main/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.7.0:compile (default-compile) @ standalone-xa ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ standalone-xa ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO]
+[INFO] --- maven-compiler-plugin:3.7.0:testCompile (default-testCompile) @ standalone-xa ---
+[INFO] Changes detected - recompiling the module!
+[INFO] Compiling 3 source files to /data/sources/github.com/jboss-fuse/fuse-karaf/quickstarts/persistence/standalone-xa/target/test-classes
+[INFO]
+[INFO] --- maven-surefire-plugin:2.20:test (default-test) @ standalone-xa ---
+[INFO]
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.jboss.fuse.quickstarts.persistence.standalone.StandaloneJMSAccessTest
+14:07:54 INFO [StandaloneJMSAccessTest] (StandaloneJMSAccessTest.java:71) : MESSAGE: Hello IBM MQ 9
+14:07:54 INFO [StandaloneJMSAccessTest] (StandaloneJMSAccessTest.java:72) : MESSAGE:
+  JMSMessage class: jms_text
+  JMSType:          null
+  JMSDeliveryMode:  2
+  JMSDeliveryDelay: 0
+  JMSDeliveryTime:  0
+  JMSExpiration:    0
+  JMSPriority:      4
+  JMSMessageID:     ID:414d512046555345514d2020202020207f89d45a05eff121
+  JMSTimestamp:     1523880474298
+  JMSCorrelationID: null
+  JMSDestination:   queue:///DEV.QUEUE.1
+  JMSReplyTo:       null
+  JMSRedelivered:   false
+    JMSXAppID: jar
+    JMSXDeliveryCount: 1
+    JMSXUserID: app
+    JMS_IBM_Character_Set: UTF-8
+    JMS_IBM_Encoding: 273
+    JMS_IBM_Format: MQSTR
+    JMS_IBM_MsgType: 8
+    JMS_IBM_PutApplType: 28
+    JMS_IBM_PutDate: 20180416
+    JMS_IBM_PutTime: 12075430
+Hello IBM MQ 9
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.717 s - in org.jboss.fuse.quickstarts.persistence.standalone.StandaloneJMSAccessTest
+[INFO]
+[INFO] Results:
+[INFO]
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 3.368 s
+[INFO] Finished at: 2018-04-16T14:07:54+02:00
+[INFO] ------------------------------------------------------------------------
+----
+
+* `StandaloneArtemisAccessTest` shows _canonical_ methods for accessing A-MQ 7 broker. This example should be run
+with `-Partemis` Maven profile.
+
+* `StandaloneAMQ6AccessTest` shows _canonical_ methods for accessing A-MQ 6 broker. This example should be run
+with `-Pamq6` Maven profile.
+
 == JavaEE example
 
 `javaee-xa` is not OSGi related, but presents _canonical_ example of using JTA and JDBC APIs inside standard Servlet.

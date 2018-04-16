@@ -2,9 +2,6 @@
 
 Before deploying/configuring anything in {f7} we need actual RDBMS system running.
 
-We'll be testing 3 different databases - two running inside docker container and one embedded. All will support
-XA transactions.
-
 Persistence quickstarts include SQL script that prepare database structures.
 
 We will refer to the root directory of persistence quickstarts as `$PQ_HOME`. This directory is stored inside {f7}
