@@ -34,7 +34,7 @@ http://camel.apache.org/schema/blueprint http://camel.apache.org/schema/blueprin
 		</route>
 
 		<route id="hl7FileRoute">
-			<from uri="file:work/hl7/input?delete=true&amp;readLock=fileLock&amp;moveFailed=.error&amp;antInclude=*.hl7"/>
+			<from uri="file:work/hl7/input?delete=true&amp;moveFailed=.error&amp;antInclude=*.hl7"/>
 			<convertBodyTo type="java.lang.String"/>
 			<to uri="direct:hl7Main"/>
 		</route>
