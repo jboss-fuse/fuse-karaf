@@ -30,7 +30,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class StandaloneArtemisAccessTest {
 
-    public static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneArtemisAccessTest.class);
+    public static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneArtemisAccessTest.class);
 
     @Test
     public void manualNonXAJMSAccess() throws Exception {

@@ -20,6 +20,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Properties;
+
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
 
@@ -45,7 +46,7 @@ import org.postgresql.xa.PGXADataSource;
 
 public class StandaloneXADataAccessTest {
 
-    public static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneXADataAccessTest.class);
+    public static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneXADataAccessTest.class);
 
     private UserTransaction userTransaction;
     private TransactionManager transactionManager;

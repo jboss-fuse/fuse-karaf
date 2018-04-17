@@ -25,10 +25,10 @@ include::01-database.adoc[]
 include::02-jdbc.adoc[]
 
 include::03-datasources.adoc[]
-//
-//include::04-message-broker.adoc[]
-//
-//include::05-connection-factories.adoc[]
+
+include::04-message-brokers.adoc[]
+
+include::05-jms.adoc[]
 //
 //include::06-transaction-management.adoc[]
 

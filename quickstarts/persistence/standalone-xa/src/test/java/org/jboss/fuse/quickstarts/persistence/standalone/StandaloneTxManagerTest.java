@@ -19,6 +19,7 @@ import java.io.File;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
+
 import javax.transaction.Transaction;
 import javax.transaction.TransactionManager;
 import javax.transaction.UserTransaction;
@@ -46,7 +47,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class StandaloneTxManagerTest {
 
-    public static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneTxManagerTest.class);
+    public static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneTxManagerTest.class);
 
     @Before
     public void init() {
@@ -138,13 +139,14 @@ public class StandaloneTxManagerTest {
      */
     public static final class DummyXAResource implements XAResource {
 
+        Runnable callback;
+
         private final boolean crash;
         private final String name;
 
         private boolean recovered = false;
         private Xid crashedXid;
 
-        public Runnable callback;
 
         public DummyXAResource(String name, boolean crashOnCommit) {
             this.name = name;

@@ -152,8 +152,8 @@ Hello IBM MQ 9
 [INFO] ------------------------------------------------------------------------
 ----
 
-* `StandaloneArtemisAccessTest` shows _canonical_ methods for accessing A-MQ 7 broker. This example should be run
-with `-Partemis` Maven profile.
+* `StandaloneArtemisAccessTest` shows _canonical_ methods for accessing A-MQ 7 broker. This example may be run
+without specifying any profile.
 
 * `StandaloneAMQ6AccessTest` shows _canonical_ methods for accessing A-MQ 6 broker. This example should be run
 with `-Pamq6` Maven profile.

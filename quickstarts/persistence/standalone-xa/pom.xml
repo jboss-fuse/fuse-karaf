@@ -69,6 +69,11 @@
             <artifactId>spring-context</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <scope>test</scope>
+        </dependency>
 
         <!-- Other dependencies -->
 
@@ -95,6 +100,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.messaginghub</groupId>
+            <artifactId>pooled-jms</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -127,6 +138,29 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Artemis -->
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-core-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jms-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.qpid</groupId>
+            <artifactId>proton-j</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.qpid</groupId>
+            <artifactId>qpid-jms-client</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -174,7 +208,6 @@
                     <artifactId>derbyclient</artifactId>
                     <scope>test</scope>
                 </dependency>
-
             </dependencies>
         </profile>
         <profile>
@@ -188,34 +221,9 @@
                 <dependency>
                     <groupId>com.ibm.mq</groupId>
                     <artifactId>com.ibm.mq.allclient</artifactId>
-                    <version>9.0.5</version>
+                    <version>9.0.5.0</version>
                     <scope>system</scope>
                     <systemPath>${mq9library.path}/com.ibm.mq.allclient.jar</systemPath>
-                </dependency>
-            </dependencies>
-        </profile>
-        <profile>
-            <id>artemis</id>
-            <dependencies>
-                <dependency>
-                    <groupId>org.apache.activemq</groupId>
-                    <artifactId>artemis-core-client</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.activemq</groupId>
-                    <artifactId>artemis-jms-client</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.qpid</groupId>
-                    <artifactId>proton-j</artifactId>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>org.apache.qpid</groupId>
-                    <artifactId>qpid-jms-client</artifactId>
-                    <scope>test</scope>
                 </dependency>
             </dependencies>
         </profile>

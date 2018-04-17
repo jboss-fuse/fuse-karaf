@@ -17,8 +17,9 @@ package org.jboss.fuse.quickstarts.persistence.standalone;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
+import javax.jms.JMSConsumer;
+import javax.jms.JMSContext;
 import javax.jms.Message;
-import javax.jms.MessageConsumer;
 import javax.jms.MessageProducer;
 import javax.jms.Queue;
 import javax.jms.Session;
@@ -30,19 +31,19 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class StandaloneWMQ9AccessTest {
 
-    public static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneWMQ9AccessTest.class);
+    public static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneWMQ9AccessTest.class);
 
     @Test
     public void manualNonXAJMSAccess() throws Exception {
         ApplicationContext context = new ClassPathXmlApplicationContext("classpath:/StandaloneWMQ9AccessTest.xml");
         ConnectionFactory cf = context.getBean(ConnectionFactory.class);
+        Queue q = context.getBean(Queue.class);
+        LOG.info("Using WMQ9 queue: {}", q.getClass().getName());
         {
+            // classic API
             try (Connection c = cf.createConnection("app", "fuse")) {
                 c.start();
                 try (Session session = c.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-                    Queue q = context.getBean(Queue.class);
-                    LOG.info("Using WMQ9 queue: {}", q.getClass().getName());
-
                     try (MessageProducer producer = session.createProducer(q)) {
                         TextMessage message = session.createTextMessage("Hello IBM MQ 9");
                         producer.send(message);
@@ -51,17 +52,12 @@ public class StandaloneWMQ9AccessTest {
             }
         }
         {
-            try (Connection c = cf.createConnection("app", "fuse")) {
-                c.start();
-                try (Session session = c.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-                    Queue q = context.getBean(Queue.class);
-                    LOG.info("Using WMQ9 queue: {}", q.getClass().getName());
-
-                    try (MessageConsumer consumer = session.createConsumer(q)) {
-                        Message msg = consumer.receive(5000);
-                        LOG.info("MESSAGE: " + ((TextMessage)msg).getText());
-                        LOG.info("MESSAGE: " + msg);
-                    }
+            // simplified API
+            try (JMSContext jms = cf.createContext("app", "fuse", JMSContext.AUTO_ACKNOWLEDGE)) {
+                try (JMSConsumer consumer = jms.createConsumer(q)) {
+                    Message msg = consumer.receive(5000);
+                    LOG.info("MESSAGE: " + ((TextMessage)msg).getText());
+                    LOG.info("MESSAGE: " + msg);
                 }
             }
         }

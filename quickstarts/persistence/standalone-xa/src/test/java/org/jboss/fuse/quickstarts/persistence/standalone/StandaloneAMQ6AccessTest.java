@@ -30,7 +30,7 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class StandaloneAMQ6AccessTest {
 
-    public static org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneAMQ6AccessTest.class);
+    public static final org.slf4j.Logger LOG = org.slf4j.LoggerFactory.getLogger(StandaloneAMQ6AccessTest.class);
 
     @Test
     public void manualNonXAJMSAccess() throws Exception {
