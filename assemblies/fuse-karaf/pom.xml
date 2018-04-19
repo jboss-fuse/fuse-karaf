@@ -520,7 +520,7 @@
 										<include>licenses.xml</include>
 									</includes>
 									<stylesheet>${basedir}/src/license/licenses.xsl</stylesheet>
-									<outputDir>${basedir}/target/target/maven-jboss-license-plugin</outputDir>
+									<outputDir>${project.build.directory}/assembly/licenses</outputDir>
 									<fileMappers>
 										<fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
 											<targetExtension>.html</targetExtension>
@@ -594,6 +594,13 @@
                         </goals>
                         <configuration>
                             <target>
+                                <copy todir="${project.build.directory}/assembly/licenses">
+                                  <fileset dir="${basedir}/target/target/maven-jboss-license-plugin">
+                                    <include name="*" />
+                                  </fileset>
+                                </copy>
+                                <copy file="${basedir}/src/license/licenses.css"
+                                        todir="${project.build.directory}/assembly/licenses" />
                                 <copy file="${project.build.directory}/${project.artifactId}-${project.version}-baseline.zip"
                                         todir="${project.build.directory}/assembly/system/org/jboss/fuse/fuse-karaf/${project.version}" />
                             </target>
