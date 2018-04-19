@@ -326,6 +326,7 @@
                         <feature>camel-sql</feature>
                         <feature>camel-jpa</feature>
                         <feature>camel-activemq</feature>
+                        <feature>camel-jms</feature>
                     </installedFeatures>
                     <blacklistedFeatures>
                         <feature>httplite</feature>
@@ -387,6 +388,15 @@
                         <!-- Jclouds -->
                         <feature>jclouds-chef</feature>
                         <feature>jclouds-commands</feature>
+
+                        <!--artemis server-->
+                        <feature>artemis</feature>
+                        <feature>artemis-core</feature>
+                        <feature>artemis-amqp</feature>
+                        <feature>artemis-stomp</feature>
+                        <feature>artemis-mqtt</feature>
+                        <feature>artemis-hornetq</feature>
+                        <feature>artemis-openwire</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
