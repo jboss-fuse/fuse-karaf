@@ -1,0 +1,219 @@
+= Java™ Connector Architecture
+
+JCA specification was created to (among others) _generalize_ the scenarios with three participants:
+
+* external system (like database or _generally_ EIS system)
+* (JavaEE) application server
+* (deployed) application
+
+== JDBC - a simple analogy
+
+In simplest scenario, where there's only application and database, we have:
+
+[plantuml]
+....
+Application -> "Database (driver)": java.sql.Driver.connect()
+"Database (driver)" -> Application: java.sql.Connection
+....
+
+Adding Application server (which exposes `javax.sql.DataSource`) to the picture, we have (without recalling
+different aspects of data sources like XA):
+[plantuml]
+....
+Application -> "App Server": javax.sql.DataSource.getConnection()
+"App Server" -> "Database (driver)": javax.sql.ConnectionPoolDataSource.getPooledConnection()
+"Database (driver)" -> "App Server": javax.sql.PooledConnection
+"App Server" -> Application: javax.sql.PooledConnection.getConnection()
+....
+
+JCA generalizes the concept of _database driver_ by adding two-way communication between the _driver_ and
+application server. The driver becomes a _resource adapter_ represented by `javax.resource.spi.ResourceAdapter`.
+
+There are two important interfaces:
+
+* `javax.resource.spi.ManagedConnectionFactory` implemented by resource adapter.
+* `javax.resource.spi.ConnectionManager` implemented by application server.
+
+`ManagedConnectionFactory` serves two purposes:
+
+* `Object createConnectionFactory(ConnectionManager cxManager)` method may be used to produce a _connection factory_
+for given EIS (or database or message broker) that can be used by application code. The returned `Object` may be:
+** generic `javax.resource.cci.ConnectionFactory` (not described here further, see JCA 1.6, chapter 17: _Common Client Interface_)
+** EIS specif connection factory like our well-known `javax.sql.DataSource` or `javax.jms.ConnectionFactory` - that's
+the type of _connection factory_ that's used by `pax-transx-jdbc` and `pax-transx-jms` bundles
+* `javax.resource.spi.ManagedConnection ManagedConnectionFactory.createManagedConnection()` used by _application server_,
+creates actual physical connections to EIS/database/broker
+
+`ConnectionManager` is implemented by _application server_ and used by _resource adapter_. It's _application server_
+that first performs QoS operations (pooling, security, transaction management) and finally delegates to `ManagedConnectionFactory`
+of _resource adapter_ to create `ManagedConnection` instances. The flow looks like this:
+
+. application code uses _connection factory_ created and exposed by _application server_ using object returned from `ManagedConnectionFactory.createConnectionFactory()`.
+It may be generic CCI interface or e.g., `javax.sql.DataSource`.
+. this _connection factory_ doesn't create _connections_ on its own, instead it delegates to `ConnectionManager.allocateConnection()`
+passing _resource adapter_-specific `ManagedConnectionFactory`
+. `ConnectionManager` implemented by _application server_ creates _supporting objects_, manages transactions, pooling, etc. and eventually
+obtains _physical (managed) connection_ from passed `ManagedConnectionFactory`.
+. application code gets _connection_ which is usually a wrapper/proxy created by _application server_ which eventually
+delegates to _resource adapter_'s specific _physical connection_.
+
+Here's the diagram, where _application server_ created non-CCI _connection factory_ which is EIS-specific. Simply - access
+to EIS (here: database) is done using `javax.sql.DataSource` interface, the driver's task is to provide _physical connection_,
+while _application server_ will wrapp it inside (typically) a proxy that does pooling/enlisting/security.
+[plantuml]
+....
+participant Application
+participant "App Server"
+
+create "Connection Manager"
+"App Server" -> "Connection Manager": new
+
+"App Server" -> "Resource Adapter": ManagedConnectionFactory.createConnectionFactory(connection manager)
+
+create "Connection Factory"
+"Resource Adapter" -> "Connection Factory": new
+
+Application -> "Connection Factory": javax.sql.DataSource.getConnection()
+"Connection Factory" -> "Connection Manager": ConnectionManager.allocateConnection()
+"Connection Manager" -> "App Server": configure pooling/tx/security
+"Connection Manager" -> "Resource Adapter": ManagedConnectionFactory.createManagedConnection()
+"Connection Manager" <- "Resource Adapter": javax.resource.spi.ManagedConnection
+"Connection Manager" -> "Connection Factory": pooled/enlisted/secured connection
+Application <- "Connection Factory": pooled/enlisted/secured connection
+....
+
+[[pax-transx]]
+== pax-transx
+
+`pax-transx` project closes the gap between `pax-jdbc` and `pax-jms`.
+
+* `pax-jdbc` adds configuration options and discovery for `javax.sql.(XA)ConnectionFactory` services and ships some
+JDBC pooling implementations
+* `pax-jms` does the same for `javax.jms.(XA)ConnectionFactory` services and ships some JMS pooling implementations
+* `pax-transx` adds configuration options and discovery for `javax.transaction.TransactionManager` implementations and
+(finally) provides JCA-based JDBC/JMS connection management with pooling and tranasction support.
+
+Chapters <<jdbc-connection-pools,about JDBC connection pools>> and <<jms-connection-pools,about JMS connection pools>>
+are still valid. The only change needed to use JCA-based pools is to use `pool=transx` properties when registering
+JDBC data sources and JMS connection factories.
+
+* `pax-jdbc-pool-transx` uses `org.ops4j.pax.transx.jdbc.ManagedDataSourceBuilder` from `pax-transx-jdbc`
+* `pax-jms-pool-transx` uses `org.ops4j.pax.transx.jms.ManagedConnectionFactoryBuilder` from `pax-transx-jms`
+
+While the pooled data sources / connection factories are created in _builder style_ (no Java™ bean properties), these
+properties are supported for JDBC:
+
+* `name`
+* `userName`
+* `password`
+* `commitBeforeAutocommit`
+* `preparedStatementCacheSize`
+* `transactionIsolationLevel`
+* `minIdle`
+* `maxPoolSize`
+* `aliveBypassWindow`
+* `houseKeepingPeriod`
+* `connectionTimeout`
+* `idleTimeout`
+* `maxLifetime`
+
+and for JMS:
+
+* `name`
+* `userName`
+* `password`
+* `clientID`
+* `minIdle`
+* `maxPoolSize`
+* `aliveBypassWindow`
+* `houseKeepingPeriod`
+* `connectionTimeout`
+* `idleTimeout`
+* `maxLifetime`
+
+`userName` and `password` properties are needed for XA recovery to work (just like it was with
+`aries.xa.username` and `aries.xa.password` properties in Fuse 6.x).
+
+With this JDBC configuration in Blueprint (mind `pool=transx`):
+[listing,options="nowrap"]
+----
+<!--
+    Database-specific, non-pooling, non-enlisting javax.sql.XADataSource
+-->
+<bean id="postgresql" class="org.postgresql.xa.PGXADataSource">
+    <property name="url" value="jdbc:postgresql://localhost:5432/reportdb" />
+    <property name="user" value="fuse" />
+    <property name="password" value="fuse" />
+    <property name="currentSchema" value="report" />
+    <property name="connectTimeout" value="5" />
+</bean>
+
+<!--
+    Expose database-specific data source with service properties
+    No need to expose pooling, enlisting, non database-specific javax.sql.DataSource - it'll be registered
+    automatically by pax-jdbc-config with the same properties as this <service>, but with higher service.ranking
+-->
+<service id="pool" ref="postgresql" interface="javax.sql.XADataSource">
+    <service-properties>
+        <!-- "pool" key is needed for pax-jdbc-config to wrap database-specific data source inside connection pool -->
+        <entry key="pool" value="transx" />
+        <!-- <service>/@id attribute doesn't propagate, but name of the datasource is required using one of: -->
+        <entry key="osgi.jndi.service.name" value="jdbc/postgresql" />
+        <!-- or: -->
+        <!--<entry key="dataSourceName" value="jdbc/postgresql" />-->
+        <!-- Other properties, that normally are needed by e.g., pax-jdbc-pool-transx -->
+        <entry key="pool.maxPoolSize" value="13" />
+        <entry key="pool.userName" value="fuse" />
+        <entry key="pool.password" value="fuse" />
+    </service-properties>
+</service>
+----
+
+And with this JMS configuration in Blueprint (mind `pool=transx`):
+[listing,options="nowrap"]
+----
+<!--
+    Broker-specific, non-pooling, non-enlisting javax.jms.XAConnectionFactory
+-->
+<bean id="artemis" class="org.apache.activemq.artemis.jms.client.ActiveMQXAConnectionFactory">
+<!--<bean id="artemis" class="org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory">-->
+    <argument index="0" value="tcp://localhost:61616" />
+    <!-- credentials needed for JCA-based XA-recovery -->
+    <argument index="1" value="fuse" />
+    <argument index="2" value="fuse" />
+    <property name="callTimeout" value="2000" />
+    <property name="initialConnectAttempts" value="3" />
+</bean>
+
+<!--
+    Expose broker-specific connection factory with service properties
+    No need to expose pooling, enlisting, non broker-specific javax.jms.XAConnectionFactory - it'll be registered
+    automatically by pax-jms-config with the same properties as this <service>, but with higher service.ranking
+-->
+<service id="pool" ref="artemis" interface="javax.jms.XAConnectionFactory">
+<!--<service id="pool" ref="artemis" interface="javax.jms.ConnectionFactory">-->
+    <service-properties>
+        <!-- "pool" key is needed for pax-jms-config to wrap broker-specific connection factory inside connection pool -->
+        <entry key="pool" value="transx" />
+        <!-- <service>/@id attribute doesn't propagate, but name of the connection factory is required using one of: -->
+        <entry key="osgi.jndi.service.name" value="jms/artemis" />
+        <!-- or: -->
+        <!--<entry key="name" value="jms/artemis" />-->
+        <!-- Other properties, that normally are needed e.g., pax-jms-pool-transx -->
+        <entry key="pool.maxPoolSize" value="13" />
+        <entry key="pool.userName" value="fuse" />
+        <entry key="pool.password" value="fuse" />
+    </service-properties>
+</service>
+----
+
+We'll have JDBC data source and JMS connection factory registered that leverage JCA-based resource management.
+trasx-based pools will property integrate with pax-transx-tm-narayana with respect to XA recovery.
+
+The features that are needed are:
+
+* `pax-jdbc-pool-tranx`
+* `pax-jms-pool-tranx`
+* `pax-transx-jdbc`
+* `pax-transx-jms`
+* `pax-jms-artemis` (for example)

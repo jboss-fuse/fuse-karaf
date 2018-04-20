@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!--
+
+     Copyright 2005-2018 Red Hat, Inc.
+
+     Red Hat licenses this file to you under the Apache License, version
+     2.0 (the "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+     implied.  See the License for the specific language governing
+     permissions and limitations under the License.
+
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <!--
+        This Blueprint XML shows other _deployment_ method for connection factory configuration.
+        With this method, we map the activities done with pax-jms-config
+        We need:
+         - jms feature
+         - pax-jms-artemis feature
+         - pax-jms-pool-pooledjms feature
+
+        This Blueprint XML can be directly dropped to ${karaf.home}/deploy or archived in typical /OSGI-INF/blueprint
+        directory and installed as normal bundle.
+
+        Finally, this set of beans reflects the method of using pax-jms-config bundle,
+        org.ops4j.pax.jms.service.ConnectionFactoryFactory JMS service and org.ops4j.connection factory PID.
+
+        This method is a bit tricky, because we have to use factory approach (both
+        org.ops4j.pax.jms.service.ConnectionFactoryFactory and org.ops4j.pax.jms.service.PooledConnectionFactoryFactory just
+        create relevant objects using set of properties)
+
+        We don't configure the broker-speific connection factory directly and instead we pass a set of properties
+        through factory method (e.g., org.ops4j.pax.jms.service.ConnectionFactoryFactory.createXAConnectionFactory())
+    -->
+
+    <!--
+        A broker-specific org.ops4j.pax.jms.service.ConnectionFactoryFactory that can create (XA)ConnectionFactory
+        using properties. It's registered by pax-jms-* bundles
+    -->
+    <reference id="connectionFactoryFactory"
+            interface="org.ops4j.pax.jms.service.ConnectionFactoryFactory"
+            filter="(type=artemis)" />
+
+    <!--
+        Non broker-specific org.ops4j.pax.jms.service.PooledConnectionFactoryFactory that can create
+        pooled connection factories with the help of org.ops4j.pax.jms.service.ConnectionFactoryFactory
+
+        For example, pax-jms-pool-pooledjms bundle registers org.ops4j.pax.jms.service.PooledConnectionFactoryFactory
+        with these properties:
+         - pool = pooledjms
+         - xa = true|false (both are registered)
+    -->
+    <reference id="pooledConnectionFactoryFactory"
+            interface="org.ops4j.pax.jms.service.PooledConnectionFactoryFactory"
+            filter="(&amp;(pool=pooledjms)(xa=true))" />
+
+    <!--
+        When using XA connection factories, javax.transaction.TransactionManager service is not needed here - it's used
+        internally by xa-aware pooledConnectionFactoryFactory
+    -->
+    <!--<reference id="tm" interface="javax.transaction.TransactionManager" />-->
+
+    <!--
+        Finally we can use both factories to expose pooled, xa-aware connection factory
+    -->
+    <bean id="pool" factory-ref="pooledConnectionFactoryFactory" factory-method="create">
+        <argument ref="connectionFactoryFactory" />
+        <argument>
+            <props>
+                <!--
+                    Properties needed by artemis-specific org.ops4j.pax.jms.service.ConnectionFactoryFactory
+                    We can't prepend them with 'jms.' prefix because we directly invoke the factories
+                    without the help from pax-jms-config
+                -->
+                <prop key="url" value="tcp://localhost:61616" />
+                <prop key="callTimeout" value="2000" />
+                <prop key="initialConnectAttempts" value="3" />
+                <!-- Properties needed by pooled-jms-specific org.ops4j.pax.jms.service.PooledConnectionFactoryFactory -->
+                <prop key="pool.maxConnections" value="10" />
+                <prop key="pool.idleTimeout" value="10000" />
+            </props>
+        </argument>
+    </bean>
+
+    <!--
+        Expose connection factory to use by application code (like Camel, Spring, ...)
+    -->
+    <service interface="javax.jms.ConnectionFactory" ref="pool">
+        <service-properties>
+            <!-- Giving connection factory a name using one of these properties makes identification easier in jms:connectionfactories: -->
+            <entry key="osgi.jndi.service.name" value="jms/artemis" />
+            <!--<entry key="name" value="jms/artemis" />-->
+            <!-- Without any of the above, name will fallback to "service.id" -->
+        </service-properties>
+    </service>
+
+</blueprint>
