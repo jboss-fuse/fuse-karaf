@@ -417,6 +417,9 @@
 
                         <!-- Geronimo TX manager -->
                         <feature>pax-transx-tm-geronimo</feature>
+
+                        <!-- CDI extensions that do not work in OSGi -->
+                        <feature>deltaspike*</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
