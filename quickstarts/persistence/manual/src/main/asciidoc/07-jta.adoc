@@ -158,7 +158,7 @@ This artifact is unpacked and used by `org.ops4j.pax.transx:pax-transx-tm-naraya
 * additionally: `jboss-logging`, `artemis`, `netty`...
 
 
-### Looking for properties
+== Looking for properties
 
 `com.arjuna.common.util.propertyservice.PropertiesFactory.getDefaultProperties()` checks MANIFEST.MF of `org.jboss.narayana:common`
 for `arjuna-properties-file` entry. It points to `jbossts-properties.xml`.
