@@ -338,6 +338,12 @@
                         <feature>camel-jpa</feature>
                         <feature>camel-activemq</feature>
                         <feature>camel-jms</feature>
+
+                        <!-- Artemis client features -->
+                        <feature>artemis-core-client</feature>
+                        <feature>artemis-jms-client</feature>
+                        <feature>artemis-amqp-client</feature>
+                        <feature>pax-jms-artemis</feature>
                     </installedFeatures>
                     <blacklistedFeatures>
                         <feature>httplite</feature>
