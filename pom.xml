@@ -99,6 +99,7 @@
         <version.commons-codec>1.11</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
         <version.commons-io>2.6</version.commons-io>
+        <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
         <version.io.dropwizard.metrics>3.1.5</version.io.dropwizard.metrics>
         <version.io.netty>4.1.16.Final-redhat-2</version.io.netty>
         <version.io.swagger>1.5.17</version.io.swagger>
