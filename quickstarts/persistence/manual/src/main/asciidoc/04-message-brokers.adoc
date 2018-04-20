@@ -191,6 +191,7 @@ Even if it seems that `9.0.5.0-IBM-MQ-Install-Java-All` package should be used t
 * `OSGi` contains respective `com.ibm.mq.osgi.allclient_9.0.5.0.jar` and dependencies
 
 `MQSeriesJava-9.0.5-0.x86_64.cpio` contains:
+
 * `com.ibm.mq.osgi.allclientprereqs_9.0.5.0.jar` - should not be used
 * `com.ibm.mq.osgi.allclient_9.0.5.0.jar` - depends on the above, so should not be used
 * `com.ibm.mq.osgi.java_9.0.5.0.jar`

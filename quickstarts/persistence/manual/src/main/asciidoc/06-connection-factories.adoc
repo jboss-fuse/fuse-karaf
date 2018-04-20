@@ -374,10 +374,12 @@ bundles, IBM MQ driver is not installed due to licensing reasons.
 
 As mentioned in <<ibm-mq,chapter about IBM MQ>>, we can download drivers from https://developer.ibm.com/messaging/mq-downloads/[IBM MQ page].
 `OSGi` directory of `9.0.5.0-IBM-MQ-Install-Java-All.jar` package contains only two bundles:
+
 * `com.ibm.mq.osgi.allclient_9.0.5.0.jar` - actual driver
 * `com.ibm.mq.osgi.allclientprereqs_9.0.5.0.jar` - preprequisites
 
 While the prerequisites JAR contain required `fscontext.jar` and `providerutil.jar` libraries, it also contains:
+
 * `bcprov-jdk15on-157.jar` and `bcpkix-jdk15on-157.jar`, while {f7} ships those (in newer version) in `$FUSE_HOME/lib/ext`
 * `jms.jar` which is exactly the same jar which is available using `mvn:javax.jms/javax.jms-api/2.0`
 
