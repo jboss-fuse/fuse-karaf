@@ -408,6 +408,9 @@
                         <feature>artemis-mqtt</feature>
                         <feature>artemis-hornetq</feature>
                         <feature>artemis-openwire</feature>
+
+                        <!-- Geronimo TX manager -->
+                        <feature>pax-transx-tm-geronimo</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
