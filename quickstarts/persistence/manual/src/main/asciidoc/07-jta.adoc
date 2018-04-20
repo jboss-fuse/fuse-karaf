@@ -1,0 +1,176 @@
+= Java™ Transaction API
+
+NOTE: This chapter only summarizes some information about Narayana Transaction Manager. Feel safe to skip it.
+
+All guides: http://docs.jboss.org/jbosstm/5.0.2.Final/guides/
+Internals: http://docs.jboss.org/jbosstm/5.0.2.Final/guides/arjunacore-development_guide/
+
+When doing:
+
+[source]
+----
+InitialContext context = new InitialContext();
+UserTransaction tx = (UserTransaction) context.lookup("java:comp/UserTransaction");
+tx.begin();
+----
+
+in JavaEE environment (e.g., servlet running in EAP 7.1), we go through several layers/libraries.
+
+`javax.transaction` classes come from `javax.transaction.api` module (`mvn:org.jboss.spec.javax.transaction/jboss-transaction-api_1.2_spec/1.0.1.Final-redhat-1`).
+
+Implementation classes come from `org.wildfly.transaction.client` module (`mvn:org.wildfly.transaction/wildfly-transaction-client/1.0.2.Final-redhat-1`).
+
+`javax.transaction.TransactionManager` implementation is `com.arjuna.ats.jbossatx.jta.TransactionManagerDelegate`
+from `org.jboss.jts.integration` module (`mvn:org.jboss.narayana.jts/narayana-jts-integration/5.5.30.Final-redhat-1`)
+which delegates to `com.arjuna.ats.internal.jta.transaction.arjunacore.TransactionManagerImple`
+from `org.jboss.jts` module (`mvn:org.jboss.narayana.jts/narayana-jts-idlj/5.5.30.Final-redhat-1`).
+
+`narayana-jts-idlj` is an uber-jar which contains classes from these maven artifacts:
+
+* `org.jboss.narayana:common`
+* `org.jboss.narayana.arjunacore:arjuna`
+* `org.jboss.narayana.arjunacore:txoj`
+* `org.jboss.narayana.jta:jta`
+* `org.jboss.narayana.jta:jdbc`
+* `org.jboss.narayana.jta:jms`
+* `org.jboss.narayana.jta:cdi`
+* `org.jboss.narayana.jts:orbportability`
+* `org.jboss.narayana.jts:jts`
+* `org.jboss.narayana.jts:idlj-idl`
+* `org.jboss.narayana.jts:jtax`
+
+.List of all Narayana artifacts
+[cols=4*,options="header"]
+|===
+|group id
+|artifact id
+|type
+|classifier
+
+|org.jboss.narayana               | common                   | jar |
+|org.jboss.narayana               | jbosstxbridge            | jar |
+|org.jboss.narayana               | narayana-code-coverage   | jar |
+|org.jboss.narayana               | narayana-full            | zip | bin
+|org.jboss.narayana               | test-utils               | jar |
+|org.jboss.narayana.arjunacore    | arjuna                   | jar |
+|org.jboss.narayana.arjunacore    | arjunacore               | jar |
+|org.jboss.narayana.arjunacore    | arjunacore-services      | jar |
+|org.jboss.narayana.arjunacore    | txoj                     | jar |
+|org.jboss.narayana.compensations | compensations            | jar |
+|org.jboss.narayana.jta           | cdi                      | jar |
+|org.jboss.narayana.jta           | jdbc                     | jar |
+|org.jboss.narayana.jta           | jms                      | jar |
+|org.jboss.narayana.jta           | jta                      | jar |
+|org.jboss.narayana.jta           | narayana-jta             | jar |
+|org.jboss.narayana.jta           | narayana-spi             | jar |
+|org.jboss.narayana.jts           | idlj-idl                 | jar |
+|org.jboss.narayana.jts           | jacorb-idl               | jar |
+|org.jboss.narayana.jts           | jtax                     | jar |
+|org.jboss.narayana.jts           | jts                      | jar |
+|org.jboss.narayana.jts           | narayana-jts-idlj        | jar |
+|org.jboss.narayana.jts           | narayana-jts-integration | jar |
+|org.jboss.narayana.jts           | narayana-jts-jacorb      | jar |
+|org.jboss.narayana.jts           | orbportability           | jar |
+|org.jboss.narayana.osgi          | narayana-osgi-jta        | jar |
+|org.jboss.narayana.rts           | restat-api               | jar |
+|org.jboss.narayana.rts           | restat-bridge            | jar |
+|org.jboss.narayana.rts           | restat-integration       | jar |
+|org.jboss.narayana.rts           | restat-util              | jar |
+|org.jboss.narayana.rts           | restat-web               | war |
+|org.jboss.narayana.stm           | stm                      | jar |
+|org.jboss.narayana.tomcat        | tomcat-jta               | jar |
+|org.jboss.narayana.txframework   | txframework              | jar |
+|org.jboss.narayana.vertx         | mod-stm                  | jar |
+|org.jboss.narayana.vertx         | mod-stm                  | zip | mod
+|org.jboss.narayana.vertx         | stm-vertex-shared        | jar |
+|org.jboss.narayana.xts           | bridge                   | jar |
+|org.jboss.narayana.xts           | bridge                   | jar | api
+|org.jboss.narayana.xts           | byteman_support          | jar |
+|org.jboss.narayana.xts           | jbossxts                 | jar |
+|org.jboss.narayana.xts           | jbossxts                 | jar | api
+|org.jboss.narayana.xts           | recovery                 | jar |
+|org.jboss.narayana.xts           | service                  | jar |
+|org.jboss.narayana.xts           | wsas                     | jar |
+|org.jboss.narayana.xts           | ws-c11                   | jar |
+|org.jboss.narayana.xts           | ws-c11                   | jar | api
+|org.jboss.narayana.xts           | ws-c11                   | war | war
+|org.jboss.narayana.xts           | wscf11                   | jar |
+|org.jboss.narayana.xts           | ws-t11                   | jar |
+|org.jboss.narayana.xts           | ws-t11                   | jar | api
+|org.jboss.narayana.xts           | ws-t11                   | war | client
+|org.jboss.narayana.xts           | ws-t11                   | war | coordinator
+|org.jboss.narayana.xts           | ws-t11                   | war | participant
+|org.jboss.narayana.xts           | wstf-sc007-interop       | jar |
+|org.jboss.narayana.xts           | wstx11                   | jar |
+|org.jboss.narayana.xts           | wstx11                   | jar | api
+|org.jboss.narayana.xts           | wstx11-interop           | jar |
+|org.jboss.narayana.xts           | xts-test-servlet         | jar |
+|org.jboss.narayana.xts           | xtstest                  | war |
+|===
+
+.Detailed information about important artifact
+[cols=2*,options="header"]
+|===
+|group id:artifact id
+|description
+
+|org.jboss.narayana:common | Common utilities
+|org.jboss.narayana.arjunacore:arjuna | Model, stores (hornet/artemis, jdbc, file, in-memory),
+|org.jboss.narayana.arjunacore:arjunacore | org.jboss.narayana:common + org.jboss.narayana.arjunacore:arjuna + org.jboss.narayana.arjunacore:txoj
+|org.jboss.narayana.arjunacore:arjunacore-services | empty...
+|org.jboss.narayana.arjunacore:txoj | transaction records, tx object model
+|org.jboss.narayana.compensations:compensations | Compensations CDI extensions
+|org.jboss.narayana.jta:cdi | TransactionalInterceptorRequired* CDI interceptors (for @javax.transaction.Transactional)
+|org.jboss.narayana.jta:jdbc | jdbc:arjuna: TransactionalDriver (non-JavaEE)
+|org.jboss.narayana.jta:jms | org.jboss.narayana.jta.jms.ConnectionFactoryProxy implementation of javax.jms.ConnectionFactory (XA)
+|org.jboss.narayana.jta:jta | Pure Java implementation of JTA (no CORBA OTS)
+|org.jboss.narayana.jta:narayana-jta | org.jboss.narayana:common + org.jboss.narayana.arjunacore:arjuna + org.jboss.narayana.arjunacore:txoj + org.jboss.narayana.jta:[jta, cdi, jdbc, jms]
+|org.jboss.narayana.jta:narayana-spi | empty...
+|org.jboss.narayana.jts:idlj-idl | com.sun.tools.corba.se.idl.toJavaPortable.Compile'd stubs from ArjunaOTS.idl, XA.idl, CosTransactions.idl, ...
+|org.jboss.narayana.jts:jacorb-idl | org.jacorb:jacorb-idl-compiler:generate'd stubs from ArjunaOTS.idl, XA.idl, CosTransactions.idl, ...
+|org.jboss.narayana.jts:jtax | layer between JTA and ArjunaCore that uses OTS
+|org.jboss.narayana.jts:jts | CORBA OTS implementation of JTA
+|org.jboss.narayana.jts:narayana-jts-idlj | 11 shaded artifacts (common, jta:*, jts:*, idl stubs)
+|org.jboss.narayana.jts:narayana-jts-integration | Recovery managers (JTA and JTS)
+|org.jboss.narayana.jts:narayana-jts-jacorb| 11 shaded artifacts (common, jta:*, jts:*, idl stubs - jacorb)
+|org.jboss.narayana.jts:orbportability | ORB Portability layer
+|org.jboss.narayana:jbosstxbridge | WS-AT to JTA (XA) transaction bridge
+|org.jboss.narayana.osgi:narayana-osgi-jta | OSGi Transaction Service Bundles
+|org.jboss.narayana.rts:* | REST interfaces to the Narayana Transaction Manager
+|org.jboss.narayana.stm:* | Software Transactional Memory (STM) implementation
+|org.jboss.narayana.tomcat:* | Tomcat JNDI/JTA integration
+|org.jboss.narayana.txframework:* | deprecated by org.jboss.narayana.compensations
+|org.jboss.narayana.vertx:* | STM and Vert.x integration
+|org.jboss.narayana.xts:* | XML Transaction Service (XTS): WS-Coordination and WS-Atomic Transaction
+|===
+
+From the point of view of Fuse 7 Standalone, the most important artifact is `org.jboss.narayana.osgi:narayana-osgi-jta`.
+This artifact is unpacked and used by `org.ops4j.pax.transx:pax-transx-tm-narayana` (with minor adjustments).
+
+`org.jboss.narayana.osgi:narayana-osgi-jta` embedds:
+
+* `org.jboss.narayana.jta:jta`
+* `org.jboss.narayana.jts:jtax`
+* `org.jboss.narayana.jts:orbportability`
+* `org.jboss.narayana:common`
+* `org.jboss.narayana.arjunacore:arjuna`
+* `org.jboss.narayana.jts:narayana-jts-integration`
+* additionally: `jboss-logging`, `artemis`, `netty`...
+
+
+== Looking for properties
+
+`com.arjuna.common.util.propertyservice.PropertiesFactory.getDefaultProperties()` checks MANIFEST.MF of `org.jboss.narayana:common`
+for `arjuna-properties-file` entry. It points to `jbossts-properties.xml`.
+Classloader of `org.jboss.narayana:common` (in pax-transx it's URLClassLoader for all embedded jars) is used to
+load this XML file. The file is located in pax-transx-tm-narayana bundle.
+
+Possible configurations:
+
+* `com.arjuna.ats.arjuna.common.CoordinatorEnvironmentBean`, prefix `com.arjuna.ats.arjuna.coordinator.`
+* `com.arjuna.ats.arjuna.common.CoreEnvironmentBean`, prefix `com.arjuna.ats.arjuna.`
+* `com.arjuna.ats.internal.arjuna.objectstore.hornetq.HornetqJournalEnvironmentBean`, prefix `com.arjuna.ats.arjuna.hornetqjournal.`
+* `com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean`, prefix `com.arjuna.ats.arjuna.objectstore.`
+* `com.arjuna.ats.arjuna.common.RecoveryEnvironmentBean`, prefix `com.arjuna.ats.arjuna.recovery.`
+* `com.arjuna.ats.jdbc.common.JDBCEnvironmentBean`, prefix `com.arjuna.ats.jdbc.`
+* `com.arjuna.ats.jta.common.JTAEnvironmentBean`, prefix `com.arjuna.ats.jta.`

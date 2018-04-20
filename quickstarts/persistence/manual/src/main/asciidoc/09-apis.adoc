@@ -1,0 +1,200 @@
+= Java™ EE API libraries
+
+It's worth documenting all the possible ways of using (some) JavaEE API JARs.
+Traditionally it wasn't that obvious which _jar_ in general should be used if we wanted to, say, use JMS.
+
+The fact that some APIs are provided *partially* by JDK itself (like JTA) doesn't make things easier.
+
+Another fact that JavaEE APIs were not published to Maven Central when they were released (I don't even treat file named `jms.jar`
+as anything usable) made things worse.
+
+A syndrome (understandable) of creating _own_ JavaEE API JARs in Maven central by different organizations
+(JBoss, Apache) or products (ServiceMIX, Geronimo) made things more complicated.
+
+And there's a need to use proper OSGi bundles for JavaEE APIs as well...
+
+== Specifications we need
+
+We'll try to summarize the options we have when using these JavaEE APIs.
+
+.Versions of API in JavaEE releases
+|===
+|API |JavaEE 6 (2009-12-10) |JavaEE 7 (2013-05-28) |JavaEE 8 (2017-09-18)
+
+|JTA
+|1.1 (JSR907)
+|1.2 (JSR907)
+|1.2 (JSR907)
+
+|JDBC
+|4.0 (JSR221)
+|4.0 (JSR221)
+|4.0 (JSR221)
+
+|JMS
+|1.1 (JSR914)
+|2.0 (JSR343)
+|2.0 (JSR343)
+
+|JCA
+|1.6 (JSR322)
+|1.7 (JSR322)
+|1.7 (JSR322)
+|===
+
+Fortunately we don't have to look for external JDBC API JAR - it is provided by JDK itself.
+
+I won't count `javax:javaee-api` artifacts - there are such for versions `6.0`, `7.0` and `8.0` - but these are not
+OSGi bundles and they're not that useful after all.
+
+== Java™ Transaction API
+
+Quick http://search.maven.org/solrsearch/select?q=fc:"javax.transaction.TransactionManager"[search]
+on Maven Central gives us 140 pages of artifacts...
+
+By narrowing http://search.maven.org/#api[the search] and rejecting betas and obviously not relevant artifacts,
+we can find these group IDs and artifact IDs:
+
+* javax.transaction:jta:1.1
+* javax.transaction:transaction-api:1.1
+* javax.transaction:transaction-api:1.1-rev-1
+* javax.transaction:javax.transaction-api:1.2
+* javax.transaction:javax.transaction-api:1.3
+* org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec:1.0.0.Final
+* org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec:1.0.1.Final
+* org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.0.Final
+* org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.0.1.Final
+* org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.1.0.Final
+* org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.1.1.Final
+* org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:2.0.0.Alpha1 (not an OSGi bundle!)
+* org.apache.geronimo.specs:geronimo-jta_1.0.1B_spec:1.0
+* org.apache.geronimo.specs:geronimo-jta_1.0.1B_spec:1.0.1
+* org.apache.geronimo.specs:geronimo-jta_1.0.1B_spec:1.1
+* org.apache.geronimo.specs:geronimo-jta_1.0.1B_spec:1.1.1
+* org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.0
+* org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1
+* org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1
+* org.apache.geronimo.specs:geronimo-jta_1.2_spec:1.0-alpha-1
+
+== Java™ Message Service
+
+Here's narrowed list of artifacts with JMS API:
+
+* javax.jms:jms-api:1.1-rev-1
+* javax.jms:javax.jms-api:2.0
+* javax.jms:javax.jms-api:2.0.1
+* org.jboss.spec.javax.jms:jboss-jms-api_1.1_spec:1.0.0.Final
+* org.jboss.spec.javax.jms:jboss-jms-api_1.1_spec:1.0.1.Final
+* org.jboss.spec.javax.jms:jboss-jms-api_2.0_spec:1.0.0.Final
+* org.jboss.spec.javax.jms:jboss-jms-api_2.0_spec:1.0.1.Final
+* org.jboss.spec.javax.jms:jboss-jms-api_2.0_spec:1.0.2.Final
+* org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.0
+* org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.0.1
+* org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1
+* org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1
+* org.apache.geronimo.specs:geronimo-jms_2.0_spec:1.0-alpha-1
+* org.apache.geronimo.specs:geronimo-jms_2.0_spec:1.0-alpha-2
+
+== Java™ Connector Architecture
+
+Here's narrowed list of artifacts with JCA API:
+
+* javax.resource:connector-api:1.5
+* javax.resource:connector-api:1.6-alpha-1
+* javax.resource:javax.resource-api:1.7
+* javax.resource:javax.resource-api:1.7.1
+* org.jboss.spec.javax.resource:jboss-connector-api_1.5_spec:1.0.0.Final
+* org.jboss.spec.javax.resource:jboss-connector-api_1.6_spec:1.0.0.Final
+* org.jboss.spec.javax.resource:jboss-connector-api_1.6_spec:1.0.1.Final
+* org.jboss.spec.javax.resource:jboss-connector-api_1.7_spec:1.0.0.Final
+* org.jboss.spec.javax.resource:jboss-connector-api_1.7_spec:1.0.1.Final
+* org.apache.geronimo.specs:geronimo-j2ee-connector_1.5_spec:1.0
+* org.apache.geronimo.specs:geronimo-j2ee-connector_1.5_spec:1.0.1
+* org.apache.geronimo.specs:geronimo-j2ee-connector_1.5_spec:1.1
+* org.apache.geronimo.specs:geronimo-j2ee-connector_1.5_spec:1.1.1
+* org.apache.geronimo.specs:geronimo-j2ee-connector_1.5_spec:2.0.0
+* org.apache.geronimo.specs:geronimo-j2ee-connector_1.6_spec:1.0
+
+== Opinionated summary
+
+Here's even more truncated list (only OSGi bundles included) - this time with comments.
+
+.JTA
+
+* javax.transaction:javax.transaction-api:1.2
+** imports `javax.enterprise.*` and `javax.interceptor` package
+** imports and exports `javax.transaction` and `javax.transaction.xa` package (1.2)
+
+* javax.transaction:javax.transaction-api:1.3
+** imports `javax.enterprise.*` and `javax.interceptor` package
+** exports `javax.transaction` package (1.3)
+** doesn't export `javax.transaction.xa` package - imports it instead
+
+* org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec:1.0.1.Final
+** exports `javax.transaction` and `javax.transaction.xa` package (1.1)
+
+* org.jboss.spec.javax.transaction:jboss-transaction-api_1.2_spec:1.1.1.Final
+** imports `javax.enterprise.*` (optionally) and `javax.interceptor` package
+** exports `javax.transaction` package (1.2)
+** doesn't export `javax.transaction.xa` package - imports it instead
+
+* org.apache.geronimo.specs:geronimo-jta_1.1_spec:1.1.1
+** imports and exports `javax.transaction` and `javax.transaction.xa` package (1.1)
+
+* org.apache.geronimo.specs:geronimo-jta_1.2_spec:1.0-alpha-1
+** imports `javax.enterprise.*` and `javax.interceptor` package
+** imports and exports `javax.transaction` and `javax.transaction.xa` package (1.2)
+
+NOTE: `javax.transaction.xa` package is not exported by newest `javax.transaction:javax.transaction-api` because
+it's the same as in JDK itself. Also, when bundle both exports and imports given package (as `geronimo-jta_1.x_spec` does)
+it's a hint that other bundle may be the actual exported (JDK in this case).
+
+*The recommendation is*: `mvn:javax.transaction/javax.transaction-api/1.2` - as it's used by Karaf's `transaction` feature
+(which also includes `interceptor-api`, `cdi-api`, `el-api` and `javax.inject` bundles). If a project doesn't rely on CDI,
+`mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/1.1.1` may be used instead.
+
+.JMS
+
+* javax.jms:javax.jms-api:2.0.1
+** exports `javax.jms` package (2.0)
+** imports `javax.transaction.xa`
+
+* org.jboss.spec.javax.jms:jboss-jms-api_1.1_spec:1.0.1.Final
+** exports `javax.jms` package (1.1)
+** imports `javax.transaction.xa`
+
+* org.jboss.spec.javax.jms:jboss-jms-api_2.0_spec:1.0.2.Final
+** exports `javax.jms` package (2.0)
+** imports `javax.transaction.xa`
+
+* org.apache.geronimo.specs:geronimo-jms_1.1_spec:1.1.1
+** exports and imports `javax.jms` package (1.1)
+** imports `javax.transaction.xa`
+
+* org.apache.geronimo.specs:geronimo-jms_2.0_spec:1.0-alpha-2
+** exports `javax.jms` package (2.0)
+** imports `javax.transaction.xa`
+
+*The recommendation is*: `mvn:javax.jms/javax.jms-api/2.0.1` for JMS 2.0 - as it's used by Karaf's `jms` feature. For
+JMS 1.1 `mvn:org.apache.geronimo.specs/geronimo-jms_1.1_spec/1.1.1` should be used.
+
+.JCA
+
+* javax.resource:javax.resource-api:1.7.1
+** imports `javax.transaction.*` (1.3)
+** exports `javax.resource.*` packages (1.7.1)
+
+* org.jboss.spec.javax.resource:jboss-connector-api_1.6_spec:1.0.1.Final
+** imports `javax.transaction` and `javax.transaction.xa`
+** exports `javax.resource.*` packages (1.6)
+
+* org.jboss.spec.javax.resource:jboss-connector-api_1.7_spec:1.0.1.Final
+** imports `javax.transaction.*` (`[1.2,2)`)
+** exports `javax.resource.*` packages (1.7)
+
+* org.apache.geronimo.specs:geronimo-j2ee-connector_1.6_spec:1.0
+** imports `javax.transaction` and `javax.transaction.xa`
+** exports and imports `javax.resource.*` packages (1.6)
+
+*The recommendation is*: `mvn:org.apache.geronimo.specs/geronimo-j2ee-connector_1.6_spec/1.0` - as it's used by Karaf's
+`connector` feature.

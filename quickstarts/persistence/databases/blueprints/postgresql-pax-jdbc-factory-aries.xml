@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!--
+
+     Copyright 2005-2018 Red Hat, Inc.
+
+     Red Hat licenses this file to you under the Apache License, version
+     2.0 (the "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+     implied.  See the License for the specific language governing
+     permissions and limitations under the License.
+
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <!--
+        This Blueprint XML shows other _deployment_ method for data source configuration.
+        With this method, we map the activities done with pax-jdbc-config and described in
+        "3.2. PAX-JDBC configuration service" of quickstarts/persistence/manual
+        We need:
+         - mvn:org.postgresql/postgresql/42.2.2 bundle
+         - jdbc feature (which includes pax-jdbc and pax-jdbc-config)
+         - pax-jdbc-pool-dbcp2
+
+        This Blueprint XML can be directly dropped to ${karaf.home}/deploy or archived in typical /OSGI-INF/blueprint
+        directory and installed as normal bundle.
+
+        Finally, this set of beans reflects the method of using pax-jdbc-config bundle, standard
+        org.osgi.service.jdbc.DataSourceFactory OSGi JDBC service and org.ops4j.datasource factory PID.
+
+        This method is a bit tricky, because we have to use factory approach (both
+        org.osgi.service.jdbc.DataSourceFactory and org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory just
+        create relevant objects using set of properties)
+
+        We don't configure the database-speific (e.g., org.postgresql.xa.PGXADataSource) data source directly and
+        instead we pass a set of properties through factory method
+        (e.g., org.osgi.service.jdbc.DataSourceFactory.createXADataSource())
+    -->
+
+    <!--
+        A database-specific org.osgi.service.jdbc.DataSourceFactory that can create DataSource/XADataSource/
+        /ConnectionPoolDataSource/Driver using properties. It's registered by pax-jdbc-* or for example
+        mvn:org.postgresql/postgresql/42.2.2 bundle natively
+
+        PostgreSQL driver registers its data source factory with these properties:
+         - osgi.jdbc.driver.name = PostgreSQL JDBC Driver
+         - osgi.jdbc.driver.class = org.postgresql.Driver
+         - osgi.jdbc.driver.version = 42.2.2
+
+        pax-jdbc-mysql registers its data source factory with these properties:
+         - osgi.jdbc.driver.name = mysql
+         - osgi.jdbc.driver.class = com.mysql.jdbc.Driver
+
+        (So it's better to filter by osgi.jdbc.driver.class than by osgi.jdbc.driver.name)
+    -->
+    <reference id="dataSourceFactory"
+            interface="org.osgi.service.jdbc.DataSourceFactory"
+            filter="(osgi.jdbc.driver.class=org.postgresql.Driver)" />
+
+    <!--
+        Non database-specific org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory that can create
+        pooled data sources using some org.osgi.service.jdbc.DataSourceFactory
+
+        For example, pax-jdbc-pool-dbcp2 bundle registers org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory
+        with these properties:
+         - pool = dbcp2
+         - xa = true|false (both are registered)
+    -->
+    <reference id="pooledDataSourceFactory"
+            interface="org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory"
+            filter="(&amp;(pool=aries)(xa=true))" />
+
+    <!--
+        When using XA datasources, javax.transaction.TransactionManager service is not needed here - it's used
+        internally by xa-aware pooledDataSourceFactory
+    -->
+    <!--<reference id="tm" interface="javax.transaction.TransactionManager" />-->
+
+    <!--
+        Finally we can use both factories to expose pooled, xa-aware data source
+    -->
+    <bean id="pool" factory-ref="pooledDataSourceFactory" factory-method="create">
+        <argument ref="dataSourceFactory" />
+        <argument>
+            <props>
+                <!-- Properties needed by postgresql-specific org.osgi.service.jdbc.DataSourceFactory -->
+                <prop key="url" value="jdbc:postgresql://localhost:5432/reportdb" />
+                <prop key="user" value="fuse" />
+                <prop key="password" value="fuse" />
+                <prop key="currentSchema" value="report" />
+                <prop key="connectTimeout" value="5" />
+                <!-- Properties needed by aries-specific org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory -->
+                <prop key="pool.name" value="reportdb" />
+                <prop key="pool.connectionMaxWaitMilliseconds" value="5000" />
+                <prop key="pool.poolMinSize" value="2" />
+                <prop key="pool.poolMaxSize" value="10" />
+                <prop key="pool.transaction" value="xa" />
+            </props>
+        </argument>
+    </bean>
+
+    <!--
+        Expose datasource to use by application code (like Camel, Spring, ...)
+    -->
+    <service interface="javax.sql.DataSource" ref="pool">
+        <service-properties>
+            <!-- Giving data source a name using one of these properties makes identification easier in jdbc:ds-list: -->
+            <entry key="osgi.jndi.service.name" value="jdbc/postgresql" />
+            <!--<entry key="datasource" value="jdbc/postgresql" />-->
+            <!--<entry key="name" value="jdbc/postgresql" />-->
+            <!--<entry key="dataSourceName" value="jdbc/postgresql" />-->
+            <!-- Without any of the above, name will fallback to "service.id" -->
+        </service-properties>
+    </service>
+
+</blueprint>

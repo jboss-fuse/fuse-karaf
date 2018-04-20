@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+     Copyright 2005-2018 Red Hat, Inc.
+
+     Red Hat licenses this file to you under the Apache License, version
+     2.0 (the "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+     implied.  See the License for the specific language governing
+     permissions and limitations under the License.
+
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+      <groupId>org.jboss.fuse.quickstarts</groupId>
+      <artifactId>persistence</artifactId>
+      <version>7.0.0.redhat-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>standalone-xa</artifactId>
+    <packaging>jar</packaging>
+    
+    <name>Red Hat Fuse :: Quickstarts :: persistence :: standalone transaction support</name>
+    <description>Persistence example in standalone environment</description>
+
+    <dependencies>
+
+        <!-- Test dependencies -->
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Spring -->
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jms</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Other dependencies -->
+
+        <dependency>
+            <groupId>javax.transaction</groupId>
+            <artifactId>javax.transaction-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.jms</groupId>
+            <artifactId>javax.jms-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.resource</groupId>
+            <artifactId>javax.resource-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-dbcp2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.messaginghub</groupId>
+            <artifactId>pooled-jms</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- EAP/Wildfly dependencies -->
+
+        <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jboss.narayana.osgi</groupId>
+            <artifactId>narayana-osgi-jta</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.narayana.jta</groupId>
+            <artifactId>jta</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.narayana.jts</groupId>
+            <artifactId>narayana-jts-integration</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Database driver dependencies (for testing) -->
+
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Artemis -->
+
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-core-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.activemq</groupId>
+            <artifactId>artemis-jms-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.qpid</groupId>
+            <artifactId>proton-j</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.qpid</groupId>
+            <artifactId>qpid-jms-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+    </dependencies>
+
+    <profiles>
+        <profile>
+            <id>debugging-support</id>
+            <dependencies>
+
+                <!-- EAP/Wildfly dependencies -->
+
+                <dependency>
+                    <groupId>org.jboss</groupId>
+                    <artifactId>jboss-transaction-spi</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.narayana.jta</groupId>
+                    <artifactId>jdbc</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.narayana.jta</groupId>
+                    <artifactId>jms</artifactId>
+                </dependency>
+
+                <!-- Database driver dependencies (for testing) -->
+
+                <dependency>
+                    <groupId>org.mariadb.jdbc</groupId>
+                    <artifactId>mariadb-java-client</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.derby</groupId>
+                    <artifactId>derby</artifactId>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.derby</groupId>
+                    <artifactId>derbyclient</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>wmq9</id>
+            <properties>
+                <!--<mq9library.path>/data/downloads/ibm.com/IBM MQ/9.0.5.0-IBM-MQ-Install-Java-All/JavaSE</mq9library.path>-->
+                <mq9library.path>/path/to/location/of/com.ibm.mq.allclient.jar</mq9library.path>
+            </properties>
+            <!-- IBM MQ 9 specific dependencies, available from https://developer.ibm.com/messaging/mq-downloads -->
+            <dependencies>
+                <dependency>
+                    <groupId>com.ibm.mq</groupId>
+                    <artifactId>com.ibm.mq.allclient</artifactId>
+                    <version>9.0.5.0</version>
+                    <scope>system</scope>
+                    <systemPath>${mq9library.path}/com.ibm.mq.allclient.jar</systemPath>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>amq6</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.apache.activemq</groupId>
+                    <artifactId>activemq-client</artifactId>
+                    <scope>test</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+
+</project>

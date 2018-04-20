@@ -1,0 +1,357 @@
+= Database configuration
+
+Before deploying/configuring anything in {f7} we need actual RDBMS system running.
+
+Persistence quickstarts include SQL script that prepare database structures.
+
+We will refer to the root directory of persistence quickstarts as `$PQ_HOME`. This directory is stored inside {f7}
+installation in `$FUSE_HOME/quickstarts/persistence`.
+
+== Docker based PostgreSQL installation
+
+We can use *official* PostgreSQL docker image available at https://hub.docker.com/_/postgres/[docker hub].
+Any method of accessing PostgreSQL server may be used (e.g., mapping ports or connecting to container's IP address directly).
+
+. Start PostgreSQL 10.3 server docker container:
++
+[listing,options="nowrap"]
+----
+$ docker run -d --name fuse-postgresql-server -e POSTGRES_USER=fuse -e POSTGRES_PASSWORD=fuse -p 5432:5432 postgres:10.3
+...
+Trying to pull repository docker.io/library/postgres ...
+...
+Status: Downloaded newer image for docker.io/postgres:10.3
+dbb6b43311bcd65d234510421e62e933ce3086102ac70d6c3088fc10b493510c
+
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED              STATUS              PORTS                    NAMES
+cd8b621aa554        postgres:10.3       "docker-entrypoint..."   About a minute ago   Up About a minute   0.0.0.0:5432->5432/tcp   fuse-postgresql-server
+----
+
+. Create `reportdb` database from the `fuse-postgresql-server` container:
++
+[listing,options="nowrap"]
+----
+$ docker exec -ti fuse-postgresql-server /bin/bash
+root@cd8b621aa554:/# psql -U fuse -d fuse
+psql (10.3 (Debian 10.3-1.pgdg90+1))
+Type "help" for help.
+
+fuse=# create database reportdb owner fuse encoding 'utf8';
+CREATE DATABASE
+fuse=# \c reportdb
+You are now connected to database "reportdb" as user "fuse".
+reportdb=# \q
+root@cd8b621aa554:/# exit
+exit
+----
+
+. Initialize database by creating schema, table and populating the table with data:
++
+[listing,options="nowrap"]
+----
+$ cd $PQ_HOME/databases/scripts
+$ docker cp reportdb-postgresql-script.sql fuse-postgresql-server:/tmp
+$ docker exec -ti fuse-postgresql-server /bin/bash
+root@cd8b621aa554:/# psql -U fuse -d reportdb -f /tmp/reportdb-postgresql-script.sql
+DROP SCHEMA
+CREATE SCHEMA
+CREATE TABLE
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+root@cd8b621aa554:/# psql -U fuse -d reportdb
+psql (10.3 (Debian 10.3-1.pgdg90+1))
+Type "help" for help.
+
+reportdb=# \c reportdb
+You are now connected to database "reportdb" as user "fuse".
+reportdb=# set schema 'report';
+SET
+reportdb=# \dt
+         List of relations
+ Schema |   Name   | Type  | Owner
+--------+----------+-------+-------
+ report | incident | table | fuse
+(1 row)
+
+reportdb=# select * from incident;
+ id |        date         |  name  |  summary   |            details            |      email
+----+---------------------+--------+------------+-------------------------------+------------------
+  1 | 2018-02-20 08:00:00 | User 1 | Incident 1 | This is a report incident 001 | user1@redhat.com
+  2 | 2018-02-20 08:10:00 | User 2 | Incident 2 | This is a report incident 002 | user2@redhat.com
+  3 | 2018-02-20 08:20:00 | User 3 | Incident 3 | This is a report incident 003 | user3@redhat.com
+  4 | 2018-02-20 08:30:00 | User 4 | Incident 4 | This is a report incident 004 | user4@redhat.com
+(4 rows)
+
+reportdb=# \q
+root@cd8b621aa554:/# exit
+exit
+----
+
+. Configure PostgreSQL database to allow XA transactions:
++
+We have to set `max_prepared_transactions` to the value equal or greater than `max_connections` setting
+(`100` in the case of `postgres:10.3` image).
++
+[listing,options="nowrap"]
+----
+$ docker exec -ti fuse-postgresql-server /bin/bash
+root@cd8b621aa554:/# grep max_prepared_transactions /var/lib/postgresql/data/postgresql.conf
+#max_prepared_transactions = 0		# zero disables the feature
+# Caution: it is not advisable to set max_prepared_transactions nonzero unless
+
+root@cd8b621aa554:/# sed -i 's/^#max_prepared_transactions = 0/max_prepared_transactions = 200/' /var/lib/postgresql/data/postgresql.conf
+
+root@cd8b621aa554:/# grep max_prepared_transactions /var/lib/postgresql/data/postgresql.conf
+max_prepared_transactions = 200		# zero disables the feature
+# Caution: it is not advisable to set max_prepared_transactions nonzero unless
+
+root@cd8b621aa554:/# exit
+exit
+----
+
+. Restart `fuse-postgresql-server` container:
++
+[listing,options="nowrap"]
+----
+$ docker stop fuse-postgresql-server
+fuse-postgresql-server
+
+$ docker start fuse-postgresql-server
+fuse-postgresql-server
+----
++
+Your PostgreSQL 10.3 database is ready to use.
+
+== Docker based MariaDB installation
+
+Docker image is available at https://hub.docker.com/_/mariadb/[docker hub].
+
+. Start MariaDB 10.3.5 server docker container:
++
+[listing,options="nowrap"]
+----
+$ docker run -d --name fuse-mariadb-server -e MYSQL_ROOT_PASSWORD=fuse -p 3306:3306 mariadb:10.3.5
+...
+Trying to pull repository docker.io/library/mariadb ...
+...
+Status: Downloaded newer image for docker.io/mariadb:10.3.5
+0f312505f6c7294ecfc91bc43d70676b2cc990cb6a653f4ecd6d0300dd17e36d
+
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+0f312505f6c7        mariadb:10.3.5      "docker-entrypoint..."   34 seconds ago      Up 30 seconds       0.0.0.0:3306->3306/tcp   fuse-mariadb-server
+----
+
+. Create `reportdb` database from the `fuse-mariadb-server` container:
++
+[listing,options="nowrap"]
+----
+$ docker exec -ti fuse-mariadb-server /bin/bash
+root@0f312505f6c7:/# mysql -p
+Enter password: fuse
+...
+
+MariaDB [(none)]> create database reportdb character set 'utf8';
+Query OK, 1 row affected (0.007 sec)
+
+MariaDB [(none)]> select password('fuse');
++-------------------------------------------+
+| password('fuse')                          |
++-------------------------------------------+
+| *66366D5297921E017C7C9378931FD111B3951D84 |
++-------------------------------------------+
+1 row in set (0.000 sec)
+
+MariaDB [(none)]> create user 'fuse'@'%' identified by password '*66366D5297921E017C7C9378931FD111B3951D84';
+Query OK, 0 rows affected (0.001 sec)
+
+MariaDB [(none)]> select Host, User, authentication_string, plugin from mysql.user;
++-----------+------+-----------------------+--------+
+| Host      | User | authentication_string | plugin |
++-----------+------+-----------------------+--------+
+| localhost | root |                       |        |
+| %         | fuse |                       |        |
+| %         | root |                       |        |
++-----------+------+-----------------------+--------+
+3 rows in set (0.000 sec)
+
+MariaDB [(none)]> grant all on reportdb.* to 'fuse'@'%';
+Query OK, 0 rows affected (0.001 sec)
+
+MariaDB [(none)]> flush privileges;
+Query OK, 0 rows affected (0.001 sec)
+
+MariaDB [(none)]> \q
+Bye
+root@0f312505f6c7:/# exit
+----
+
+. Initialize database by creating table and populating the table with data:
++
+[listing,options="nowrap"]
+----
+$ cd $PQ_HOME/databases/scripts
+$ docker cp reportdb-mariadb-script.sql fuse-mariadb-server:/tmp
+$ docker exec -ti fuse-mariadb-server /bin/bash
+root@0f312505f6c7:/# mysql -u fuse reportdb -p < /tmp/reportdb-mariadb-script.sql
+Enter password: fuse
+
+root@0f312505f6c7:/# mysql -u fuse -p reportdb
+Enter password: fuse
+...
+
+MariaDB [reportdb]> show tables;
++--------------------+
+| Tables_in_reportdb |
++--------------------+
+| incident           |
++--------------------+
+1 row in set (0.001 sec)
+
+MariaDB [reportdb]> desc incident;
++---------+--------------+------+-----+---------------------+-------------------------------+
+| Field   | Type         | Null | Key | Default             | Extra                         |
++---------+--------------+------+-----+---------------------+-------------------------------+
+| id      | int(11)      | NO   | PRI | NULL                | auto_increment                |
+| date    | timestamp    | NO   |     | current_timestamp() | on update current_timestamp() |
+| name    | varchar(35)  | YES  |     | NULL                |                               |
+| summary | varchar(35)  | YES  |     | NULL                |                               |
+| details | varchar(255) | YES  |     | NULL                |                               |
+| email   | varchar(60)  | YES  |     | NULL                |                               |
++---------+--------------+------+-----+---------------------+-------------------------------+
+6 rows in set (0.002 sec)
+
+MariaDB [reportdb]> select * from incident;
++----+---------------------+--------+------------+-------------------------------+------------------+
+| id | date                | name   | summary    | details                       | email            |
++----+---------------------+--------+------------+-------------------------------+------------------+
+|  1 | 2018-02-20 08:00:00 | User 1 | Incident 1 | This is a report incident 001 | user1@redhat.com |
+|  2 | 2018-02-20 08:10:00 | User 2 | Incident 2 | This is a report incident 002 | user2@redhat.com |
+|  3 | 2018-02-20 08:20:00 | User 3 | Incident 3 | This is a report incident 003 | user3@redhat.com |
+|  4 | 2018-02-20 08:30:00 | User 4 | Incident 4 | This is a report incident 004 | user4@redhat.com |
++----+---------------------+--------+------------+-------------------------------+------------------+
+4 rows in set (0.001 sec)
+
+MariaDB [reportdb]> \q
+Bye
+root@0f312505f6c7:/# exit
+exit
+----
+
++
+Your MariaDB 10.3.5 database is ready to use.
+
+=== Docker based MySQL installation
+
+Docker image is available at https://hub.docker.com/_/mysql/[docker hub].
+
+. Start MySQL 5.7.21 server docker container:
++
+[listing,options="nowrap"]
+----
+$ docker run -d --name fuse-mysql-server -e MYSQL_ROOT_PASSWORD=fuse -p 3306:3306 mysql:5.7.21
+a820d02eb3f1d8482a24daf062d74650c1ed819b62fa112a9bebdd181283c12d
+...
+----
+
+. Create `reportdb` database from the `fuse-mysql-server` container:
++
+[listing,options="nowrap"]
+----
+$ docker exec -ti fuse-mysql-server /bin/bash
+root@a820d02eb3f1:/# mysql -p
+Enter password: fuse
+...
+
+mysql> create database reportdb character set 'utf8';
+Query OK, 1 row affected (0.01 sec)
+
+mysql> create user 'fuse'@'%' identified with mysql_native_password by 'fuse';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select Host, User, authentication_string, plugin from mysql.user;
++-----------+---------------+-------------------------------------------+-----------------------+
+| Host      | User          | authentication_string                     | plugin                |
++-----------+---------------+-------------------------------------------+-----------------------+
+| localhost | root          | *66366D5297921E017C7C9378931FD111B3951D84 | mysql_native_password |
+| localhost | mysql.session | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password |
+| localhost | mysql.sys     | *THISISNOTAVALIDPASSWORDTHATCANBEUSEDHERE | mysql_native_password |
+| %         | root          | *66366D5297921E017C7C9378931FD111B3951D84 | mysql_native_password |
+| %         | fuse          | *66366D5297921E017C7C9378931FD111B3951D84 | mysql_native_password |
++-----------+---------------+-------------------------------------------+-----------------------+
+5 rows in set (0.00 sec)
+
+mysql> grant all on reportdb.* to 'fuse'@'%';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> flush privileges;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> \q
+Bye
+root@a820d02eb3f1:/# exit
+exit
+----
+
+. Initialize database by creating table and populating the table with data (same script as for MariaDB):
++
+[listing,options="nowrap"]
+----
+$ cd $PQ_HOME/databases/scripts
+$ docker cp reportdb-mariadb-script.sql fuse-mysql-server:/tmp/reportdb-mysql-script.sql
+$ docker exec -ti fuse-mysql-server /bin/bash
+root@a820d02eb3f1:/# mysql -u fuse reportdb -p < /tmp/reportdb-mysql-script.sql
+Enter password: fuse
+
+root@a820d02eb3f1:/# mysql -u fuse -p reportdb
+Enter password: fuse
+...
+
+mysql> show tables;
++--------------------+
+| Tables_in_reportdb |
++--------------------+
+| incident           |
++--------------------+
+1 row in set (0.00 sec)
+
+mysql> desc incident;
++---------+--------------+------+-----+-------------------+-----------------------------+
+| Field   | Type         | Null | Key | Default           | Extra                       |
++---------+--------------+------+-----+-------------------+-----------------------------+
+| id      | int(11)      | NO   | PRI | NULL              | auto_increment              |
+| date    | timestamp    | NO   |     | CURRENT_TIMESTAMP | on update CURRENT_TIMESTAMP |
+| name    | varchar(35)  | YES  |     | NULL              |                             |
+| summary | varchar(35)  | YES  |     | NULL              |                             |
+| details | varchar(255) | YES  |     | NULL              |                             |
+| email   | varchar(60)  | YES  |     | NULL              |                             |
++---------+--------------+------+-----+-------------------+-----------------------------+
+6 rows in set (0.00 sec)
+
+mysql> select * from incident;
++----+---------------------+--------+------------+-------------------------------+------------------+
+| id | date                | name   | summary    | details                       | email            |
++----+---------------------+--------+------------+-------------------------------+------------------+
+|  1 | 2018-02-20 08:00:00 | User 1 | Incident 1 | This is a report incident 001 | user1@redhat.com |
+|  2 | 2018-02-20 08:10:00 | User 2 | Incident 2 | This is a report incident 002 | user2@redhat.com |
+|  3 | 2018-02-20 08:20:00 | User 3 | Incident 3 | This is a report incident 003 | user3@redhat.com |
+|  4 | 2018-02-20 08:30:00 | User 4 | Incident 4 | This is a report incident 004 | user4@redhat.com |
++----+---------------------+--------+------------+-------------------------------+------------------+
+4 rows in set (0.00 sec)
+
+mysql> \q
+Bye
+root@a820d02eb3f1:/# exit
+exit
+----
+
++
+Your MariaDB 10.3.5 database is ready to use.
+
+== Embedded Derby database
+
+There's no need to configure anything. Derby database will run in in-memory using `jdbc:derby:reportdb;create=true`
+JDBC URL. The table will be created directly from Java™ code.

@@ -1,0 +1,134 @@
+[[JMS]]
+= JMS
+
+In a way similar to <<JDBC>>, let's review the mechanisms of Java™ Message Service.
+
+== Connections
+
+While JDBC uses simple factory -> connection pattern (even if there are three kinds of factories), JMS
+defines more concepts (consumers, producers, sessions, connections, destinations, contexts (JMS 2.0)).
+We'll however focus again on connections/contexts and the factories that may be used to obtain them.
+
+.The factory
+
+There are 5 factory interfaces:
+
+* generic `javax.jms.ConnectionFactory`
+* queue-specific `javax.jms.QueueConnectionFactory`
+* topic-specific `javax.jms.TopicConnectionFactory`
+* XA `javax.jms.XAConnectionFactory`
+* queue-specific `javax.jms.XAQueueConnectionFactory`
+* topic-specific `javax.jms.XATopicConnectionFactory`
+
+The libraries that contain the objects I'm going to describe are:
+
+* A-MQ 6: `mvn:org.apache.activemq/activemq-client/<version>`
+* A-MQ 7 (Artemis): `mvn:org.apache.activemq/artemis-jms-client/<version>`
+or `mvn:org.apache.qpid/qpid-jms-client/<version>`
+* IBM MQ 9: download `9.0.5.0-IBM-MQ-Install-Java-All.jar` starting from https://developer.ibm.com/messaging/mq-downloads/
+
+If we check existing implementation (contained in _driver JARs_) we can find:
+
+* A-MQ 6: `org.apache.activemq.ActiveMQConnectionFactory` and `org.apache.activemq.ActiveMQXAConnectionFactory`
+* A-MQ 7 (Artemis): `org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory` and `org.apache.activemq.artemis.jms.client.ActiveMQXAConnectionFactory`
+or `org.apache.qpid.jms.JmsConnectionFactory` (no XA in qpid library)
+* IBM MQ 9: `com.ibm.mq.jms.MQConnectionFactory` and `com.ibm.mq.jms.MQXAConnectionFactory`
+
+These implementations contain broker-specific logic to connect to given JMS broker.
+
+In <<JDBC>> we could obtain connections directly from driver or using `javax.sql.DataSource`.
+With JMS there's just:
+
+[source,java,options="nowrap"]
+----
+// standard way
+javax.jms.Connection connection = javax.jms.ConnectionFactory.createConnection();
+// simplified way (JMS 2.0)
+javax.jms.JMSContext jms = javax.jms.ConnectionFactory.createContext()
+----
+
+(possibly with credential variants).
+`JMSContext` is just `Connection` + `Session` and we won't write about it.
+
+`javax.jms.XAConnectionFactory` is analogous to `javax.sql.XADataSource` - it allows to obtain
+`javax.jms.XAConnection` objects - most importantly to get `javax.jms.XASession` and `javax.transaction.xa.XAResource`
+in order to enlist the XA resource in active `javax.transaction.Transaction` object.
+
+[[two-kinds-of-connection-factories]]
+=== Broker specific and generic connection factories
+
+As with <<JDBC>>, we can separate JMS connection factory implementations into two categories:
+
+* broker specific implementations of `javax.jms.ConnectionFactory`, `javax.jms.XAConnectionFactory` and
+domain-specific (queue or topic) variants
+* generic `javax.jms.ConnectionFactory` implementations that provida QoS functionality like connection/session pooling
+
+Differently that with <<JDBC>>, in JMS it's usually not that clear if pooling should be performed by
+non broker-specific connection factory.
+
+Here are two _generic_ connection factories:
+
+* `org.springframework.jms.connection.CachingConnectionFactory` (only JMS 1.1)
+* `org.messaginghub.pooled.jms.JmsPoolConnectionFactory` (with XA and JCA versions, works with JMS 2.0)
+
+Again, as with <<JDBC>>, _generic_ connection factory should be configured with _broker-specific_ connection factory.
+It's even easier, because there's no _driver manager way_ of obtaining connections, so there's *always*
+a need to use _broker-specific_ connection factory.
+
+NOTE: `org.messaginghub.pooled.jms.JmsPoolConnectionFactory` uses DBCP2 internally, see the details <<commons-dbcp2-standalone,here>>.
+
+== Wrapping up
+
+Again, the recommended pattern is:
+
+* create/obtain *broker-specific* `javax.jms.ConnectionFactory` or `javax.jms.XAConnectionFactory` instance with broker-specific
+configuration (URL, credentials, ...) that knows how to create connections/XA connections,
+* create/obtain *non broker-specific* `javax.jms.ConnectionFactory` instance (internally configured with
+the above, broker-specific connection factory) with non broker-specific configuration (connection pooling,
+transaction manager, ...),
+* use `javax.jms.ConnectionFactory` to get `javax.jms.Connection` and perform JMS operations.
+
+[[canonical-jms-example, Canonical JMS example]]
+Here's a _canonical_ example:
+
+[source, java, options="nowrap"]
+....
+// broker-specific, non-pooling, non-enlisting javax.jms.XAConnectionFactory
+ActiveMQXAConnectionFactory brokerCF
+        = new org.apache.activemq.artemis.jms.client.ActiveMQXAConnectionFactory("tcp://localhost:61616");
+// broker-specific configuration
+brokerCF.setCallTimeout(2000);
+brokerCF.setInitialConnectAttempts(3);
+// ...
+
+// non broker-specific, pooling, enlisting javax.jms.ConnectionFactory
+JmsPoolXAConnectionFactory pool = new org.messaginghub.pooled.jms.JmsPoolXAConnectionFactory();
+// delegate to broker-specific XAConnectionFactory
+pool.setConnectionFactory(brokerCF);
+// delegate to JTA transaction manager
+pool.setTransactionManager(transactionManager);
+// non broker-specific configuration
+pool.setMaxConnections(10);
+pool.setIdleTimeout(10000);
+// ...
+
+// JMS code
+javax.jms.ConnectionFactory jmsCF = pool;
+
+userTransaction.begin();
+
+try (Connection c = jmsCF.createConnection("fuse", "fuse")) {
+    c.start();
+    try (Session session = c.createSession(false, Session.SESSION_TRANSACTED)) {
+        ActiveMQQueue brokerQueue = new ActiveMQQueue("DEV.QUEUE.1");
+        Queue jmsQueue = brokerQueue;
+
+        try (MessageProducer producer = session.createProducer(jmsQueue)) {
+            TextMessage message = session.createTextMessage("Hello A-MQ 7");
+            producer.send(message);
+        }
+    }
+}
+
+userTransaction.commit();
+....

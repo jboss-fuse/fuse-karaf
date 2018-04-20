@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 
-     Copyright 2005-2017 Red Hat, Inc.
+     Copyright 2005-2018 Red Hat, Inc.
 
      Red Hat licenses this file to you under the Apache License, version
      2.0 (the "License"); you may not use this file except in compliance
@@ -29,7 +29,7 @@
   <artifactId>camel-jms</artifactId>
   <packaging>bundle</packaging>
 
-  <name>JBoss Fuse :: Quickstarts :: camel-jms</name>
+  <name>Red Hat Fuse :: Quickstarts :: camel-jms</name>
   <description>Camel JMS Example</description>
   <url>https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-jms</url>
 

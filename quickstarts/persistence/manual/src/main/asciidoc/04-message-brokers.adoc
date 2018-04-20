@@ -1,0 +1,316 @@
+= Message Broker configuration
+
+In this chapter we'll configure testing message brokers.
+Before deploying/configuring anything in {f7} we need actual RDBMS system running.
+
+We'll be testing:
+
+* A-MQ 6
+* A-MQ 7 (Artemis)
+* IBM MQ 8
+* IBM MQ 9
+
+[[ibm-mq]]
+== Docker based IBM MQ 9 installation
+
+We can use *official* image available at https://hub.docker.com/r/ibmcom/mq/[docker hub].
+The sources for Dockerfile are stored in https://github.com/ibm-messaging/mq-docker[github project].
+
+. Start IBM MQ 9 docker container:
++
+[listing,options="nowrap"]
+----
+$ docker run -d --name fuse-webspheremq9 --env LICENSE=accept --env MQ_QMGR_NAME=FUSEQM --publish 1414:1414 --publish 19443:9443 ibmcom/mq:9
+3b9aa3d47195d53a8d8159af2ca9b0074bd2f4af370bcd6ff09e0d4a0f078812
+
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS                                             NAMES
+3b9aa3d47195        ibmcom/mq:9         "runmqdevserver"    9 seconds ago       Up 8 seconds        0.0.0.0:1414->1414/tcp, 0.0.0.0:19443->9443/tcp   fuse-webspheremq9
+----
+
+. Check if web console works
++
+With the above port mapping, we can access web console at https://localhost:19443/ibmmq/console/ using
+`admin`/`passw0rd` credentials (see details https://github.com/ibm-messaging/mq-docker#web-console[here]).
+
+. Check if MQ Explorer works
++
+We can install IBM MQ Explorer downloaded from https://developer.ibm.com/messaging/mq-downloads/ (check _MQ Explorer standalone download_ link).
++
+After installing, we can add broker connection with these properties:
+
+* _Queue manager name_: `FUSEQM`, _connect directly_
+* _Host name or IP address_: `localhost`
+* _Server connection channel_: `DEV.ADMIN.SRVCONN`
+* Check _Enable user identification_ and use user: `admin`, password: `passw0rd`.
+
++
+Then, under _Queues_ node we should see `DEV.QUEUE.[1-3]` and `DEV.DEAD.LETTER.QUEUE`.
+
+=== Authentication configuration
+
+In order to test the examples, we have to configure proper channel security. https://github.com/ibm-messaging/mq-docker#running-mq-commands[github page]
+points us to https://www.ibm.com/developerworks/community/blogs/messaging/entry/getting_going_without_turning_off_mq_security?lang=en[article about security configuration].
+There's also another article https://www.ibm.com/developerworks/community/blogs/aimsupport/entry/chlauth_allow_some_privileged_admins?lang=en[here].
+
+We need to override security configuration for `DEV.APP.SVRCONN` channel which we'll use for client connections.
+
+.Connect to docker container and run `runmqsc` command as `mqm` user:
+[listing,options="nowrap"]
+----
+$ docker exec -ti fuse-webspheremq9 /bin/bash
+
+(mq:9.0.5.0)root@3b9aa3d47195:/# su - mqm
+No directory, logging in with HOME=/
+
+$ runmqsc
+5724-H72 (C) Copyright IBM Corp. 1994, 2018.
+Starting MQSC for queue manager FUSEQM.
+----
+
+.Check current configuration of the channel
+[listing,options="nowrap"]
+----
+display channel (DEV.APP.SVRCONN)
+     1 : display channel (DEV.APP.SVRCONN)
+AMQ8414I: Display Channel details.
+   CHANNEL(DEV.APP.SVRCONN)                CHLTYPE(SVRCONN)
+   ALTDATE(2018-04-16)                     ALTTIME(11.31.11)
+   CERTLABL( )                             COMPHDR(NONE)
+   COMPMSG(NONE)                           DESCR( )
+   DISCINT(0)                              HBINT(300)
+   KAINT(AUTO)                             MAXINST(999999999)
+   MAXINSTC(999999999)                     MAXMSGL(4194304)
+   MCAUSER( )                              MONCHL(QMGR)
+   RCVDATA( )                              RCVEXIT( )
+   SCYDATA( )                              SCYEXIT( )
+   SENDDATA( )                             SENDEXIT( )
+   SHARECNV(10)                            SSLCAUTH(REQUIRED)
+   SSLCIPH( )                              SSLPEER( )
+   TRPTYPE(TCP)
+
+display chlauth('*')
+     2 : display chlauth('*')
+...
+AMQ8878I: Display channel authentication record details.
+   CHLAUTH(DEV.APP.SVRCONN)                TYPE(ADDRESSMAP)
+   ADDRESS(*)                              USERSRC(CHANNEL)
+...
+AMQ8878I: Display channel authentication record details.
+   CHLAUTH(*)                              TYPE(ADDRESSMAP)
+   ADDRESS(*)                              USERSRC(NOACCESS)
+AMQ8878I: Display channel authentication record details.
+   CHLAUTH(*)                              TYPE(BLOCKUSER)
+   USERLIST(*MQADMIN)
+----
+
+Default auth configuration blocks authenticated users by default.
+
+.Override blocking by specifying different list of blocked users
+[listing,options="nowrap"]
+----
+SET CHLAUTH(DEV.APP.SVRCONN) TYPE(BLOCKUSER) USERLIST('nobody') DESCR('Allow privileged users on this channel')
+     5 : SET CHLAUTH(DEV.APP.SVRCONN) TYPE(BLOCKUSER) USERLIST('nobody') DESCR('Allow privileged users on this channel')
+AMQ8877I: IBM MQ channel authentication record set.
+----
+
+.Enable client connection on `DEV.APP.SVRCONN` channel
+[listing,options="nowrap"]
+----
+SET CHLAUTH('*') TYPE(ADDRESSMAP) ADDRESS('*') USERSRC(NOACCESS) DESCR('BackStop rule')
+     6 : SET CHLAUTH('*') TYPE(ADDRESSMAP) ADDRESS('*') USERSRC(NOACCESS) DESCR('BackStop rule')
+AMQ8883E: Channel authentication record already exists.
+SET CHLAUTH(DEV.APP.SVRCONN) TYPE(ADDRESSMAP) ADDRESS('*') USERSRC(CHANNEL) CHCKCLNT(REQUIRED)
+     7 : SET CHLAUTH(DEV.APP.SVRCONN) TYPE(ADDRESSMAP) ADDRESS('*') USERSRC(CHANNEL) CHCKCLNT(REQUIRED)
+AMQ8883E: Channel authentication record already exists.
+----
+
+.Enable password authentication (instead of _runas_ authentication)
+[listing,options="nowrap"]
+----
+ALTER AUTHINFO(SYSTEM.DEFAULT.AUTHINFO.IDPWOS) AUTHTYPE(IDPWOS) ADOPTCTX(YES)
+    10 : ALTER AUTHINFO(SYSTEM.DEFAULT.AUTHINFO.IDPWOS) AUTHTYPE(IDPWOS) ADOPTCTX(YES)
+AMQ8567I: IBM MQ authentication information changed.
+REFRESH SECURITY TYPE(CONNAUTH)
+    11 : REFRESH SECURITY TYPE(CONNAUTH)
+AMQ8560I: IBM MQ security cache refreshed.
+
+exit
+    12 : exit
+...
+----
+
+.Change password of `app` user
+After exiting `runmqsc` we have to again become `root` user in bash shell.
+[listing,options="nowrap"]
+----
+(mq:9.0.5.0)root@3b9aa3d47195:/# id
+uid=0(root) gid=0(root) groups=0(root),999(mqm)
+
+(mq:9.0.5.0)root@3b9aa3d47195:/# passwd app
+Enter new UNIX password: fuse
+Retype new UNIX password: fuse
+passwd: password updated successfully
+----
+
+[[ibmmq-client-libraries]]
+=== Client libraries
+
+For completeness, here's the list of libraries that should be used with IBM MQ 9.
+
+If we go to https://developer.ibm.com/messaging/mq-downloads/ -> http://www-01.ibm.com/support/docview.wss?uid=swg24042176,
+we can download `9.0.5.0-IBM-MQC-Redist-Java` package, but it doesn't contain everything we need.
+
+However, we can change criteria in _Change your selection_ box in strange way:
+
+* click in _Product selector_ and don't change anything - accept existing _WebSphere MQ_
+* without changing product, we actually change lower box from _Upgrades to version_ to _Applies to version_
+* select _9.0.4_, _Platform_ = _all_ and click _Submit_
+* then we can find the _official_ client library package: `9.0.5.0-IBM-MQ-Install-Java-All.jar`
+
+To be precise, here are the checksums:
+
+[listing,options="nowrap"]
+----
+$ sha1sum 9.0.5.0-IBM*
+4e6548956756c87c579d17a739416c59b736c145  9.0.5.0-IBM-MQC-Redist-Java.zip
+c38a55118059221677240d507ae6c9b3b6923439  9.0.5.0-IBM-MQ-Install-Java-All.jar
+----
+
+Additionally, after downloading developer version of IBM MQ 9 (`mqadv_dev905_linux_x86-64.tar.gz`), we
+can find additional library package:
+
+`MQSeriesJava-9.0.5-0.x86_64.rpm` -> `MQSeriesJava-9.0.5-0.x86_64.cpio.lzma` -> `MQSeriesJava-9.0.5-0.x86_64.cpio`.
+After unpacking cpio package, we can see even more complete set of libraries.
+
+Even if it seems that `9.0.5.0-IBM-MQ-Install-Java-All` package should be used there are some OSGi issues
+<<ibmmq-osgi-package,described here>>. There are three subdirectories in this package:
+
+* `JavaEE` contains resource adapter archive (`wmq.jmsra.rar`)
+* `JavaSE` contains `com.ibm.mq.allclient.jar` library and dependencies
+* `OSGi` contains respective `com.ibm.mq.osgi.allclient_9.0.5.0.jar` and dependencies
+
+`MQSeriesJava-9.0.5-0.x86_64.cpio` contains:
+
+* `com.ibm.mq.osgi.allclientprereqs_9.0.5.0.jar` - should not be used
+* `com.ibm.mq.osgi.allclient_9.0.5.0.jar` - depends on the above, so should not be used
+* `com.ibm.mq.osgi.java_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.commonservices.j2se_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.jms_9.0.5.0.jar` - should not be used
+* `com.ibm.msg.client.osgi.jms.prereq_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.nls_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.wmq_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.wmq.nls_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.wmq.prereq_9.0.5.0.jar`
+
+
+== A-MQ 7 installation (Artemis)
+
+This time we'll run standalone (no docker) version of `amq-broker-7.1.0-bin.zip`.
+
+[listing,options="nowrap"]
+----
+$ pwd
+/data/servers/amq-broker-7.1.0
+
+$ bin/artemis create --user fuse --password fuse --require-login amq7
+Creating ActiveMQ Artemis instance at: /data/servers/amq-broker-7.1.0/amq7
+
+Auto tuning journal ...
+done! Your system can make 27.78 writes per millisecond, your journal-buffer-timeout will be 36000
+
+You can now start the broker by executing:
+
+   "/data/servers/amq-broker-7.1.0/amq7/bin/artemis" run
+
+Or you can run the broker in the background using:
+
+   "/data/servers/amq-broker-7.1.0/amq7/bin/artemis-service" start
+
+$ amq7/bin/artemis run
+           __  __  ____    ____            _
+     /\   |  \/  |/ __ \  |  _ \          | |
+    /  \  | \  / | |  | | | |_) |_ __ ___ | | _____ _ __
+   / /\ \ | |\/| | |  | | |  _ <| '__/ _ \| |/ / _ \ '__|
+  / ____ \| |  | | |__| | | |_) | | | (_) |   <  __/ |
+ /_/    \_\_|  |_|\___\_\ |____/|_|  \___/|_|\_\___|_|
+
+ Red Hat JBoss AMQ 7.1.0.GA
+
+
+2018-04-16 15:02:25,082 INFO  [org.apache.activemq.artemis.integration.bootstrap] AMQ101000: Starting ActiveMQ Artemis Server
+...
+----
+
+=== Non-OSGi client libraries
+
+Artemis libraries are available in Maven Central or Red Hat repository. I used:
+
+* `mvn:org.apache.activemq/artemis-core-client/2.4.0.amq-710008-redhat-1`
+* `mvn:org.apache.activemq/artemis-jms-client/2.4.0.amq-710008-redhat-1`
+
+== A-MQ 6 installation
+
+For A-MQ 6 we'll run standalone (no docker) version of `jboss-a-mq-6.3.0.redhat-344.zip`.
+
+.Add authentication entries
+
+We'll add two authentication entries to `etc/users.properties`:
+[listing,options="nowrap"]
+----
+admin=admin,admin,manager,viewer,Operator, Maintainer, Deployer, Auditor, Administrator, SuperUser
+fuse=fuse,Operator
+----
+
+.Run A-MQ 6
+[listing,options="nowrap"]
+----
+$ pwd
+/data/servers/jboss-a-mq-6.3.0.redhat-344
+
+$ bin/amq
+Please wait, JBoss A-MQ is initializing...
+100% [========================================================================]
+
+      _ ____                                __  __  ____
+     | |  _ \                    /\        |  \/  |/ __ \
+     | | |_) | ___  ___ ___     /  \ ______| \  / | |  | |
+ _   | |  _ < / _ \/ __/ __|   / /\ \______| |\/| | |  | |
+| |__| | |_) | (_) \__ \__ \  / ____ \     | |  | | |__| |
+ \____/|____/ \___/|___/___/ /_/    \_\    |_|  |_|\___\_\
+
+  JBoss A-MQ (6.3.0.redhat-344)
+  http://www.redhat.com/products/jbossenterprisemiddleware/amq/
+
+Hit '<tab>' for a list of available commands
+and '[cmd] --help' for help on a specific command.
+
+Open a browser to http://localhost:8181 to access the management console
+
+Hit '<ctrl-d>' or 'osgi:shutdown' to shutdown JBoss A-MQ.
+
+JBossA-MQ:karaf@root> bstat
+connectorName = ws
+
+connectorName = openwire
+
+Name = KahaDBPersistenceAdapter[/data/servers/jboss-a-mq-6.3.0.redhat-344/data/amq/kahadb,Index:/data/servers/jboss-a-mq-6.3.0.redhat-344/data/amq/kahadb]
+
+
+BrokerName = amq
+TotalEnqueueCount = 1
+TotalDequeueCount = 0
+TotalMessageCount = 0
+TotalConsumerCount = 0
+Uptime = 18.398 seconds
+
+connectorName = amqp
+
+connectorName = mqtt
+----
+
+=== Non-OSGi client libraries
+
+Libraries are available in Maven Central or Red Hat repository. I used:
+
+* `mvn:org.apache.activemq/activemq-client/5.11.0.redhat-630344`

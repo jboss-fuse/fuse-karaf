@@ -49,17 +49,16 @@ import org.slf4j.LoggerFactory;
 /**
  * Helper class to generate diff reports after patching
  */
-public class DiffUtils {
+public final class DiffUtils {
 
-    public static Logger LOG = LoggerFactory.getLogger(DiffUtils.class);
+    public static final Logger LOG = LoggerFactory.getLogger(DiffUtils.class);
+    private static final DateFormat DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     private static String reportHeader;
     private static String reportFooter;
     private static String fileHeader1;
     private static String fileHeader2;
     private static String fileFooter;
-
-    private static DateFormat DATE = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     static {
         try {
@@ -72,6 +71,9 @@ public class DiffUtils {
         } catch (Exception e) {
             LOG.warn(e.getMessage(), e);
         }
+    }
+
+    private DiffUtils() {
     }
 
     /**
@@ -139,35 +141,35 @@ public class DiffUtils {
         result.write(reportHeader.replace("@PATCH_ID@", pd.getId()));
         PatchReport pr = patchResult.getReport();
 
-        result.write("<table class=\"summary\">\n" +
-                "        <tr>\n" +
-                "            <td class=\"f\">Patch ID:</td><td>" + pr.getId() + "</td>\n" +
-                "        </tr>\n" +
-                "        <tr>\n" +
-                "            <td class=\"f\">Patch type:</td><td>" + (pr.isRollup() ? "rollup" : "non-rollup") + "</td>\n" +
-                "        </tr>\n" +
-                "        <tr>\n" +
-                "            <td class=\"f\">Installation date:</td><td>" + DATE.format(pr.getTimestamp()) + "</td>\n" +
-                "        </tr>\n" +
-                "        <tr>\n" +
-                "            <td class=\"f\">Bundles updated</td><td>" + pr.getUpdatedBundles() + "</td>\n" +
-                "        </tr>\n" +
-                "        <tr>\n" +
-                "            <td class=\"f\">Features updated</td><td>" + pr.getUpdatedFeatures() + "</td>\n" +
-                "        </tr>\n" +
-                "        <tr>\n" +
-                "            <td class=\"f\">Features overriden</td><td>" + pr.getOverridenFeatures() + "</td>\n" +
-                "        </tr>\n" +
-                "        <tr>\n" +
-                "            <td class=\"f\">File conflicts</td><td>" + conflicts.size() + "</td>\n" +
-                "        </tr>\n" +
-                "    </table>\n" +
-                "</div>\n");
+        result.write("<table class=\"summary\">\n"
+                + "        <tr>\n"
+                + "            <td class=\"f\">Patch ID:</td><td>" + pr.getId() + "</td>\n"
+                + "        </tr>\n"
+                + "        <tr>\n"
+                + "            <td class=\"f\">Patch type:</td><td>" + (pr.isRollup() ? "rollup" : "non-rollup") + "</td>\n"
+                + "        </tr>\n"
+                + "        <tr>\n"
+                + "            <td class=\"f\">Installation date:</td><td>" + DATE.format(pr.getTimestamp()) + "</td>\n"
+                + "        </tr>\n"
+                + "        <tr>\n"
+                + "            <td class=\"f\">Bundles updated</td><td>" + pr.getUpdatedBundles() + "</td>\n"
+                + "        </tr>\n"
+                + "        <tr>\n"
+                + "            <td class=\"f\">Features updated</td><td>" + pr.getUpdatedFeatures() + "</td>\n"
+                + "        </tr>\n"
+                + "        <tr>\n"
+                + "            <td class=\"f\">Features overriden</td><td>" + pr.getOverridenFeatures() + "</td>\n"
+                + "        </tr>\n"
+                + "        <tr>\n"
+                + "            <td class=\"f\">File conflicts</td><td>" + conflicts.size() + "</td>\n"
+                + "        </tr>\n"
+                + "    </table>\n"
+                + "</div>\n");
 
         if (conflicts.size() > 0) {
-            result.write("<h1 class=\"header\">\n" +
-                    "  <div>Conflicting files</div>\n" +
-                    "</h1>\n");
+            result.write("<h1 class=\"header\">\n"
+                    + "  <div>Conflicting files</div>\n"
+                    + "</h1>\n");
         }
 
         for (Map.Entry<String, DiffEntry[]> e : report.entrySet()) {
@@ -180,31 +182,31 @@ public class DiffUtils {
             result.write(e.getKey());
             result.write(fileHeader2);
             // we have max 3 entries (not all entries may be present
-            result.write("<td class=\"side\">\n" +
-                    "          <div class=\"header\">Custom version</div>\n" +
-                    "          <div class=\"content" + (e.getValue()[0] != null ? "" : " empty") + "\">");
+            result.write("<td class=\"side\">\n"
+                    + "          <div class=\"header\">Custom version</div>\n"
+                    + "          <div class=\"content" + (e.getValue()[0] != null ? "" : " empty") + "\">");
             if (e.getValue()[0] != null) {
                 // custom change
                 diff(git, reader, e.getValue()[0], result);
             } else {
                 result.write("No change");
             }
-            result.write("</div>\n" +
-                    "        </td>");
-            result.write("<td class=\"side\">\n" +
-                    "          <div class=\"header\">Patch</div>\n" +
-                    "          <div class=\"content" + (e.getValue()[1] != null ? "" : " empty") + "\">");
+            result.write("</div>\n"
+                    + "        </td>");
+            result.write("<td class=\"side\">\n"
+                    + "          <div class=\"header\">Patch</div>\n"
+                    + "          <div class=\"content" + (e.getValue()[1] != null ? "" : " empty") + "\">");
             if (e.getValue()[1] != null) {
                 // patch change
                 diff(git, reader, e.getValue()[1], result);
             } else {
                 result.write("No change");
             }
-            result.write("</div>\n" +
-                    "        </td>");
-            result.write("<td class=\"side\">\n" +
-                    "          <div class=\"header\">Final version</div>\n" +
-                    "          <div class=\"content" + (e.getValue()[2] != null ? "" : " empty") + "\">");
+            result.write("</div>\n"
+                    + "        </td>");
+            result.write("<td class=\"side\">\n"
+                    + "          <div class=\"header\">Final version</div>\n"
+                    + "          <div class=\"content" + (e.getValue()[2] != null ? "" : " empty") + "\">");
             if (e.getValue()[2] != null) {
                 // effective change - should always be available
                 // or maybe not when both patch and user removed the file?
@@ -212,8 +214,8 @@ public class DiffUtils {
             } else {
                 result.write("No change");
             }
-            result.write("</div>\n" +
-                    "        </td>");
+            result.write("</div>\n"
+                    + "        </td>");
             result.write(fileFooter);
         }
 
