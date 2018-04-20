@@ -85,6 +85,10 @@
             <groupId>javax.jms</groupId>
             <artifactId>javax.jms-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.resource</groupId>
+            <artifactId>javax.resource-api</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>

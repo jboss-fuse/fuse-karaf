@@ -59,8 +59,12 @@
                 replacement="mvn:joda-time/joda-time/${version.joda-time}" mode="maven" />
         <bundle originalUri="mvn:org.apache.commons/commons-lang3/[3,4)"
                 replacement="mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.commons/commons-dbcp2/[2.1,2.3)"
+                replacement="mvn:org.apache.commons/commons-dbcp2/${version.org.apache.commons.dbcp2}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.commons/commons-pool2/[2.4,3)"
+                replacement="mvn:org.apache.commons/commons-pool2/${version.org.apache.commons.pool2}" mode="maven" />
         <bundle originalUri="mvn:org.apache.geronimo.specs/geronimo-jms_2.0_spec"
-                replacement="mvn:org.apache.geronimo.specs/geronimo-jms_2.0_spec/${version.org.apache.geronimo.specs.jms_2.0}" mode="maven" />
+                replacement="mvn:javax.jms/javax.jms-api/${version.javax.jms}" mode="maven" />
         <bundle originalUri="mvn:org.apache.httpcomponents/httpclient-osgi/[4.5,4.6)"
                 replacement="mvn:org.apache.httpcomponents/httpclient-osgi/${version.org.apache.httpcomponents.httpclient}" mode="maven" />
         <bundle originalUri="mvn:org.apache.httpcomponents/httpcore-osgi/[4.4,4.5)"
