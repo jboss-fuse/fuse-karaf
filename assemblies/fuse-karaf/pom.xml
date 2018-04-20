@@ -160,6 +160,17 @@
             <artifactId>slf4j-api</artifactId>
             <scope>provided</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -418,6 +429,10 @@
                             delegate:=true - packages from Export-Package MANIFEST.MF header will be added to
                                 org.osgi.framework.bootdelegation property in etc/config.properties
                         -->
+                        <!-- lib/ext -->
+                        <!-- Bouncy Castle libraries are already added to org.osgi.framework.bootdelegation property -->
+                        <library>mvn:org.bouncycastle/bcprov-jdk15on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
+                        <library>mvn:org.bouncycastle/bcpkix-jdk15on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
                         <!-- lib/endorsed -->
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces};type:=endorsed;export:=true;delegate:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxp-api-1.4/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
