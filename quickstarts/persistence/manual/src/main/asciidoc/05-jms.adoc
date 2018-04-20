@@ -1,7 +1,7 @@
 [[JMS]]
 = JMS
 
-In a way similar to <<JDBC>>, et's review the mechanisms of Java™ Message Service.
+In a way similar to <<JDBC>>, let's review the mechanisms of Java™ Message Service.
 
 == Connections
 
@@ -55,7 +55,7 @@ javax.jms.JMSContext jms = javax.jms.ConnectionFactory.createContext()
 in order to enlist the XA resource in active `javax.transaction.Transaction` object.
 
 [[two-kinds-of-connection-factories]]
-=== Database specific and generic connection factories
+=== Broker specific and generic connection factories
 
 As with <<JDBC>>, we can separate JMS connection factory implementations into two categories:
 

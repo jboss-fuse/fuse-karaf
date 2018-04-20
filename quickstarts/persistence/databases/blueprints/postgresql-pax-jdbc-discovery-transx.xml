@@ -20,20 +20,19 @@
         xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
     <!--
-        This Blueprint XML shows the _deployment_ method for data source configuration.
-        With this method, it is not required to use pax-jdbc bundles at all. Instead both database-specific
-        and generic data sources are declared as Blueprint beans.
+        This Blueprint XML shows other _deployment_ method for data source configuration.
+        With this method, we use pax-jdbc-config 1.3.0+, but without a need to use configuration admin factory PID
         We need:
          - mvn:org.postgresql/postgresql/42.2.2 bundle
-         - mvn:org.apache.commons/commons-pool2/2.4.2 bundle
-         - mvn:org.apache.commons/commons-dbcp2/2.1.1 bundle
-        Optionally, "jdbc" Karaf feature gives us jdbc:* commands to list and use datasources from shell
+         - jdbc feature (which includes pax-jdbc and pax-jdbc-config)
+         - pax-jdbc-pool-transx feature
 
         This Blueprint XML can be directly dropped to ${karaf.home}/deploy or archived in typical /OSGI-INF/blueprint
         directory and installed as normal bundle.
 
-        Finally, this set of beans reflects the _canonical_ code example from
-        org.jboss.fuse.quickstarts.persistence.standalone.StandaloneXADataAccessTest.convenientXADataAccess()
+        We configure database-specific (XA) data source directly as Blueprint bean
+        (as it was recommended with Fuse 6.x) and specify some properties that'll make this data source eligible
+        for "wrapping" by pax-jdbc-config (since 1.3.0).
     -->
 
     <!--
@@ -48,32 +47,22 @@
     </bean>
 
     <!--
-        Fuse exports this service from fuse-pax-transx-tm-narayana bundle
+        Expose database-specific data source with service properties
+        No need to expose pooling, enlisting, non database-specific javax.sql.DataSource - it'll be registered
+        automatically by pax-jdbc-config with the same properties as this <service>, but with higher service.ranking
     -->
-    <reference id="tm" interface="javax.transaction.TransactionManager" />
-
-    <!--
-        Non database-specific, generic, pooling, enlisting javax.sql.DataSource
-    -->
-    <bean id="pool" class="org.apache.commons.dbcp2.managed.BasicManagedDataSource">
-        <property name="xaDataSourceInstance" ref="postgresql" />
-        <property name="transactionManager" ref="tm" />
-        <property name="minIdle" value="3" />
-        <property name="maxTotal" value="10" />
-        <property name="validationQuery" value="select schema_name, schema_owner from information_schema.schemata" />
-    </bean>
-
-    <!--
-        Expose datasource to use by application code (like Camel, Spring, ...)
-    -->
-    <service interface="javax.sql.DataSource" ref="pool">
+    <service id="pool" ref="postgresql" interface="javax.sql.XADataSource">
         <service-properties>
-            <!-- Giving data source a name using one of these properties makes identification easier in jdbc:ds-list: -->
+            <!-- "pool" key is needed for pax-jdbc-config to wrap database-specific data source inside connection pool -->
+            <entry key="pool" value="transx" />
+            <!-- <service>/@id attribute doesn't propagate, but name of the datasource is required using one of: -->
             <entry key="osgi.jndi.service.name" value="jdbc/postgresql" />
-            <!--<entry key="datasource" value="jdbc/postgresql" />-->
-            <!--<entry key="name" value="jdbc/postgresql" />-->
+            <!-- or: -->
             <!--<entry key="dataSourceName" value="jdbc/postgresql" />-->
-            <!-- Without any of the above, name will fallback to "service.id" -->
+            <!-- Other properties, that normally are needed by e.g., pax-jdbc-pool-transx -->
+            <entry key="pool.maxPoolSize" value="13" />
+            <entry key="pool.userName" value="fuse" />
+            <entry key="pool.password" value="fuse" />
         </service-properties>
     </service>
 

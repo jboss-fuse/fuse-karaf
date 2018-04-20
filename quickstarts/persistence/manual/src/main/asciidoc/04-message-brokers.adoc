@@ -10,6 +10,7 @@ We'll be testing:
 * IBM MQ 8
 * IBM MQ 9
 
+[[ibm-mq]]
 == Docker based IBM MQ 9 installation
 
 We can use *official* image available at https://hub.docker.com/r/ibmcom/mq/[docker hub].
@@ -152,6 +153,7 @@ Retype new UNIX password: fuse
 passwd: password updated successfully
 ----
 
+[[ibmmq-client-libraries]]
 === Client libraries
 
 For completeness, here's the list of libraries that should be used with IBM MQ 9.
@@ -181,12 +183,25 @@ can find additional library package:
 `MQSeriesJava-9.0.5-0.x86_64.rpm` -> `MQSeriesJava-9.0.5-0.x86_64.cpio.lzma` -> `MQSeriesJava-9.0.5-0.x86_64.cpio`.
 After unpacking cpio package, we can see even more complete set of libraries.
 
-It looks however that `9.0.5.0-IBM-MQ-Install-Java-All` package should be used. There are three
-subdirectories in this package:
+Even if it seems that `9.0.5.0-IBM-MQ-Install-Java-All` package should be used there are some OSGi issues
+<<ibmmq-osgi-package,described here>>. There are three subdirectories in this package:
 
 * `JavaEE` contains resource adapter archive (`wmq.jmsra.rar`)
 * `JavaSE` contains `com.ibm.mq.allclient.jar` library and dependencies
 * `OSGi` contains respective `com.ibm.mq.osgi.allclient_9.0.5.0.jar` and dependencies
+
+`MQSeriesJava-9.0.5-0.x86_64.cpio` contains:
+* `com.ibm.mq.osgi.allclientprereqs_9.0.5.0.jar` - should not be used
+* `com.ibm.mq.osgi.allclient_9.0.5.0.jar` - depends on the above, so should not be used
+* `com.ibm.mq.osgi.java_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.commonservices.j2se_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.jms_9.0.5.0.jar` - should not be used
+* `com.ibm.msg.client.osgi.jms.prereq_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.nls_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.wmq_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.wmq.nls_9.0.5.0.jar`
+* `com.ibm.msg.client.osgi.wmq.prereq_9.0.5.0.jar`
+
 
 == A-MQ 7 installation (Artemis)
 

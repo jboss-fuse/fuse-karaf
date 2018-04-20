@@ -29,8 +29,14 @@ include::03-datasources.adoc[]
 include::04-message-brokers.adoc[]
 
 include::05-jms.adoc[]
-//
-//include::06-transaction-management.adoc[]
+
+include::06-connection-factories.adoc[]
+
+include::07-jta.adoc[]
+
+include::08-jca.adoc[]
+
+include::09-apis.adoc[]
 
 :leveloffset: -1
 

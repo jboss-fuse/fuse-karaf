@@ -16,7 +16,6 @@
      permissions and limitations under the License.
 
 -->
-
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
@@ -90,7 +89,11 @@
         <argument ref="dataSourceFactory" />
         <argument>
             <props>
-                <!-- Properties needed by postgresql-specific org.osgi.service.jdbc.DataSourceFactory -->
+                <!--
+                    Properties needed by postgresql-specific org.osgi.service.jdbc.DataSourceFactory
+                    We can't prepend them with 'jdbc.' prefix because we directly invoke the factories
+                    without the help from pax-jdbc-config
+                -->
                 <prop key="url" value="jdbc:postgresql://localhost:5432/reportdb" />
                 <prop key="user" value="fuse" />
                 <prop key="password" value="fuse" />

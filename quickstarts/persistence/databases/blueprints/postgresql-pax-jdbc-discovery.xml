@@ -21,7 +21,7 @@
 
     <!--
         This Blueprint XML shows other _deployment_ method for data source configuration.
-        With this method, we map use pax-jdbc-config 1.3.0+, but without a need to use configuration admin factory PID
+        With this method, we use pax-jdbc-config 1.3.0+, but without a need to use configuration admin factory PID
         We need:
          - mvn:org.postgresql/postgresql/42.2.2 bundle
          - jdbc feature (which includes pax-jdbc and pax-jdbc-config)

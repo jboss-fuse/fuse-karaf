@@ -39,26 +39,24 @@ public class StandaloneWMQ9AccessTest {
         ConnectionFactory cf = context.getBean(ConnectionFactory.class);
         Queue q = context.getBean(Queue.class);
         LOG.info("Using WMQ9 queue: {}", q.getClass().getName());
-        {
-            // classic API
-            try (Connection c = cf.createConnection("app", "fuse")) {
-                c.start();
-                try (Session session = c.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
-                    try (MessageProducer producer = session.createProducer(q)) {
-                        TextMessage message = session.createTextMessage("Hello IBM MQ 9");
-                        producer.send(message);
-                    }
+
+        // classic API
+        try (Connection c = cf.createConnection("app", "fuse")) {
+            c.start();
+            try (Session session = c.createSession(false, Session.AUTO_ACKNOWLEDGE)) {
+                try (MessageProducer producer = session.createProducer(q)) {
+                    TextMessage message = session.createTextMessage("Hello IBM MQ 9");
+                    producer.send(message);
                 }
             }
         }
-        {
-            // simplified API
-            try (JMSContext jms = cf.createContext("app", "fuse", JMSContext.AUTO_ACKNOWLEDGE)) {
-                try (JMSConsumer consumer = jms.createConsumer(q)) {
-                    Message msg = consumer.receive(5000);
-                    LOG.info("MESSAGE: " + ((TextMessage)msg).getText());
-                    LOG.info("MESSAGE: " + msg);
-                }
+
+        // simplified API
+        try (JMSContext jms = cf.createContext("app", "fuse", JMSContext.AUTO_ACKNOWLEDGE)) {
+            try (JMSConsumer consumer = jms.createConsumer(q)) {
+                Message msg = consumer.receive(5000);
+                LOG.info("MESSAGE: " + ((TextMessage)msg).getText());
+                LOG.info("MESSAGE: " + msg);
             }
         }
     }

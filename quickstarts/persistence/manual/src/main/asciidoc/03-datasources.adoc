@@ -1,3 +1,4 @@
+[[datasource-configuration]]
 = Datasource configuration
 
 As we've seen in the chapter about <<JDBC>>, we need two kinds of data sources:
@@ -209,7 +210,7 @@ public DataSource createDataSource(Properties props);
 public XADataSource createXADataSource(Properties props);
 public ConnectionPoolDataSource createConnectionPoolDataSource(Properties props);
 ....
-* tracks `org.ops4j.datasource` _factory PIDs_ in order to collect properties required by the above method.
+* tracks `org.ops4j.datasource` _factory PIDs_ in order to collect properties required by the above methods.
 If we create a _factory configuration_ using any method available for Configuration Admin service, for example by
 creating `${karaf.etc}/org.ops4j.datasource-mysql.cfg` file, we can perform the final step to expose actual
 database-specific data source.
@@ -281,7 +282,7 @@ FactoryPid:     org.ops4j.datasource
 BundleLocation: ?
 Properties:
    dataSourceName = mysqlds
-   felix.fileinstall.filename = file:/data/sources/github.com/jboss-fuse/fuse-karaf/assemblies/fuse-karaf/target/assembly/etc/org.ops4j.datasource-mysql.cfg
+   felix.fileinstall.filename = file:${karaf.etc}/org.ops4j.datasource-mysql.cfg
    osgi.jdbc.driver.name = mysql
    password = fuse
    service.factoryPid = org.ops4j.datasource
@@ -298,7 +299,7 @@ karaf@root()> service:list javax.sql.DataSource
 [javax.sql.DataSource]
 ----------------------
  dataSourceName = mysqlds
- felix.fileinstall.filename = file:/data/sources/github.com/jboss-fuse/fuse-karaf/assemblies/fuse-karaf/target/assembly/etc/org.ops4j.datasource-mysql.cfg
+ felix.fileinstall.filename = file:${karaf.etc}/org.ops4j.datasource-mysql.cfg
  osgi.jdbc.driver.name = mysql
  osgi.jndi.service.name = mysqlds
  password = fuse
@@ -343,7 +344,7 @@ In the above case we see some MySQL warning. No problem. Any property (not only 
 karaf@root()> config:property-set --pid org.ops4j.datasource.d92fc580-d39b-4c20-9349-d174b8cf40c8 useSSL false
 ----
 
-Hmm, we can see in the logs:
+Hmm, we can see in the logs (pax-jdbc 1.2.0):
 [listing,options="nowrap"]
 ----
 2018-04-06 13:21:37,449 WARN  {CM Configuration Updater (Update: pid=org.ops4j.datasource.d92fc580-d39b-4c20-9349-d174b8cf40c8)} [org.ops4j.pax.jdbc.config.impl.DataSourceRegistration.<init>()] (DataSourceRegistration.java:91) : cannot set properties [useSSL]
@@ -373,13 +374,70 @@ NOTE: This problem is fixed with https://ops4j1.jira.com/browse/PAXJDBC-130.
 
 === Summary of handled properties
 
+Properties from configuration admin _factory PID_ are passed to relevant `org.osgi.service.jdbc.DataSourceFactory`
+implementation.
+
 .Generic org.ops4j.pax.jdbc.impl.DriverDataSourceFactory
 * `url`
 * `user`
 * `password`
 
+.DB2 - org.ops4j.pax.jdbc.db2.impl.DB2DataSourceFactory
+* all bean properties of these implementation classes: `com.ibm.db2.jcc.DB2SimpleDataSource`,
+`com.ibm.db2.jcc.DB2ConnectionPoolDataSource`, `com.ibm.db2.jcc.DB2XADataSource`
+
 .PostgreSQL - native org.postgresql.osgi.PGDataSourceFactory
 * all properties specified in `org.postgresql.PGProperty`
+
+.Derby - org.ops4j.pax.jdbc.derby.impl.DerbyDataSourceFactory
+* `databaseName`
+* `createDatabase`
+* `url`
+* `user`
+* `password`
+* since pax-jdbc 1.3.0, all bean properties of `org.apache.derby.jdbc.EmbeddedDataSource`,
+`org.apache.derby.jdbc.EmbeddedConnectionPoolDataSource` or `org.apache.derby.jdbc.EmbeddedXADataSource`
+
+.Derby - org.ops4j.pax.jdbc.derbyclient.impl.DerbyClientDatasourceFactory
+* `databaseName`
+* `serverName`
+* `portNumber`
+* `createDatabase`
+* `url`
+* `user`
+* `password`
+* since pax-jdbc 1.3.0, all bean properties of `org.apache.derby.jdbc.ClientDataSource`,
+`org.apache.derby.jdbc.ClientConnectionPoolDataSource` or `org.apache.derby.jdbc.ClientXADataSource`
+
+.HSQLDB - org.ops4j.pax.jdbc.hsqldb.impl.HsqldbDataSourceFactory
+* `url`
+* `user`
+* `password`
+* `databaseName`
+* since pax-jdbc 1.3.0, all bean properties of `org.hsqldb.jdbc.JDBCDataSource`,
+`org.hsqldb.jdbc.pool.JDBCPooledDataSource` or `org.hsqldb.jdbc.pool.JDBCXADataSource`
+
+.SQL Server and Sybase - org.ops4j.pax.jdbc.jtds.impl.JTDSDataSourceFactory
+* since pax-jdbc 1.3.0, all bean properties of `net.sourceforge.jtds.jdbcx.JtdsDataSource`
+
+.MariaDB - org.ops4j.pax.jdbc.mariadb.impl.MariaDbDataSourceFactory
+* `url`
+* `user`
+* `password`
+* `databaseName`
+* `serverName`
+* `portNumber`
+* since pax-jdbc 1.3.0, all bean properties of `org.mariadb.jdbc.MariaDbDataSource`
+
+.SQL Server - org.ops4j.pax.jdbc.mssql.impl.MSSQLDataSourceFactory
+* `url`
+* `user`
+* `password`
+* `databaseName`
+* `serverName`
+* `portNumber`
+* since pax-jdbc 1.3.0, all bean properties of `com.microsoft.sqlserver.jdbc.SQLServerDataSource`,
+`com.microsoft.sqlserver.jdbc.SQLServerConnectionPoolDataSource`, or `com.microsoft.sqlserver.jdbc.SQLServerXADataSource`
 
 .MySQL - org.ops4j.pax.jdbc.mysql.impl.MysqlDataSourceFactory
 * `url`
@@ -387,14 +445,95 @@ NOTE: This problem is fixed with https://ops4j1.jira.com/browse/PAXJDBC-130.
 * `password`
 * `databaseName`
 * `serverName`
-* since pax-jdbc 1.3.0, all bean properties of `com.mysql.jdbc.jdbc2.optional.MysqlDataSource`
+* `portNumber`
+* since pax-jdbc 1.3.0, all bean properties of `com.mysql.jdbc.jdbc2.optional.MysqlDataSource`,
+`com.mysql.jdbc.jdbc2.optional.MysqlConnectionPoolDataSource` or `com.mysql.jdbc.jdbc2.optional.MysqlXADataSource`
+
+.Oracle - org.ops4j.pax.jdbc.oracle.impl.OracleDataSourceFactory
+* `url`
+* `databaseName`
+* `serverName`
+* `user`
+* `password`
+* since pax-jdbc 1.3.0, all bean properties of `oracle.jdbc.pool.OracleDataSource`,
+`oracle.jdbc.pool.OracleConnectionPoolDataSource` or `oracle.jdbc.xa.client.OracleXADataSource`
 
 .SQLite - org.ops4j.pax.jdbc.sqlite.impl.SqliteDataSourceFactory
-* `url` or `databaseName`
+* `url`
+* `databaseName`
 * since pax-jdbc 1.3.0, all bean properties of `org.sqlite.SQLiteDataSource`
 
-.Other data source factories:
-* since pax-jdbc 1.3.0, all bean properties of database-specific data source implementations
+=== Useful convention
+
+`pax-jdbc-config` bundle handles properties prefixed with `jdbc.` - all these properties will have this prefix
+removed and remaining names will be passed over.
+
+Here's the example:
+
+[listing,options="nowrap"]
+----
+karaf@root()> install -s mvn:mysql/mysql-connector-java/5.1.46
+Bundle ID: 233
+
+karaf@root()> install -s mvn:org.ops4j.pax.jdbc/pax-jdbc-mysql/1.3.0-SNAPSHOT
+Bundle ID: 234
+
+karaf@root()> install -s mvn:org.ops4j.pax.jdbc/pax-jdbc-config/1.3.0-SNAPSHOT
+Bundle ID: 235
+
+karaf@root()> config:edit --factory --alias mysql org.ops4j.datasource
+karaf@root()> config:property-set osgi.jdbc.driver.name mysql
+karaf@root()> config:property-set dataSourceName mysqlds
+karaf@root()> config:property-set dataSourceType DataSource
+karaf@root()> config:property-set jdbc.url jdbc:mysql://localhost:3306/reportdb
+karaf@root()> config:property-set jdbc.user fuse
+karaf@root()> config:property-set jdbc.password fuse
+karaf@root()> config:property-set jdbc.useSSL false
+karaf@root()> config:update
+
+karaf@root()> config:list '(service.factoryPid=org.ops4j.datasource)'
+----------------------------------------------------------------
+Pid:            org.ops4j.datasource.27626710-abd3-4660-a06a-554a13b0f305
+FactoryPid:     org.ops4j.datasource
+BundleLocation: ?
+Properties:
+   dataSourceName = mysqlds
+   dataSourceType = DataSource
+   felix.fileinstall.filename = file:${karaf.etc}/org.ops4j.datasource-mysql.cfg
+   jdbc.password = fuse
+   jdbc.url = jdbc:mysql://localhost:3306/reportdb
+   jdbc.user = fuse
+   jdbc.useSSL = false
+   osgi.jdbc.driver.name = mysql
+   service.factoryPid = org.ops4j.datasource
+   service.pid = org.ops4j.datasource.27626710-abd3-4660-a06a-554a13b0f305
+
+karaf@root()> service:list javax.sql.DataSource
+[javax.sql.DataSource]
+----------------------
+ dataSourceName = mysqlds
+ dataSourceType = DataSource
+ felix.fileinstall.filename = file:${karaf.etc}/org.ops4j.datasource-mysql.cfg
+ jdbc.password = fuse
+ jdbc.url = jdbc:mysql://localhost:3306/reportdb
+ jdbc.user = fuse
+ jdbc.useSSL = false
+ osgi.jdbc.driver.name = mysql
+ osgi.jndi.service.name = mysqlds
+ pax.jdbc.managed = true
+ service.bundleid = 235
+ service.factoryPid = org.ops4j.datasource
+ service.id = 249
+ service.pid = org.ops4j.datasource.27626710-abd3-4660-a06a-554a13b0f305
+ service.scope = singleton
+Provided by :
+ OPS4J Pax JDBC Config (235)
+----
+
+Properties `osgi.jdbc.driver.name`, `dataSourceName` and `dataSourceType` are required by `pax-jdbc-config` itself to
+locate and invoke relevant `org.osgi.service.jdbc.DataSourceFactory`, properties prefixed with `jdbc.` are passed
+(after removing the prefix) to e.g., `org.osgi.service.jdbc.DataSourceFactory.createDataSource(properties)`, but are
+added without the prefix removed as properties of e.g., `javax.sql.DataSource` OSGi service.
 
 == Using console commands
 
@@ -499,6 +638,7 @@ where `<alias>` is the value of `decryptor` property from data source configurat
 
 NOTE: An instruction about how to use Jasypt may be added here soon....
 
+[[jdbc-connection-pools]]
 == Using connection pools
 
 IMPORTANT: This chapter presents exhaustive information on the internals of data source management.
@@ -576,10 +716,6 @@ What bundles register pooled data source factories (`o.o.p.j.p` == `org.ops4j.pa
 |`o.o.p.j.p.c3p0.impl.ds.C3p0(XA)PooledDataSourceFactory`
 |`c3p0`
 
-|`pax-jdbc-pool-transx`
-|`o.o.p.j.p.transx.impl.Transx(Xa)PooledDataSourceFactory`
-|`transx`
-
 |`pax-jdbc-pool-dbcp2`
 |`o.o.p.j.p.dbcp2.impl.Dbcp(XA)PooledDataSourceFactory`
 |`dbcp2`
@@ -591,10 +727,14 @@ What bundles register pooled data source factories (`o.o.p.j.p` == `org.ops4j.pa
 |`pax-jdbc-pool-hikaricp`
 |`o.o.p.j.p.hikaricp.impl.HikariPooledDataSourceFactory` (no XA version)
 |`hikari`
+
+|`pax-jdbc-pool-transx`
+|`o.o.p.j.p.transx.impl.Transx(Xa)PooledDataSourceFactory`
+|`transx`
 |===
 
 The above bundles only install data source factories. Not the data sources themselves. So again we need something
-that'll actually call `javax.sql.DataSource create(org.osgi.service.jdbc.DataSourceFactory dsf, Properties config)`.
+that'll actually call `javax.sql.DataSource create(org.osgi.service.jdbc.DataSourceFactory dsf, Properties config)` method.
 
 === pax-jdbc-pool-dbcp2
 
@@ -609,7 +749,7 @@ This time we'll do it in OSGi environment like {f7}.
 also tracks instances of `org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory` registered by one of `pax-jdbc-pool-*` bundles.
 
 If _factory configuration_ contains `pool` property, the ultimate data source registered by `pax-jdbc-config` bundle
-will be the database-specific datasource, but wrapped inside one of:
+will be the database-specific datasource, but wrapped inside one of (if `pool=dbcp2`):
 
 * `org.apache.commons.dbcp2.PoolingDataSource`
 * `org.apache.commons.dbcp2.managed.ManagedDataSource`
@@ -627,7 +767,8 @@ Where each of the properties are used depends on `pax-jdbc-pool-*` bundle used. 
 * `factory.*`: bean properties of `org.apache.commons.dbcp2.managed.PoolableManagedConnectionFactory` (xa) or
  `org.apache.commons.dbcp2.PoolableConnectionFactory` (non-xa)
 
-Here's quite realistic configuration of dbcp2 pool (`org.ops4j.datasource-mysql` _factory PID_):
+Here's quite realistic (except `useSSL=false`) configuration of dbcp2 pool (`org.ops4j.datasource-mysql` _factory PID_)
+using convenient syntax with `jdbc.`-prefixed properties:
 
 [listing, options="nowrap"]
 ----
@@ -635,9 +776,10 @@ Here's quite realistic configuration of dbcp2 pool (`org.ops4j.datasource-mysql`
 dataSourceName = mysqlds
 dataSourceType = DataSource
 osgi.jdbc.driver.name = mysql
-url = jdbc:mysql://localhost:3306/reportdb?useSSL=false
-user = fuse
-password = fuse
+jdbc.url = jdbc:mysql://localhost:3306/reportdb
+jdbc.user = fuse
+jdbc.password = fuse
+jdbc.useSSL = false
 
 # hints for pax-jdbc-config to use org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory
 pool = dbcp2
@@ -663,6 +805,9 @@ In the above configuration, `pool` and `xa` keys are _hints_ (service filter pro
 `org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory` services. In case of dbcp2 it's:
 [listing, options="nowrap"]
 ----
+karaf@root()> install -s mvn:org.ops4j.pax.jdbc/pax-jdbc-pool-dbcp2/1.3.0-SNAPSHOT
+Bundle ID: 238
+
 karaf@root()> bundle:services -p 238
 
 OPS4J Pax JDBC Pooling DBCP2 (238) provides:
@@ -670,14 +815,14 @@ OPS4J Pax JDBC Pooling DBCP2 (238) provides:
 objectClass = [org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory]
 pool = dbcp2
 service.bundleid = 238
-service.id = 253
+service.id = 255
 service.scope = singleton
 xa = false
 - - - -
 objectClass = [org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory]
 pool = dbcp2
 service.bundleid = 238
-service.id = 254
+service.id = 256
 service.scope = singleton
 xa = true
 ----
@@ -687,7 +832,7 @@ xa = true
 For completeness, here's full example with connection pool configuration that's added to
 <<canonical-pax-jdbc-config-example,previous example>>:
 
-. Install JDBC driver with `/META-INF/services/java.sql.Driver`:
+. Install JDBC driver:
 +
 [listing,options="nowrap"]
 ----
@@ -699,6 +844,9 @@ Bundle ID: 233
 +
 [listing,options="nowrap"]
 ----
+karaf@root()> feature:repo-add mvn:org.ops4j.pax.jdbc/pax-jdbc-features/1.3.0-SNAPSHOT/xml/features-gpl
+Adding feature url mvn:org.ops4j.pax.jdbc/pax-jdbc-features/1.3.0-SNAPSHOT/xml/features-gpl
+
 karaf@root()> feature:install jdbc pax-jdbc-mysql pax-jdbc-pool-dbcp2
 
 karaf@root()> service:list org.osgi.service.jdbc.DataSourceFactory
@@ -707,7 +855,7 @@ karaf@root()> service:list org.osgi.service.jdbc.DataSourceFactory
  osgi.jdbc.driver.class = com.mysql.jdbc.Driver
  osgi.jdbc.driver.name = mysql
  service.bundleid = 237
- service.id = 252
+ service.id = 254
  service.scope = singleton
 Provided by :
  OPS4J Pax JDBC MySQL Driver Adapter (237)
@@ -718,7 +866,7 @@ karaf@root()> service:list org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactor
 --------------------------------------------------------
  pool = dbcp2
  service.bundleid = 238
- service.id = 253
+ service.id = 252
  service.scope = singleton
  xa = false
 Provided by :
@@ -728,7 +876,7 @@ Provided by :
 --------------------------------------------------------
  pool = dbcp2
  service.bundleid = 238
- service.id = 254
+ service.id = 253
  service.scope = singleton
  xa = true
 Provided by :
@@ -743,9 +891,10 @@ karaf@root()> config:edit --factory --alias mysql org.ops4j.datasource
 karaf@root()> config:property-set osgi.jdbc.driver.name mysql
 karaf@root()> config:property-set dataSourceName mysqlds
 karaf@root()> config:property-set dataSourceType DataSource
-karaf@root()> config:property-set url jdbc:mysql://localhost:3306/reportdb?useSSL=false
-karaf@root()> config:property-set user fuse
-karaf@root()> config:property-set password fuse
+karaf@root()> config:property-set jdbc.url jdbc:mysql://localhost:3306/reportdb
+karaf@root()> config:property-set jdbc.user fuse
+karaf@root()> config:property-set jdbc.password fuse
+karaf@root()> config:property-set jdbc.useSSL false
 karaf@root()> config:property-set pool dbcp2
 karaf@root()> config:property-set xa false
 karaf@root()> config:property-set pool.minIdle 2
@@ -772,9 +921,13 @@ karaf@root()> service:list javax.sql.DataSource
  factory.validationQuery = select schema_name from information_schema.schemata
  factory.validationQueryTimeout = 2
  felix.fileinstall.filename = file:${karaf.etc}/org.ops4j.datasource-mysql.cfg
+ jdbc.password = fuse
+ jdbc.url = jdbc:mysql://localhost:3306/reportdb
+ jdbc.user = fuse
+ jdbc.useSSL = false
  osgi.jdbc.driver.name = mysql
  osgi.jndi.service.name = mysqlds
- password = fuse
+ pax.jdbc.managed = true
  pool.blockWhenExhausted = true
  pool.maxTotal = 10
  pool.maxWaitMillis = 2000
@@ -785,10 +938,8 @@ karaf@root()> service:list javax.sql.DataSource
  service.bundleid = 235
  service.factoryPid = org.ops4j.datasource
  service.id = 255
- service.pid = org.ops4j.datasource.26c00958-54fe-409a-86ea-51662742980d
+ service.pid = org.ops4j.datasource.27efc60d-67de-4750-ac36-2a4af47f30e7
  service.scope = singleton
- url = jdbc:mysql://localhost:3306/reportdb?useSSL=false
- user = fuse
 Provided by :
  OPS4J Pax JDBC Config (235)
 ----
@@ -812,15 +963,14 @@ For clarification, `pax-jdbc-pool-narayna` does almost everything as `pax-jdbc-p
 `org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory` - both for XA and non-XA scenarios. The *only* difference is
 that in XA scenario we have additional integration point:
 
-* `org.jboss.tm.XAResourceRecovery` OSGi service is registered to be picked up by
- `com.arjuna.ats.arjuna.recovery.RecoveryManager`
+* `org.jboss.tm.XAResourceRecovery` OSGi service is registered to be picked up by `com.arjuna.ats.arjuna.recovery.RecoveryManager`
 
 === pax-jdbc-pool-transx
 
 The implementation of `org.ops4j.pax.jdbc.pool.common.PooledDataSourceFactory` services provided by this bundle is
 based on `pax-transx-jdbc` bundle, which creates `javax.sql.DataSource` pools using
 `org.ops4j.pax.transx.jdbc.ManagedDataSourceBuilder` facility.
-This is JCA (Java™ Connector Architecture) based solution and will be described <<pax-transx-jdbc,later>>.
+This is JCA (Java™ Connector Architecture) based solution and will be described <<pax-transx,later>>.
 
 == Deploying datasources as artifacts
 
@@ -942,7 +1092,7 @@ XML doesn't have explicit `<service ref="postgresql">` declaration.
 === Factory deployment of data sources
 
 In this method, we use `pax-jdbc-config` in a _canonical_ way. That's a bit different method than the one
-recommended in Fuse 6.x, where we need to specify pooling properties as service properties.
+recommended in Fuse 6.x, where we need to specify pooling configuration as service properties.
 
 Here's the Blueprint XML example:
 
@@ -973,7 +1123,11 @@ Here's the Blueprint XML example:
     <argument ref="dataSourceFactory" />
     <argument>
         <props>
-            <!-- Properties needed by postgresql-specific org.osgi.service.jdbc.DataSourceFactory -->
+            <!--
+                Properties needed by postgresql-specific org.osgi.service.jdbc.DataSourceFactory
+                We can't prepend them with 'jdbc.' prefix as the DataSourceFactory is implemented directly
+                by PostgreSQL driver, not by pax-jdbc-* bundle
+            -->
             <prop key="url" value="jdbc:postgresql://localhost:5432/reportdb" />
             <prop key="user" value="fuse" />
             <prop key="password" value="fuse" />

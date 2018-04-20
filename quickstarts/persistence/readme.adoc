@@ -48,7 +48,19 @@ Final documentation can be found in `quickstarts/persistence/manual/target/gener
 using `pax-jdbc` features
 
 * `blueprints` contains sample Blueprint XML files that may be dropped directly to `$FUSE_HOME/deploy` directory
-(after configuring docker-based databases) or used as reference examples for normal OSGi bundles
+(after configuring docker-based databases) or used as reference examples for normal OSGi bundles. These blueprints
+provide _deployment method_ to configure JDBC data sources.
+
+== Message broker and configuration scripts
+
+`quickstarts/persistence/message-brokers` directory contains different examples which are not itself part of Maven artifact:
+
+* `cm` contains sample Configuration Admin factory configuration that may be used to configure JMS connection pool
+using `pax-jms` features
+
+* `blueprints` contains sample Blueprint XML files that may be dropped directly to `$FUSE_HOME/deploy` directory
+(after configuring docker-based message brokers) or used as reference examples for normal OSGi bundles. These blueprints
+provide _deployment method_ to configure JMS connection factories.
 
 == Standalone example
 
