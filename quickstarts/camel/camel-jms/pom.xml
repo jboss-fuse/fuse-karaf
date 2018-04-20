@@ -29,7 +29,7 @@
   <artifactId>camel-jms</artifactId>
   <packaging>bundle</packaging>
 
-  <name>JBoss Fuse :: Quickstarts :: camel-jms</name>
+  <name>Red Hat Fuse :: Quickstarts :: camel-jms</name>
   <description>Camel JMS Example</description>
   <url>https://github.com/jboss-fuse/fuse-karaf/tree/master/quickstarts/camel/camel-jms</url>
 
