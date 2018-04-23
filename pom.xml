@@ -102,7 +102,7 @@
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
         <version.io.dropwizard.metrics>3.1.5</version.io.dropwizard.metrics>
         <version.io.netty>4.1.16.Final-redhat-2</version.io.netty>
-        <version.io.swagger>1.5.17</version.io.swagger>
+        <version.io.swagger>1.5.18.fuse70-1-redhat-1</version.io.swagger>
         <version.io.undertow>1.4.18.SP5-redhat-1</version.io.undertow>
         <version.javax.el2>2.2.5</version.javax.el2>
         <version.javax.jms>2.0.1</version.javax.jms>
@@ -257,6 +257,17 @@
             </snapshots>
         </repository>
         <repository>
+            <!-- For Swagger 1.5.18.fuse70-1-redhat-1 -->
+            <id>jb-fuse-7-brew</id>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-fuse-7-maven-build/latest/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <!-- For Narayana 5.5.31.Final-redhat-1 -->
             <id>jb-eap-7.1-brew</id>
             <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.1-rhel-7-maven-build/latest/maven</url>
@@ -270,7 +281,7 @@
         <repository>
             <!-- For Artemis -->
             <id>jb-amq-7-brew</id>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-amq-7-build/latest/maven/</url>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-amq-7-build/latest/maven</url>
             <releases>
                 <enabled>true</enabled>
             </releases>

@@ -126,6 +126,17 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <!-- For Swagger 1.5.18.fuse70-1-redhat-1 -->
+            <id>jb-fuse-7-brew</id>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-fuse-7-maven-build/latest/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
     </repositories>
 
     <pluginRepositories>
