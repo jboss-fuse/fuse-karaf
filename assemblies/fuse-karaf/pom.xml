@@ -391,7 +391,7 @@
 
                         <!-- Tomcat -->
                         <feature>*tomcat*</feature>
- 
+
                         <!-- Spring-DM -->
                         <feature>spring-dm</feature>
                         <feature>spring-dm-web</feature>
@@ -492,7 +492,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-		       
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -623,12 +623,12 @@
                                                 <include>licenses.css</include>
                                             </includes>
                                             <filtering>false</filtering>
-                                        </resource>                                        
+                                        </resource>
                                     </resources>
                                 </configuration>
                             </execution>
                         </executions>
-                    </plugin>                           
+                    </plugin>
                     <plugin>
                         <groupId>org.wildfly.maven.plugins</groupId>
                         <artifactId>licenses-plugin</artifactId>
@@ -703,8 +703,8 @@
             <id>generate-licenses-xml</id>
             <build>
                 <plugins>
-                    <!-- this needs to be run when we add or remove dependencies 
-                        (updating versions is handled). After running copy ${basedir}/target/target/maven-jboss-license-plugin/license.xml 
+                    <!-- this needs to be run when we add or remove dependencies
+                        (updating versions is handled). After running copy ${basedir}/target/target/maven-jboss-license-plugin/license.xml
                         and potentially any new license txt files and check into ${basedir}/src/license/license.xml -->
                     <plugin>
                         <groupId>org.fusesource.mvnplugins</groupId>
