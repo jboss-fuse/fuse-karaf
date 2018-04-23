@@ -22,7 +22,7 @@
 
     <groupId>org.jboss.fuse</groupId>
     <artifactId>jboss-fuse-parent</artifactId>
-    <version>7.0.0.redhat-SNAPSHOT</version>
+    <version>7.0.0.fuse-000177</version>
     <packaging>pom</packaging>
 
     <name>Red Hat Fuse :: Parent</name>
@@ -75,14 +75,14 @@
         -->
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
-        <version.io.hawt>2.0.0.fuse-000158</version.io.hawt>
+        <version.io.hawt>2.0.0.fuse-000161</version.io.hawt>
         <version.org.apache.activemq.artemis>2.4.0.amq-711002-redhat-1</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.21.0.fuse-000071</version.org.apache.camel>
-        <version.org.apache.cxf>3.1.11.fuse-000231</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-000226</version.org.apache.karaf>
+        <version.org.apache.camel>2.21.0.fuse-000074</version.org.apache.camel>
+        <version.org.apache.cxf>3.1.11.fuse-000236</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.0.fuse-000230</version.org.apache.karaf>
         <version.org.fusesource.activemq>7.0.0.fuse-000205</version.org.fusesource.activemq>
-        <version.org.fusesource.camel-sap>7.0.0.fuse-000205</version.org.fusesource.camel-sap>
-        <version.org.apache-extras.camel-extra>2.21.0.fuse-000048</version.org.apache-extras.camel-extra>
+        <version.org.fusesource.camel-sap>7.0.0.fuse-000208</version.org.fusesource.camel-sap>
+        <version.org.apache-extras.camel-extra>2.21.0.fuse-000051</version.org.apache-extras.camel-extra>
 
         <!-- versions of normal dependencies of Red Hat Fuse -->
         <version.com.fasterxml.classmate>1.3.4</version.com.fasterxml.classmate>
@@ -177,7 +177,7 @@
         <version.org.ops4j.pax.exam>4.11.0</version.org.ops4j.pax.exam>
         <version.org.ops4j.pax.jdbc>1.3.0</version.org.ops4j.pax.jdbc>
         <version.org.ops4j.pax.jms>1.0.0</version.org.ops4j.pax.jms>
-        <version.org.ops4j.pax.keycloak>0.2.0</version.org.ops4j.pax.keycloak>
+        <version.org.ops4j.pax.keycloak>0.2.0.fuse-000011</version.org.ops4j.pax.keycloak>
         <version.org.ops4j.pax.logging>1.10.1</version.org.ops4j.pax.logging>
         <version.org.ops4j.pax.swissbox>1.8.3</version.org.ops4j.pax.swissbox>
         <version.org.ops4j.pax.transx>0.3.0</version.org.ops4j.pax.transx>
