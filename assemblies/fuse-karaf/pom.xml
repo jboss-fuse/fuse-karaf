@@ -388,6 +388,8 @@
                         <feature>camel-openshift</feature>
                         <feature>camel-quartz</feature>
                         <feature>camel-routebox</feature>
+                        <feature>camel-jbpm</feature>
+                        <feature>camel-optaplanner</feature>
 
                         <!-- Tomcat -->
                         <feature>*tomcat*</feature>
