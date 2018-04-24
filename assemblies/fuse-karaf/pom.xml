@@ -388,6 +388,8 @@
                         <feature>camel-openshift</feature>
                         <feature>camel-quartz</feature>
                         <feature>camel-routebox</feature>
+                        <feature>camel-jbpm</feature>
+                        <feature>camel-optaplanner</feature>
 
                         <!-- Tomcat -->
                         <feature>*tomcat*</feature>
@@ -415,8 +417,9 @@
                         <feature>artemis-hornetq</feature>
                         <feature>artemis-openwire</feature>
 
-                        <!-- Geronimo TX manager -->
+                        <!-- Unsupported TX managers -->
                         <feature>pax-transx-tm-geronimo</feature>
+                        <feature>pax-transx-tm-atomikos</feature>
 
                         <!-- CDI extensions that do not work in OSGi -->
                         <feature>deltaspike*</feature>
