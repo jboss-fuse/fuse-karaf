@@ -419,7 +419,9 @@
 
                         <!-- Unsupported TX managers -->
                         <feature>pax-transx-tm-geronimo</feature>
+                        <feature>transaction-manager-geronimo</feature>
                         <feature>pax-transx-tm-atomikos</feature>
+                        <feature>transaction-manager-atomikos</feature>
 
                         <!-- CDI extensions that do not work in OSGi -->
                         <feature>deltaspike*</feature>
