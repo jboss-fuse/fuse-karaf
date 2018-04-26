@@ -344,11 +344,23 @@
                         <feature>artemis-jms-client</feature>
                         <feature>artemis-amqp-client</feature>
                         <feature>pax-jms-artemis</feature>
+
+                        <!-- JDBC/JMS features for offline use -->
+                        <feature>pax-jdbc-config</feature>
+                        <feature>pax-jdbc-pool-narayana</feature>
+                        <feature>pax-jdbc-pool-transx</feature>
+                        <feature>pax-jdbc-oracle</feature>
+                        <feature>pax-jdbc-db2</feature>
+                        <feature>pax-jdbc-mssql</feature>
+                        <feature>pax-jms-config</feature>
+                        <feature>pax-jms-pool-narayana</feature>
+                        <feature>pax-jms-pool-transx</feature>
                     </installedFeatures>
                     <blacklistedFeatures>
                         <feature>httplite</feature>
                         <feature>jetty/[8,9)</feature>
                         <feature>pax-*jetty*</feature>
+                        <feature>pax-keycloak*</feature>
                         <feature>camel-jetty8</feature>
                         <feature>*openwebbeans*</feature>
                         <feature>camel-ignite</feature>

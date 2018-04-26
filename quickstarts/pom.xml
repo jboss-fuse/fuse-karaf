@@ -34,13 +34,13 @@
         <skip.quickstarts.tests>true</skip.quickstarts.tests>
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
-        <version.org.apache.cxf>3.1.11.fuse-000198</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-000190</version.org.apache.karaf>
+        <version.org.apache.cxf>3.1.11.fuse-000231</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.0.fuse-000226</version.org.apache.karaf>
 
         <!-- versions of Maven plugins -->
         <version.plugin.asciidoctor-maven-plugin>1.5.6</version.plugin.asciidoctor-maven-plugin>
         <version.org.asciidoctor>1.5.8</version.org.asciidoctor>
-        <version.plugin.felix.maven-bundle-plugin>3.3.0</version.plugin.felix.maven-bundle-plugin>
+        <version.plugin.felix.maven-bundle-plugin>3.5.0</version.plugin.felix.maven-bundle-plugin>
         <version.plugin.mojo.build-helper-maven-plugin>3.0.0</version.plugin.mojo.build-helper-maven-plugin>
         <!-- Plugins from org.apache.maven.plugins -->
         <version.plugin.maven-compiler-plugin>3.7.0</version.plugin.maven-compiler-plugin>
@@ -48,7 +48,7 @@
         <version.plugin.maven-install-plugin>2.5.2</version.plugin.maven-install-plugin>
         <version.plugin.maven-resources-plugin>3.0.2</version.plugin.maven-resources-plugin>
         <version.plugin.maven-source-plugin>3.0.1</version.plugin.maven-source-plugin>
-        <version.plugin.maven-surefire-plugin>2.20</version.plugin.maven-surefire-plugin>
+        <version.plugin.maven-surefire-plugin>2.20.1</version.plugin.maven-surefire-plugin>
         <version.plugin.maven-war-plugin>3.1.0</version.plugin.maven-war-plugin>
     </properties>
 
@@ -84,6 +84,39 @@
             </snapshots>
         </repository>
         <repository>
+            <!-- For Swagger 1.5.18.fuse70-1-redhat-1 -->
+            <id>jb-fuse-7-brew</id>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-fuse-7-maven-build/latest/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <!-- For Narayana 5.5.31.Final-redhat-1 -->
+            <id>jb-eap-7.1-brew</id>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.1-rhel-7-maven-build/latest/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <!-- For Artemis -->
+            <id>jb-amq-7-brew</id>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-amq-7-build/latest/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>apache-snapshots-repository</id>
             <url>https://repository.apache.org/content/groups/snapshots</url>
             <releases>
@@ -102,39 +135,6 @@
             </releases>
             <snapshots>
                 <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Narayana 5.5.31.Final-redhat-1 -->
-            <id>jb-eap-7.1-brew</id>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.1-rhel-7-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Artemis -->
-            <id>jb-amq-7-brew</id>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-amq-7-build/latest/maven/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Swagger 1.5.18.fuse70-1-redhat-1 -->
-            <id>jb-fuse-7-brew</id>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-fuse-7-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
             </snapshots>
         </repository>
     </repositories>
