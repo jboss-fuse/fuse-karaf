@@ -195,6 +195,7 @@
 
         <!-- versions of Maven plugins (and their important dependencies) -->
         <version.plugin.asciidoctor-maven-plugin>1.5.6</version.plugin.asciidoctor-maven-plugin>
+        <version.org.asciidoctor>1.5.8</version.org.asciidoctor>
         <version.plugin.felix.maven-scr-plugin>1.26.0</version.plugin.felix.maven-scr-plugin>
         <version.plugin.felix.maven-bundle-plugin>3.5.0</version.plugin.felix.maven-bundle-plugin>
         <version.plugin.mycila.license-maven-plugin>3.0</version.plugin.mycila.license-maven-plugin>
