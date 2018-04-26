@@ -1,7 +1,6 @@
 = Message Broker configuration
 
 In this chapter we'll configure testing message brokers.
-Before deploying/configuring anything in {f7} we need actual RDBMS system running.
 
 We'll be testing:
 
@@ -242,7 +241,7 @@ $ amq7/bin/artemis run
 ...
 ----
 
-=== Non-OSGi client libraries
+=== Client libraries
 
 Artemis libraries are available in Maven Central or Red Hat repository. I used:
 
@@ -309,7 +308,7 @@ connectorName = amqp
 connectorName = mqtt
 ----
 
-=== Non-OSGi client libraries
+=== Client libraries
 
 Libraries are available in Maven Central or Red Hat repository. I used:
 
