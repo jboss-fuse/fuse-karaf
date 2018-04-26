@@ -349,6 +349,7 @@
                         <feature>httplite</feature>
                         <feature>jetty/[8,9)</feature>
                         <feature>pax-*jetty*</feature>
+                        <feature>pax-keycloak*</feature>
                         <feature>camel-jetty8</feature>
                         <feature>*openwebbeans*</feature>
                         <feature>camel-ignite</feature>
