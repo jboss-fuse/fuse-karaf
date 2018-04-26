@@ -162,7 +162,7 @@
         <version.org.eclipse.jgit>4.10.0.201712302008-r</version.org.eclipse.jgit>
         <version.org.glassfish.web.javax.el>2.2.5</version.org.glassfish.web.javax.el>
         <version.org.hibernate>5.1.10.Final-redhat-1</version.org.hibernate>
-        <version.org.hibernate.validator>5.3.5.Final-redhat-2</version.org.hibernate.validator>
+        <version.org.hibernate.validator>5.4.2.Final</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.0.Final</version.org.hibernate.javax.persistence>
         <version.org.javassist>3.21.0-GA</version.org.javassist>
         <version.org.jboss.logging>3.3.1.Final-redhat-1</version.org.jboss.logging>
