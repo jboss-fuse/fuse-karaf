@@ -239,6 +239,7 @@
                         <feature>pax-jetty</feature>
                         <feature>pax-jetty-http2</feature>
                         <feature>pax-http-jetty</feature>
+                        <feature>pax-keycloak*</feature>
                     </blacklistedFeatures>
                     <blacklistedRepositories />
 
