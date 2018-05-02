@@ -42,7 +42,7 @@ Build and Deploy the Quickstart
   Credentials are set to admin/admin.  
 * In the JBoss Fuse console, enter the following commands:
 
-        feature:install pax-jms-pool artemis-jms-client camel-blueprint camel-jms 
+        feature:install pax-jms-pool artemis-jms-client pax-jms-artemis camel-blueprint camel-jms 
         install -s mvn:org.jboss.fuse.quickstarts/camel-jms/${project.version}
 
 * Fuse should give you an id when the bundle is deployed
