@@ -1,0 +1,612 @@
+= Introduction to Transactions
+
+.Abstract
+This chapter defines some basic transaction concepts and explains an example Camel application
+that uses transactions and JMS.
+
+== Basic transaction concepts
+
+.What is a transaction?
+The prototype of a transaction is an operation that conceptually consists of a single step (for example,
+transfer money from account A to account B), but must be implemented as a series of steps. Clearly, such
+operations are acutely vulnerable to system failures, because a crash is likely to leave some of the steps
+unfinished, leaving the system in an inconsistent state. For example, if you consider the operation of transferring
+money from account A to account B: if the system crashes after debiting account A, but before crediting account B,
+the net result is that some money disappears into thin air.
+
+In order to make such an operation reliable, it must be implemented as a transaction. On close examination,
+it turns out that there are four key properties a transaction must have in order to guarantee reliable execution:
+these are the so-called ACID properties of a transaction.
+
+.ACID properties of a transaction
+The ACID properties of a transaction are defined as follows:
+
+* *Atomic* – a transaction is an all or nothing procedure; individual updates are assembled and either committed or
+ aborted (rolled back) simultaneously when the transaction completes.
+* *Consistent* – a transaction is a unit of work that takes a system from one consistent state to another.
+* *Isolated* – while a transaction is executing, its partial results are hidden from other entities accessing the
+ transaction.
+* *Durable* – the results of a transaction are persistent.
+
+.Transaction clients
+A transaction client is an API or object that enables you to initiate and end transactions. Typically,
+a transaction client exposes operations that enable you to begin, commit, or roll back a transaction.
+
+In standard JavaEE application, the transaction client API is exposed by `javax.transaction.UserTransaction` interface.
+In the context of the Spring Framework / Spring Boot, the `org.springframework.transaction.PlatformTransactionManager`
+exposes a transaction client API.
+
+.Transaction demarcation
+Transaction demarcation refers to the initiating and ending of transactions (where transactions can be ended either
+by being committed or rolled back). Demarcation can be effected either explicitly (for example, by calling a
+transaction client API) or implicitly (for example, whenever a message is polled from a transactional endpoint).
+
+.Resources
+A resource is any component of a computer system that can undergo a persistent or permanent change. In practice,
+a resource is almost always a database or a service layered over a database (for example, a message service with
+persistence). Other kinds of resource are conceivable, however. For example, an Automated Teller Machine (ATM) is
+a kind of resource: once a customer has physically accepted cash from the machine, the transaction cannot be reversed.
+
+.Transaction manager
+A transaction manager is responsible for coordinating transactions across one or more resources. In many cases,
+a transaction manager is built into a resource. For example, enterprise-level databases generally include a
+transaction manager that is capable of managing transactions involving that database. But for transactions
+involving more than one resource, it is normally necessary to employ an external transaction manager implementation.
+
+.Managing single or multiple resources
+For transactions involving a single resource, the transaction manager built into the resource can generally be used.
+For transactions involving multiple resources, however, it is necessary to use an external transaction manager or a
+transaction processing (TP) monitor. In this case, the resources must be integrated with the transaction manager by
+registering their XA switches. There is also an important difference between the types of algorithm that are used
+for committing single-resource systems and multiple-resource systems, as follows:
+
+* 1-phase commit—suitable for single-resource systems, this protocol commits a transaction in a single step.
+* 2-phase commit—suitable for multiple-resource systems, this protocol commits a transaction in two steps.
+ Including multiple resources in a transaction introduces an extra element of risk: there is the danger that a system
+ failure might occur after some, but not all, of the resources have been committed. This would leave the system in an
+ inconsistent state. The 2-phase commit protocol is designed to eliminate this risk, ensuring that the system can
+ always be restored to a consistent state after it is restarted.
+
+.Transactions and threading
+To understand transaction processing, it is crucial to appreciate the basic relationship between transactions and
+threads: transactions are thread-specific. That is, when a transaction is started, it is attached to a specific thread
+(technically, a transaction context object is created and associated with the current thread). From this point on
+(until the transaction ends), all of the activity in the thread occurs within this transaction scope. Conversely,
+activity in any other thread does not fall within this transaction's scope (although it might fall within the scope
+of some other transaction).
+
+From this, we can draw a few simple conclusions:
+
+* An application can process multiple transactions simultaneously—as long as each of the transactions are created
+in separate threads.
+* Beware of creating subthreads within a transaction—if you are in the middle of a transaction and you create a new
+pool of threads (for example, by calling the `threads()` Camel DSL command), the new threads are not in the scope of the
+original transaction.
+* Beware of processing steps that implicitly create new threads—for the same reason given in the preceding point.
+* Transaction scopes do not usually extend across route segments—that is, if one route segment ends with
+`to(JoinEndpoint)` and another route segment starts with from(JoinEndpoint), these route segments typically do not
+belong to the same transaction. There are exceptions, however (see the section called
+<<Breaking a route into fragments,???>>).
+
+NOTE: Some advanced transaction manager implementations give you the freedom to detach and attach transaction contexts
+to and from threads at will. For example, this makes it possible to move a transaction context from one thread to
+another thread. In some cases it is also possible to attach a single transaction context to multiple threads.
+
+.Transaction context
+A transaction context is an object that encapsulates the information needed to keep track of a transaction. The format
+of a transaction context depends entirely on the relevant transaction manager implementation. At a minimum, the
+transaction context contains a unique transaction identifier.
+
+.Distributed transactions
+A distributed transaction refers to a transaction in a distributed system, where the transaction scope spans multiple
+network nodes. A basic prerequisite for supporting distributed transactions is a network protocol that supports
+transmission of transaction contexts in a canonical format (see also, the section called
+<<Distributed transaction managers,???>>). Distributed transactions lie outside the scope of Apache Camel transactions.
+
+[[x-open-xa-standard]]
+.X/Open XA standard
+The X/Open XA standard describes a standardized interface for integrating resources with a transaction manager.
+If you want to manage a transaction that includes more than one resource, it is essential that the participating
+resources support the XA standard. Resources that support the XA standard expose a special object, the XA switch,
+which enables transaction managers (or TP monitors) to take control of their transactions. The XA standard supports
+both the 1-phase commit protocol and the 2-phase commit protocol.
+
+== Transaction Qualities of Service
+
+.Overview
+When it comes to choosing the products that implement your transaction system, there is a great variety of database
+products and transaction managers available, some free of charge and some commercial. All of them have nominal
+support for transaction processing, but there are considerable variations in the qualities of service supported by
+these products. This section provides a brief guide to the kind of features that you need to consider when comparing
+the reliability and sophistication of different transaction products.
+
+.Qualities of service provided by resources
+The following features determine the quality of service of a resource:
+
+* <<transaction-isolation-levels,Transaction isolation levels>>
+* <<support-for-the-xa-standard,Support for the XA standard>>.
+
+[[transaction-isolation-levels]]
+.Transaction isolation levels
+ANSI SQL defines four transaction isolation levels, as follows:
+
+SERIALIZABLE::
+Transactions are perfectly isolated from each other. That is, nothing that one transaction does can affect any other
+transaction until the transaction is committed. This isolation level is described as serializable, because the effect
+is as if all transactions were executed one after the other (although in practice, the resource can often optimize the
+algorithm, so that some transactions are allowed to proceed simultaneously).
+
+REPEATABLE_READ::
+Every time a transaction reads or updates the database, a read or write lock is obtained and held until the end of the
+transaction. This provides almost perfect isolation. But there is one case where isolation is not perfect. Consider a
+SQL SELECT statement that reads a range of rows using a WHERE clause. If another transaction adds a row to this range
+while the first transaction is running, the first transaction can see this new row, if it repeats the SELECT call (a
+phantom read).
+
+READ_COMMITTED::
+Read locks are not held until the end of a transaction. So, repeated reads can give different answers (updates
+committed by other transactions are visible to an ongoing transaction).
+
+READ_UNCOMMITTED::
+Neither read locks nor write locks are held until the end of a transaction. Hence, dirty reads are possible (that is,
+a transaction can see uncommitted updates made by other transactions).
+
+Databases generally do not support all of the different transaction isolation levels. For example, some free databases
+support only `READ_UNCOMMITTED`. Also, some databases implement transaction isolation levels in ways that are subtly
+different from the ANSI standard. Isolation is a complicated issue, which involves trade offs with database performance
+(for example, see https://en.wikipedia.org/wiki/Isolation_(database_systems)[Isolation in Wikipedia]).
+
+[[support-for-the-xa-standard]]
+.Support for the XA standard
+In order for a resource to participate in a transaction involving multiple resources, it needs to support the
+<<x-open-xa-standard,X/Open XA standard>>. You also need to check whether the resource's implementation of the XA
+standard is subject to any special restrictions. For example, some implementations of the XA standard are restricted
+to a single database connection (which implies that only one thread at a time can process a transaction involving that
+resource).
+
+.Qualities of service provided by transaction managers
+The following features determine the quality of service of a transaction manager:
+
+* Support for suspend/resume and attach/detach.
+* Support for multiple resources.
+* Distributed transactions.
+* Transaction monitoring.
+* Recovery from failure.
+
+.Support for multiple resources
+A key differentiator for transaction managers is the ability to support multiple resources. This normally entails
+support for the XA standard, where the transaction manager provides a way for resources to register their XA switches.
+
+NOTE: Strictly speaking, the XA standard is not the only approach you can use to support multiple resources, but it is
+the most practical one. The alternative typically involves writing tedious (and critical) custom code to implement
+the algorithms normally provided by an XA switch.
+
+.Support for suspend/resume and attach/detach
+Some transaction managers support advanced capabilities for manipulating the associations between a transaction context
+and application threads, as follows:
+
+* Suspend/resume current transaction—enables you to suspend temporarily the current transaction context, while the
+application does some non-transactional work in the current thread.
+* Attach/detach transaction context—enables you to move a transaction context from one thread to another or to extend
+a transaction scope to include multiple threads.
+
+.Distributed transactions
+Some transaction managers have the capability to manage transactions whose scope includes multiple nodes in a
+distributed system (where the transaction context is propagated from node to node using special protocols such as
+WS-AtomicTransactions or CORBA OTS).
+
+.Transaction monitoring
+Advanced transaction managers typically provide visual tools to monitor the status of pending transactions. This kind
+of tool is particularly useful after a system failure, where it can help to identify and resolve transactions that
+were left in an uncertain state (heuristic exceptions).
+
+.Recovery from failure
+There are significant variations amongst transaction managers with respect to their robustness in the event of a
+system failure (crash). The key strategy that transaction managers use is to write data to a persistent log before
+performing each step of a transaction. In the event of a failure, the data in the log can be used to recover the
+transaction. Some transaction managers implement this strategy more carefully than others. For example, a high-end
+transaction manager would typically duplicate the persistent transaction log and allow each of the logs to be stored
+on separate host machines.
+
+== Getting Started with Transactions in {f7} for Karaf (OSGi)
+
+.Abstract
+This section provides detailed explanation of Camel application that's performing transactional access to Artemis JMS
+broker.
+
+=== Prerequisites
+
+We need external A-MQ 7 JMS message broker running. Here's short instruction on how to get it up and running.
+
+We'll run standalone (no docker) version of `amq-broker-7.1.0-bin.zip`. Here's an example that creates and runs
+`amq7` instance.
+
+[listing,options="nowrap"]
+----
+$ pwd
+/data/servers/amq-broker-7.1.0
+
+$ bin/artemis create --user admin --password admin --require-login amq7
+Creating ActiveMQ Artemis instance at: /data/servers/amq-broker-7.1.0/amq7
+
+Auto tuning journal ...
+done! Your system can make 27.78 writes per millisecond, your journal-buffer-timeout will be 36000
+
+You can now start the broker by executing:
+
+   "/data/servers/amq-broker-7.1.0/amq7/bin/artemis" run
+
+Or you can run the broker in the background using:
+
+   "/data/servers/amq-broker-7.1.0/amq7/bin/artemis-service" start
+
+$ amq7/bin/artemis run
+           __  __  ____    ____            _
+     /\   |  \/  |/ __ \  |  _ \          | |
+    /  \  | \  / | |  | | | |_) |_ __ ___ | | _____ _ __
+   / /\ \ | |\/| | |  | | |  _ <| '__/ _ \| |/ / _ \ '__|
+  / ____ \| |  | | |__| | | |_) | | | (_) |   <  __/ |
+ /_/    \_\_|  |_|\___\_\ |____/|_|  \___/|_|\_\___|_|
+
+ Red Hat JBoss AMQ 7.1.0.GA
+
+
+018-05-02 16:37:19,294 INFO  [org.apache.activemq.artemis.integration.bootstrap] AMQ101000: Starting ActiveMQ Artemis Server
+...
+----
+
+.Client libraries
+
+Artemis libraries are available in Maven Central or Red Hat repository. I used:
+
+* `mvn:org.apache.activemq/artemis-core-client/2.4.0.amq-710008-redhat-1`
+* `mvn:org.apache.activemq/artemis-jms-client/2.4.0.amq-710008-redhat-1`
+
+.Karaf features
+
+Artemis/A-MQ 7 client libraries can be installed as Karaf features as well.
+
+[listing,options="nowrap"]
+----
+karaf@root()> feature:install artemis-jms-client artemis-core-client
+----
+
+Additionally we need some supporting features that give us Karaf shell commands or dedicated Artemis support:
+
+[listing,options="nowrap"]
+----
+karaf@root()> feature:install jms pax-jms-artemis pax-jms-config
+----
+
+And camel features:
+
+[listing,options="nowrap"]
+----
+karaf@root()> feature:install camel-jms camel-blueprint
+----
+
+=== Building camel-jms project
+
+{f7} distribution contains `quickstarts/camel/camel-jms` example that can be built and installed as OSGi bundle.
+This bundle contains Blueprint XML definition of Camel route that sends messages to A-MQ 7 JMS queue.
+
+We can build the example using Maven (`$FUSE_HOME` is the location of unzipped {f7} distribution):
+[listing,options="nowrap"]
+----
+$ pwd
+$FUSE_HOME/quickstarts
+
+$ mvn clean install -f camel/camel-jms/
+[INFO] Scanning for projects...
+[INFO]
+[INFO] ----------------< org.jboss.fuse.quickstarts:camel-jms >----------------
+[INFO] Building Red Hat Fuse :: Quickstarts :: camel-jms 7.0.0.redhat-SNAPSHOT
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO]
+[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ camel-jms ---
+[INFO]
+[INFO] >>> maven-source-plugin:3.0.1:jar (default-cli) > generate-sources @ camel-jms >>>
+[INFO]
+[INFO] <<< maven-source-plugin:3.0.1:jar (default-cli) < generate-sources @ camel-jms <<<
+[INFO]
+[INFO]
+[INFO] --- maven-source-plugin:3.0.1:jar (default-cli) @ camel-jms ---
+[INFO] Building jar: $FUSE_HOME/quickstarts/camel/camel-jms/target/camel-jms-sources.jar
+[INFO]
+[INFO] --- maven-resources-plugin:3.0.2:resources (default-resources) @ camel-jms ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 2 resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.7.0:compile (default-compile) @ camel-jms ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- maven-resources-plugin:3.0.2:testResources (default-testResources) @ camel-jms ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] skip non existing resourceDirectory $FUSE_HOME/quickstarts/camel/camel-jms/src/test/resources
+[INFO]
+[INFO] --- maven-compiler-plugin:3.7.0:testCompile (default-testCompile) @ camel-jms ---
+[INFO] No sources to compile
+[INFO]
+[INFO] --- maven-surefire-plugin:2.20.1:test (default-test) @ camel-jms ---
+[INFO] Tests are skipped.
+[INFO]
+[INFO] --- maven-bundle-plugin:3.5.0:bundle (default-bundle) @ camel-jms ---
+[INFO]
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ camel-jms ---
+[INFO] Installing $FUSE_HOME/quickstarts/camel/camel-jms/target/camel-jms.jar to ~/.m2/repository/org/jboss/fuse/quickstarts/camel-jms/7.0.0.redhat-SNAPSHOT/camel-jms-7.0.0.redhat-SNAPSHOT.jar
+[INFO] Installing $FUSE_HOME/quickstarts/camel/camel-jms/pom.xml to ~/.m2/repository/org/jboss/fuse/quickstarts/camel-jms/7.0.0.redhat-SNAPSHOT/camel-jms-7.0.0.redhat-SNAPSHOT.pom
+[INFO] Installing $FUSE_HOME/quickstarts/camel/camel-jms/target/camel-jms-sources.jar to ~/.m2/repository/org/jboss/fuse/quickstarts/camel-jms/7.0.0.redhat-SNAPSHOT/camel-jms-7.0.0.redhat-SNAPSHOT-sources.jar
+[INFO]
+[INFO] --- maven-bundle-plugin:3.5.0:install (default-install) @ camel-jms ---
+[INFO] Local OBR update disabled (enable with -DobrRepository)
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 2.042 s
+[INFO] Finished at: 2018-05-02T16:28:57+02:00
+[INFO] ------------------------------------------------------------------------
+----
+
+Next, we have to create JMS Connection Factory configuration, so `javax.jms.ConnectionFactory` service is published
+in OSGi runtime. We have to copy `$FUSE_HOME/quickstarts/camel/camel-jms/src/main/resources/etc/org.ops4j.connectionfactory-amq7.cfg`
+into `$FUSE_HOME/etc` directory. This configuration will be processed into working connection factory:
+
+[listing,options="nowrap"]
+----
+$ cp camel/camel-jms/src/main/resources/etc/org.ops4j.connectionfactory-amq7.cfg ../etc/
+----
+
+We can verify the published connection factory:
+[listing,options="nowrap"]
+----
+karaf@root()> service:list javax.jms.ConnectionFactory
+[javax.jms.ConnectionFactory]
+-----------------------------
+ felix.fileinstall.filename = file:$FUSE_HOME/etc/org.ops4j.connectionfactory-amq7.cfg
+ name = artemis
+ osgi.jndi.service.name = artemis
+ password = admin
+ pax.jms.managed = true
+ service.bundleid = 251
+ service.factoryPid = org.ops4j.connectionfactory
+ service.id = 436
+ service.pid = org.ops4j.connectionfactory.d6207fcc-3fe6-4dc1-a0d8-0e76ba3b89bf
+ service.scope = singleton
+ type = artemis
+ url = tcp://localhost:61616
+ user = admin
+Provided by :
+ OPS4J Pax JMS Config (251)
+
+karaf@root()> jms:info -u admin -p admin artemis
+Property │ Value
+─────────┼──────────────────────────
+product  │ ActiveMQ
+version  │ 2.4.0.amq-711002-redhat-1
+
+karaf@root()> jms:queues -u admin -p admin artemis
+JMS Queues
+────────────────────────────────────
+df2501d1-aa52-4439-b9e4-c0840c568df1
+DLQ
+ExpiryQueue
+----
+
+Next we have to install the bundle:
+[listing,options="nowrap"]
+----
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts/camel-jms/7.0.0.redhat-SNAPSHOT
+Bundle ID: 256
+----
+
+And see if it's working:
+[listing,options="nowrap"]
+----
+karaf@root()> camel:context-list
+ Context               Status              Total #       Failed #     Inflight #   Uptime
+ -------               ------              -------       --------     ----------   ------
+ jms-example-context   Started                   0              0              0   2 minutes
+karaf@root()> camel:route-list
+ Context               Route               Status              Total #       Failed #     Inflight #   Uptime
+ -------               -----               ------              -------       --------     ----------   ------
+ jms-example-context   file-to-jms-route   Started                   0              0              0   2 minutes
+ jms-example-context   jms-cbr-route       Started                   0              0              0   2 minutes
+----
+
+1. As soon as the Camel routes have started, you will see a directory `work/jms/input` in your {f7} installation.
+2. Copy the files you find in this quickstart's `src/main/data` directory to the newly created `work/jms/input` directory.
+3. Wait a few moments and you will find the same files organized by country under the `work/jms/output` directory.
+  * `order1.xml`, `order2.xml` and `order4.xml` in `work/jms/output/others`
+  * `order3.xml` and `order5.xml` in `work/jms/output/us`
+  * `order6.xml` in `work/jms/output/fr`
+
+4. See logs to check out the business logging:
+[listing,options="nowrap"]
+----
+2018-05-02 17:20:47,952 | INFO  | ile://work/jms/input | file-to-jms-route                | 58 - org.apache.camel.camel-core - 2.21.0.fuse-000077 | Receiving order order1.xml
+2018-05-02 17:20:48,052 | INFO  | umer[incomingOrders] | jms-cbr-route                    | 58 - org.apache.camel.camel-core - 2.21.0.fuse-000077 | Sending order order1.xml to another country
+2018-05-02 17:20:48,053 | INFO  | umer[incomingOrders] | jms-cbr-route                    | 58 - org.apache.camel.camel-core - 2.21.0.fuse-000077 | Done processing order1.xml
+----
+
+We can see the queue was dynamically created:
+[listing,options="nowrap"]
+----
+karaf@root()> jms:queues -u admin -p admin artemis
+JMS Queues
+────────────────────────────────────
+DLQ
+17767323-937f-4bad-a403-07cd63311f4e
+ExpiryQueue
+incomingOrders
+----
+
+We can check Camel route statistics:
+[listing,options="nowrap"]
+----
+karaf@root()> camel:route-info jms-example-context file-to-jms-route
+Camel Route file-to-jms-route
+	Camel Context: jms-example-context
+	State: Started
+	State: Started
+
+
+Statistics
+	Exchanges Total: 1
+	Exchanges Completed: 1
+	Exchanges Failed: 0
+	Exchanges Inflight: 0
+	Min Processing Time: 67 ms
+	Max Processing Time: 67 ms
+	Mean Processing Time: 67 ms
+	Total Processing Time: 67 ms
+	Last Processing Time: 67 ms
+	Delta Processing Time: 67 ms
+	Start Statistics Date: 2018-05-02 17:14:17
+	Reset Statistics Date: 2018-05-02 17:14:17
+	First Exchange Date: 2018-05-02 17:20:48
+	Last Exchange Date: 2018-05-02 17:20:48
+----
+
+=== Explaining camel-jms project
+
+.Camel endpoints
+
+Camel routes are using the following endpoint URIs:
+[source,xml,options="nowrap"]
+....
+<route id="file-to-jms-route">
+...
+    <to uri="jms:queue:incomingOrders?transacted=true" />
+</route>
+
+<route id="jms-cbr-route">
+    <from uri="jms:queue:incomingOrders?transacted=true" />
+...
+</route>
+....
+
+`jms` component is configured using this snippet:
+[source,xml,options="nowrap"]
+....
+<bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+    <property name="connectionFactory">
+        <reference interface="javax.jms.ConnectionFactory" />
+    </property>
+    <property name="transactionManager" ref="transactionManager"/>
+</bean>
+....
+
+While the `transactionManager` reference is:
+[source,xml,options="nowrap"]
+....
+<reference id="transactionManager" interface="org.springframework.transaction.PlatformTransactionManager" />
+....
+
+As we can see, both JMS connection factory and Spring interface of `PlatformTransactionManager` are only references,
+there's no need to _define_ them in Blueprint XML. These _services_ are exposed by {f7} itself.
+
+We've already seen `javax.jms.ConnectionFactory` - created using `etc/org.ops4j.connectionfactory-amq7.cfg`.
+
+Transaction manager is:
+[listing,options="nowrap"]
+----
+karaf@root()> service:list org.springframework.transaction.PlatformTransactionManager
+[org.springframework.transaction.PlatformTransactionManager]
+------------------------------------------------------------
+ service.bundleid = 21
+ service.id = 527
+ service.scope = singleton
+Provided by :
+ Red Hat Fuse :: Fuse Modules :: Transaction (21)
+Used by:
+ Red Hat Fuse :: Quickstarts :: camel-jms (256)
+----
+
+We can check other interfaces under which the actual transaction manager is registered:
+[listing,options="nowrap"]
+----
+karaf@root()> headers 21
+
+Red Hat Fuse :: Fuse Modules :: Transaction (21)
+------------------------------------------------
+...
+Bundle-Name = Red Hat Fuse :: Fuse Modules :: Transaction
+Bundle-SymbolicName = fuse-pax-transx-tm-narayana
+Bundle-Vendor = Red Hat
+...
+
+karaf@root()> bundle:services -p 21
+
+Red Hat Fuse :: Fuse Modules :: Transaction (21) provides:
+----------------------------------------------------------
+objectClass = [org.osgi.service.cm.ManagedService]
+service.bundleid = 21
+service.id = 519
+service.pid = org.ops4j.pax.transx.tm.narayana
+service.scope = singleton
+ ----
+objectClass = [javax.transaction.TransactionManager]
+provider = narayana
+service.bundleid = 21
+service.id = 520
+service.scope = singleton
+ ----
+objectClass = [javax.transaction.TransactionSynchronizationRegistry]
+provider = narayana
+service.bundleid = 21
+service.id = 523
+service.scope = singleton
+ ----
+objectClass = [javax.transaction.UserTransaction]
+provider = narayana
+service.bundleid = 21
+service.id = 524
+service.scope = singleton
+ ----
+objectClass = [org.jboss.narayana.osgi.jta.ObjStoreBrowserService]
+provider = narayana
+service.bundleid = 21
+service.id = 525
+service.scope = singleton
+ ----
+objectClass = [org.ops4j.pax.transx.tm.TransactionManager]
+provider = narayana
+service.bundleid = 21
+service.id = 526
+service.scope = singleton
+ ----
+objectClass = [org.springframework.transaction.PlatformTransactionManager]
+service.bundleid = 21
+service.id = 527
+service.scope = singleton
+----
+
+So the transaction manager is available under these interfaces:
+
+* `javax.transaction.TransactionManager`
+* `javax.transaction.TransactionSynchronizationRegistry`
+* `javax.transaction.UserTransaction`
+* `org.jboss.narayana.osgi.jta.ObjStoreBrowserService`
+* `org.ops4j.pax.transx.tm.TransactionManager`
+* `org.springframework.transaction.PlatformTransactionManager`
+
+We can use any of them in any context we need. For example `camel-jms` requires `org.apache.camel.component.jms.JmsConfiguration.transactionManager`
+field to be initialized - that's why our example uses:
+[source,xml,options="nowrap"]
+....
+<reference id="transactionManager" interface="org.springframework.transaction.PlatformTransactionManager" />
+....
+
+instead of for example:
+[source,xml,options="nowrap"]
+....
+<reference id="transactionManager" interface="javax.transaction.TransactionManager" />
+....
+
+== Getting Started with Transactions in {f7} for Spring-Boot
+
+TODO?
+
+== Getting Started with Transactions in {f7} for OpenShift
+
+TODO?

@@ -1,0 +1,30 @@
+// Asciidoctor attributes
+
+:toc: left
+:sectnums:
+:sectnumlevels: 3
+:!linkcss:
+:source-highlighter: highlightjs
+:data-uri:
+
+// custom attributes
+
+:f7: Red Hat Fuse 7
+
+= {f7} Transaction Guide
+
+[abstract]
+== Abstract
+
+This guide describes the basic concepts of transactions,
+how to configure and interact with a transaction manager, how to access data using JavaEE APIs and Spring,
+the various ways to demarcate transactions, and JMS transaction semantics.
+
+:leveloffset: +1
+
+include::01-introduction.adoc[]
+
+:leveloffset: -1
+
+- - -
+[small]#Generated with Asciidoctor {asciidoctor-version} on {docdatetime}.#

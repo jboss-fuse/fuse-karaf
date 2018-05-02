@@ -43,6 +43,7 @@
         <module>standalone-xa</module>
         <module>javaee-xa</module>
         <module>manual</module>
+        <module>manual-transactions</module>
     </modules>
 
     <dependencyManagement>
