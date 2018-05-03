@@ -414,14 +414,11 @@
                         <!-- Old Spring version -->
                         <feature>spring*/[3,4.3)</feature>
 
-                        <!-- Artemis broker -->
-                        <feature>artemis</feature>
-
                         <!-- Jclouds -->
                         <feature>jclouds-chef</feature>
                         <feature>jclouds-commands</feature>
 
-                        <!--artemis server-->
+                        <!-- Artemis broker -->
                         <feature>artemis</feature>
                         <feature>artemis-core</feature>
                         <feature>artemis-amqp</feature>
@@ -438,6 +435,9 @@
 
                         <!-- CDI extensions that do not work in OSGi -->
                         <feature>deltaspike*</feature>
+
+                        <!-- Unsupported PAX JMS features -->
+                        <feature>pax-jms-activemq</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
