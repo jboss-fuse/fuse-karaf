@@ -279,8 +279,6 @@
                         <feature>deployer</feature>
                         <!-- dev commands -->
                         <feature>diagnostic</feature>
-                        <!-- child container support -->
-                        <feature>instance</feature>
 
                         <!-- non Karaf features -->
 
@@ -438,6 +436,9 @@
 
                         <!-- Unsupported PAX JMS features -->
                         <feature>pax-jms-activemq</feature>
+
+                        <!-- Unsupported Karaf features -->
+                        <feature>instance</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
