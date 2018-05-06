@@ -645,6 +645,8 @@
                                             <directory>${project.basedir}/src/license</directory>
                                             <includes>
                                                 <include>licenses.css</include>
+                                                <include>licenses.xml</include>
+                                                <include>licenses.html</include>                                                                                                
                                             </includes>
                                             <filtering>false</filtering>
                                         </resource>
@@ -653,6 +655,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- disabling as per ENTESB-8080; we are using cached license.xml/html from PNC repour-bf1b2224cf03d7ea8c959c1d252968b00a19830b tag
                     <plugin>
                         <groupId>org.wildfly.maven.plugins</groupId>
                         <artifactId>licenses-plugin</artifactId>
@@ -719,6 +722,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    -->
                 </plugins>
             </build>
         </profile>
