@@ -439,6 +439,8 @@
 
                         <!-- Unsupported Karaf features -->
                         <feature>instance</feature>
+                        <feature>minimal</feature>
+                        <feature>standard</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
