@@ -40,8 +40,8 @@ To build the quick start:
 1. Change your working directory to `secure-soap` directory.
 2. Run `mvn clean install` to build the quick start.
 3. Start Red Hat Fuse 7 by running `bin/fuse` (on Linux) or `bin\fuse.bat` (on Windows).
-4. Verify etc/users.properties from the Red Hat Fuse installation contains the following 'admin' user configured:
-   admin=admin,admin
+4. Verify `etc/users.properties` from the Red Hat Fuse installation contains the following 'admin' user configured: `admin=admin,_g_:admingroup` (it is commented by default).
+The group `_g_\:admingroup` should be uncommented as well.
 5. In the Red Hat Fuse console, enter the following command:
 
         feature:install cxf-ws-security
@@ -79,7 +79,7 @@ created a Maven `test` profile to allow us to run tests code with a simple Maven
 1. Change to the `secure-soap` directory.
 2. Run the following command:
 
-        mvn -Ptest
+        mvn -Pqtest
 
 The test uses a client proxy for the Web service to invoke the remote method - in reality,
 a SOAP message will be sent to the server and the response SOAP message will be received and handled.  You will see this output from the remote method:

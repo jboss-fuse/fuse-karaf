@@ -94,7 +94,7 @@ created a Maven `test` profile to allow us to run tests code with a simple Maven
 1. Change to the `soap` directory.
 2. Run the following command:
 
-        mvn -Ptest
+        mvn -Pqtest
 
     The test sends the contents of the request.xml sample SOAP request file to the server and afterwards display the response
     message:

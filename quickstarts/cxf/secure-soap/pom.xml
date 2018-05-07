@@ -32,10 +32,6 @@
     <name>Red Hat Fuse :: Quickstarts :: secure-soap</name>
     <description>Secure SOAP example using JAXWS with WS-Security</description>
 
-    <properties>
-        <skipTests>true</skipTests>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.cxf</groupId>
@@ -87,14 +83,6 @@
     <build>
         <finalName>esb-shared</finalName>
         <plugins>
-            <!-- Skip Test by default and enable them only in Test profile -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>${skipTests}</skipTests>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -143,15 +131,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>test</id>
-            <properties>
-                <skipTests>false</skipTests>
-            </properties>
-            <build>
-                <defaultGoal>verify</defaultGoal>
-            </build>
-        </profile>
-    </profiles>
 </project>

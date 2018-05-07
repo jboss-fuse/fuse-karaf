@@ -310,7 +310,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <skip>${skip.quickstarts.tests}</skip>
+                    <!-- Skip tests by default and enable them only in "qtest" profile -->
+                    <skipTests>${skip.quickstarts.tests}</skipTests>
                 </configuration>
             </plugin>
 
@@ -357,10 +358,13 @@
 
     <profiles>
         <profile>
-            <id>quickstarts-test</id>
+            <id>qtest</id>
             <properties>
                 <skip.quickstarts.tests>false</skip.quickstarts.tests>
             </properties>
+            <build>
+                <defaultGoal>verify</defaultGoal>
+            </build>
         </profile>
     </profiles>
 

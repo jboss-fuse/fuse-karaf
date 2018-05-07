@@ -51,7 +51,7 @@ Use the bundle
 To use the application be sure to have deployed the quickstart in Fuse as described above. 
 
 1. cd to the 'camel-cxf-code-first' directory
-2. Run 'mvn -Ptest test'
+2. Run 'mvn -Pqtest test'
 
 Or open 'http://localhost:8181/cxf/' in a browser to see 'OrderEndpoint' listed as a SOAP service.
 
