@@ -93,12 +93,13 @@
         <version.com.google.guava19>19.0.0.redhat-1</version.com.google.guava19>
         <version.com.google.guava20>20.0.0.redhat-1</version.com.google.guava20>
         <version.com.ning.async-http-client>1.9.40</version.com.ning.async-http-client>
-        <version.com.sun.mail>1.6.1</version.com.sun.mail>
+        <version.com.sun.mail>1.6.1.redhat-1</version.com.sun.mail>
         <version.com.thoughtworks.paranamer>2.8</version.com.thoughtworks.paranamer>
         <version.commons-beanutils>1.9.3</version.commons-beanutils>
         <version.commons-codec>1.11</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
         <version.commons-io>2.6</version.commons-io>
+        <version.commons-lang>2.6.0.redhat-6</version.commons-lang>
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
         <version.io.dropwizard.metrics>3.1.5</version.io.dropwizard.metrics>
         <version.io.netty>4.1.16.Final-redhat-2</version.io.netty>
@@ -107,8 +108,9 @@
         <version.javax.el2>2.2.5</version.javax.el2>
         <version.javax.jms>2.0.1</version.javax.jms>
         <version.javax.resource>1.7.1</version.javax.resource>
-        <version.javax.servlet>3.1.0</version.javax.servlet>
+        <version.javax.servlet>3.1.0.redhat-1</version.javax.servlet>
         <version.javax.transaction>1.2</version.javax.transaction>
+        <version.javax.validation>1.1.0.Final-redhat-1</version.javax.validation>
         <version.joda-time>2.9.9</version.joda-time>
         <version.junit>4.12</version.junit>
         <version.net.java.dev.jna>4.5.1</version.net.java.dev.jna>
@@ -128,7 +130,10 @@
         <version.org.apache.felix.scr>2.0.14</version.org.apache.felix.scr>
         <version.org.apache.felix.scr.annotations>1.12.0</version.org.apache.felix.scr.annotations>
         <version.org.apache.felix.utils>1.10.4</version.org.apache.felix.utils>
+        <version.org.apache.geronimo.specs.annotation_1.0>1.1.1.redhat-2</version.org.apache.geronimo.specs.annotation_1.0>
+        <version.org.apache.geronimo.specs.jms_1.1>1.1.1.redhat-2</version.org.apache.geronimo.specs.jms_1.1>
         <version.org.apache.geronimo.specs.jms_2.0>1.0.0.alpha-2-redhat-2</version.org.apache.geronimo.specs.jms_2.0>
+        <version.org.apache.geronimo.specs.jta_1.1>1.1.1.redhat-2</version.org.apache.geronimo.specs.jta_1.1>
         <version.org.apache.httpcomponents.httpclient>4.5.4</version.org.apache.httpcomponents.httpclient>
         <version.org.apache.httpcomponents.httpcore>4.4.8</version.org.apache.httpcomponents.httpcore>
         <version.org.apache.logging.log4j>2.9.0</version.org.apache.logging.log4j>
