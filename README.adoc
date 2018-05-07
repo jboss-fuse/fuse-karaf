@@ -10,27 +10,31 @@ across the extended enterprise—on-premise or in the cloud.
 Based on Apache Camel, Fuse leverages pattern-based integration, a rich connector catalog, and extensive
 data transformation capabilities to enables users to integrate anything.
 
-== Development Process
+== Security Prerequisites
 
-There are two ways of building Red Hat Fuse 7:
+By default, no users are defined for the container. You can run the container in the
+foreground in this case, but you will not be able to access the container remotely
+and you will not be able to run it in the background.
 
-* using Jenkins pipeline
-* using plain old Maven
+To enable remote access to the container, you must create at least one user in
+the `etc/users.properties` file. It is recommended that you create at least one user
+with the `admin` role by adding the following configuration:
 
-=== Building using Jenkins Pipeline
+  admin = admin,_g_:admingroup
+  _g_\:admingroup = group,admin,manager,viewer,systembundles,ssh
 
-TO DESCRIBE
+The `admin` role grants full administration privileges to the user.
 
-=== Building locally using Maven
+== Quick Start
 
-Basic invocation of `mvn clean install` will build Fuse minimal and full distro. Minimal distribution is
-maintained only for presentation and test purposes.
+To start Fuse, run `bin/fuse` on Linux/Unix or `bin\fuse.bat` on Windows.
 
-We can enable additional profiles:
+== Examples
 
-* `mvn -Pcs validate` - Run checkstyle  checks
-* `mvn -Plicense process-sources` - regenerate license headers in configured files using `license-header.txt`
-* `mvn -Ptest verify` - run integration test inside `fuse-itests` module
+Examples with instructions are in the `quickstarts` directory.
 
-(In order to generate license headers and/or perform checkstyle checks, it's recommended to use `-Plicense,test` and
-`-Pcs,test` respectively).
+== Documentation
+
+You can find documentation online at:
+
+https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse
