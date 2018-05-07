@@ -1,0 +1,40 @@
+image:https://img.shields.io/badge/stack%20overflow-jbossfuse-red.svg?colorB=cc0000[link="https://stackoverflow.com/questions/tagged/jbossfuse"]
+
+= Red Hat Fuse
+:toc:
+:icons: font
+
+Red Hat Fuse is a lightweight, flexible integration platform that enables rapid integration
+across the extended enterprise—on-premise or in the cloud.
+
+Based on Apache Camel, Fuse leverages pattern-based integration, a rich connector catalog, and extensive
+data transformation capabilities to enables users to integrate anything.
+
+== Security Prerequisites
+
+By default, no users are defined for the container. You can run the container in the
+foreground in this case, but you will not be able to access the container remotely
+and you will not be able to run it in the background.
+
+To enable remote access to the container, you must create at least one user in
+the `etc/users.properties` file. It is recommended that you create at least one user
+with the `admin` role by adding the following configuration:
+
+  admin = admin,_g_:admingroup
+  _g_\:admingroup = group,admin,manager,viewer,systembundles,ssh
+
+The `admin` role grants full administration privileges to the user.
+
+== Quick Start
+
+To start Fuse, run `bin/fuse` on Linux/Unix or `bin\fuse.bat` on Windows.
+
+== Examples
+
+Examples with instructions are in the `quickstarts` directory.
+
+== Documentation
+
+You can find documentation online at:
+
+https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse
