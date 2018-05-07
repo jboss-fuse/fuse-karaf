@@ -95,7 +95,7 @@ created a Maven `test` profile to allow us to run tests code with a simple Maven
 1. Change to the `rest` directory.
 2. Run the following command:
 
-        mvn -Ptest
+        mvn -Pqtest
         
 The tests in `src/test/java/org.jboss.fuse.quickstarts.rest/CrmTest`  make a sequence of RESTful invocations and displays the results.
 

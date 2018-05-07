@@ -32,10 +32,6 @@
     <name>Red Hat Fuse :: Quickstarts :: secure-rest</name>
     <description>Secure Restful Web Services Example using JAX-RS Basic Authentication with Fuse</description>
 
-    <properties>
-        <skipTests>true</skipTests>
-    </properties>
-
     <dependencies>
         <!--
             For coding the example, we don't actually depend on any CXF classes - we only use the JAX-RS (JSR-339)
@@ -131,14 +127,6 @@
     <build>
         <finalName>shared</finalName>
         <plugins>
-            <!-- Skip Test by default and enable them only in test profile -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>${skipTests}</skipTests>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.felix</groupId>
                 <artifactId>maven-bundle-plugin</artifactId>
@@ -214,15 +202,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>test</id>
-            <properties>
-                <skipTests>false</skipTests>
-            </properties>
-            <build>
-                <defaultGoal>verify</defaultGoal>
-            </build>
-        </profile>
-    </profiles>
 </project>

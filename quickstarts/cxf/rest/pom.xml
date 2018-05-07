@@ -32,10 +32,6 @@
     <name>Red Hat Fuse :: Quickstarts :: rest</name>
     <description>RESTful WebService Example using JAX-RS with Red Hat Fuse</description>
 
-    <properties>
-        <skipTests>true</skipTests>
-    </properties>
-
     <dependencies>
         <!--
             For coding the example, we don't actually depend on any CXF classes - we only use the JAX-RS (JSR-339)
@@ -143,14 +139,6 @@
         </resources>
 
         <plugins>
-            <!-- Skip Test by default and enable them only in Test profile -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skipTests>${skipTests}</skipTests>
-                </configuration>
-            </plugin>
             <!-- Need to setup the OSGi meta information here -->
             <plugin>
                 <groupId>org.apache.felix</groupId>
@@ -267,15 +255,4 @@
         </plugins>
     </build>
 
-    <profiles>
-        <profile>
-            <id>test</id>
-            <properties>
-                <skipTests>false</skipTests>
-            </properties>
-            <build>
-                <defaultGoal>verify</defaultGoal>
-            </build>
-        </profile>
-    </profiles>
 </project>

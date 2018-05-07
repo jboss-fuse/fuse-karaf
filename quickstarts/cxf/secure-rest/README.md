@@ -36,7 +36,8 @@ Build and Deploy the Quickstart
 
 1. Change your working directory to `secure-rest` directory.
 2. Run `mvn clean install` to build the quickstart.
-3. Verify `etc/users.properties` from the Red Hat Fuse installation contains the following 'admin' user configured: `admin=admin,admin` (it is commented by default)
+3. Verify `etc/users.properties` from the Red Hat Fuse installation contains the following 'admin' user configured: `admin=admin,_g_:admingroup` (it is commented by default).
+The group `_g_\:admingroup` should be uncommented as well.
 4. Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
 5. In the Red Hat Fuse console, enter the following command:
 
@@ -90,7 +91,7 @@ created a Maven `test` profile to allow us to run tests code with a simple Maven
 1. Change to the `secure-rest` directory.
 2. Run the following command:
 
-        mvn -Ptest
+        mvn -Pqtest
 
 The tests in `src/test/java/org.jboss.fuse.quickstarts.rest.secure/CrmSecureTest` make a sequence of authenticated RESTful invocations and displays the results.
 

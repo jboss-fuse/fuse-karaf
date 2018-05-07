@@ -79,7 +79,7 @@ created a Maven `test` profile to allow us to run tests code with a simple Maven
 1. Change to the `secure-soap` directory.
 2. Run the following command:
 
-        mvn -Ptest
+        mvn -Pqtest
 
 The test uses a client proxy for the Web service to invoke the remote method - in reality,
 a SOAP message will be sent to the server and the response SOAP message will be received and handled.  You will see this output from the remote method:
