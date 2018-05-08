@@ -1606,7 +1606,7 @@
     <dependency>
       <groupId>org.jboss.fuse</groupId>
       <artifactId>fuse-karaf-framework</artifactId>
-      <version>7.0.0.fuse-000187-redhat-1</version>
+      <version>${project.version}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1618,7 +1618,7 @@
     <dependency>
       <groupId>org.jboss.fuse</groupId>
       <artifactId>quickstarts</artifactId>
-      <version>7.0.0.fuse-000187-redhat-1</version>
+      <version>${project.version}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1630,7 +1630,7 @@
     <dependency>
       <groupId>org.jboss.fuse.modules.patch</groupId>
       <artifactId>patch-commands</artifactId>
-      <version>7.0.0.fuse-000187-redhat-1</version>
+      <version>${project.version}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1642,7 +1642,7 @@
     <dependency>
       <groupId>org.jboss.fuse.modules.patch</groupId>
       <artifactId>patch-core</artifactId>
-      <version>7.0.0.fuse-000187-redhat-1</version>
+      <version>${project.version}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1654,7 +1654,7 @@
     <dependency>
       <groupId>org.jboss.fuse.modules.patch</groupId>
       <artifactId>patch-core-api</artifactId>
-      <version>7.0.0.fuse-000187-redhat-1</version>
+      <version>${project.version}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1666,7 +1666,7 @@
     <dependency>
       <groupId>org.jboss.fuse.modules.patch</groupId>
       <artifactId>patch-features</artifactId>
-      <version>7.0.0.fuse-000187-redhat-1</version>
+      <version>${project.version}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1678,7 +1678,7 @@
     <dependency>
       <groupId>org.jboss.fuse.modules.patch</groupId>
       <artifactId>patch-management</artifactId>
-      <version>7.0.0.fuse-000187-redhat-1</version>
+      <version>${project.version}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1690,7 +1690,7 @@
     <dependency>
       <groupId>org.jboss.fuse.quickstarts</groupId>
       <artifactId>quickstarts-parent</artifactId>
-      <version>7.0.0.fuse-000187-redhat-1</version>
+      <version>${project.version}</version>
       <licenses>
         <!--No license information available. -->
       </licenses>

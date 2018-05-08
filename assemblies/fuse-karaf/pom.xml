@@ -648,7 +648,7 @@
                                                 <include>licenses.xml</include>
                                                 <include>licenses.html</include>                                                                                                
                                             </includes>
-                                            <filtering>false</filtering>
+                                            <filtering>true</filtering>
                                         </resource>
                                     </resources>
                                 </configuration>
