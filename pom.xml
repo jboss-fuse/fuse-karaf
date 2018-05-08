@@ -116,6 +116,7 @@
         <version.net.java.dev.jna>4.5.1</version.net.java.dev.jna>
         <version.net.sf.ehcache>2.10.3</version.net.sf.ehcache>
         <version.org.apache.activemq.amq6>5.11.0.redhat-630344</version.org.apache.activemq.amq6>
+        <version.org.apache.aries.jpa>2.6.1</version.org.apache.aries.jpa>
         <version.org.apache.aries.proxy.api>1.1.0</version.org.apache.aries.proxy.api>
         <version.org.apache.aries.proxy>1.1.1</version.org.apache.aries.proxy>
         <version.org.apache.commons.compress>1.16.1</version.org.apache.commons.compress>
@@ -166,6 +167,7 @@
         <version.org.codehaus.woodstox.core>4.4.1</version.org.codehaus.woodstox.core>
         <version.org.codehaus.woodstox.stax2-api>3.1.4</version.org.codehaus.woodstox.stax2-api>
         <version.org.eclipse.jgit>4.10.0.201712302008-r</version.org.eclipse.jgit>
+        <version.org.eclipse.persistence>2.1.0</version.org.eclipse.persistence>
         <version.org.glassfish.web.javax.el>2.2.5</version.org.glassfish.web.javax.el>
         <version.org.hibernate>5.1.10.Final-redhat-1</version.org.hibernate>
         <version.org.hibernate.validator>5.3.5.Final-redhat-2</version.org.hibernate.validator>
@@ -204,7 +206,7 @@
         <version.plugin.asciidoctor-maven-plugin>1.5.6</version.plugin.asciidoctor-maven-plugin>
         <version.org.asciidoctor>1.5.8</version.org.asciidoctor>
         <version.plugin.felix.maven-scr-plugin>1.26.0</version.plugin.felix.maven-scr-plugin>
-        <version.plugin.felix.maven-bundle-plugin>3.5.0</version.plugin.felix.maven-bundle-plugin>
+        <version.plugin.felix.maven-bundle-plugin>3.3.0</version.plugin.felix.maven-bundle-plugin>
         <version.plugin.mycila.license-maven-plugin>3.0</version.plugin.mycila.license-maven-plugin>
         <version.plugin.mojo.build-helper-maven-plugin>3.0.0</version.plugin.mojo.build-helper-maven-plugin>
         <version.plugin.mojo.properties-maven-plugin>1.0.0</version.plugin.mojo.properties-maven-plugin>
@@ -770,22 +772,32 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>apache-salesforce</artifactId>
+                <artifactId>camel-salesforce</artifactId>
                 <version>${version.org.apache.camel}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>apache-blueprint</artifactId>
+                <artifactId>camel-blueprint</artifactId>
                 <version>${version.org.apache.camel}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>apache-jdbc</artifactId>
+                <artifactId>camel-jdbc</artifactId>
                 <version>${version.org.apache.camel}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.camel</groupId>
-                <artifactId>apache-sql</artifactId>
+                <artifactId>camel-jms</artifactId>
+                <version>${version.org.apache.camel}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-jpa</artifactId>
+                <version>${version.org.apache.camel}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.camel</groupId>
+                <artifactId>camel-sql</artifactId>
                 <version>${version.org.apache.camel}</version>
             </dependency>
 
@@ -1159,6 +1171,11 @@
                 <groupId>org.eclipse.jgit</groupId>
                 <artifactId>org.eclipse.jgit</artifactId>
                 <version>${version.org.eclipse.jgit}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.persistence</groupId>
+                <artifactId>javax.persistence</artifactId>
+                <version>${version.org.eclipse.persistence}</version>
             </dependency>
 
             <dependency>
