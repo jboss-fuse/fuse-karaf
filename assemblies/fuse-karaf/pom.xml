@@ -378,6 +378,7 @@
                         <feature>camel-rcode</feature>
                         <feature>camel-spring-neo4j</feature>
                         <feature>camel-spring-security</feature>
+                        <feature>camel-tika</feature>
                         <feature>camel-xmlrpc</feature> 
                         <!-- swagger 1.3 -->
                         <feature>camel-swagger</feature>
@@ -645,14 +646,17 @@
                                             <directory>${project.basedir}/src/license</directory>
                                             <includes>
                                                 <include>licenses.css</include>
+                                                <include>licenses.xml</include>
+                                                <include>licenses.html</include>                                                                                                
                                             </includes>
-                                            <filtering>false</filtering>
+                                            <filtering>true</filtering>
                                         </resource>
                                     </resources>
                                 </configuration>
                             </execution>
                         </executions>
                     </plugin>
+                    <!-- disabling as per ENTESB-8080; we are using cached license.xml/html from PNC repour-bf1b2224cf03d7ea8c959c1d252968b00a19830b tag
                     <plugin>
                         <groupId>org.wildfly.maven.plugins</groupId>
                         <artifactId>licenses-plugin</artifactId>
@@ -719,6 +723,7 @@
                             </execution>
                         </executions>
                     </plugin>
+                    -->
                 </plugins>
             </build>
         </profile>
