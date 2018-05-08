@@ -466,7 +466,7 @@
                         <library>mvn:org.bouncycastle/bcpkix-jdk15on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
                         <!-- lib/endorsed -->
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces};type:=endorsed;export:=true;delegate:=true</library>
-                        <!--<library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxp-api-1.4/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>-->
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxp-api-1.4/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxws-api-2.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.saaj-api-1.3/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
