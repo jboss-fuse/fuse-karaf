@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+     Copyright 2005-2018 Red Hat, Inc.
+
+     Red Hat licenses this file to you under the Apache License, version
+     2.0 (the "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+     implied.  See the License for the specific language governing
+     permissions and limitations under the License.
+
+-->
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+
+    <!-- pax-transx-tm-narayana registers this interface if it finds the org.springframework.transaction.PlatformTransactionManager class  -->
+    <reference id="springJtaTxManager" interface="org.springframework.transaction.PlatformTransactionManager" />
+
+    <reference id="xaConnectionFactory" interface="javax.jms.ConnectionFactory" filter="(osgi.jndi.service.name=jms/artemisXAConnectionFactory)" />
+
+    <!-- ActiveMQ JMS Configuration is defined as Transacted and use global JTA TxManager -->
+    <bean id="jms" class="org.apache.camel.component.jms.JmsComponent">
+        <property name="configuration">
+            <bean class="org.apache.camel.component.jms.JmsConfiguration">
+                <property name="connectionFactory" ref="xaConnectionFactory" />
+                <!-- JTA transaction manager (Spring interface to Aries-TM): -->
+                <property name="transactionManager" ref="springJtaTxManager" />
+                <!-- We set local transactions to false, because the JtaTransactionManager will take care of enrolling the XA JMS Connection when needed. -->
+                <property name="transacted" value="false" />
+                <property name="cacheLevelName" value="CACHE_NONE" />
+                <property name="maxConcurrentConsumers" value="1" />
+                <property name="testConnectionOnStartup" value="true" />
+            </bean>
+        </property>
+    </bean>
+
+    <!-- reference to EMF using transaction-type="RESOURCE_LOCAL" -->
+    <reference id="entityManagerFactory" interface="javax.persistence.EntityManagerFactory" />
+
+    <bean id="jpa" class="org.apache.camel.component.jpa.JpaComponent" activation="lazy">
+        <!-- otherwise, org.apache.aries.transaction.internal.AriesPlatformTransactionManager would be picked -->
+        <property name="transactionManager" ref="springJtaTxManager" />
+        <!--should be true, because we're using JTA entity manager-->
+        <property name="joinTransaction" value="true" />
+        <!--we'll inject JTA, context-aware EMF, so "shared" flag should be set to false-->
+        <property name="sharedEntityManager" value="false" />
+        <!--instead of setting entityManagerFactory directly by reference, we'll use jpa:unit -->
+        <!--<jpa:unit property="entityManagerFactory" unitname="reportincident-jta" />-->
+        <property name="entityManagerFactory" ref="entityManagerFactory" />
+    </bean>
+
+    <!-- Defines the transactional policy we want to use. -->
+    <bean id="PROPAGATION_REQUIRED" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
+        <property name="transactionManager" ref="springJtaTxManager" />
+    </bean>
+
+</blueprint>

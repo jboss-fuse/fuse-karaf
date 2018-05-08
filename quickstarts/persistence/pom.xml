@@ -40,6 +40,7 @@
 
     <modules>
         <module>camel-jdbc</module>
+        <module>camel-xa</module>
         <module>standalone-xa</module>
         <module>javaee-xa</module>
         <module>manual</module>

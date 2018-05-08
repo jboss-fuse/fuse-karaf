@@ -152,6 +152,11 @@
             <version>${version.org.apache.camel}</version>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.aries.jpa</groupId>
+            <artifactId>org.apache.aries.jpa.container</artifactId>
+            <version>${version.org.apache.aries.jpa}</version>
+        </dependency>
 
     </dependencies>
 
