@@ -221,7 +221,7 @@
                         mvn:org.apache.karaf.features/framework/VERSION/kar or
                         mvn:org.apache.karaf.features/static/VERSION/kar
                     -->
-                    <framework>framework</framework>
+                    <framework>custom</framework>
                     <!--
                         installAllFeaturesByDefault should be false when using custom kar. Otherwise all
                         features from feature repositories found in the kar would be installed by default
@@ -354,6 +354,9 @@
                         <feature>pax-jms-pool-narayana</feature>
                         <feature>pax-jms-pool-transx</feature>
                     </installedFeatures>
+                    <installedBundles>
+                        <bundle>mvn:org.jline/jline/${version.org.jline}</bundle>
+                    </installedBundles>
                     <blacklistedFeatures>
                         <feature>httplite</feature>
                         <feature>jetty/[8,9)</feature>
