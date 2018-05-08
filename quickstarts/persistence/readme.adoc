@@ -216,3 +216,91 @@ After triggering `key-from-file` route using the above command, we'll see this i
 2018-04-12 14:51:22,973 INFO  {Camel (camel) thread #7 - file://data/camel-jdbc} [org.apache.camel.util.CamelLogger.log()] (CamelLogger.java:159) : >>> SQL Query : select * from report.incident where id = '3'
 2018-04-12 14:51:22,977 INFO  {Camel (camel) thread #7 - file://data/camel-jdbc} [org.apache.camel.util.CamelLogger.log()] (CamelLogger.java:159) : >>> Select using key : [{id=3, date=2018-02-20 08:20:00.0, name=User 3, summary=Incident 3, details=This is a report incident 003, email=user3@redhat.com}]
 ----
+
+== Camel XA example
+
+`camel-xa` is a Camel context with routes that us multiple XA resources - two Artemis JMS queues and PostgreSQL database.
+The database access is performed using JPA. It is required to configure docker-based PostgreSQL database (as presented
+in Persistence Manual) and Artemis broker accessible at `tcp://localhost:61616` URL.
+
+.Database
+* user: `fuse`
+* password: `fuse`
+* database name: `reportdb`
+* URI: `jdbc:postgresql://localhost:5432/reportdb`
+
+.Broker
+* user: `admin`
+* password: `admin`
+* URI: `tcp://localhost:61616`
+
+Using fresh {f7} instance, we can (after building the example):
+[listing,options="nowrap"]
+----
+karaf@root()> install -s mvn:org.postgresql/postgresql/42.2.2
+Bundle ID: 237
+karaf@root()> feature:install jdbc jms jndi
+karaf@root()> feature:install pax-jdbc-pool-narayana pax-jms-pool-narayana pax-jms-artemis pax-jdbc-config pax-jms-config
+karaf@root()> feature:install camel-blueprint camel-jpa camel-jms
+karaf@root()> feature:install jpa hibernate-orm
+----
+
+Now we have to install blueprint-based datasource and connection factory. After replacing {f7} location for `$FUSE_HOME`
+we can install file-based blueprints:
+
+[listing,options="nowrap"]
+----
+karaf@root()> install -s blueprint:file://$FUSE_HOME/quickstarts/persistence/camel-xa/src/main/blueprint/connection-factory.xml
+Bundle ID: 306
+karaf@root()> install -s blueprint:file://$FUSE_HOME/quickstarts/persistence/camel-xa/src/main/blueprint/xa-datasource.xml
+Bundle ID: 307
+----
+
+Install the example:
+[listing,options="nowrap"]
+----
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts/camel-xa/7.0.0.redhat-SNAPSHOT
+Bundle ID: 308
+
+karaf@root()> camel:route-list
+ Context                     Route                   Status              Total #       Failed #     Inflight #   Uptime
+ -------                     -----                   ------              -------       --------     ----------   ------
+ xa-transaction-jms-ok-way   transactedTargetOkWay   Started                   0              0              0   33.706 seconds
+----
+
+We can test the route now:
+[listing,options="nowrap"]
+----
+karaf@root()> jms:browse -u admin -p admin jms/artemisXAConnectionFactory xa1Queue
+Message ID │ Content │ Charset │ Type │ Correlation ID │ Delivery Mode │ Destination │ Expiration │ Priority │ Redelivered │ ReplyTo │ Timestamp
+───────────┼─────────┼─────────┼──────┼────────────────┼───────────────┼─────────────┼────────────┼──────────┼─────────────┼─────────┼──────────
+
+karaf@root()> jms:browse -u admin -p admin jms/artemisXAConnectionFactory xa2Queue
+Message ID │ Content │ Charset │ Type │ Correlation ID │ Delivery Mode │ Destination │ Expiration │ Priority │ Redelivered │ ReplyTo │ Timestamp
+───────────┼─────────┼─────────┼──────┼────────────────┼───────────────┼─────────────┼────────────┼──────────┼─────────────┼─────────┼──────────
+
+karaf@root()> jdbc:query jdbc/postgresDS 'select * from message'
+messagetext
+───────────
+
+karaf@root()> jms:send -u admin -p admin jms/artemisXAConnectionFactory xa1Queue "Hello Camel XA"
+
+karaf@root()> jdbc:query jdbc/postgresDS 'select * from message'
+messagetext
+──────────────
+Hello Camel XA
+
+karaf@root()> jms:browse -u admin -p admin jms/artemisXAConnectionFactory xa1Queue
+Message ID │ Content │ Charset │ Type │ Correlation ID │ Delivery Mode │ Destination │ Expiration │ Priority │ Redelivered │ ReplyTo │ Timestamp
+───────────┼─────────┼─────────┼──────┼────────────────┼───────────────┼─────────────┼────────────┼──────────┼─────────────┼─────────┼──────────
+
+karaf@root()> jms:browse -u admin -p admin jms/artemisXAConnectionFactory xa2Queue
+Message ID                              │ Content        │ Charset │ Type │ Correlation ID │ Delivery Mode │ Destination             │ Expiration │ Priority │ Redelivered │ ReplyTo │ Timestamp
+────────────────────────────────────────┼────────────────┼─────────┼──────┼────────────────┼───────────────┼─────────────────────────┼────────────┼──────────┼─────────────┼─────────┼──────────────────────────────
+ID:40b47880-67e9-11e8-a219-0242648b369e │ Hello Camel XA │ UTF-8   │      │                │ Persistent    │ ActiveMQQueue[xa2Queue] │ Never      │ 4        │ false       │         │ Mon Jun 04 13:20:14 CEST 2018
+
+karaf@root()> route-list
+ Context                     Route                   Status              Total #       Failed #     Inflight #   Uptime
+ -------                     -----                   ------              -------       --------     ----------   ------
+ xa-transaction-jms-ok-way   transactedTargetOkWay   Started                   1              0              0   26 minutes
+----
