@@ -176,6 +176,7 @@
         <version.org.jboss.transaction>7.6.0.Final-redhat-1</version.org.jboss.transaction>
         <version.org.jboss.xnio>3.3.8.Final</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
+        <version.org.jline>3.6.2</version.org.jline>
         <version.org.messaginghub.pooled-jms>0.3.0</version.org.messaginghub.pooled-jms>
         <version.org.mockito>2.13.0</version.org.mockito>
         <version.org.ops4j.base>1.5.0</version.org.ops4j.base>
