@@ -279,6 +279,8 @@
                         <feature>deployer</feature>
                         <!-- dev commands -->
                         <feature>diagnostic</feature>
+                        <!-- child container support -->
+                        <feature>instance</feature>
 
                         <!-- non Karaf features -->
 
@@ -442,7 +444,6 @@
                         <feature>pax-jms-activemq</feature>
 
                         <!-- Unsupported Karaf features -->
-                        <feature>instance</feature>
                         <feature>minimal</feature>
                         <feature>standard</feature>
                     </blacklistedFeatures>
