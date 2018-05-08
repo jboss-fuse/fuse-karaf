@@ -262,7 +262,7 @@
     <dependency>
       <groupId>org.apache-extras.camel-extra.karaf</groupId>
       <artifactId>camel-extra</artifactId>
-      <version>2.21.0.fuse-000054-redhat-1</version>
+      <version>${version.org.apache.camel}</version>
       <licenses>
         <license>
           <name>GNU GENERAL PUBLIC LICENSE</name>
@@ -358,7 +358,7 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-core</artifactId>
-      <version>2.21.0.fuse-000077-redhat-1</version>
+      <version>${version.org.apache.camel}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -370,7 +370,7 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-jms</artifactId>
-      <version>2.21.0.fuse-000077-redhat-1</version>
+      <version>${version.org.apache.camel}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -382,7 +382,7 @@
     <dependency>
       <groupId>org.apache.camel</groupId>
       <artifactId>camel-spring</artifactId>
-      <version>2.21.0.fuse-000077-redhat-1</version>
+      <version>${version.org.apache.camel}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -394,7 +394,7 @@
     <dependency>
       <groupId>org.apache.camel.karaf</groupId>
       <artifactId>apache-camel</artifactId>
-      <version>2.21.0.fuse-000077-redhat-1</version>
+      <version>${version.org.apache.camel}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -438,7 +438,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-core</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -450,7 +450,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-bindings-soap</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -462,7 +462,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-bindings-xml</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -474,7 +474,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-databinding-jaxb</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -486,7 +486,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-frontend-jaxws</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -498,7 +498,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-frontend-simple</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -510,7 +510,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-management</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -522,7 +522,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-rs-json-basic</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -534,7 +534,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-rs-security-jose</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -546,7 +546,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-security</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -558,7 +558,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-security-saml</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -570,7 +570,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-transports-http</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -582,7 +582,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-transports-udp</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -594,7 +594,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-ws-addr</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -606,7 +606,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-ws-mex</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -618,7 +618,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-ws-policy</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -630,7 +630,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-ws-rm</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -642,7 +642,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-ws-security</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -654,7 +654,7 @@
     <dependency>
       <groupId>org.apache.cxf</groupId>
       <artifactId>cxf-rt-wsdl</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -666,7 +666,7 @@
     <dependency>
       <groupId>org.apache.cxf.karaf</groupId>
       <artifactId>apache-cxf</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -678,7 +678,7 @@
     <dependency>
       <groupId>org.apache.cxf.karaf</groupId>
       <artifactId>cxf-karaf-commands</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -690,7 +690,7 @@
     <dependency>
       <groupId>org.apache.cxf.services.sts</groupId>
       <artifactId>cxf-services-sts-core</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -702,7 +702,7 @@
     <dependency>
       <groupId>org.apache.cxf.services.ws-discovery</groupId>
       <artifactId>cxf-services-ws-discovery-api</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -714,7 +714,7 @@
     <dependency>
       <groupId>org.apache.cxf.services.ws-discovery</groupId>
       <artifactId>cxf-services-ws-discovery-service</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -726,7 +726,7 @@
     <dependency>
       <groupId>org.apache.cxf.services.wsn</groupId>
       <artifactId>cxf-services-wsn-api</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -738,7 +738,7 @@
     <dependency>
       <groupId>org.apache.cxf.services.wsn</groupId>
       <artifactId>cxf-services-wsn-core</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -750,7 +750,7 @@
     <dependency>
       <groupId>org.apache.cxf.services.wsn</groupId>
       <artifactId>cxf-services-wsn-osgi</artifactId>
-      <version>3.1.11.fuse-000243-redhat-1</version>
+      <version>${version.org.apache.cxf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -954,7 +954,7 @@
     <dependency>
       <groupId>org.apache.karaf</groupId>
       <artifactId>org.apache.karaf.client</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -966,7 +966,7 @@
     <dependency>
       <groupId>org.apache.karaf</groupId>
       <artifactId>org.apache.karaf.main</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -978,7 +978,7 @@
     <dependency>
       <groupId>org.apache.karaf</groupId>
       <artifactId>org.apache.karaf.util</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -990,7 +990,7 @@
     <dependency>
       <groupId>org.apache.karaf.diagnostic</groupId>
       <artifactId>org.apache.karaf.diagnostic.boot</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1002,7 +1002,7 @@
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>base</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1014,7 +1014,7 @@
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>enterprise</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1026,7 +1026,7 @@
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>framework</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1038,7 +1038,7 @@
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>org.apache.karaf.features.core</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>Apache Software License, Version 2.0</name>
@@ -1050,7 +1050,7 @@
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>org.apache.karaf.features.extension</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1062,7 +1062,7 @@
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>spring-legacy</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1074,7 +1074,7 @@
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>standard</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1086,7 +1086,7 @@
     <dependency>
       <groupId>org.apache.karaf.jaas</groupId>
       <artifactId>org.apache.karaf.jaas.boot</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1098,7 +1098,7 @@
     <dependency>
       <groupId>org.apache.karaf.shell</groupId>
       <artifactId>org.apache.karaf.shell.core</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1110,7 +1110,7 @@
     <dependency>
       <groupId>org.apache.karaf.specs</groupId>
       <artifactId>org.apache.karaf.specs.activator</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1122,7 +1122,7 @@
     <dependency>
       <groupId>org.apache.karaf.specs</groupId>
       <artifactId>org.apache.karaf.specs.java.xml</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1134,7 +1134,7 @@
     <dependency>
       <groupId>org.apache.karaf.specs</groupId>
       <artifactId>org.apache.karaf.specs.java.xml.ws</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
@@ -1146,7 +1146,7 @@
     <dependency>
       <groupId>org.apache.karaf.specs</groupId>
       <artifactId>org.apache.karaf.specs.locator</artifactId>
-      <version>4.2.0.fuse-000237-redhat-1</version>
+      <version>${version.org.apache.karaf}</version>
       <licenses>
         <license>
           <name>The Apache Software License, Version 2.0</name>
