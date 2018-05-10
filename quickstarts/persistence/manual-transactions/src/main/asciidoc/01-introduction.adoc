@@ -28,6 +28,7 @@ The ACID properties of a transaction are defined as follows:
  transaction.
 * *Durable* – the results of a transaction are persistent.
 
+[[transaction-clients]]
 .Transaction clients
 A transaction client is an API or object that enables you to initiate and end transactions. Typically,
 a transaction client exposes operations that enable you to begin, commit, or roll back a transaction.

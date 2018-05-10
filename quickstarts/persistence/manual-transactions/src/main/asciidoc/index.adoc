@@ -24,7 +24,7 @@ the various ways to demarcate transactions, and JMS transaction semantics.
 
 include::01-introduction.adoc[]
 
-include::02-configuration.adoc[]
+include::02-transaction-managers.adoc[]
 
 :leveloffset: -1
 
