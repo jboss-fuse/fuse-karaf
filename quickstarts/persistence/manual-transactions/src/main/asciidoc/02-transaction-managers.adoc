@@ -97,7 +97,7 @@ ut.commit(); // or ut.rollback()
 ----
 
 Obtaining `UserTransaction` instance from JNDI is just one method of getting the
-<<transaction-clients,transaction client>>. In JavaEE envorinment we can access it for example with CDI (dependency
+<<transaction-clients,transaction client>>. In JavaEE environment we can access it for example with CDI (dependency
 injection).
 
 image::images/javaee-transaction-api.png[]

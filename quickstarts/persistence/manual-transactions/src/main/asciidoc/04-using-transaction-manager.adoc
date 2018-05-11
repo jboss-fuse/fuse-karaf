@@ -1,0 +1,256 @@
+= Using the Transaction Manager
+
+We've already mentioned how to use `javax.transaction.UserTransaction` and `org.springframework.transaction.PlatformTransactionManager`
+in a _canonical way_. Let's review that and give more details.
+
+.UserTransaction interface
+The JTA UserTransaction interface has the following definition:
+
+[source,java,options="nowrap"]
+----
+public interface javax.transaction.UserTransaction {
+
+    public void begin();
+
+    public void commit();
+
+    public void rollback();
+
+    public void setRollbackOnly();
+
+    public int getStatus();
+
+    public void setTransactionTimeout(int seconds);
+}
+----
+
+.UserTransaction methods
+The `UserTransaction` interface defines the following methods:
+
+begin()::
+Start a new transaction, associating it with the current thread. If any XA resources get associated with this
+transaction, it implicitly becomes an XA transaction.
+
+commit()::
+Complete the current transaction normally, so that all pending changes become permanent. After the commit, there is no
+longer a transaction associated with the current thread.
++
+NOTE: If the current transaction is marked as rollback only, however, the transaction would actually be rolled back
+when `commit()` is called.
+
+rollback()::
+Abort the transaction immediately, so that all pending changes are discarded. After the rollback, there is no longer
+a transaction associated with the current thread.
+
+setRollbackOnly()::
+Modify the state of the current transaction, so that a rollback is the only possible outcome, but do not perform the
+rollback yet.
+
+getStatus()::
+Returns the status of the current transaction, which can be one of the following integer values defined in the
+`javax.transaction.Status` interface:
+
+* STATUS_ACTIVE
+* STATUS_COMMITTED
+* STATUS_COMMITTING
+* STATUS_MARKED_ROLLBACK
+* STATUS_NO_TRANSACTION
+* STATUS_PREPARED
+* STATUS_PREPARING
+* STATUS_ROLLEDBACK
+* STATUS_ROLLING_BACK
+* STATUS_UNKNOWN
+
+setTransactionTimeout()::
+Customize the timeout of the current transaction, specified in units of seconds. If the transaction does not get
+resolved within the specified timeout, the transaction manager will automatically roll it back.
+
+.When to use UserTransaction?
+The `UserTransaction` interface is used for transaction demarcation: that is, for beginning, committing, or rolling
+back transactions. This is the JTA interface that you are most likely to use directly in your application code.
+But the `UserTransaction` interface is just one of the ways to demarcate transactions. For a complete discussion
+of the different ways to demarcate transactions, see <<XA Transaction Demarcation,???>>.
+
+.TransactionManager interface
+The JTA TransactionManager interface has the following definition:
+
+[source,java,options="nowrap"]
+----
+interface javax.transaction.TransactionManager {
+
+    // Same as UserTransaction methods
+
+    public void begin();
+
+    public void commit();
+
+    public void rollback();
+
+    public void setRollbackOnly();
+
+    public int getStatus();
+
+    public void setTransactionTimeout(int seconds);
+
+    // Extra TransactionManager methods
+
+    public Transaction getTransaction();
+
+    public Transaction suspend() ;
+
+    public void resume(Transaction tobj);
+}
+----
+
+.TransactionManager methods
+The `TransactionManager` interface supports all of the methods found in the `UserTransaction` interface (so you can
+also use it for transaction demarcation) and, in addition, supports the following methods:
+
+getTransaction()::
+Get a reference to the current transaction (that is, the transaction associated with the current thread), if any.
+If there is no current transaction, this method returns `null`.
+
+suspend()::
+Detach the current transaction from the current thread, returning a reference to the transaction. After calling
+this method, the current thread no longer has a transaction context, so that any work that you do after this
+point is no longer done in the context of a transaction.
++
+NOTE: Not all transaction managers support suspending transactions. This feature is supported by Narayana, however.
+
+resume()::
+Re-attach a suspended transaction to the current thread context. After calling this method, the transaction context
+is restored and any work that you do after this point is done in the context of a transaction.
+
+.When to use TransactionManager?
+The most common way to use a TransactionManager object is simply to pass it to a framework API (for example, to the
+Camel JMS component), enabling the framework to look after transaction demarcation for you. Occasionally, you might
+want to use the `TransactionManager` object directly, if you need to access advanced transaction APIs (such as
+`suspend()` and `resume()`).
+
+.Transaction interface
+The JTA `Transaction` interface has the following definition:
+
+[source,java,options="nowrap"]
+----
+interface javax.transaction.Transaction {
+
+    public void commit();
+
+    public void rollback();
+
+    public void setRollbackOnly();
+
+    public int getStatus();
+
+    public boolean enlistResource(XAResource xaRes);
+
+    public boolean delistResource(XAResource xaRes, int flag);
+
+    public void registerSynchronization(Synchronization sync);
+}
+----
+
+.Transaction methods
+The `commit()`, `rollback()`, `setRollbackOnly()`, and `getStatus()` methods have just the same effect as the
+corresponding methods from the `UserTransaction` interface (in fact, the `UserTransaction` object is really just
+a convenient wrapper that retrieves the current transaction and then invokes the corresponding methods on the
+`Transaction` object).
+
+Additionally, the `Transaction` interface defines the following methods that have no counterpart in the `UserTransaction`
+interface:
+
+enlistResource()::
+Associate an XA resource with the current transaction.
++
+NOTE: This method is of key importance in the context of XA transactions. It is precisely the capability to enlist
+multiple XA resources with the current transaction that characterizes XA transactions. On the other hand, enlisting
+resources explicitly is a nuisance and you would normally expect your framework or container to do this for you.
+For example, see <<Section 6.5 “The XA Enlistment Problem”,???>>.
+
+delistResource()::
+Disassociates the specified resource from the transaction. The flag argument can take one of the following integer
+values defined in the `javax.transaction.Transaction` interface:
+
+* TMSUCCESS
+* TMFAIL
+* TMSUSPEND
+
+registerSynchronization()::
+Register a `javax.transaction.Synchronization` object with the current transaction. The Synchronization object
+is an object that receives a callback just before the prepare phase of a commit and a callback just after
+the transaction completes.
+
+.When to use Transaction?
+You would only need to access a `Transaction` object directly, if you are suspending/resuming transactions or
+if you need to enlist a resource explicitly. As discussed in <<Section 6.5 “The XA Enlistment Problem”,???>>,
+a framework or container would usually take care of enlisting resources automatically for you.
+
+.Reference
+For fulls details of the Java transaction API, see the Java Transaction API (JTA) 1.2 specification.
+
+== The XA Enlistment Problem
+
+.The problem of XA enlistment
+The standard JTA approach to enlisting XA resources is to add the XA resource explicitly to the current
+`javax.transaction.Transaction` object (representing the current transaction).
+In other words, you must explicitly enlist an XA resource every time a new transaction starts.
+
+.How to enlist an XA resource
+Enlisting an XA resource with a transaction simply involves invoking the `enlistResource()` method on the `Transaction`
+interface. For example, given a `TransactionManager` object and an `XAResource` object, you could enlist the
+`XAResource` object as follows:
+
+[source,java,options="nowrap"]
+----
+// Java
+import javax.transaction.Transaction;
+import javax.transaction.TransactionManager;
+import javax.transaction.xa.XAResource;
+...
+// Given:
+// 'tm' of type TransactionManager
+// 'xaResource' of type XAResource
+
+// Start the transaction
+tm.begin();
+
+Transaction transaction = tm.getTransaction();
+transaction.enlistResource(xaResource);
+
+// Do some work...
+...
+
+// End the transaction
+tm.commit();
+----
+
+.Auto-enlistment
+The tricky aspect of enlisting resources is that the resource must be enlisted on _every_ new transaction and the
+resource must be enlisted before you start to use the resource. If you enlist resources explicitly, you could end up
+with error-prone code that is littered with `enlistResource()` calls. Moreover, sometimes it can be difficult to call
+`enlistResource()` in the right place (for example, if you are using a framework that hides some of the transaction
+details).
+
+For these reasons, it is much easier (and safer) in practice to use features that support auto-enlistment of XA
+resources. For example, in the context of using JMS and JDBC resources, the standard technique is to use wrapper
+classes that support auto-enlistment.
+
+The common pattern, both for JDBC and JMS access is:
+
+1. application code expects `javax.sql.DataSource` for JDBC access and `javax.jms.ConnectionFactory` for JMS to
+get JDBC or JMS connections
+2. withing application/OSGi server, database or broker specific implementations of these interfaces are registered
+3. application/OSGi server _wraps_ the database/broker-specific factories into generic, pooling, enlisting factories
+
+So, application code still uses `javax.sql.DataSource`/`javax.jms.ConnectionFactory`, but internally when these are
+accessed, there's additional functionality, which usually concerns:
+
+* _connection pooling_ - instead of creating new connetion to database / message broker every time, a _pool_ of
+pre-initialized connections is used. Other aspect of _pooling_ may be for example periodical validation of connections.
+* _JTA enlistment_ - before returning actual instance of `java.sql.Connection` (JDBC) or `javax.jms.Connection` (JMS)
+the real connection objects are registered (if they are true XA Resources) withing JTA transaction (if available).
+
+Application code doesn't have to change.
+
+We'll cover such pooling and enlisting wrappers for JDBC data sources and JMS connection factories in the following
+chapters.

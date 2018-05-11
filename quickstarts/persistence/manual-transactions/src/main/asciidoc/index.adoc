@@ -26,6 +26,10 @@ include::01-introduction.adoc[]
 
 include::02-transaction-managers.adoc[]
 
+include::03-configuring-narayana.adoc[]
+
+include::04-using-transaction-manager.adoc[]
+
 :leveloffset: -1
 
 - - -

@@ -1,0 +1,227 @@
+= Configuring the Transaction Manager
+
+.Abstract
+Red Hat Fuse 7 provides built-in global transaction manager. It's the same transaction manager that is
+used by Enterprise Application Platform 7 which is http://narayana.io/[JBoss Narayana Transaction Manager].
+
+In OSGi runtime, like Red Hat Fuse 7 for Karaf, the additional integration layer is provided by
+https://github.com/ops4j/org.ops4j.pax.transx[PAX TRANSX] project.
+
+== Installation
+
+We already know from previous chapter, that Narayana Transaction Manager is exposed to use in OSGi bundles
+under these interfaces (plus few additional support interfaces):
+
+* `javax.transaction.TransactionManager`
+* `javax.transaction.UserTransaction`
+* `org.springframework.transaction.PlatformTransactionManager`
+* `org.ops4j.pax.transx.tm.TransactionManager`
+
+When we start fresh `fuse-karaf-7.0.0.fuse-000191-redhat-1` distribution, we can see that everything is
+available from start.
+
+The `pax-transx-tm-narayana` feature contains overriden bundle that embedds Narayana Transaction Manager:
+[listing,options="nowrap"]
+----
+karaf@root()> feature:info pax-transx-tm-narayana
+Feature pax-transx-tm-narayana 0.3.0
+Feature has no configuration
+Feature has no configuration files
+Feature depends on:
+  pax-transx-tm-api 0.0.0
+Feature contains followed bundles:
+  mvn:org.jboss.fuse.modules/fuse-pax-transx-tm-narayana/7.0.0.fuse-000191-redhat-1 (overriden from mvn:org.ops4j.pax.transx/pax-transx-tm-narayana/0.3.0)
+Feature has no conditionals.
+----
+
+These are the services provided by `fuse-pax-transx-tm-narayana` bundle:
+[listing,options="nowrap"]
+----
+karaf@root()> bundle:services fuse-pax-transx-tm-narayana
+
+Red Hat Fuse :: Fuse Modules :: Transaction (21) provides:
+----------------------------------------------------------
+[org.osgi.service.cm.ManagedService]
+[javax.transaction.TransactionManager]
+[javax.transaction.TransactionSynchronizationRegistry]
+[javax.transaction.UserTransaction]
+[org.jboss.narayana.osgi.jta.ObjStoreBrowserService]
+[org.ops4j.pax.transx.tm.TransactionManager]
+[org.springframework.transaction.PlatformTransactionManager]
+----
+
+Because this bundle registers `org.osgi.service.cm.ManagedService`, it means it tracks (and reacts to
+the changes) CM configurations:
+[listing,options="nowrap"]
+----
+karaf@root()> bundle:services -p fuse-pax-transx-tm-narayana
+
+Red Hat Fuse :: Fuse Modules :: Transaction (21) provides:
+----------------------------------------------------------
+objectClass = [org.osgi.service.cm.ManagedService]
+service.bundleid = 21
+service.id = 232
+service.pid = org.ops4j.pax.transx.tm.narayana
+service.scope = singleton
+...
+----
+
+Default `org.ops4j.pax.transx.tm.narayana` PID is:
+[listing,options="nowrap"]
+----
+karaf@root()> config:list '(service.pid=org.ops4j.pax.transx.tm.narayana)'
+----------------------------------------------------------------
+Pid:            org.ops4j.pax.transx.tm.narayana
+BundleLocation: ?
+Properties:
+   com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.communicationStore.localOSRoot = communicationStore
+   com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.communicationStore.objectStoreDir = /data/servers/fuse-karaf-7.0.0.fuse-000191-redhat-1/data/narayana
+   com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.communicationStore.objectStoreType = com.arjuna.ats.internal.arjuna.objectstore.ShadowNoFileLockStore
+   com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.localOSRoot = defaultStore
+   com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.objectStoreDir = /data/servers/fuse-karaf-7.0.0.fuse-000191-redhat-1/data/narayana
+   com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.objectStoreType = com.arjuna.ats.internal.arjuna.objectstore.ShadowNoFileLockStore
+   com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.stateStore.localOSRoot = stateStore
+   com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.stateStore.objectStoreDir = /data/servers/fuse-karaf-7.0.0.fuse-000191-redhat-1/data/narayana
+   com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.stateStore.objectStoreType = com.arjuna.ats.internal.arjuna.objectstore.ShadowNoFileLockStore
+   com.arjuna.ats.arjuna.common.RecoveryEnvironmentBean.recoveryBackoffPeriod = 10
+   felix.fileinstall.filename = file:/data/servers/fuse-karaf-7.0.0.fuse-000191-redhat-1/etc/org.ops4j.pax.transx.tm.narayana.cfg
+   service.pid = org.ops4j.pax.transx.tm.narayana
+----
+
+That explains the context:
+
+* Red Hat Fuse 7 for Karaf includes fully-features global transaction manager - Narayana
+* The transaction manager is correctly exposed under various client interfaces (JTA, Spring-tx, PAX JMS)
+* It can be configured using standard OSGi method - Configuration Admin - using `org.ops4j.pax.transx.tm.narayana`
+* The default configuration is provided in `$FUSE_HOME/etc/org.ops4j.pax.transx.tm.narayana.cfg`
+
+== Narayana Transaction Manager
+
+http://narayana.io/[Narayana Transaction Manager] is JBoss / Red Hat product used in EAP. From the home page:
+
+Narayana is a transactions toolkit which provides support for applications developed using a broad range of
+standards-based transaction protocols:
+
+* JTA
+* JTS
+* Web-Service Transactions
+* REST Transactions
+* STM
+* XATMI/TX
+
+== Narayana configuration
+
+`pax-transx-tm-narayana` bundle includes `jbossts-properties.xml` file which provides default configuration
+of different aspects of Transaction Manager. All these properties may be overriden in `$FUSE_HOME/etc/org.ops4j.pax.transx.tm.narayana.cfg`
+file directly or via Configuration Admin API.
+
+The basic configuration of Narayana TM is done through various `*EnvironmentBean` objects. Every such bean
+may be configured using properties with different prefixes. Here's the summary of configuration objects and prefixes used:
+
+|===
+|Configuration Bean|Property Prefix
+
+|com.arjuna.ats.arjuna.common.CoordinatorEnvironmentBean
+|com.arjuna.ats.arjuna.coordinator.
+
+|com.arjuna.ats.arjuna.common.CoreEnvironmentBean
+|com.arjuna.ats.arjuna.
+
+|com.arjuna.ats.internal.arjuna.objectstore.hornetq.HornetqJournalEnvironmentBean
+|com.arjuna.ats.arjuna.hornetqjournal.
+
+|com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean
+|com.arjuna.ats.arjuna.objectstore.
+
+|com.arjuna.ats.arjuna.common.RecoveryEnvironmentBean
+|com.arjuna.ats.arjuna.recovery.
+
+|com.arjuna.ats.jdbc.common.JDBCEnvironmentBean
+|com.arjuna.ats.jdbc.
+
+|com.arjuna.ats.jta.common.JTAEnvironmentBean
+|com.arjuna.ats.jta.
+
+|com.arjuna.ats.txoj.common.TxojEnvironmentBean
+|com.arjuna.ats.txoj.lockstore.
+|===
+
+The _prefix_ is meant to simpliy the configuration, but it's best to use:
+
+    fully-qualified-class-name.field-name
+
+syntax. For example there's `com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.purgeTime` field. It may be configured
+using `com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.purgeTime` property, but additionally,
+`com.arjuna.ats.arjuna.objectstore.purgeTime` may be used.
+
+Here's complete algorithm:
+
+1. check `fully-qualified-class-name.field-name` property
+2. check `simple-class-name.field-name` property
+3. if the property value is still null, one of the below properties are checked:
+** some bean properties in Narayana may be annotated with `@com.arjuna.common.internal.util.propertyservice.FullPropertyName`,
+so use this property (e.g., `com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.purgeTime` is annotated with
+`@FullPropertyName(name = "com.arjuna.ats.arjuna.coordinator.transactionLog.purgeTime")`
+** otherwise, each bean is annotated with `@com.arjuna.common.internal.util.propertyservice.PropertyPrefix`, so the property name
+is calculated from `@PropertyPrefix.name` and `field-name`. For example `com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.exposeAllLogRecordsAsMBeans`
+may be configured with `com.arjuna.ats.arjuna.objectstore.exposeAllLogRecordsAsMBeans` property
+** finally just `field-name` property may be checked
+
+Last information is that some beans (like `ObjectStoreEnvironmentBean`) may be configured multiple times - for _named_
+instances - in this case, the name of the instance is used between the prefix (any of the above) and `field-name`.
+
+So for example, a type of object store for `ObjectStoreEnvironmentBean` instance named `communicationStore` may
+be configured using properties named:
+
+1. `com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.communicationStore.objectStoreType`
+2. `ObjectStoreEnvironmentBean.communicationStore.objectStoreType`
+
+=== Log storage
+
+The most important configuration is the type and location of object log storage. There are (generally) 3
+implementations of `com.arjuna.ats.arjuna.objectstore.ObjectStoreAPI` interface:
+
+com.arjuna.ats.internal.arjuna.objectstore.hornetq.HornetqObjectStoreAdaptor::
+It uses `org.apache.activemq.artemis.core.journal.Journal` storage from A-MQ 7 internally
+
+com.arjuna.ats.internal.arjuna.objectstore.jdbc.JDBCStore::
+It uses JDBC to keep TX log files.
+
+com.arjuna.ats.internal.arjuna.objectstore.FileSystemStore (and specialized implementations)::
+It uses custom file-based log storage.
+
+By default, Red Hat Fuse 7 uses `com.arjuna.ats.internal.arjuna.objectstore.ShadowNoFileLockStore` which
+is specialized implementation of `FileSystemStore`.
+
+There are 3 _stores_ used by Narayana where the transaction/object logs are kept:
+
+* default
+* communication
+* state
+
+See http://narayana.io//docs/project/index.html#d0e1050[State management in Narayana documentation] for more details.
+
+The default configuration of these 3 _stores_ is:
+
+[listing,options="nowrap"]
+----
+# default store
+com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.objectStoreType = com.arjuna.ats.internal.arjuna.objectstore.ShadowNoFileLockStore
+com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.objectStoreDir = ${karaf.data}/narayana
+com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.localOSRoot = defaultStore
+# communication store
+com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.communicationStore.objectStoreType = com.arjuna.ats.internal.arjuna.objectstore.ShadowNoFileLockStore
+com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.communicationStore.objectStoreDir = ${karaf.data}/narayana
+com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.communicationStore.localOSRoot = communicationStore
+# state store
+com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.stateStore.objectStoreType = com.arjuna.ats.internal.arjuna.objectstore.ShadowNoFileLockStore
+com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.stateStore.objectStoreDir = ${karaf.data}/narayana
+com.arjuna.ats.arjuna.common.ObjectStoreEnvironmentBean.stateStore.localOSRoot = stateStore
+----
+
+`ShadowNoFileLockStore` is configured simply with the base directory (`objectStoreDir`) and particular store's directory
+(`localOSRoot`).
+
+There are really many configuration options, which should be found in http://narayana.io/docs/product/index.html#d0e3471[Narayana configuration guide].
+
+NOTE: From the official documentation: _The canonical reference for configuration options is the Javadoc of the various EnvironmentBean classes_
