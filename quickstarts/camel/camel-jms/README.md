@@ -107,7 +107,7 @@ Camel commands can be used to gain some insights on the Camel context, e.g.:
 - And the `camel:route-info` command displays the exchange statistics
 
     ```
-    karaf@root()> camel:route-info jms-cbr-route jms-example-context 
+    karaf@root()> camel:route-info jms-example-context jms-cbr-route 
     Camel Route jms-cbr-route
         Camel Context: jms-example-context
         State: Started
@@ -134,8 +134,9 @@ Camel commands can be used to gain some insights on the Camel context, e.g.:
 Undeploy the Archive
 --------------------
 
-To uninstall the bundle in Fuse:
+To stop and undeploy the bundle in Fuse:
 
-1. To stop and uninstall the bundle enter
+1. Enter `bundle:list` command to retrieve your bundle id
+2. To stop and uninstall the bundle enter
 
-        uninstall "JBoss Fuse :: Quickstarts :: camel-jms"
+        bundle:uninstall <id>
