@@ -1,3 +1,4 @@
+[[datasource-configuration]]
 = JDBC Data Sources
 
 Before going into technical details of Datasource configuration in OSGi runtime (like {f7}), let's review the common
@@ -987,7 +988,7 @@ of pooling data sources.
 NOTE: Of course nothing can stop us from configuring pooling `javax.sql.DataSource` using `org.osgi.service.jdbc.DataSourceFactory`
 service that already returns pooling `javax.sql.DataSource`, but that's the part of developer's freedom.
 
-What bundles register pooled data source factories (`o.o.p.j.p` == `org.ops4j.pax.jdbc.pool`)?
+Which bundles register pooled data source factories (`o.o.p.j.p` == `org.ops4j.pax.jdbc.pool`)?
 
 |===
 |Bundle |PooledDataSourceFactory |pool key
