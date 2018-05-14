@@ -76,7 +76,7 @@ Two remaining _connection_ objects have their own _data sources_:
 |`javax.sql.XAConnection`
 |===
 
-It's worth emphasizing the most important deferences between each of the above _data sources_:
+It's worth emphasizing the most important differences between each of the above _data sources_:
 
 * `javax.sql.DataSource` is most importantly a _factory_-like object to obtain `java.sql.Connection` instances.
 The fact that most `javax.sql.DataSource` implementations usually perform _connection pooling_ should not
@@ -84,7 +84,7 @@ change the picture. This is the only interface that should be used by applicatio
 access, JPA persistence unit configuration (either `<jta-data-source>` or `<non-jta-data-source>`) or most of
 the popular libraries (Apache Camel, Spring Framework, ...)
 * `javax.sql.ConnectionPoolDataSource` is most importantly a _bridge_ between generic (non database-specific)
-connection pool/data source and database-specific data source. It maybe be treated as SPI interface. Application
+connection pool/data source and database-specific data source. It may be treated as SPI interface. Application
 code usually deals with generic `javax.sql.DataSource` obtained from JNDI bound and implemented by application
 server (probably using a library like commons-dbcp2). On the other end, application code doesn't deal with
 `javax.sql.ConnectionPoolDataSource` directly - it's used between application server and database-specific driver.

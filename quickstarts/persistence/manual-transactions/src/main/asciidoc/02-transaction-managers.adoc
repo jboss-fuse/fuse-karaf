@@ -362,6 +362,7 @@ jtaTx.execute((status) -> {
 In the above example, actual instances of JTA objects (`UserTransaction` and `TransactionManager`) are taken from JNDI.
 In OSGi they may as well be obtained from OSGi service registry.
 
+[[osgi-transaction-architecture]]
 == OSGi Transaction Architecture
 
 Finally, after showing the <<javaee-transaction-api,JavaEE Transaction API>> and

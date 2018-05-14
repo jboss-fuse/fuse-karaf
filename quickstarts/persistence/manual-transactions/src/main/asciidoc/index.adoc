@@ -30,6 +30,10 @@ include::03-configuring-narayana.adoc[]
 
 include::04-using-transaction-manager.adoc[]
 
+include::05-data-sources.adoc[]
+
+include::06-connection-factories.adoc[]
+
 :leveloffset: -1
 
 - - -
