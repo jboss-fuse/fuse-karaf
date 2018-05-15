@@ -36,6 +36,8 @@ include::06-connection-factories.adoc[]
 
 include::07-jca.adoc[]
 
+include::08-camel.adoc[]
+
 :leveloffset: -1
 
 - - -
