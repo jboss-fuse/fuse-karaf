@@ -1660,3 +1660,86 @@ distinguish original and wrapper data source available soon).
 * has `pax.jdbc.managed = true` property, so it's not tried to be wrapped again
 * has `pax.jdbc.service.id.ref = 336` property, so we know what's the original data source service that's wrapped
 inside connection pool
+
+== Java™ Persistence API
+
+Last important thing about data sources, from the perspective of transaction management is their usage in JPA
+(Java™ Persistence API).
+
+We're not going to describe details of JPA specification itself (nor even the details about Hibernate - a JPA
+most known implementation). We'll only show how to point JPA persistent units to data sources.
+
+`META-INF/persistence.xml` descriptor (see JPA 2.1 specification, _8.2.1.5 jta-data-source, non-jta-data-source_)
+defines two kinds of data source references:
+
+* `<jta-data-source>` - a JNDI reference to JTA-enabled data source to use with `JTA` transactions
+* `<non-jta-data-source>` - a JNDI reference to JTA-enabled data source to use outside of `JTA` transactions. This
+data source is usually also used in initialization phase, for example with `hibernate.hbm2ddl.auto` property that
+configures Hibernate to auto create database schema.
+
+These two data sources are *not* related to `javax.sql.DataSource` / `javax.sql.XADataSource`! That's common mistake
+when developing JPA applications. Both JNDI names must refer to JNDI-bound `javax.sql.DataSource` services.
+
+=== Referring to JNDI names
+
+When we register an OSGi service with `osgi.jndi.service.name` property, it is _bound_ in OSGi JNDI service. In OSGi
+runtime (like {f7} / Karaf), JNDI is not simple dictionary of name → value. Referring to objects via JNDI names in
+OSGi involves service lookups and other, more complex OSGi mechanisms (like service hooks).
+
+Let's check how data sources are registered in JNDI. Starting with fresh {f7}:
+
+[listing,options="nowrap"]
+----
+karaf@root()> install -s mvn:mysql/mysql-connector-java/5.1.46
+Bundle ID: 223
+karaf@root()> install -s mvn:org.osgi/org.osgi.service.jdbc/1.0.0
+Bundle ID: 224
+karaf@root()> install -s mvn:org.ops4j.pax.jdbc/pax-jdbc-mysql/1.3.0
+Bundle ID: 225
+karaf@root()> install -s mvn:org.ops4j.pax.jdbc/pax-jdbc/1.3.0
+Bundle ID: 226
+karaf@root()> install -s mvn:org.ops4j.pax.jdbc/pax-jdbc-pool-common/1.3.0
+Bundle ID: 227
+karaf@root()> install -s mvn:org.ops4j.pax.jdbc/pax-jdbc-config/1.3.0
+Bundle ID: 228
+
+karaf@root()> config:edit --factory --alias mysql org.ops4j.datasource
+karaf@root()> config:property-set osgi.jdbc.driver.name mysql
+karaf@root()> config:property-set dataSourceName mysqlds
+karaf@root()> config:property-set osgi.jndi.service.name jdbc/mysqlds
+karaf@root()> config:property-set dataSourceType DataSource
+karaf@root()> config:property-set jdbc.url jdbc:mysql://localhost:3306/reportdb
+karaf@root()> config:property-set jdbc.user fuse
+karaf@root()> config:property-set jdbc.password fuse
+karaf@root()> config:property-set jdbc.useSSL false
+karaf@root()> config:update
+
+karaf@root()> feature:install jndi
+
+karaf@root()> jndi:names
+JNDI Name                 │ Class Name
+──────────────────────────┼───────────────────────────────────────────────
+osgi:service/jndi         │ org.apache.karaf.jndi.internal.JndiServiceImpl
+osgi:service/jdbc/mysqlds │ com.mysql.jdbc.jdbc2.optional.MysqlDataSource
+----
+
+As we can see, our data source is available under `osgi:service/jdbc/mysqlds` JNDI name.
+
+But in case of JPA in OSGi and in particular in case of `aries-jpa` implementation (which provides an OSGi bridge
+from Karaf to JPA providers), we have to use *full JNDI names*. Here's the sample `META-INF/persistence.xml`
+fragment that specifies data source references:
+
+[source,xml,options="nowrap"]
+----
+<jta-data-source>
+    osgi:service/javax.sql.DataSource/(osgi.jndi.service.name=jdbc/mysqlds)
+</jta-data-source>
+<non-jta-data-source>
+    osgi:service/javax.sql.DataSource/(osgi.jndi.service.name=jdbc/mysqlds)
+</non-jta-data-source>
+----
+
+Without the above configuration we may end up with this error:
+----
+Persistence unit "pu-name" refers to a non OSGi service DataSource
+----

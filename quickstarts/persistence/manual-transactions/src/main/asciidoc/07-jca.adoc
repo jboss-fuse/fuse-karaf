@@ -147,7 +147,7 @@ and for JMS:
 `aries.xa.username` and `aries.xa.password` properties in Fuse 6.x).
 
 With this JDBC configuration in Blueprint (mind `pool=transx`):
-[listing,options="nowrap"]
+[source,xml,options="nowrap"]
 ----
 <!--
     Database-specific, non-pooling, non-enlisting javax.sql.XADataSource
@@ -182,17 +182,16 @@ With this JDBC configuration in Blueprint (mind `pool=transx`):
 ----
 
 And with this JMS configuration in Blueprint (mind `pool=transx`):
-[listing,options="nowrap"]
+[source,xml,options="nowrap"]
 ----
 <!--
     Broker-specific, non-pooling, non-enlisting javax.jms.XAConnectionFactory
 -->
 <bean id="artemis" class="org.apache.activemq.artemis.jms.client.ActiveMQXAConnectionFactory">
-<!--<bean id="artemis" class="org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory">-->
     <argument index="0" value="tcp://localhost:61616" />
     <!-- credentials needed for JCA-based XA-recovery -->
-    <argument index="1" value="fuse" />
-    <argument index="2" value="fuse" />
+    <argument index="1" value="admin" />
+    <argument index="2" value="admin" />
     <property name="callTimeout" value="2000" />
     <property name="initialConnectAttempts" value="3" />
 </bean>
@@ -203,7 +202,6 @@ And with this JMS configuration in Blueprint (mind `pool=transx`):
     automatically by pax-jms-config with the same properties as this <service>, but with higher service.ranking
 -->
 <service id="pool" ref="artemis" interface="javax.jms.XAConnectionFactory">
-<!--<service id="pool" ref="artemis" interface="javax.jms.ConnectionFactory">-->
     <service-properties>
         <!-- "pool" key is needed for pax-jms-config to wrap broker-specific connection factory inside connection pool -->
         <entry key="pool" value="transx" />
@@ -213,8 +211,8 @@ And with this JMS configuration in Blueprint (mind `pool=transx`):
         <!--<entry key="name" value="jms/artemis" />-->
         <!-- Other properties, that normally are needed e.g., pax-jms-pool-transx -->
         <entry key="pool.maxPoolSize" value="13" />
-        <entry key="pool.userName" value="fuse" />
-        <entry key="pool.password" value="fuse" />
+        <entry key="pool.userName" value="admin" />
+        <entry key="pool.password" value="admin" />
     </service-properties>
 </service>
 ----
