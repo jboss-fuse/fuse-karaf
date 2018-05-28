@@ -39,6 +39,7 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-blueprint</artifactId>
+            <scope>provided</scope>
         </dependency>
         <!--
         For logging, we will use SLF4J, which is also available in the container by default.
