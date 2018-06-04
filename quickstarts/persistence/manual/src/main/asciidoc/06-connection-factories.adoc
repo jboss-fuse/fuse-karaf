@@ -930,7 +930,7 @@ configurations.
 
 `pax-jms-config` version 1.0.0 adds a _deployment method_ for connection factory configuration. Application developer
 registers `javax.jms.(XA)ConnectionFactory` service (usually using Bluerpint XML) and specifies service properties. Then
-`pax-jjms-config` detects such registered broker-specific connection factory and (using service properties) wraps the
+`pax-jms-config` detects such registered broker-specific connection factory and (using service properties) wraps the
 service inside generic, non broker-specific connection pool.
 
 For completeness, I'll present *three* _deployment methods_ using Blueprint XML.
