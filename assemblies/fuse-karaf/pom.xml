@@ -436,6 +436,7 @@
                         <feature>transaction-manager-geronimo</feature>
                         <feature>pax-transx-tm-atomikos</feature>
                         <feature>transaction-manager-atomikos</feature>
+                        <feature>connector</feature>
 
                         <!-- CDI extensions that do not work in OSGi -->
                         <feature>deltaspike*</feature>
