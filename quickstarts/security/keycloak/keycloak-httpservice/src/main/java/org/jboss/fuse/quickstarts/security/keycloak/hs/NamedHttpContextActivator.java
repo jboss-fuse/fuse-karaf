@@ -92,6 +92,7 @@ public class NamedHttpContextActivator implements BundleActivator {
     @Override
     public void stop(BundleContext context) throws Exception {
         if (http != null) {
+            http.unregisterConstraintMapping(httpContext);
             http.unregister("/info");
             http.unregister("/logout");
             http.unregisterLoginConfig(httpContext);

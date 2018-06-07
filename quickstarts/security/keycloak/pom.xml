@@ -39,6 +39,7 @@
     <modules>
         <module>keycloak-war</module>
         <module>keycloak-httpservice</module>
+        <module>keycloak-httpservice-blueprint</module>
     </modules>
 
 </project>
