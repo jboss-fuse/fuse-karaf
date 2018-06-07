@@ -716,7 +716,67 @@ Where `hs-info` Keycloak client is just standard client with:
 
 * Standard Flow Enabled: true
 * Access type: `public` (will work with `confidential` as well)
+* Valid redirect URIs: `http://localhost:8181/*`
+* Base URL: `http://localhost:8181/`
+* Web Origins: `+`
 * Role: `admin`
+
+=== Embedded Keycloak configuration
+
+The above example used _external_ `etc/<context>-keycloak.json` configuration. This is configured using
+`keycloak.config.resolver` context property.
+
+This property can be configured in `web.xml`:
+
+[source,xml,options="nowrap"]
+----
+<context-param>
+    <param-name>keycloak.config.resolver</param-name>
+    <param-value>org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver</param-value>
+</context-param>
+----
+
+Or with OSGi HTTP Service:
+[source,java,options="nowrap"]
+----
+org.ops4j.pax.web.service.WebContainer container = ...;
+Dictionary<String, String> init = new Hashtable<>();
+init.put("keycloak.config.resolver", "org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver");
+container.setContextParam(init, httpContext);
+----
+
+However, without `keycloak.config.resolver` configuration, default configuration is used (if available).
+
+If a bundle contains `/WEB-INF/keycloak.json` resource, it'll be read by `org.keycloak.adapters.undertow.KeycloakServletExtension`
+during application deployment.
+
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-httpservice-blueprint/<version>` is an example
+where servlets are still registered using HTTP Service (and its pax-web extension), but using Blueprint
+XML descriptor. The bundle embedds `/WEB-INF/keycloak.json`:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "hs-blueprint-info",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username"
+}
+----
+
+Where `hs-blueprint-info` client is configured using:
+
+* Standard Flow Enabled: true
+* Access type: `public` (will work with `confidential` as well)
+* Valid redirect URIs: `http://localhost:8181/app2/*`
+* Base URL: `http://localhost:8181/app2`
+* Web Origins: `+`
+* Role: `admin`
+
+Embedding `keycloak.json` inside a bundle has some benefits, but usually external configuration is preferred.
 
 === pax-web-extender-whiteboard
 
