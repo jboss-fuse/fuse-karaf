@@ -40,6 +40,8 @@
         <module>keycloak-war</module>
         <module>keycloak-httpservice</module>
         <module>keycloak-httpservice-blueprint</module>
+        <module>keycloak-whiteboard-blueprint</module>
+        <module>keycloak-whiteboard</module>
     </modules>
 
 </project>
