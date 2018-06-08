@@ -48,6 +48,10 @@ public class DefaultHttpContextActivator implements BundleActivator {
         http = wcTracker.waitForService(10000);
 
         if (http != null) {
+            // this call creates bundle-specific instance of org.osgi.service.http.HttpContext
+            // with "default" id. Using the same context to register different objects (servlets, filters,
+            // login configurations, ...) ensures that the objects will be registered in single
+            // web application
             httpContext = http.createDefaultHttpContext();
 
             // equivalent of web.xml's /web-app/context-param to configure Keycloak config resolver

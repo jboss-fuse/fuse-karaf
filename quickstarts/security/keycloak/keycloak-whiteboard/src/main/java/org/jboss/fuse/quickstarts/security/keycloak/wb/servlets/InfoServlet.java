@@ -13,7 +13,7 @@
  *  implied.  See the License for the specific language governing
  *  permissions and limitations under the License.
  */
-package org.jboss.fuse.quickstarts.security.keycloak.hs.servlets;
+package org.jboss.fuse.quickstarts.security.keycloak.wb.servlets;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -23,12 +23,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class InfoServlet extends HttpServlet {
 
-    public static Logger LOG = LoggerFactory.getLogger(InfoServlet.class);
+    public static org.slf4j.Logger LOG = LoggerFactory.getLogger(InfoServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -51,7 +50,7 @@ public class InfoServlet extends HttpServlet {
 
             resp.getWriter().println(page);
         } else {
-            resp.getWriter().println("[keycloak-httpservice] User not logged in");
+            resp.getWriter().println("[keycloak-whiteboard] User not logged in");
         }
         resp.getWriter().flush();
         resp.getWriter().close();

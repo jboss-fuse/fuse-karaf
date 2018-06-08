@@ -18,17 +18,17 @@ package org.jboss.fuse.quickstarts.security.keycloak.war;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class InfoServlet extends HttpServlet {
 
-    public static org.slf4j.Logger LOG = LoggerFactory.getLogger(InfoServlet.class);
+    public static Logger LOG = LoggerFactory.getLogger(InfoServlet.class);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -51,7 +51,7 @@ public class InfoServlet extends HttpServlet {
 
             resp.getWriter().println(page);
         } else {
-            resp.getWriter().println("User not logged in");
+            resp.getWriter().println("[keycloak-war] User not logged in");
         }
         resp.getWriter().flush();
         resp.getWriter().close();

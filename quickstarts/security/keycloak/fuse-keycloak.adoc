@@ -421,7 +421,7 @@ Let's start with minimal Maven project that can be used to build WAR bundle.
 ----
 
 This project is part of Red Hat Fuse 7 quickstarts available under
-`mvn:org.jboss.fuse.quickstarts.security/keycloak-war/<version>` URL.
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-war/<version>/war` URL.
 
 `web.xml` should contain several security related elements. Let's start with `BASIC` _auth-method_.
 [source,xml,options="nowrap"]
@@ -721,7 +721,7 @@ Where `hs-info` Keycloak client is just standard client with:
 * Web Origins: `+`
 * Role: `admin`
 
-=== Embedded Keycloak configuration
+==== Embedded Keycloak configuration
 
 The above example used _external_ `etc/<context>-keycloak.json` configuration. This is configured using
 `keycloak.config.resolver` context property.
@@ -779,6 +779,103 @@ Where `hs-blueprint-info` client is configured using:
 Embedding `keycloak.json` inside a bundle has some benefits, but usually external configuration is preferred.
 
 === pax-web-extender-whiteboard
+
+There's 3rd option to register web _components_ (servlets, filters, ...) in OSGi. We don't have to explicitly call
+registration methods on `org.osgi.service.http.HttpService` (or its extension, `org.ops4j.pax.web.service.WebContainer`).
+We just have to register for example `javax.servlet.Servlet` service in OSGi registry with several parameters.
+
+The benefit is that we can use declarative approach much easier. Blueprint XML allows easy registration of `<bean>`
+objects using `<service>` elements.
+
+==== Java code approach
+
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-whiteboard/<version>` quickstarts shows how to register
+servlets using pax-web-extender-whiteboard approach and additionally register services needed for keycloak integration.
+
+In simplest case, servlets (instances of `javax.servlet.Servlet`) can simply be registered in OSGi registry using:
+[source,java,options="nowrap"]
+----
+Hashtable<String, Object> infoProperties = new Hashtable<>();
+...
+infoServletRegistration = context.registerService(Servlet.class, new InfoServlet(), infoProperties);
+----
+
+It's enough for pax-web-extender-whiteboard to process them and register within web container. `keycloak-whiteboard`
+example however shows additional steps:
+
+* setting _context path_, so `/info` servlet is accessible under `http://localhost:8181/<context>/info` instead of
+just `http://localhost:8181/info`
+* setting context parameters (accessible later using `javax.servlet.ServletContext.getInitParameter()` so we
+can configure `keycloak.config.resolver` in order to use external `etc/<context>-keycloak.json` configuration file
+* invoking security related methods - registering login configuration and security constraints - just like it was done
+in previous examples
+
+NOTE: pax-web-extender-war tracks several web _components_ registered as OSGi services, to _gather_ them under single
+_web application_. However not all elements (that we can declare in `WEB-INF/web.xml` or register using
+`org.ops4j.pax.web.service.WebContainer`) can be tracked as OSGi services - we have to use `org.ops4j.pax.web.service.WebContainer`.
+
+The `org.jboss.fuse.quickstarts.security.keycloak.wb.Activator` Java class does these steps:
+
+. obtains OSGi reference to `org.ops4j.pax.web.service.WebContainer` to register these _components_ that can't be
+registered using pax-web-extender-whiteboard approach
+
+. calls `org.ops4j.pax.web.service.WebContainer.createDefaultHttpContext()` to create single instance of
+`org.osgi.service.http.HttpContext` object used as _discriminator_ of different web _components_ (so they end up in single
+_web application_)
+
+. registers `org.ops4j.pax.web.service.whiteboard.HttpContextMapping` instance as OSGi service - this object allows us
+to customize two things:
+
+* context name (so we may use `http://localhost:8181/<context>/info` instead of `http://localhost:8181/info`)
+* context parameters (so we may configure `keycloak.config.resolver`
+
+. calls `org.ops4j.pax.web.service.WebContainer.registerLoginConfig()`, so we actually configure `KEYCLOAK` mechanism
+
+. calls `org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()` so we configure security constraints
+
+. registers two `javax.servlet.Servlet` OSGi services to be picked up by pax-web-extender-whiteboard
++
+[source,java,options="nowrap"]
+----
+Hashtable<String, Object> infoProperties = new Hashtable<>();
+infoProperties.put(ExtenderConstants.PROPERTY_HTTP_CONTEXT_ID, contextId); <1>
+infoProperties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "info-servlet"); <2>
+infoProperties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, new String[] { "/info" }); <3>
+infoServletRegistration = context.registerService(Servlet.class, new InfoServlet(), infoProperties);
+----
+<1> We specify `httpContext.id` property, so servlets will be registered in correct _web application_
+<2> `osgi.http.whiteboard.servlet.name` specifies servlet name (`javax.servlet.GenericServlet.getServletName()`)
+<3> `osgi.http.whiteboard.servlet.pattern` specifies an array of URL patterns for the servlet (just like in `web.xml`)
+
+Because `keycloak.config.resolver` is configured as `org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver`,
+and the context is set to `app3`, we:
+
+* need `etc/app3-keycloak.json` configuration file
+* can access the `/info` servlet by browsing to `http://localhost:8181/app3/info`
+
+`app3-keycloak.json` is:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "whiteboard-info",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username"
+}
+----
+
+and `whiteboard-info` Keycloak _client_ again uses:
+
+* Standard Flow Enabled: true
+* Access type: `public` (will work with `confidential` as well)
+* Valid redirect URIs: `http://localhost:8181/app3/*`
+* Base URL: `http://localhost:8181/app3`
+* Web Origins: `+`
+* Role: `admin`
 
 == Configuring Camel
 
