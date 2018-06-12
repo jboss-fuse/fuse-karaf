@@ -148,7 +148,7 @@
         <version.org.apache.servicemix.bundles.jsch>0.1.54_1</version.org.apache.servicemix.bundles.jsch>
         <version.org.apache.servicemix.bundles.reflections>0.9.11_2</version.org.apache.servicemix.bundles.reflections>
         <version.org.apache.servicemix.bundles.rhino>1.7.7.1_1</version.org.apache.servicemix.bundles.rhino>
-        <version.org.apache.servicemix.bundles.spring>4.3.14.RELEASE_1</version.org.apache.servicemix.bundles.spring>
+        <version.org.apache.servicemix.bundles.spring>4.3.16.RELEASE_1</version.org.apache.servicemix.bundles.spring>
         <version.org.apache.servicemix.bundles.velocity>1.7_6</version.org.apache.servicemix.bundles.velocity>
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
@@ -194,7 +194,7 @@
         <version.org.osgi.compendium>5.0.0</version.org.osgi.compendium>
         <version.org.ow2.asm>6.0</version.org.ow2.asm>
         <version.org.slf4j>1.7.25</version.org.slf4j>
-        <version.org.springframework>4.3.14.RELEASE</version.org.springframework>
+        <version.org.springframework>4.3.16.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.19</version.org.yaml.snakeyaml>
         <version.org.wildfly.common>1.2.0.Beta3</version.org.wildfly.common>
         <version.org.wildfly.security.elytron>1.1.0.Beta22</version.org.wildfly.security.elytron>
