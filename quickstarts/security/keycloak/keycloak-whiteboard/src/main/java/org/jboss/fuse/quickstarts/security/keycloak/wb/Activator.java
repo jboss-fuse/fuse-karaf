@@ -78,7 +78,7 @@ public class Activator implements BundleActivator {
 //            init.put(WebContainerConstants.CONTEXT_NAME, "app3");
 //            http.setContextParam(init, httpContext);
 
-            // with pax-web-extender-whiteboard however, we can register context path and context parameters
+            // with pax-web-extender-whiteboard however, we can configure context path and context parameters
             // by registering org.ops4j.pax.web.service.whiteboard.HttpContextMapping service
             // we don't have to call org.ops4j.pax.web.service.WebContainer.setContextParam()
             HttpContextMapping contextMapping = new App3HttpContextMapping(contextId, "app3", httpContext);
