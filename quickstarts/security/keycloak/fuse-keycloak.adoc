@@ -877,6 +877,101 @@ and `whiteboard-info` Keycloak _client_ again uses:
 * Web Origins: `+`
 * Role: `admin`
 
+==== Blueprint approach
+
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-whiteboard-blueprint/<version>` quickstarts builds on what was
+shown in `keycloak-whiteboard` example, but this time with less Java code and with more XML.
+
+As mentioned earlier, `pax-web-extender-war` doesn't track all the possible components that may be registered using
+`org.ops4j.pax.web.service.WebContainer`. However `org.keycloak.adapters.osgi.undertow.PaxWebIntegrationService`
+saves us from some boilerplate code.
+
+`org.keycloak.adapters.osgi.undertow.PaxWebIntegrationService` can be declared in blueprint.xml using:
+[source,xml,options="nowrap"]
+----
+<bean id="keycloakPaxWebIntegration" class="org.keycloak.adapters.osgi.undertow.PaxWebIntegrationService"
+        init-method="start" destroy-method="stop">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <property name="constraintMappings">
+        <list>
+            <bean class="org.keycloak.adapters.osgi.PaxWebSecurityConstraintMapping">
+                <property name="url" value="/info/*" />
+                <property name="authentication" value="true" /> <!-- true is default -->
+                <property name="roles">
+                    <list>
+                        <value>admin</value>
+                    </list>
+                </property>
+            </bean>
+        </list>
+    </property>
+</bean>
+----
+
+Thanks to `init-method="start"`, these calls are performed by keycloak utility:
+
+* `org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()`
+* `org.ops4j.pax.web.service.WebContainer.registerLoginConfig()`
+
+With previous quickstarts, it had to be done manually.
+
+The remaining part of blueprint.xml is setting up servlet beans and registering them as OSGi services to be processed
+by pax-web-extender-whiteboard:
+[source,xml,options="nowrap"]
+----
+<bean id="infoServlet" class="org.jboss.fuse.quickstarts.security.keycloak.wb.servlets.InfoServlet"
+    depends-on="keycloakPaxWebIntegration" />
+
+<service ref="infoServlet" interface="javax.servlet.Servlet">
+    <service-properties>
+        <entry key="osgi.http.whiteboard.servlet.name" value="info-servlet" />
+        <entry key="osgi.http.whiteboard.servlet.pattern">
+            <array value-type="java.lang.String">
+                <value>/info</value>
+            </array>
+        </entry>
+    </service-properties>
+</service>
+
+...
+----
+
+.More configuration options
+
+The above XML snippets work fine in default scenario - where servlets are registered in _default_ context (so for
+example `/info` servlet will be accessible under `http://localhost:8181/info` path). When we want more flexibility,
+we need to perform some additional work.
+
+The example is shown in `mvn:org.jboss.fuse.quickstarts.security/keycloak-whiteboard-blueprint/<version>` quickstart.
+We do additional configuration steps:
+
+* configure context path as `app4`, so we can access `/info` servlet by browsing to `http://localhost:8181/app4/info`
+* configure servlet context parameters, so keycloak configuration is searched in `etc/app4-keycloak.json`
+
+Finally, the easiest part is straightforward. We have to create `whiteboard-blueprint-info` Keycloak client with:
+
+* Standard Flow Enabled: true
+* Access type: `public` (will work with `confidential` as well)
+* Valid redirect URIs: `http://localhost:8181/app4/*`
+* Base URL: `http://localhost:8181/app4`
+* Web Origins: `+`
+* Role: `admin`
+
+And the `etc/app4-keycloak.json` is:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "whiteboard-blueprint-info",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username"
+}
+----
+
 == Configuring Camel
 
 == Configuring CXF
