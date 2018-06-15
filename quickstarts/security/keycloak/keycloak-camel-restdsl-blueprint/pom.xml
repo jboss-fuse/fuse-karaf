@@ -27,13 +27,13 @@
     </parent>
 
     <groupId>org.jboss.fuse.quickstarts.security</groupId>
-    <artifactId>keycloak-camel-blueprint</artifactId>
+    <artifactId>keycloak-camel-restdsl-blueprint</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Red Hat Fuse :: Quickstarts :: Security :: Keycloak :: Camel/Blueprint</name>
+    <name>Red Hat Fuse :: Quickstarts :: Security :: Keycloak :: Camel REST DSL/Blueprint</name>
 
     <description>
-        An OSGi bundle with Blueprint-based Camel routes
+        An OSGi bundle with Blueprint-based Camel routes using REST DSL
     </description>
 
     <build>

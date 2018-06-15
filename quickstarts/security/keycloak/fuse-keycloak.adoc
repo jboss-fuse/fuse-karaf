@@ -1097,4 +1097,42 @@ is used, POST includes credentials of the _resource owner_ (A Keycloak user with
 
 . Retrieves a response from Camel route which contains formatted information about Keycloak authenticated _principal_.
 
+=== Camel REST DSL with Undertow Keycloak component
+
+Camel REST DSL may be used to put emphasis on REST nature of Camel routes. The same components are used underneath.
+
+The actual difference is in Blueprint XML:
+[source,xml,options="nowrap"]
+----
+<bean id="keycloakConfigResolver" class="org.keycloak.adapters.osgi.BundleBasedKeycloakConfigResolver">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <!-- loaded using org.osgi.framework.Bundle.getResource() -->
+    <property name="configLocation" value="/camel-keycloak.json" />
+</bean>
+
+<bean id="hello" class="org.jboss.fuse.quickstarts.security.keycloak.camel.CamelHelloProcessor" />
+
+<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+    <restConfiguration component="undertow-keycloak" contextPath="/restdsl" port="8484">
+        <endpointProperty key="configResolver" value="#keycloakConfigResolver" />
+        <endpointProperty key="allowedRoles" value="admin" />
+    </restConfiguration>
+    <rest path="/info">
+        <description>Information about authenticated user</description>
+        <get outType="java.lang.String">
+            <to uri="bean:hello" />
+        </get>
+    </rest>
+</camelContext>
+----
+
+We don't specify reference to Keycloak configuration resolver in endpoint URI, but as `configResolver` property of
+REST configuration inside Camel context definition.
+
+The same Keycloak _client_ configuration is used, except
+
+* different _client_ ID: `camel-undertow-restdsl-endpoint`.
+* port 8484
+* endpoint URI: `http://localhost:8484/restdsl/info`
+
 == Configuring CXF

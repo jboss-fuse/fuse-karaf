@@ -31,15 +31,17 @@
     <bean id="hello" class="org.jboss.fuse.quickstarts.security.keycloak.camel.CamelHelloProcessor" />
 
     <camelContext xmlns="http://camel.apache.org/schema/blueprint">
-        <route>
-            <!--
-                matchOnUriPrefix:
-                 - true: io.undertow.server.handlers.PathHandler.addPrefixPath()
-                 - false: io.undertow.server.handlers.PathHandler.addExactPath()
-            -->
-            <from uri="undertow-keycloak:http://0.0.0.0:8383/admin-camel-endpoint?matchOnUriPrefix=true&amp;configResolver=#keycloakConfigResolver&amp;allowedRoles=admin" />
-            <process ref="hello" />
-        </route>
+        <restConfiguration component="undertow-keycloak" contextPath="/restdsl" port="8484">
+            <endpointProperty key="configResolver" value="#keycloakConfigResolver" />
+            <endpointProperty key="allowedRoles" value="admin" />
+        </restConfiguration>
+
+        <rest path="/info">
+            <description>Information about authenticated user</description>
+            <get outType="java.lang.String">
+                <to uri="bean:hello" />
+            </get>
+        </rest>
     </camelContext>
 
 </blueprint>
