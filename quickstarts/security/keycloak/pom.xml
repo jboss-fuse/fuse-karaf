@@ -43,6 +43,7 @@
         <module>keycloak-whiteboard</module>
         <module>keycloak-whiteboard-blueprint</module>
         <module>keycloak-camel-blueprint</module>
+        <module>keycloak-camel-restdsl-blueprint</module>
     </modules>
 
 </project>
