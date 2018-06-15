@@ -29,7 +29,7 @@ When new realm is created, it contains several default _clients_:
 * `realm-management`
 * `security-admin-console` (`/auth/admin/fuse7karaf/console/index.html`)
 
-There are no default users in new realm. Following examples will use just `admin` user with `redhat1` password with
+There are no default users in new realm. Following examples will use just `admin` user with `passw0rd` password with
 different roles assigned (as required by given scenario). I'll only use roles assigned per given client - there'll be
 no realm-wide roles assigned to user(s).
 
@@ -169,7 +169,7 @@ karaf@root()> config:property-set --pid org.apache.karaf.shell sshRealm keycloak
 Now we should be able to use `bin/client` (or `ssh` client) using Keycloak credentials:
 [listing,options="nowrap"]
 ----
-$ bin/client -u admin -p redhat1
+$ bin/client -u admin -p passw0rd
 Logging in as admin
  ____          _   _   _       _     _____
 |  _ \ ___  __| | | | | | __ _| |_  |  ___|   _ ___  ___
@@ -239,7 +239,7 @@ karaf@root()> config:property-set --pid org.apache.karaf.management jmxRealm key
 Then, from `jconsole` we should be able to connect using:
 
 * url: `service:jmx:rmi://127.0.0.1:44444/jndi/rmi://127.0.0.1:1099/karaf-root`
-* credentials from keycloak: `admin`/`redhat1`
+* credentials from keycloak: `admin`/`passw0rd`
 
 JMX access doesn't require any roles mapped to user.
 
@@ -973,5 +973,128 @@ And the `etc/app4-keycloak.json` is:
 ----
 
 == Configuring Camel
+
+There are many ways to expose Camel routes as http endpoints (REST, Soap, other) where messages are sent to Camel
+using HTTP requests. There's no single way to enable Keycloak authentication/authorization mechanism for every possible
+`<from uri="..." />` in Camel.
+
+Keycloak provides dedicated mechanisms for some of the endpoint URIs in Camel.
+
+=== Camel Undertow Keycloak component
+
+There is https://github.com/apache/camel/blob/camel-2.21.0/components/camel-undertow/src/main/docs/undertow-component.adoc[Camel undertow component] which exposes an HTTP-based endpoint using
+embedded Undertow server.
+
+:link-to-fuse7adapter: https://www.keycloak.org/docs/latest/securing_apps/index.html#_fuse7_adapter_camel
+
+Keycloak provides {link-to-fuse7adapter}[an extension of this component]
+which allows specifying Keycloak configuration - an instance of `org.keycloak.adapters.KeycloakConfigResolver` which
+is _injected_ to Keycloak-specific `org.apache.camel.component.undertow.UndertowConsumer`.
+
+Using well-known Blueprint XML DSL to configure Camel route (other DSLs are allowed as well - that's obvious) we
+can configure simple Camel route:
+[source,xml,options="nowrap"]
+----
+<bean id="hello" class="org.jboss.fuse.quickstarts.security.keycloak.camel.CamelHelloProcessor" />
+
+<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+    <route>
+        <from uri="undertow-keycloak:http://0.0.0.0:8383/admin-camel-endpoint?matchOnUriPrefix=true&amp;configResolver=#keycloakConfigResolver&amp;allowedRoles=admin" />
+        <process ref="hello" />
+    </route>
+</camelContext>
+----
+
+There are two Keycloak-specific details:
+
+* the URI scheme is `undertow-keycloak`, which chooses
+`org.keycloak.adapters.camel.undertow.UndertowKeycloakConsumer` - an extension of `org.apache.camel.component.undertow.UndertowConsumer`
+* there's new URI parameter `configResolver` which points to Keycloak configuration resolver
+
+The config resolver is specified as:
+[source,xml,options="nowrap"]
+----
+<bean id="keycloakConfigResolver" class="org.keycloak.adapters.osgi.BundleBasedKeycloakConfigResolver">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <!-- loaded using org.osgi.framework.Bundle.getResource() -->
+    <property name="configLocation" value="/camel-keycloak.json" />
+</bean>
+----
+
+`BundleBasedKeycloakConfigResolver` is another implementation of configuration resolver which suits our scenario
+better.
+
+Previously (when configuring security for WARs, servlets and OSGi HTTP Service) we were using `PathBasedKeycloakConfigResolver`
+which was looking for configuration files under `${karaf.etc}/<context-path>-keycloak.json` - there's nothing
+that prevents us using this resolver for Camel routes.
+
+.Authentication
+
+HTTP endpoint exposed by `undertow-keycloak` consumer is not the same as full web application handling different
+requests. That's why it should not use Standard (code + token) or implicit (token only) OAuth2 flows.
+
+Here's the JSON configuration that should be included inside Camel Blueprint bundle:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "resource": "camel-undertow-endpoint",
+  "bearer-only": true,
+  "use-resource-role-mappings": true
+}
+----
+
+`"bearer-only": true` means that Undertow endpoint expects this HTTP header (defined in https://tools.ietf.org/html/rfc6750[RFC 6750]):
+[listing,options="nowrap"]
+----
+GET /admin-camel-endpoint HTTP/1.1
+Authorization: Bearer eyJhbGciOiJS[...]
+----
+
+However, in order to obtain the token that's sent using `Authorization: Bearer ...` we have to invoke one
+of the OAuth2 flows that grants us the token.
+
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-camel-blueprint/<version>` quickstart is not only a bundle
+that we can install in Red Hat Fuse 7 to run Camel route, it also contains a JUnit test that invokes the route
+using Apache HTTP Client.
+
+To install the quickstart, we need:
+[listing,options="nowrap"]
+----
+karaf@root()> feature:install keycloak-pax-http-undertow
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-camel-blueprint/7.1.0.redhat-SNAPSHOT
+Bundle ID: 285
+----
+
+The `camel-undertow-endpoint` Keycloak client is configured with:
+
+* Standard Flow Enabled: false
+* Implicit Flow Enabled: false
+* Direct Access Grants Enabled: true
+* Access type: `confidential` - will enable _Credentials_ tab, where we can get/regenerate a _secret_. I used
+`f591a8ae-5a82-40de-9190-ea84ceca05a7`
+* Valid redirect URIs: `http://localhost:8181/app4/*`
+* Base URL: `http://localhost:8383/`
+* Role: `admin`
+
+`org.jboss.fuse.quickstarts.security.keycloak.camel.CamelClientTest.accessCamelRoute()` JUnit tests perform
+these steps:
+
+. Sends initial `POST` to token endpoint of Keycloak server to obtain the token. Because _Direct Access Grants Flow_
+is used, POST includes credentials of the _resource owner_ (A Keycloak user with `admin` role assigned).
+
+* `Authorization` header contains HTTP Basic credentials of the _client_ (not _user_ == _resource owner_), which is
+`BASE64(<client-id>:<secret>)` (`BASE64(camel-undertow-endpoint:f591a8ae-5a82-40de-9190-ea84ceca05a7)`).
+* `Content-Type` is set to `application/x-www-form-urlencoded`
+* body contains `grant_type=password&username=admin&password=passw0rd`
+
+. Retrieves JSON response containing OAuth2 access token, refresh token and few other settings
+
+. Sends a `GET` request to Camel endpoint using the above access token
+
+* `Authorization` header contains `Bearer` access token obtained in the above `POST` request
+
+. Retrieves a response from Camel route which contains formatted information about Keycloak authenticated _principal_.
 
 == Configuring CXF
