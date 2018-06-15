@@ -121,6 +121,7 @@ public class CredentialStoreHelperTest {
         Map<String, String> attrs = new HashMap<>();
         attrs.put("keyStoreType", "PKCS12");
         attrs.put("location", String.format("target/credentials-%12d.store", new Date().getTime()));
+        attrs.put("create", "true");
         cs1.initialize(attrs, pp);
         cs1.store("alias1", new PasswordCredential(pwd2));
         cs1.flush();

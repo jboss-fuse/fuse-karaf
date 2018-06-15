@@ -122,6 +122,9 @@ public final class CreateCredentialStore implements Action {
         final Map<String, String> attributes = CredentialStoreHelper.defaultCredentialStoreAttributesFor(algorithm);
         attributes.putAll(givenAttributes);
 
+        // Since Elytron 1.1.0, it is required to add the "create=true" attribute to enable automatic
+        // creation of the credential store
+        attributes.put("create", "true");
         credentialStore.initialize(attributes, protectionParameter);
 
         credentialStore.flush();
