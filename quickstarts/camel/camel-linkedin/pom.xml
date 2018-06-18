@@ -23,7 +23,7 @@
     <parent>
       <groupId>org.jboss.fuse.quickstarts</groupId>
       <artifactId>camel-quickstarts</artifactId>
-      <version>7.1.0.redhat-SNAPSHOT</version>
+      <version>7.1.0.fuse-000003</version>
     </parent>
 
     <artifactId>camel-linkedin</artifactId>
