@@ -23,7 +23,7 @@
     <parent>
       <groupId>org.jboss.fuse.quickstarts</groupId>
       <artifactId>camel-quickstarts</artifactId>
-      <version>7.0.1.redhat-SNAPSHOT</version>
+      <version>7.0.1.fuse-000003</version>
     </parent>
 
     <artifactId>camel-odata</artifactId>
