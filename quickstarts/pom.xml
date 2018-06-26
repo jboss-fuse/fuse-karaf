@@ -339,6 +339,7 @@
         <module>custom</module>
         <module>cxf</module>
         <module>persistence</module>
+        <module>security</module>
     </modules>
 
     <!-- Distribution Management                                                     -->

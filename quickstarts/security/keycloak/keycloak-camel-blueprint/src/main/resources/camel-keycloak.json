@@ -1,0 +1,7 @@
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "resource": "camel-undertow-endpoint",
+  "bearer-only": true,
+  "use-resource-role-mappings": true
+}
