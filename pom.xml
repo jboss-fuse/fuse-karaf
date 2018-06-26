@@ -472,6 +472,11 @@
                 <artifactId>patch-commands</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jboss.fuse.modules</groupId>
+                <artifactId>fuse-pax-transx-tm-narayana</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- OSGi/Karaf dependencies -->
 
