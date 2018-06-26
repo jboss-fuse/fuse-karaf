@@ -20,6 +20,7 @@ The realm has ID `fuse7karaf` and is exported (with clients, groups and roles) t
 
 * `etc/fuse7karaf-realm-export-clean.json` - that's fresh export of newly created realm. It's purpose is to show
 changes I made to the realm using UI when checking different scenarios.
+* `etc/fuse7karaf-realm-export.json` - export of newly `fuse7karaf` realm after all the changes I made for the examples.
 
 When new realm is created, it contains several default _clients_:
 
