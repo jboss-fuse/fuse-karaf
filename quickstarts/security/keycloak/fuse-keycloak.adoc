@@ -539,6 +539,15 @@ valid in every Fuse instance. Then a file named `<web context>-keycloak.json` is
 using `org.osgi.framework.Bundle.getResource()` from configured `BundleContext` - this options is designed to be
 used in Blueprint container, where we can configure the resolver directly and use for example with
 `org.keycloak.adapters.osgi.undertow.CxfKeycloakAuthHandler`.
+* (See https://issues.jboss.org/browse/KEYCLOAK-7703)
+`org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver` - enhanced version of `PathBasedKeycloakConfigResolver`
+where for given URI path (for example `/cxf/jax-rs/customers/customer` URI, configuration locations are checked from
+most to least specific:
+** `etc/cxf-jax-rs-customers-customer-keycloak.json`
+** `etc/cxf-jax-rs-customers-keycloak.json`
+** `etc/cxf-jax-rs-keycloak.json`
+** `etc/cxf-keycloak.json`
+** `etc/keycloak.json`
 
 With:
 [source,xml,options="nowrap"]
@@ -1253,3 +1262,223 @@ _out interceptor_ added to CXF client
 
 The same code-only example, but for JAX-RS endpoint is available in
 `org.jboss.fuse.quickstarts.security.keycloak.cxf.JaxRsClientTest.helloExternalAauthenticated()` unit test.
+
+=== Securing embedded CXF server - previous solution
+
+When CXF endpoints are registered using relative paths (`address` attribute), then we have less control over
+the server.
+
+Previously, Keycloak's approach to configure authentication mechanisms for `/cxf` servlet registered using
+OSGi HTTP Service (implemented by PAX-WEB) inside Red Hat Fuse was to *re-register `/cxf` servlet* and manually
+configure login method and security constraint.
+
+The draft of blueprint.xml fragment was:
+[source,xml,options="nowrap"]
+----
+<bean id="cxfConstraintMapping" class="org.keycloak.adapters.osgi.PaxWebSecurityConstraintMapping">
+    <property name="roles">
+        <list>
+            <value>user</value>
+        </list>
+    </property>
+    <property name="url" value="/cxf/*" />
+    <property name="authentication" value="true" />
+</bean>
+
+<bean id="cxfKeycloakPaxWebIntegration" class="org.keycloak.adapters.osgi.undertow.PaxWebIntegrationService"
+        init-method="start" destroy-method="stop">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <property name="constraintMappings">
+        <list>
+            <ref component-id="cxfConstraintMapping" />
+        </list>
+    </property>
+</bean>
+
+<bean id="defaultCxfReregistration" class="org.keycloak.adapters.osgi.ServletReregistrationService"
+        depends-on="cxfKeycloakPaxWebIntegration" init-method="start" destroy-method="stop">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <property name="managedServiceReference">
+        <reference interface="org.osgi.service.cm.ManagedService" filter="(service.pid=org.apache.cxf.osgi)" timeout="5000"  />
+    </property>
+</bean>
+----
+
+* `cxfConstraintMapping` bean is used to define information passed later to `org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()`
+* `cxfKeycloakPaxWebIntegration` bean is used to invoke:
+** `org.ops4j.pax.web.service.WebContainer.registerLoginConfig()`
+** `org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()`
+
++
+These are called for `WebContainer` instance (an extension to standard OSGi HTTP Service) which is bundle-scoped for
+`keycloak-pax-web-undertow` bundle
+* `defaultCxfReregistration` bean is used to re-register `/cxf` servlet from a WebContainer of `cxf-rt-transport-http`
+bundle to a WebContainer of `keycloak-pax-web-undertow` - after registering login configuration and security constraints.
+
+The above approach works quite well, assuming:
+
+* `org.apache.cxf.osgi` PID doesn't change - because the change would be tracked by `cxf-rt-transport-http` bundle that
+may re-register `/cxf` servlet again - possibly leading to alias conflict
+* we don't mind it's a solution specific to CXF - if CXF changes `/cxf` servlet registration, there may be a problem.
+
+=== Securing embedded CXF server - new solution
+
+With https://ops4j1.jira.com/browse/PAXWEB-1167 there's new and more generic approach to _altering existing
+web contexts_.
+
+The documentation is available here: https://ops4j1.jira.com/wiki/spaces/paxweb/pages/354025473/HTTP+Context+processing.
+
+This time instead of using (with blueprint.xml) Keycloak-specific `<bean>` declarations that re-register `/cxf`
+servlet we can do the same using configuration admin configurations.
+
+If we create `${karaf.etc}/org.ops4j.pax.web.context-<anyName>.cfg` file, It'll be treated as _factory PID_ configuration
+that is _tracked_ by `pax-web-runtime` bundle. Such configuration may contain the following properties:
+
+[listing,options="nowrap"]
+----
+# for which bundle do we want to acquire bundle-scoped org.ops4j.pax.web.service.WebContainer service?
+bundle.symbolicName = org.apache.cxf.cxf-rt-transports-http
+
+# what's the ID of org.osgi.service.http.HttpContext we want to get from
+# org.ops4j.pax.web.service.WebContainer.createDefaultHttpContext(String contextId)?
+context.id = default
+
+# WEB-INF/web.xml's:
+# <context-param>
+#     <param-name>keycloak.config.resolver</param-name>
+#     <param-value>org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver</param-value>
+# </context-param>
+# PAX-WEB's org.ops4j.pax.web.service.WebContainer.setContextParam()
+context.param.keycloak.config.resolver = org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver
+
+# WEB-INF/web.xml's:
+# <login-config>
+#     <auth-method>KEYCLOAK</auth-method>
+#     <realm-name>_does_not_matter</realm-name>
+# </login-config>
+# PAX-WEB's org.ops4j.pax.web.service.WebContainer.registerLoginConfig()
+login.config.authMethod = KEYCLOAK
+login.config.realmName = _does_not_matter
+
+# WEB-INF/web.xml's:
+# <security-constraint>
+#     <web-resource-collection>
+#         <web-resource-name>secured</web-resource-name>
+#         <url-pattern>/cxf/*</url-pattern>
+#         <http-method>GET</http-method>
+#     </web-resource-collection>
+#     <auth-constraint>
+#         <role-name>admin</role-name>
+#         <role-name>superuser</role-name>
+#     </auth-constraint>
+# </security-constraint>
+#
+# <security-role>
+#     <role-name>admin</role-name>
+# </security-role>
+# <security-role>
+#     <role-name>superuser</role-name>
+# </security-role>
+# PAX-WEB's org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()
+security.constraint.1.url = /cxf/*
+security.constraint.1.roles = admin, superuser, ...
+----
+
+This configuration can also be created using Karaf commands:
+[listing,options="nowrap"]
+----
+karaf@root()> config:edit --factory --alias cxf org.ops4j.pax.web.context
+karaf@root()> config:property-edit bundle.symbolicName org.apache.cxf.cxf-rt-transports-http
+karaf@root()> config:property-edit ...
+karaf@root()> config:update
+----
+
+Or even created programmatically by calling `org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration()`.
+
+Here's detailed instruction to secure JAX-RS/JAX-WS endpoints running on embedded server engine (`/cxf` servlet
+registered in PAX-WEB's HTTP Service):
+
+. Install relevant features
++
+[listing,options="nowrap"]
+----
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final-SNAPSHOT/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:install keycloak-pax-http-undertow
+----
+. Create `etc/org.ops4j.pax.web.context-cxf.cfg` file with:
++
+[listing,options="nowrap"]
+----
+bundle.symbolicName = org.apache.cxf.cxf-rt-transports-http
+context.id = default
+
+context.param.keycloak.config.resolver = org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver
+login.config.authMethod = KEYCLOAK
+security.cxf.url = /cxf/*
+security.cxf.roles = admin, superuser
+----
++
+We should see something like this in logs (indication of servlet context processing):
++
+[listing,options="nowrap"]
+----
+2018-06-26 18:06:01,880 INFO  {fileinstall-/data/servers/fuse-karaf-7.0.0.fuse-000191-redhat-1/etc} (PaxLoggingServiceImpl.java:398) : Creating configuration from org.ops4j.pax.web.context-cxf.cfg
+2018-06-26 18:06:01,891 INFO  {CM Configuration Updater (Update: pid=org.ops4j.pax.web.context.96c5265c-ac6e-45ef-8c26-7f2f7bab9144)} (HttpContextProcessing.java:88) : Updated configuration for pid=org.ops4j.pax.web.context.96c5265c-ac6e-45ef-8c26-7f2f7bab9144
+2018-06-26 18:06:01,901 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:366) : Found bundle "org.apache.cxf.cxf-rt-transports-http", scheduling customization of its WebContainer
+2018-06-26 18:06:01,903 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:216) : Customizing WebContainer for bundle org.apache.cxf.cxf-rt-transports-http/3.1.11.fuse-000276
+2018-06-26 18:06:01,905 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:233) : Setting context parameters in WebContainer for bundle "org.apache.cxf.cxf-rt-transports-http": {keycloak.config.resolver=org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver}
+2018-06-26 18:06:01,905 INFO  {paxweb-context-3-thread-1} (Context.java:171) : Stopping context /
+2018-06-26 18:06:01,907 INFO  {paxweb-context-3-thread-1} (Context.java:227) : destroying context DefaultHttpContext [bundle=org.apache.cxf.cxf-rt-transports-http [102], contextID=default], with context path:
+2018-06-26 18:06:01,914 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:239) : Registering login configuration in WebContainer for bundle "org.apache.cxf.cxf-rt-transports-http": method=KEYCLOAK, realm=76b1af0a-6a60-46fb-b4aa-aceb52fa6d28
+2018-06-26 18:06:01,916 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:251) : Registering security mappings in WebContainer for bundle "org.apache.cxf.cxf-rt-transports-http": SecurityConstraintsMapping{name='cxf', url='/cxf/*', roles=[admin, superuser]}
+----
+. Install the example:
++
+[listing,options="nowrap"]
+----
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-cxf/7.1.0.redhat-SNAPSHOT
+Bundle ID: 235
+----
+. Thanks to `HierarchicalPathBasedKeycloakConfigResolver` we can have the configuration for `http://localhost:8181/cxf/jaxws`
+in one of:
+* `etc/cxf-jaxws-keycloak.json`, or
+* `etc/cxf-keycloak.json`, or
+* `etc/keycloak.json`
+
+Here we can see the benefit of `HierarchicalPathBasedKeycloakConfigResolver` - we can have different configurations
+for different endpoints registered in default `/cxf` servlet without forcing user to create single Keycloak _client_.
+
+The `etc/cxf-jaxws|jaxrs-keycloak.json` configuration is:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "cxf",
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username",
+  "bearer-only": true
+}
+----
+
+`"bearer-only": true` means there's no OAuth2 flow used and endpoints simply expect `Authorization: Bearer xxx` header.
+
+However, we still can _see_ `http://localhost:8181/cxf` page in browser, that's why `cxf` Keycloak _client_
+maybe be configured with `public` or `confidential` _Access Type_ and `etc/cxf-keycloak.json` should contain
+`"public-client": true`:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "cxf",
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username",
+  "public-client": true
+}
+----
