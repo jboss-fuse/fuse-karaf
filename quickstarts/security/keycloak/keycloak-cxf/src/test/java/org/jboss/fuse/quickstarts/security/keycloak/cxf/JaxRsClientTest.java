@@ -101,4 +101,49 @@ public class JaxRsClientTest {
         }
     }
 
+    @Test
+    public void helloEmbeddedAuthenticated() throws Exception {
+
+        String accessToken = null;
+
+        try (CloseableHttpClient client = HttpClients.createMinimal()) {
+            // "4.3.  Resource Owner Password Credentials Grant"
+            // from https://tools.ietf.org/html/rfc6749#section-4.3
+            // we use "resource owner" credentials directly to obtain the token
+            HttpPost post = new HttpPost("http://localhost:8180/auth/realms/fuse7karaf/protocol/openid-connect/token");
+            LinkedList<NameValuePair> params = new LinkedList<>();
+            params.add(new BasicNameValuePair(OAuth2Constants.GRANT_TYPE, OAuth2Constants.PASSWORD));
+            params.add(new BasicNameValuePair("username", "admin"));
+            params.add(new BasicNameValuePair("password", "passw0rd"));
+            UrlEncodedFormEntity postData = new UrlEncodedFormEntity(params);
+            post.setEntity(postData);
+
+            String basicAuth = BasicAuthHelper.createHeader("cxf", "f1ec716d-2262-434d-8e98-bf31b6b858d6");
+            post.setHeader("Authorization", basicAuth);
+            CloseableHttpResponse response = client.execute(post);
+
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode json = mapper.readTree(response.getEntity().getContent());
+            if (json.get("error") == null) {
+                accessToken = json.get("access_token").asText();
+                LOG.info("token: {}", accessToken);
+            } else {
+                LOG.warn("error: {}, description: {}", json.get("error"), json.get("error_description"));
+            }
+            response.close();
+        }
+
+        try (CloseableHttpClient client = HttpClients.createMinimal()) {
+            // "The OAuth 2.0 Authorization Framework: Bearer Token Usage"
+            // https://tools.ietf.org/html/rfc6750
+            HttpGet get = new HttpGet("http://localhost:8181/cxf/jaxrs/service/hello/hi");
+
+            get.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+            CloseableHttpResponse response = client.execute(get);
+
+            LOG.info("response: {}", EntityUtils.toString(response.getEntity()));
+            response.close();
+        }
+    }
+
 }
