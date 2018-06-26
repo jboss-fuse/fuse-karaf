@@ -171,7 +171,7 @@
         <version.org.hibernate>5.1.10.Final-redhat-1</version.org.hibernate>
         <version.org.hibernate.validator>5.3.5.Final-redhat-2</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.0.Final</version.org.hibernate.javax.persistence>
-        <version.org.keycloak>4.0.0.Final-SNAPSHOT</version.org.keycloak>
+        <version.org.keycloak>4.0.0.Final</version.org.keycloak>
         <version.org.javassist>3.21.0-GA</version.org.javassist>
         <version.org.jboss.logging>3.3.1.Final-redhat-1</version.org.jboss.logging>
         <version.org.jboss.modules>1.5.2.Final</version.org.jboss.modules>

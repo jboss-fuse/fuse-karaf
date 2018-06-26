@@ -32,10 +32,6 @@
     
     <name>Red Hat Fuse :: Quickstarts :: Security :: Keycloak</name>
 
-    <properties>
-        <version.org.keycloak>4.0.0.Final-SNAPSHOT</version.org.keycloak>
-    </properties>
-
     <modules>
         <module>keycloak-war</module>
         <module>keycloak-httpservice</module>
