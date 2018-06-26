@@ -1136,3 +1136,120 @@ The same Keycloak _client_ configuration is used, except
 * endpoint URI: `http://localhost:8484/restdsl/info`
 
 == Configuring CXF
+
+There are two options to publish CXF endpoints (JAX-RS and JAX-WS):
+
+* Using embedded server that's started by pax-web-undertow and when the _main_ CXF servlet is registered (use relative
+path in `address` attribute):
++
+[source,xml,options="nowrap"]
+----
+<jaxws:server id="embeddedJaxWs" serviceBean="#jaxWsService"
+        address="/jaxws" />
+
+<jaxrs:server id="embeddedJaxRs" address="/jaxrs">
+    <jaxrs:serviceBeans>
+        <ref component-id="jaxRsService" />
+    </jaxrs:serviceBeans>
+</jaxrs:server>
+----
+* Using external/separate server that's started by CXF itself (using absolute address):
++
+[source,xml,options="nowrap"]
+----
+<jaxws:server id="externalJaxWs" serviceBean="#jaxWsService"
+        address="http://localhost:8282/jaxws" />
+
+<jaxrs:server id="externalJaxRs" address="http://localhost:8282/jaxrs">
+    <jaxrs:serviceBeans>
+        <ref component-id="jaxRsService" />
+    </jaxrs:serviceBeans>
+</jaxrs:server>
+----
+
+=== Securing separate CXF server
+
+When using absolute addresses in `address` attribute of `jaxws:server`/`jaxrs:server`, we have more control over the
+engine that's used to serve HTTP(S) requests.
+
+The official method of configuring such separate engine is by using this blueprint.xml fragment:
+[source,xml,options="nowrap"]
+----
+<httpu:engine-factory id="kc-cxf-endpoint-config"
+        xmlns:httpu="http://cxf.apache.org/transports/http-undertow/configuration">
+    <httpu:engine port="8282">
+        <httpu:handlers>
+            <bean class="org.keycloak.adapters.osgi.undertow.CxfKeycloakAuthHandler">
+                <property name="configResolver">
+                    <bean class="org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver" />
+                </property>
+            </bean>
+        </httpu:handlers>
+    </httpu:engine>
+</httpu:engine-factory>
+----
+
+This fragment is a way to configure a list of `org.apache.cxf.transport.http_undertow.CXFUndertowHttpHandler`
+which is used to configure `org.apache.cxf.transport.http_undertow.UndertowHTTPServerEngine`.
+
+`org.keycloak.adapters.osgi.undertow.CxfKeycloakAuthHandler` is one of such handlers that's integrating CXF
+engine with Keycloak. Using `org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver` as Keycloak configuration
+resolver allows us to configure an endpoing using well known `etc/<context>-keycloak.json`.
+
+because we have two endpoints registered in separate CXF server engine, we need two files:
+
+* etc/jaxrs-keycloak.json
+* etc/jaxws-keycloak.json
+
+These files are actually equal and share single Keycloak client named `cxf-external`:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "cxf-external",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username"
+}
+----
+
+The `cxf-external` Keycloak client is configured using:
+
+* Standard Flow Enabled: false
+* Implicit Flow Enabled: false
+* Direct Access Grants Enabled: true
+* Access type: `confidential` - will enable _Credentials_ tab, where we can get/regenerate a _secret_. I used
+`7e20addd-87fc-4528-808c-e9c7c950ef23`
+* Valid redirect URIs: `http://localhost:8282/*`
+* Base URL: `http://localhost:8282/`
+* Role: `admin`
+
+`OSGI-INF/blueprint/blueprint.xml` in `mvn:org.jboss.fuse.quickstarts.security/keycloak-cxf/<version>` shows a
+definition of all required blueprint beans that publish JAX-RS and JAX-WS endpoints using separate (port=8282)
+Undertow engine.
+
+`org.jboss.fuse.quickstarts.security.keycloak.cxf.JaxWsClientTest.helloExternalAauthenticated()` unit test
+again shows code-only approach when accessing JAX-WS endpoint protected by Keycloak (OAuth2) mechanism:
+
+. Initial `POST` is sent to token endpoint of Keycloak server to obtain the token.
+
+* `Authorization` header contains HTTP Basic credentials of the _client_ (not _user_ == _resource owner_), which is
+`BASE64(<client-id>:<secret>)` (`BASE64(camel-undertow-endpoint:f591a8ae-5a82-40de-9190-ea84ceca05a7)`).
+* `Content-Type` is set to `application/x-www-form-urlencoded`
+* body contains `grant_type=password&username=admin&password=passw0rd`
+
+. JSON response containing OAuth2 access token, refresh token and few other settings is returned.
+
+. `org.apache.cxf.jaxws.JaxWsClientFactoryBean` is configured to create an instance of JAX-WS
+`org.apache.cxf.endpoint.Client` specific to our endpoint.
+
+* `Authorization` header containing `Bearer` access token obtained in the above `POST` request is added in special
+_out interceptor_ added to CXF client
+
+. CXF endpoint is successfully invoked.
+
+The same code-only example, but for JAX-RS endpoint is available in
+`org.jboss.fuse.quickstarts.security.keycloak.cxf.JaxRsClientTest.helloExternalAauthenticated()` unit test.
