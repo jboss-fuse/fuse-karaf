@@ -1,0 +1,1485 @@
+= Fuse 7 → Keycloak integration
+
+[abstract]
+This mini-guide describes how to integrate/use Keycloak security in Red Hat Fuse 7 / Karaf (standalone) server.
+
+== Keycloak configuration
+
+The below sections refer to single Keycloak _realm_ created in Keycloak server 4.0.0.Final-SNAPSHOT for the purpose
+of Fuse 7 Security/Keycloak quickstarts.
+
+The keycloak server is running using standard distribution with shifed ports:
+[listing,options="nowrap"]
+----
+$ bin/standalone.sh -Djboss.socket.binding.port-offset=100 --debug 5006
+----
+
+The base URL of keycloak server (used in following examples) is: `http://127.0.0.1:8180/auth`.
+
+The realm has ID `fuse7karaf` and is exported (with clients, groups and roles) to:
+
+* `etc/fuse7karaf-realm-export-clean.json` - that's fresh export of newly created realm. It's purpose is to show
+changes I made to the realm using UI when checking different scenarios.
+* `etc/fuse7karaf-realm-export.json` - export of newly `fuse7karaf` realm after all the changes I made for the examples.
+
+When new realm is created, it contains several default _clients_:
+
+* `account` (`/auth/realms/fuse7karaf/account`)
+* `admin-cli`
+* `broker`
+* `realm-management`
+* `security-admin-console` (`/auth/admin/fuse7karaf/console/index.html`)
+
+There are no default users in new realm. Following examples will use just `admin` user with `passw0rd` password with
+different roles assigned (as required by given scenario). I'll only use roles assigned per given client - there'll be
+no realm-wide roles assigned to user(s).
+
+== SSH
+
+Keycloak is mostly used to protect web applications using standard OpenID Connect / Oauth2 flows (leveraging browser
+redirects).
+But Oauth2 defines two additional flows which don't involve browser interaction:
+
+* https://tools.ietf.org/html/rfc6749#section-4.3[Resource Owner Password Credentials Grant] where _client_ (e.g.
+web application or JAAS Login Module) simply passes original _resource owner_'s credentials to authentication server
+(Keycloak)
+* https://tools.ietf.org/html/rfc6749#section-4.4[Client Credentials Grant]
+
+When user tries to `ssh` into running Red Hat Fuse 7 instance, for example using `bin/client` command, all that is
+needed is user's username and password. These are used by JAAS Login module configured for JAAS realm used by Karaf's
+SSH server.
+
+`org.apache.karaf.shell.ssh.Activator#createSshServer` takes `sshRealm` property from `org.apache.karaf.shell` PID
+(it defaults to `karaf`).
+
+Initially there's only one realm with 5 login modules:
+[listing,options="nowrap"]
+----
+karaf@root()> jaas:realm-list
+Index │ Realm Name │ Login Module Class Name
+──────┼────────────┼───────────────────────────────────────────────────────────────
+1     │ karaf      │ org.apache.karaf.jaas.modules.properties.PropertiesLoginModule
+2     │ karaf      │ org.apache.karaf.jaas.modules.publickey.PublickeyLoginModule
+3     │ karaf      │ org.apache.karaf.jaas.modules.audit.FileAuditLoginModule
+4     │ karaf      │ org.apache.karaf.jaas.modules.audit.LogAuditLoginModule
+5     │ karaf      │ org.apache.karaf.jaas.modules.audit.EventAdminAuditLoginModule
+----
+
+And in standard Red Hat Fuse 7 installation, the users are authenticated using `PropertiesLoginModule` which reads
+the credentials from `etc/users.properties`.
+
+.Keycloak bundles/features
+
+`mvn:org.keycloak/keycloak-osgi-jaas/<version>` provides `blueprint.xml` that installs `keycloak` JAAS realm with two
+login modules:
+
+* `org.keycloak.adapters.jaas.DirectAccessGrantsLoginModule` (_sufficient_) with
+ `keycloak-config-file=${karaf.base}/etc/keycloak-direct-access.json` by default. This module implements
+ _Resource Owner Password Credentials Grant_ OAuth2 flow
+* `org.keycloak.adapters.jaas.BearerTokenLoginModule` (_sufficient_) with
+ `keycloak-config-file=${karaf.base}/etc/keycloak-hawtio.json` by default. This module is used we already have OAuth2
+ access token (bearer token) available - usually after performing standard OAuth2 flow using browser redirects.
+
+These files have to be customized and they are not provided by default (e.g., by installing the features).
+
+With https://issues.jboss.org/browse/KEYCLOAK-7425 fixed, we can install keycloak feature without the need to install
+`keycloak-osgi-thirdparty` jar.
+
+[listing,options="nowrap"]
+----
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+
+karaf@root()> feature:install -v keycloak-jaas
+Adding features: keycloak-jaas/[4.0.0.Final-SNAPSHOT,4.0.0.Final-SNAPSHOT]
+...
+
+karaf@root()> jaas:realm-list
+Index │ Realm Name │ Login Module Class Name
+──────┼────────────┼───────────────────────────────────────────────────────────────
+1     │ karaf      │ org.apache.karaf.jaas.modules.properties.PropertiesLoginModule
+2     │ karaf      │ org.apache.karaf.jaas.modules.publickey.PublickeyLoginModule
+3     │ karaf      │ org.apache.karaf.jaas.modules.audit.FileAuditLoginModule
+4     │ karaf      │ org.apache.karaf.jaas.modules.audit.LogAuditLoginModule
+5     │ karaf      │ org.apache.karaf.jaas.modules.audit.EventAdminAuditLoginModule
+6     │ keycloak   │ org.keycloak.adapters.jaas.BearerTokenLoginModule
+7     │ keycloak   │ org.keycloak.adapters.jaas.DirectAccessGrantsLoginModule
+----
+
+.Keycloak client configuration
+
+Now that we have Keycloak Karaf installed, we can configure the integration.
+
+I'll create new _client_ in `fuse7karaf` realm in my local installation of Keycloak.
+
+* Client ID: `ssh`
+* Client Protocol: `openid-connect`
+
+After creating `ssh`, configure it (change):
+
+* Standard Flow Enabled: off
+* Direct Access Grants Enabled: on (which is the default)
+* Access Type: Confidential (which adds _Credentials_ tab with _Secret_ field)
+
+Now we have to create roles. After switching to `ssh` client's _Roles_ tab, we have to define these roles:
+* `ssh`
+* `admin`
+* `systembundles`
+* `manager`
+* `viewer`.
+
+These roles may be assigned for users per client at path `/admin/master/console/#/realms/fuse7karaf/users/<UUID>/role-mappings`.
+
+NOTE: We can assign roles per realm or per client.
+
+After switching to _Installation_ tab, we can access JSON configuration:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "ssh",
+  "credentials": {
+    "secret": "49d41f8d-88d8-4113-a91e-cd321a4e7433"
+  },
+  "use-resource-role-mappings": true,
+  "confidential-port": 0
+}
+----
+
+This has to be copied to `etc/keycloak-direct-access.json`.
+
+Finally, ssh console has to switch the realm:
+[listing,options="nowrap"]
+----
+karaf@root()> config:property-list --pid org.apache.karaf.shell
+   completionMode = GLOBAL
+   hostKey = /data/servers/fuse-karaf-7.0.0.fuse-000191-redhat-1/etc/host.key
+   hostKeyFormat = simple
+   sftpEnabled = true
+   sshHost = 0.0.0.0
+   sshIdleTimeout = 1800000
+   sshPort = 8101
+   sshRealm = karaf
+   sshRole = ssh
+
+karaf@root()> config:property-set --pid org.apache.karaf.shell sshRealm keycloak
+----
+
+Now we should be able to use `bin/client` (or `ssh` client) using Keycloak credentials:
+[listing,options="nowrap"]
+----
+$ bin/client -u admin -p passw0rd
+Logging in as admin
+ ____          _   _   _       _     _____
+|  _ \ ___  __| | | | | | __ _| |_  |  ___|   _ ___  ___
+| |_) / _ \/ _` | | |_| |/ _` | __| | |_ | | | / __|/ _ \
+|  _ <  __/ (_| | |  _  | (_| | |_  |  _|| |_| \__ \  __/
+|_| \_\___|\__,_| |_| |_|\__,_|\__| |_|   \__,_|___/___|
+
+  Red Hat Fuse (7.0.0.fuse-000191-redhat-1)
+...
+
+$ ssh -p 8101 admin@localhost
+Password authentication
+Password:
+ ____          _   _   _       _     _____
+|  _ \ ___  __| | | | | | __ _| |_  |  ___|   _ ___  ___
+| |_) / _ \/ _` | | |_| |/ _` | __| | |_ | | | / __|/ _ \
+|  _ <  __/ (_| | |  _  | (_| | |_  |  _|| |_| \__ \  __/
+|_| \_\___|\__,_| |_| |_|\__,_|\__| |_|   \__,_|___/___|
+
+  Red Hat Fuse (7.0.0.fuse-000191-redhat-1)
+...
+----
+
+Internally (under debugger), `Subject.getSubject(AccessController.getContext())` returns a _subject_ with:
+[listing,options="nowrap"]
+----
+result = {javax.security.auth.Subject@12433} "Subject:\n\tPrincipal: ClientPrincipal[ssh(/0:0:0:0:0:0:0:1:51228)]\n\tPrincipal: 3451fca5-7c53-4554-a0bd-bc6e6692cc42\n\tPrincipal: RolePrincipal[viewer]\n\tPrincipal: RolePrincipal[manager]\n\tPrincipal: RolePrincipal[admin]\n\tPrincipal: RolePrincipal[ssh]\n\tPrincipal: RolePrincipal[systembundles]\n\tPrivate Credential: eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJBWlVNMnNTdjk2MjV1N25nQWwxZ0gybHowREI1bDVDeTZ3aFc3QTh0LWFFIn0.eyJqdGkiOiJhZGM3N2U0YS01M2ViLTQ0NjQtODU4MC05Y2YzYzEyNmYxNjIiLCJleHAiOjE1MjgxOTE5NTQsIm5iZiI6MCwiaWF0IjoxNTI4MTkxNjU0LCJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgxODAvYXV0aC9yZWFsbXMvZnVzZTdrYXJhZiIsImF1ZCI6InNzaCIsInN1YiI6IjM0NTFmY2E1LTdjNTMtNDU1NC1hMGJkLWJjNmU2NjkyY2M0MiIsInR5cCI6IkJlYXJlciIsImF6cCI6InNzaCIsImF1dGhfdGltZSI6MCwic2Vzc2lvbl9zdGF0ZSI6IjkwYjc1NDFkLWJhODMtNGE3Ny1hNzhiLTBmMzBiMGRmMjJlOCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJzc2giOnsicm9sZXMiOlsidmlld2VyIiwibWFuYWdlciIsImFkbWluIi"
+ serialVersionUID: long  = -8308522755600156056 (0x8CB232930033FA68)
+ principals: java.util.Set  = {java.util.Collections$SynchronizedSet@12435}  size = 7
+  0 = {org.apache.karaf.jaas.boot.principal.ClientPrincipal@12442} "ClientPrincipal[ssh(/0:0:0:0:0:0:0:1:51228)]"
+  1 = {org.keycloak.KeycloakPrincipal@12443} "3451fca5-7c53-4554-a0bd-bc6e6692cc42"
+  2 = {org.apache.karaf.jaas.boot.principal.RolePrincipal@12444} "RolePrincipal[viewer]"
+  3 = {org.apache.karaf.jaas.boot.principal.RolePrincipal@12445} "RolePrincipal[manager]"
+  4 = {org.apache.karaf.jaas.boot.principal.RolePrincipal@12446} "RolePrincipal[admin]"
+  5 = {org.apache.karaf.jaas.boot.principal.RolePrincipal@12447} "RolePrincipal[ssh]"
+  6 = {org.apache.karaf.jaas.boot.principal.RolePrincipal@12448} "RolePrincipal[systembundles]"
+ pubCredentials: java.util.Set  = {java.util.Collections$SynchronizedSet@12436}  size = 0
+ privCredentials: java.util.Set  = {java.util.Collections$SynchronizedSet@12437}  size = 2
+  0 = "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJBWlVNMnNTdjk2MjV1N25nQWwxZ0gybHowREI1bDVDeTZ3aFc3QTh0LWFFIn0.eyJqdGkiOiJhZGM3N2U0YS01M2ViLTQ0NjQtODU4MC05Y2YzYzEyNmYxNjIiLCJleHAiOjE1MjgxOTE5NTQsIm5iZiI6MCwiaWF0IjoxNTI4MTkxNjU0LCJpc3MiOiJodHRwOi8vMTI3LjAuMC4xOjgxODAvYXV0aC9yZWFsbXMvZnVzZTdrYXJhZiIsImF1ZCI6InNzaCIsInN1YiI6IjM0NTFmY2E1LTdjNTMtNDU1NC1hMGJkLWJjNmU2NjkyY2M0MiIsInR5cCI6IkJlYXJlciIsImF6cCI6InNzaCIsImF1dGhfdGltZSI6MCwic2Vzc2lvbl9zdGF0ZSI6IjkwYjc1NDFkLWJhODMtNGE3Ny1hNzhiLTBmMzBiMGRmMjJlOCIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOltdLCJyZWFsbV9hY2Nlc3MiOnsicm9sZXMiOlsidW1hX2F1dGhvcml6YXRpb24iXX0sInJlc291cmNlX2FjY2VzcyI6eyJzc2giOnsicm9sZXMiOlsidmlld2VyIiwibWFuYWdlciIsImFkbWluIiwic3NoIiwic3lzdGVtYnVuZGxlcyJdfSwiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwicHJlZmVycmVkX3VzZXJuYW1lIjoiYWRtaW4ifQ.jCTV7tXPJOn9zfR9qh5PPNexE9hwgDMya6Bgdeu7JRROgZDbjaqQXHs-8LopVykVA9n-bChhAlBAJKbFdVEbLxtocBLCMoFrKlrvJRigaATsq4vhDirqoz4aKRPHgzBhBzrVa"
+  1 = {org.keycloak.adapters.jaas.DirectAccessGrantsLoginModule$RefreshTokenHolder@12440}
+----
+
+== JMX
+
+JMX, as SSH, requires `DirectAccessGrantsLoginModule` which uses Oauth2
+https://tools.ietf.org/html/rfc6749#section-4.3[_Resource Owner Password Credentials Grant_].
+
+As with SSH, the same keycloak features are required and the same `${karaf.base}/etc/keycloak-direct-access.json` may
+be used. If it points to the same _client_ in keycloak server, we only have to switch realm for JMS Access:
+
+[listing,options="nowrap"]
+----
+karaf@root()> config:property-list --pid org.apache.karaf.management
+   daemon = true
+   jmxRealm = karaf
+   objectName = connector:name=rmi
+   rmiRegistryHost = 127.0.0.1
+   rmiRegistryPort = 1099
+   rmiServerHost = 127.0.0.1
+   rmiServerPort = 44444
+   serviceUrl = service:jmx:rmi://127.0.0.1:44444/jndi/rmi://127.0.0.1:1099/karaf-root
+   threaded = true
+
+karaf@root()> config:property-set --pid org.apache.karaf.management jmxRealm keycloak
+----
+
+Then, from `jconsole` we should be able to connect using:
+
+* url: `service:jmx:rmi://127.0.0.1:44444/jndi/rmi://127.0.0.1:1099/karaf-root`
+* credentials from keycloak: `admin`/`passw0rd`
+
+JMX access doesn't require any roles mapped to user.
+
+== Hawtio
+
+With hawtio, we can't use https://tools.ietf.org/html/rfc6749#section-4.3[_Resource Owner Password Credentials Grant_],
+instead, https://tools.ietf.org/html/rfc6749#section-4.1[_Authorization Code Grant_] should be used.
+
+Without keycloak enabled, accessing `/index.html` leads to *redirection* to `/auth/login` and then a *forward* to
+`/login.html` (done by `io.hawt.web.auth.LoginRedirectFilter`).
+
+We only need single Keycloak feature:
+[listing,options="nowrap"]
+----
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:install keycloak-jaas
+----
+
+In order to configure hawtio to use keycloak, we have to alter `etc/system.properties`.
+
+NOTE: Hawtio uses configuration contained in `WEB-INF/web.xml` itself or `web.xml` configuration options may be
+overriden by system properties. Altering `etc/system.properties` requires restart of Red Hat Fuse 7 container.
+
+[listing,options="nowrap"]
+----
+# io.hawt.web.auth.AuthenticationConfiguration#keycloakEnabled
+hawtio.keycloakEnabled = true
+# io.hawt.web.auth.keycloak.KeycloakServlet#keycloakConfig - defaults to ${karaf.base}/etc/keycloak.json
+hawtio.keycloakClientConfig = ${karaf.etc}/keycloak-hawtio-client.json
+hawtio.realm = keycloak
+# split by ",", not by "\s*,\s*"
+hawtio.rolePrincipalClasses = org.keycloak.adapters.jaas.RolePrincipal,org.apache.karaf.jaas.boot.principal.RolePrincipal
+----
+
+Let's create `hawtio-client` client in keycloak UI. With:
+
+* Client protocol: `openid-connect`
+* Access Type: public
+* Standard Flow Enabled: enabled
+* Direct Access Grants Enabled: disabled
+* Base URL: `http://localhost:8181/hawtio`
+* Valid Redirect URIs: `http://localhost:8181/hawtio/*`
+* Web Origins: `+` to allow all redirects to be accessed using CORS.
+* we don't have to specify any roles
+
+The `etc/keycloak-hawtio-client.json` should contain information about Keycloak _client_ defined in Keycloak admin UI.
+Its properties are used not by JAAS login modules or `org.keycloak.representations.adapters.config.AdapterConfig`
+but by `js/keycloak.js` fetched by Hawtio using `$.getScript()`:
+[source,json,options="nowrap"]
+----
+{
+  "url": "http://localhost:8180/auth",
+  "clientId": "hawtio-client",
+  "realm": "fuse7karaf"
+}
+----
+
+`hawtio-client` client is used to perform browser-based authentication of hawtio users. After the access token
+is issued, it will be processed by JAAS modules used by server-side hawtio.
+
+So let's create `hawtio-server` client in keycloak UI. With:
+
+* Client protocol: `openid-connect`
+* Access Type: `bearer-only`
+* Roles: `ssh`, `systembundles`, `manager`, `admin`, `viewer`
+
+By definition (in blueprint.xml inside `mvn:org.keycloak/keycloak-osgi-jaas/4.0.0.Final-SNAPSHOT` bundle),
+`org.keycloak.adapters.jaas.BearerTokenLoginModule` requires `${karaf.base}/etc/keycloak-hawtio.json`.
+
+The default location (`${karaf.base}/etc/keycloak-hawtio.json`) can be changed using `org.keycloak` PID:
+[listing,options="nowrap"]
+----
+karaf@root()> config:property-set --pid org.keycloak jaasBearerKeycloakConfigFile "${karaf.base}/etc/keycloak-hawtio-server.json"
+----
+
+This configuration can be taken from _Installation_ tab of `hawtio-server` client in keycloak admin UI. We have to
+store it in the above configured `etc/keycloak-hawtio-server.json`:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "bearer-only": true,
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "hawtio-server",
+  "use-resource-role-mappings": true,
+  "confidential-port": 0
+}
+----
+
+Now, when accessing `http://localhost:8181/hawtio`, authentication will be performed using combination of:
+
+* @hawtio/oauth npm package
+* hawtio-war and filters configured in `WEB-INF/web.xml`
+* JAAS modules from `keycloak-jaas` feature.
+* `js/keycloak.js` loaded from configured Keycloak server
+
+== Configuring web applications
+
+.Abstract
+Previous sections described configuration of Red Hat Fuse 7 itself (hawtio, SSH, JMX). This sections describes how to
+configure applications deployed to Fuse using different means: plain WARs installed using `pax-web-extender-war`,
+servlets installed using OSGi HTTP Service and `pax-web-extender-whiteboard` and additionally: Camel and CXF
+applications.
+
+=== pax-web-extender-war
+
+Original documentation (for Fuse 6.3.x): https://www.keycloak.org/docs/latest/securing_apps/index.html#_fuse_adapter_classic_war.
+
+`pax-web-extender-war` detects _bundles_ that are WAR archives (installed with `war` type, like hawtio:
+`mvn:io.hawt/hawtio-war/2.0.0.fuse-SNAPSHOT/war`. The key discriminator is this `MANIFEST.MF` entry:
+[listing,options="nowrap"]
+----
+Web-ContextPath: /war-keycloak
+----
+
+When `pax-web-extender-war` detects such bundle being installed, it creates a _web application_ for it and deploys
+it in pax-web specific server. Red Hat Fuse 7 uses pax-web-undertow which runs Undertow server.
+
+Let's start with minimal Maven project that can be used to build WAR bundle.
+[source,xml,options="nowrap"]
+----
+<project>
+...
+    <packaging>war</packaging>
+...
+    <build>
+        <plugins>
+...
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <failOnMissingWebXml>true</failOnMissingWebXml>
+                    <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
+                    <archive>
+                        <manifestFile>${basedir}/target/classes/META-INF/MANIFEST.MF</manifestFile>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <id>bundle-manifest</id>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>manifest</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <supportedProjectTypes>
+                        <supportedProjectType>bundle</supportedProjectType>
+                        <supportedProjectType>jar</supportedProjectType>
+                        <supportedProjectType>war</supportedProjectType>
+                    </supportedProjectTypes>
+                    <instructions>
+                        <Web-ContextPath>/war-keycloak</Web-ContextPath>
+                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Import-Package>
+                            javax.servlet,
+                            javax.servlet.http,
+                            org.slf4j
+                        </Import-Package>
+                        <Export-Package></Export-Package>
+                        <Private-Package />
+                        <Include-Resource>{maven-resources}</Include-Resource>
+                        <Bundle-ClassPath>WEB-INF/classes</Bundle-ClassPath>
+                        <Embed-Directory>WEB-INF/lib</Embed-Directory>
+                        <Embed-Dependency>*;scope=compile</Embed-Dependency>
+                    </instructions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
+----
+
+This project is part of Red Hat Fuse 7 quickstarts available under
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-war/<version>/war` URL.
+
+`web.xml` should contain several security related elements. Let's start with `BASIC` _auth-method_.
+[source,xml,options="nowrap"]
+----
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>secured</web-resource-name>
+        <url-pattern>/*</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>admin</role-name>
+    </auth-constraint>
+</security-constraint>
+
+<login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>Our Realm shown on Basic-Auth dialog</realm-name>
+</login-config>
+
+<security-role>
+    <role-name>admin</role-name>
+</security-role>
+----
+
+With this configuration only, `io.undertow.security.impl.BasicAuthenticationMechanism#authenticate()` will perform
+the authentication, `io.undertow.security.idm.IdentityManager#verify()` is called, which in pax-web is implemented
+by `org.ops4j.pax.web.service.undertow.internal.security.JaasIdentityManager#verify()`.
+It performs standard, JAAS-based authentication - that's enough to be able to authenticate using `etc/users.properties`
+(`org.apache.karaf.jaas.modules.properties.PropertiesLoginModule`).
+
+It can be installed using:
+[listing,options="nowrap"]
+----
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-war/7.1.0.redhat-SNAPSHOT/war
+Bundle ID: 331
+
+karaf@root()> web:list
+ID  │ State       │ Web-State   │ Level │ Web-ContextPath │ Name
+────┼─────────────┼─────────────┼───────┼─────────────────┼───────────────────────────────────────────────────────────────────────────────────
+26  │ Active      │ Deployed    │ 80    │ /hawtio         │ Fuse Console (2.0.0.fuse-SNAPSHOT)
+331 │ Active      │ Deployed    │ 80    │ /keycloak-war   │ Red Hat Fuse :: Quickstarts :: Security :: Keycloak :: WAR (7.1.0.redhat-SNAPSHOT)
+----
+
+When accessing `http://localhost:8181/keycloak-war/info` URL, standard Basic authentication dialog appears and we can
+login using credentials from `etc/users.properties`.
+
+.Adding keycloak
+
+Using https://ops4j1.jira.com/browse/PAXWEB-1161 enhancement, Keycloak provides now extensions to
+pax-web authentication mechanisms.
+There are container-specific _authentication services_ (implementations of `org.ops4j.pax.web.service.AuthenticatorService`)
+provided for three pax-web supported servers:
+
+* Undertow: injects `org.keycloak.adapters.undertow.KeycloakServletExtension` (`mvn:org.keycloak/keycloak-pax-web-undertow`)
+* Tomcat: injects `org.keycloak.adapters.tomcat.KeycloakAuthenticatorValve` (`mvn:org.keycloak/keycloak-pax-web-tomcat8`)
+* Jetty 9.4: injects `org.keycloak.adapters.jetty.KeycloakJettyAuthenticator` (`mvn:org.keycloak/keycloak-pax-web-jetty94`)
+
+The simplest way to have the above services enabled is to install relevant feature.
+Fuse 7 supports Undertow container, so let's install Keycloak-specific features:
+[listing,options="nowrap"]
+----
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+
+karaf@root()> feature:install -v keycloak-pax-http-undertow
+Adding features: keycloak-pax-http-undertow/[4.0.0.Final-SNAPSHOT,4.0.0.Final-SNAPSHOT]
+...
+----
+
+From technical point of view, `org.keycloak.keycloak-pax-web-undertow` is a fragment attached to
+`org.ops4j.pax.web.pax-web-undertow` bundle so it can _inject_ undertow specific keycloak adapter:
+[listing,options="nowrap"]
+----
+karaf@root()> la
+START LEVEL 100 , List Threshold: 0
+ ID │ State    │ Lvl │ Version                     │ Name
+────┼──────────┼─────┼─────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
+...
+219 │ Active   │  80 │ 7.1.1.SNAPSHOT              │ OPS4J Pax Web - Undertow, Fragments: 359
+...
+359 │ Resolved │  80 │ 4.0.0.Final-SNAPSHOT        │ Keycloak Fuse 7.0 Adapter - Undertow, Hosts: 219
+----
+
+Now, pax-web-undertow will look for `io.undertow.servlet.ServletExtension` which is now exposed by
+`mvn:org.keycloak/keycloak-pax-web-undertow/4.0.0.Final-SNAPSHOT` fragment bundle.
+
+Now, after changing login configuaration in `web.xml` to:
+[source,xml,options="nowrap"]
+----
+<login-config>
+    <auth-method>KEYCLOAK</auth-method>
+    <realm-name>_does_not_matter</realm-name>
+</login-config>
+----
+
+And without _any_ special configuration, the authentication will be performed by
+`org.keycloak.adapters.undertow.ServletKeycloakAuthMech#authenticate()`.
+
+Of course without proper configuration, we'll just get "HTTP 403" response.
+
+The configuration is performed by `org.keycloak.adapters.undertow.KeycloakServletExtension#handleDeployment()`.
+
+There are several configuration options.
+
+. By default (without any special `web.xml` configuration), `KeycloakServletExtension` looks for `/WEB-INF/keycloak.json`
+*web resource* (within WAR), or a *file* under path specified as `keycloak.config.file` servlet context parameter.
+. `keycloak.config.resolver` servlet context init parameter may point to a class name which is implementation of
+`org.keycloak.adapters.KeycloakConfigResolver` which will be used to load Keycloak configuration. There are two
+implementations specific to OSGi environment:
+* `org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver` - first it checks `keycloak.config` system property
+which is treated as directory. If it's not present, the directory is taken from `karaf.etc` property which should be
+valid in every Fuse instance. Then a file named `<web context>-keycloak.json` is loaded from previously determined directory.
+`<web context>` is taken from `Web-ContextPath` entry from bundle manifest.
+* `org.keycloak.adapters.osgi.BundleBasedKeycloakConfigResolver` - loads configured resource (by default: `WEB-INF/keycloak.json`)
+using `org.osgi.framework.Bundle.getResource()` from configured `BundleContext` - this options is designed to be
+used in Blueprint container, where we can configure the resolver directly and use for example with
+`org.keycloak.adapters.osgi.undertow.CxfKeycloakAuthHandler`.
+* (See https://issues.jboss.org/browse/KEYCLOAK-7703)
+`org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver` - enhanced version of `PathBasedKeycloakConfigResolver`
+where for given URI path (for example `/cxf/jax-rs/customers/customer` URI, configuration locations are checked from
+most to least specific:
+** `etc/cxf-jax-rs-customers-customer-keycloak.json`
+** `etc/cxf-jax-rs-customers-keycloak.json`
+** `etc/cxf-jax-rs-keycloak.json`
+** `etc/cxf-keycloak.json`
+** `etc/keycloak.json`
+
+With:
+[source,xml,options="nowrap"]
+----
+<context-param>
+    <param-name>keycloak.config.resolver</param-name>
+    <param-value>org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver</param-value>
+</context-param>
+----
+
+With `keycloak-war` client configured using:
+
+* Standard flow enabled: true
+* Access type: any - should be used in `etc/keycloak-war-keycloak.json`
+* Valid Redirect URIs: `http://localhost:8181/keycloak-war/*`
+* Web Origins: `+`
+* Roles: `admin`
+
+And with context name = 'keycloak-war` and with `etc/keycloak-war-keycloak.json`:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "keycloak-war",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0
+}
+----
+
+we can succesfully authenticate using Keycloak.
+
+.One final note
+
+If we browse to `http://localhost:8181/keycloak-war/info` and pass the keycloak authentication, we can see something like
+[listing,options="nowrap"]
+----
+Hello 3451fca5-7c53-4554-a0bd-bc6e6692cc42 (org.keycloak.KeycloakPrincipal)!
+----
+
+We can change it by configuring (in `etc/keycloak-war-keycloak.json`):
+[source,json,options="nowrap"]
+----
+"principal-attribute": "preferred_username"
+----
+
+NOTE: See `org.keycloak.adapters.AdapterUtils#getPrincipalName()` for details.
+
+Now we can see:
+[listing,options="nowrap"]
+----
+Hello admin (org.keycloak.KeycloakPrincipal)!
+----
+
+=== OSGi HTTP Service
+
+The _canonical_ way of using servlets in OSGi environment is to use `org.osgi.service.http.HttpService` specified
+in "102 Http Service Specification" in OSGi Enteprise R6 document.
+However it allows to register only `javax.servlet.Servlet` instances and _resources_ (which are effectively
+resource-service servlets).
+
+PAX WEB provides an extension of `org.osgi.service.http.HttpService` interface: `org.ops4j.pax.web.service.WebContainer`.
+It allows registration of much more _components_ that can be declared in classic WAR's `WEB-INF/web.xml` descriptor:
+
+* filters
+* welcome files
+* error pages
+* constraint mapping
+* JSP configuration
+* websockets
+
+In order to protect servlets, we need two things:
+
+* login configuration, which is equivalent of `web.xml`:
++
+[source,xml,option="nowrap"]
+----
+<login-config>
+    <auth-method>KEYCLOAK</auth-method>
+    <realm-name>_does_not_matter</realm-name>
+</login-config>
+----
+* security constraints definition, which are equivalent of `web.xml`:
++
+[source,xml,option="nowrap"]
+----
+<security-constraint>
+    <web-resource-collection>
+        <web-resource-name>secured</web-resource-name>
+        <url-pattern>/info</url-pattern>
+    </web-resource-collection>
+    <auth-constraint>
+        <role-name>admin</role-name>
+    </auth-constraint>
+</security-constraint>
+
+<security-role>
+    <role-name>admin</role-name>
+</security-role>
+----
+
+Having obtained OSGi service reference for `org.ops4j.pax.web.service.WebContainer`, we can:
+
+. register login configuration pointing to Keycloak:
++
+[source,java,option="nowrap"]
+----
+org.ops4j.pax.web.service.WebContainer container = ...;
+container.registerLoginConfig("KEYCLOAK", "real-name", null, null, httpContext);
+----
+
+. register servlets:
++
+[source,java,option="nowrap"]
+----
+org.ops4j.pax.web.service.WebContainer container = ...;
+container.registerServlet("/info", new InfoServlet(), null, httpContext);
+container.registerServlet("/logout", new LogoutServlet(), null, httpContext);
+----
+
+. register security mapping:
++
+[source,java,option="nowrap"]
+----
+org.ops4j.pax.web.service.WebContainer container = ...;
+container.registerConstraintMapping("admin resources", null, "/info/*",
+       null, true, Collections.singletonList("admin"), httpContext);
+----
+
+Full example is available in `mvn:org.jboss.fuse.quickstarts.security/keycloak-httpservice/<version>`
+quickstart. It can be built using different Maven profiles:
+
+* `httpservice-default` - registers servlet in _default_ context, so `/info` servlet will be accessible
+using `http://localhost:8181/info` path
+* `httpservice-named` - registers servlet in named context `app1`, so `/info` servlet will be accessible
+using `http://localhost:8181/app1/info` path
+
+The profiles select different bundle activators which register the web elements in different way.
+
+The difference between _deafult_ and named contexts affects Keycloak configuration. Both examples use
+`org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver`. This Keycloak configuration resolver
+analyzes request path (see https://issues.jboss.org/browse/KEYCLOAK-7523) and try to find _context name_.
+In case of `app1` context, `${karaf.etc}/app1-keycloak.json` is used. In case of _default_ context, actual
+servlet mapping is used and first _segment_ of URI after `host:port` is used.
+
+So if the example registers two servlets (`/info` and `/logout`), actually two Keycloak configurations are
+needed:
+
+* `${karaf.etc}/info-keycloak.json`
+* `${karaf.etc}/logout-keycloak.json`
+
+The reason for that is that _default_ context is a _place_ where totally different servlets may be registered.
+For example, CXF's `org.apache.cxf.transport.http.osgi.ServletExporter` registers `/cxf` servlet
+to _default_ context.
+Having single `keycloak.json` for all servlets registered in _default_ context is not a good idea.
+
+With `httpservice-named` profile we need `etc/app1-keycloak.json` configuration:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "hs-info",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username"
+}
+----
+
+Where `hs-info` Keycloak client is just standard client with:
+
+* Standard Flow Enabled: true
+* Access type: `public` (will work with `confidential` as well)
+* Valid redirect URIs: `http://localhost:8181/*`
+* Base URL: `http://localhost:8181/`
+* Web Origins: `+`
+* Role: `admin`
+
+==== Embedded Keycloak configuration
+
+The above example used _external_ `etc/<context>-keycloak.json` configuration. This is configured using
+`keycloak.config.resolver` context property.
+
+This property can be configured in `web.xml`:
+
+[source,xml,options="nowrap"]
+----
+<context-param>
+    <param-name>keycloak.config.resolver</param-name>
+    <param-value>org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver</param-value>
+</context-param>
+----
+
+Or with OSGi HTTP Service:
+[source,java,options="nowrap"]
+----
+org.ops4j.pax.web.service.WebContainer container = ...;
+Dictionary<String, String> init = new Hashtable<>();
+init.put("keycloak.config.resolver", "org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver");
+container.setContextParam(init, httpContext);
+----
+
+However, without `keycloak.config.resolver` configuration, default configuration is used (if available).
+
+If a bundle contains `/WEB-INF/keycloak.json` resource, it'll be read by `org.keycloak.adapters.undertow.KeycloakServletExtension`
+during application deployment.
+
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-httpservice-blueprint/<version>` is an example
+where servlets are still registered using HTTP Service (and its pax-web extension), but using Blueprint
+XML descriptor. The bundle embedds `/WEB-INF/keycloak.json`:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "hs-blueprint-info",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username"
+}
+----
+
+Where `hs-blueprint-info` client is configured using:
+
+* Standard Flow Enabled: true
+* Access type: `public` (will work with `confidential` as well)
+* Valid redirect URIs: `http://localhost:8181/app2/*`
+* Base URL: `http://localhost:8181/app2`
+* Web Origins: `+`
+* Role: `admin`
+
+Embedding `keycloak.json` inside a bundle has some benefits, but usually external configuration is preferred.
+
+=== pax-web-extender-whiteboard
+
+There's 3rd option to register web _components_ (servlets, filters, ...) in OSGi. We don't have to explicitly call
+registration methods on `org.osgi.service.http.HttpService` (or its extension, `org.ops4j.pax.web.service.WebContainer`).
+We just have to register for example `javax.servlet.Servlet` service in OSGi registry with several parameters.
+
+The benefit is that we can use declarative approach much easier. Blueprint XML allows easy registration of `<bean>`
+objects using `<service>` elements.
+
+==== Java code approach
+
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-whiteboard/<version>` quickstarts shows how to register
+servlets using pax-web-extender-whiteboard approach and additionally register services needed for keycloak integration.
+
+In simplest case, servlets (instances of `javax.servlet.Servlet`) can simply be registered in OSGi registry using:
+[source,java,options="nowrap"]
+----
+Hashtable<String, Object> infoProperties = new Hashtable<>();
+...
+infoServletRegistration = context.registerService(Servlet.class, new InfoServlet(), infoProperties);
+----
+
+It's enough for pax-web-extender-whiteboard to process them and register within web container. `keycloak-whiteboard`
+example however shows additional steps:
+
+* setting _context path_, so `/info` servlet is accessible under `http://localhost:8181/<context>/info` instead of
+just `http://localhost:8181/info`
+* setting context parameters (accessible later using `javax.servlet.ServletContext.getInitParameter()` so we
+can configure `keycloak.config.resolver` in order to use external `etc/<context>-keycloak.json` configuration file
+* invoking security related methods - registering login configuration and security constraints - just like it was done
+in previous examples
+
+NOTE: pax-web-extender-war tracks several web _components_ registered as OSGi services, to _gather_ them under single
+_web application_. However not all elements (that we can declare in `WEB-INF/web.xml` or register using
+`org.ops4j.pax.web.service.WebContainer`) can be tracked as OSGi services - we have to use `org.ops4j.pax.web.service.WebContainer`.
+
+The `org.jboss.fuse.quickstarts.security.keycloak.wb.Activator` Java class does these steps:
+
+. obtains OSGi reference to `org.ops4j.pax.web.service.WebContainer` to register these _components_ that can't be
+registered using pax-web-extender-whiteboard approach
+
+. calls `org.ops4j.pax.web.service.WebContainer.createDefaultHttpContext()` to create single instance of
+`org.osgi.service.http.HttpContext` object used as _discriminator_ of different web _components_ (so they end up in single
+_web application_)
+
+. registers `org.ops4j.pax.web.service.whiteboard.HttpContextMapping` instance as OSGi service - this object allows us
+to customize two things:
+
+* context name (so we may use `http://localhost:8181/<context>/info` instead of `http://localhost:8181/info`)
+* context parameters (so we may configure `keycloak.config.resolver`
+
+. calls `org.ops4j.pax.web.service.WebContainer.registerLoginConfig()`, so we actually configure `KEYCLOAK` mechanism
+
+. calls `org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()` so we configure security constraints
+
+. registers two `javax.servlet.Servlet` OSGi services to be picked up by pax-web-extender-whiteboard
++
+[source,java,options="nowrap"]
+----
+Hashtable<String, Object> infoProperties = new Hashtable<>();
+infoProperties.put(ExtenderConstants.PROPERTY_HTTP_CONTEXT_ID, contextId); <1>
+infoProperties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME, "info-servlet"); <2>
+infoProperties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, new String[] { "/info" }); <3>
+infoServletRegistration = context.registerService(Servlet.class, new InfoServlet(), infoProperties);
+----
+<1> We specify `httpContext.id` property, so servlets will be registered in correct _web application_
+<2> `osgi.http.whiteboard.servlet.name` specifies servlet name (`javax.servlet.GenericServlet.getServletName()`)
+<3> `osgi.http.whiteboard.servlet.pattern` specifies an array of URL patterns for the servlet (just like in `web.xml`)
+
+Because `keycloak.config.resolver` is configured as `org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver`,
+and the context is set to `app3`, we:
+
+* need `etc/app3-keycloak.json` configuration file
+* can access the `/info` servlet by browsing to `http://localhost:8181/app3/info`
+
+`app3-keycloak.json` is:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "whiteboard-info",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username"
+}
+----
+
+and `whiteboard-info` Keycloak _client_ again uses:
+
+* Standard Flow Enabled: true
+* Access type: `public` (will work with `confidential` as well)
+* Valid redirect URIs: `http://localhost:8181/app3/*`
+* Base URL: `http://localhost:8181/app3`
+* Web Origins: `+`
+* Role: `admin`
+
+==== Blueprint approach
+
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-whiteboard-blueprint/<version>` quickstarts builds on what was
+shown in `keycloak-whiteboard` example, but this time with less Java code and with more XML.
+
+As mentioned earlier, `pax-web-extender-war` doesn't track all the possible components that may be registered using
+`org.ops4j.pax.web.service.WebContainer`. However `org.keycloak.adapters.osgi.undertow.PaxWebIntegrationService`
+saves us from some boilerplate code.
+
+`org.keycloak.adapters.osgi.undertow.PaxWebIntegrationService` can be declared in blueprint.xml using:
+[source,xml,options="nowrap"]
+----
+<bean id="keycloakPaxWebIntegration" class="org.keycloak.adapters.osgi.undertow.PaxWebIntegrationService"
+        init-method="start" destroy-method="stop">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <property name="constraintMappings">
+        <list>
+            <bean class="org.keycloak.adapters.osgi.PaxWebSecurityConstraintMapping">
+                <property name="url" value="/info/*" />
+                <property name="authentication" value="true" /> <!-- true is default -->
+                <property name="roles">
+                    <list>
+                        <value>admin</value>
+                    </list>
+                </property>
+            </bean>
+        </list>
+    </property>
+</bean>
+----
+
+Thanks to `init-method="start"`, these calls are performed by keycloak utility:
+
+* `org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()`
+* `org.ops4j.pax.web.service.WebContainer.registerLoginConfig()`
+
+With previous quickstarts, it had to be done manually.
+
+The remaining part of blueprint.xml is setting up servlet beans and registering them as OSGi services to be processed
+by pax-web-extender-whiteboard:
+[source,xml,options="nowrap"]
+----
+<bean id="infoServlet" class="org.jboss.fuse.quickstarts.security.keycloak.wb.servlets.InfoServlet"
+    depends-on="keycloakPaxWebIntegration" />
+
+<service ref="infoServlet" interface="javax.servlet.Servlet">
+    <service-properties>
+        <entry key="osgi.http.whiteboard.servlet.name" value="info-servlet" />
+        <entry key="osgi.http.whiteboard.servlet.pattern">
+            <array value-type="java.lang.String">
+                <value>/info</value>
+            </array>
+        </entry>
+    </service-properties>
+</service>
+
+...
+----
+
+.More configuration options
+
+The above XML snippets work fine in default scenario - where servlets are registered in _default_ context (so for
+example `/info` servlet will be accessible under `http://localhost:8181/info` path). When we want more flexibility,
+we need to perform some additional work.
+
+The example is shown in `mvn:org.jboss.fuse.quickstarts.security/keycloak-whiteboard-blueprint/<version>` quickstart.
+We do additional configuration steps:
+
+* configure context path as `app4`, so we can access `/info` servlet by browsing to `http://localhost:8181/app4/info`
+* configure servlet context parameters, so keycloak configuration is searched in `etc/app4-keycloak.json`
+
+Finally, the easiest part is straightforward. We have to create `whiteboard-blueprint-info` Keycloak client with:
+
+* Standard Flow Enabled: true
+* Access type: `public` (will work with `confidential` as well)
+* Valid redirect URIs: `http://localhost:8181/app4/*`
+* Base URL: `http://localhost:8181/app4`
+* Web Origins: `+`
+* Role: `admin`
+
+And the `etc/app4-keycloak.json` is:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "whiteboard-blueprint-info",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username"
+}
+----
+
+== Configuring Camel
+
+There are many ways to expose Camel routes as http endpoints (REST, Soap, other) where messages are sent to Camel
+using HTTP requests. There's no single way to enable Keycloak authentication/authorization mechanism for every possible
+`<from uri="..." />` in Camel.
+
+Keycloak provides dedicated mechanisms for some of the endpoint URIs in Camel.
+
+=== Camel Undertow Keycloak component
+
+There is https://github.com/apache/camel/blob/camel-2.21.0/components/camel-undertow/src/main/docs/undertow-component.adoc[Camel undertow component] which exposes an HTTP-based endpoint using
+embedded Undertow server.
+
+:link-to-fuse7adapter: https://www.keycloak.org/docs/latest/securing_apps/index.html#_fuse7_adapter_camel
+
+Keycloak provides {link-to-fuse7adapter}[an extension of this component]
+which allows specifying Keycloak configuration - an instance of `org.keycloak.adapters.KeycloakConfigResolver` which
+is _injected_ to Keycloak-specific `org.apache.camel.component.undertow.UndertowConsumer`.
+
+Using well-known Blueprint XML DSL to configure Camel route (other DSLs are allowed as well - that's obvious) we
+can configure simple Camel route:
+[source,xml,options="nowrap"]
+----
+<bean id="hello" class="org.jboss.fuse.quickstarts.security.keycloak.camel.CamelHelloProcessor" />
+
+<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+    <route>
+        <from uri="undertow-keycloak:http://0.0.0.0:8383/admin-camel-endpoint?matchOnUriPrefix=true&amp;configResolver=#keycloakConfigResolver&amp;allowedRoles=admin" />
+        <process ref="hello" />
+    </route>
+</camelContext>
+----
+
+There are two Keycloak-specific details:
+
+* the URI scheme is `undertow-keycloak`, which chooses
+`org.keycloak.adapters.camel.undertow.UndertowKeycloakConsumer` - an extension of `org.apache.camel.component.undertow.UndertowConsumer`
+* there's new URI parameter `configResolver` which points to Keycloak configuration resolver
+
+The config resolver is specified as:
+[source,xml,options="nowrap"]
+----
+<bean id="keycloakConfigResolver" class="org.keycloak.adapters.osgi.BundleBasedKeycloakConfigResolver">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <!-- loaded using org.osgi.framework.Bundle.getResource() -->
+    <property name="configLocation" value="/camel-keycloak.json" />
+</bean>
+----
+
+`BundleBasedKeycloakConfigResolver` is another implementation of configuration resolver which suits our scenario
+better.
+
+Previously (when configuring security for WARs, servlets and OSGi HTTP Service) we were using `PathBasedKeycloakConfigResolver`
+which was looking for configuration files under `${karaf.etc}/<context-path>-keycloak.json` - there's nothing
+that prevents us using this resolver for Camel routes.
+
+.Authentication
+
+HTTP endpoint exposed by `undertow-keycloak` consumer is not the same as full web application handling different
+requests. That's why it should not use Standard (code + token) or implicit (token only) OAuth2 flows.
+
+Here's the JSON configuration that should be included inside Camel Blueprint bundle:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "resource": "camel-undertow-endpoint",
+  "bearer-only": true,
+  "use-resource-role-mappings": true
+}
+----
+
+`"bearer-only": true` means that Undertow endpoint expects this HTTP header (defined in https://tools.ietf.org/html/rfc6750[RFC 6750]):
+[listing,options="nowrap"]
+----
+GET /admin-camel-endpoint HTTP/1.1
+Authorization: Bearer eyJhbGciOiJS[...]
+----
+
+However, in order to obtain the token that's sent using `Authorization: Bearer ...` we have to invoke one
+of the OAuth2 flows that grants us the token.
+
+`mvn:org.jboss.fuse.quickstarts.security/keycloak-camel-blueprint/<version>` quickstart is not only a bundle
+that we can install in Red Hat Fuse 7 to run Camel route, it also contains a JUnit test that invokes the route
+using Apache HTTP Client.
+
+To install the quickstart, we need:
+[listing,options="nowrap"]
+----
+karaf@root()> feature:install keycloak-pax-http-undertow
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-camel-blueprint/7.1.0.redhat-SNAPSHOT
+Bundle ID: 285
+----
+
+The `camel-undertow-endpoint` Keycloak client is configured with:
+
+* Standard Flow Enabled: false
+* Implicit Flow Enabled: false
+* Direct Access Grants Enabled: true
+* Access type: `confidential` - will enable _Credentials_ tab, where we can get/regenerate a _secret_. I used
+`f591a8ae-5a82-40de-9190-ea84ceca05a7`
+* Valid redirect URIs: `http://localhost:8181/app4/*`
+* Base URL: `http://localhost:8383/`
+* Role: `admin`
+
+`org.jboss.fuse.quickstarts.security.keycloak.camel.CamelClientTest.accessCamelRoute()` JUnit tests perform
+these steps:
+
+. Sends initial `POST` to token endpoint of Keycloak server to obtain the token. Because _Direct Access Grants Flow_
+is used, POST includes credentials of the _resource owner_ (A Keycloak user with `admin` role assigned).
+
+* `Authorization` header contains HTTP Basic credentials of the _client_ (not _user_ == _resource owner_), which is
+`BASE64(<client-id>:<secret>)` (`BASE64(camel-undertow-endpoint:f591a8ae-5a82-40de-9190-ea84ceca05a7)`).
+* `Content-Type` is set to `application/x-www-form-urlencoded`
+* body contains `grant_type=password&username=admin&password=passw0rd`
+
+. Retrieves JSON response containing OAuth2 access token, refresh token and few other settings
+
+. Sends a `GET` request to Camel endpoint using the above access token
+
+* `Authorization` header contains `Bearer` access token obtained in the above `POST` request
+
+. Retrieves a response from Camel route which contains formatted information about Keycloak authenticated _principal_.
+
+=== Camel REST DSL with Undertow Keycloak component
+
+Camel REST DSL may be used to put emphasis on REST nature of Camel routes. The same components are used underneath.
+
+The actual difference is in Blueprint XML:
+[source,xml,options="nowrap"]
+----
+<bean id="keycloakConfigResolver" class="org.keycloak.adapters.osgi.BundleBasedKeycloakConfigResolver">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <!-- loaded using org.osgi.framework.Bundle.getResource() -->
+    <property name="configLocation" value="/camel-keycloak.json" />
+</bean>
+
+<bean id="hello" class="org.jboss.fuse.quickstarts.security.keycloak.camel.CamelHelloProcessor" />
+
+<camelContext xmlns="http://camel.apache.org/schema/blueprint">
+    <restConfiguration component="undertow-keycloak" contextPath="/restdsl" port="8484">
+        <endpointProperty key="configResolver" value="#keycloakConfigResolver" />
+        <endpointProperty key="allowedRoles" value="admin" />
+    </restConfiguration>
+    <rest path="/info">
+        <description>Information about authenticated user</description>
+        <get outType="java.lang.String">
+            <to uri="bean:hello" />
+        </get>
+    </rest>
+</camelContext>
+----
+
+We don't specify reference to Keycloak configuration resolver in endpoint URI, but as `configResolver` property of
+REST configuration inside Camel context definition.
+
+The same Keycloak _client_ configuration is used, except
+
+* different _client_ ID: `camel-undertow-restdsl-endpoint`.
+* port 8484
+* endpoint URI: `http://localhost:8484/restdsl/info`
+
+== Configuring CXF
+
+There are two options to publish CXF endpoints (JAX-RS and JAX-WS):
+
+* Using embedded server that's started by pax-web-undertow and when the _main_ CXF servlet is registered (use relative
+path in `address` attribute):
++
+[source,xml,options="nowrap"]
+----
+<jaxws:server id="embeddedJaxWs" serviceBean="#jaxWsService"
+        address="/jaxws" />
+
+<jaxrs:server id="embeddedJaxRs" address="/jaxrs">
+    <jaxrs:serviceBeans>
+        <ref component-id="jaxRsService" />
+    </jaxrs:serviceBeans>
+</jaxrs:server>
+----
+* Using external/separate server that's started by CXF itself (using absolute address):
++
+[source,xml,options="nowrap"]
+----
+<jaxws:server id="externalJaxWs" serviceBean="#jaxWsService"
+        address="http://localhost:8282/jaxws" />
+
+<jaxrs:server id="externalJaxRs" address="http://localhost:8282/jaxrs">
+    <jaxrs:serviceBeans>
+        <ref component-id="jaxRsService" />
+    </jaxrs:serviceBeans>
+</jaxrs:server>
+----
+
+=== Securing separate CXF server
+
+When using absolute addresses in `address` attribute of `jaxws:server`/`jaxrs:server`, we have more control over the
+engine that's used to serve HTTP(S) requests.
+
+The official method of configuring such separate engine is by using this blueprint.xml fragment:
+[source,xml,options="nowrap"]
+----
+<httpu:engine-factory id="kc-cxf-endpoint-config"
+        xmlns:httpu="http://cxf.apache.org/transports/http-undertow/configuration">
+    <httpu:engine port="8282">
+        <httpu:handlers>
+            <bean class="org.keycloak.adapters.osgi.undertow.CxfKeycloakAuthHandler">
+                <property name="configResolver">
+                    <bean class="org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver" />
+                </property>
+            </bean>
+        </httpu:handlers>
+    </httpu:engine>
+</httpu:engine-factory>
+----
+
+This fragment is a way to configure a list of `org.apache.cxf.transport.http_undertow.CXFUndertowHttpHandler`
+which is used to configure `org.apache.cxf.transport.http_undertow.UndertowHTTPServerEngine`.
+
+`org.keycloak.adapters.osgi.undertow.CxfKeycloakAuthHandler` is one of such handlers that's integrating CXF
+engine with Keycloak. Using `org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver` as Keycloak configuration
+resolver allows us to configure an endpoing using well known `etc/<context>-keycloak.json`.
+
+because we have two endpoints registered in separate CXF server engine, we need two files:
+
+* etc/jaxrs-keycloak.json
+* etc/jaxws-keycloak.json
+
+These files are actually equal and share single Keycloak client named `cxf-external`:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "cxf-external",
+  "public-client": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username"
+}
+----
+
+The `cxf-external` Keycloak client is configured using:
+
+* Standard Flow Enabled: false
+* Implicit Flow Enabled: false
+* Direct Access Grants Enabled: true
+* Access type: `confidential` - will enable _Credentials_ tab, where we can get/regenerate a _secret_. I used
+`7e20addd-87fc-4528-808c-e9c7c950ef23`
+* Valid redirect URIs: `http://localhost:8282/*`
+* Base URL: `http://localhost:8282/`
+* Role: `admin`
+
+`OSGI-INF/blueprint/blueprint.xml` in `mvn:org.jboss.fuse.quickstarts.security/keycloak-cxf/<version>` shows a
+definition of all required blueprint beans that publish JAX-RS and JAX-WS endpoints using separate (port=8282)
+Undertow engine.
+
+`org.jboss.fuse.quickstarts.security.keycloak.cxf.JaxWsClientTest.helloExternalAauthenticated()` unit test
+again shows code-only approach when accessing JAX-WS endpoint protected by Keycloak (OAuth2) mechanism:
+
+. Initial `POST` is sent to token endpoint of Keycloak server to obtain the token.
+
+* `Authorization` header contains HTTP Basic credentials of the _client_ (not _user_ == _resource owner_), which is
+`BASE64(<client-id>:<secret>)` (`BASE64(camel-undertow-endpoint:f591a8ae-5a82-40de-9190-ea84ceca05a7)`).
+* `Content-Type` is set to `application/x-www-form-urlencoded`
+* body contains `grant_type=password&username=admin&password=passw0rd`
+
+. JSON response containing OAuth2 access token, refresh token and few other settings is returned.
+
+. `org.apache.cxf.jaxws.JaxWsClientFactoryBean` is configured to create an instance of JAX-WS
+`org.apache.cxf.endpoint.Client` specific to our endpoint.
+
+* `Authorization` header containing `Bearer` access token obtained in the above `POST` request is added in special
+_out interceptor_ added to CXF client
+
+. CXF endpoint is successfully invoked.
+
+The same code-only example, but for JAX-RS endpoint is available in
+`org.jboss.fuse.quickstarts.security.keycloak.cxf.JaxRsClientTest.helloExternalAauthenticated()` unit test.
+
+=== Securing embedded CXF server - previous solution
+
+When CXF endpoints are registered using relative paths (`address` attribute), then we have less control over
+the server.
+
+Previously, Keycloak's approach to configure authentication mechanisms for `/cxf` servlet registered using
+OSGi HTTP Service (implemented by PAX-WEB) inside Red Hat Fuse was to *re-register `/cxf` servlet* and manually
+configure login method and security constraint.
+
+The draft of blueprint.xml fragment was:
+[source,xml,options="nowrap"]
+----
+<bean id="cxfConstraintMapping" class="org.keycloak.adapters.osgi.PaxWebSecurityConstraintMapping">
+    <property name="roles">
+        <list>
+            <value>user</value>
+        </list>
+    </property>
+    <property name="url" value="/cxf/*" />
+    <property name="authentication" value="true" />
+</bean>
+
+<bean id="cxfKeycloakPaxWebIntegration" class="org.keycloak.adapters.osgi.undertow.PaxWebIntegrationService"
+        init-method="start" destroy-method="stop">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <property name="constraintMappings">
+        <list>
+            <ref component-id="cxfConstraintMapping" />
+        </list>
+    </property>
+</bean>
+
+<bean id="defaultCxfReregistration" class="org.keycloak.adapters.osgi.ServletReregistrationService"
+        depends-on="cxfKeycloakPaxWebIntegration" init-method="start" destroy-method="stop">
+    <property name="bundleContext" ref="blueprintBundleContext" />
+    <property name="managedServiceReference">
+        <reference interface="org.osgi.service.cm.ManagedService" filter="(service.pid=org.apache.cxf.osgi)" timeout="5000"  />
+    </property>
+</bean>
+----
+
+* `cxfConstraintMapping` bean is used to define information passed later to `org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()`
+* `cxfKeycloakPaxWebIntegration` bean is used to invoke:
+** `org.ops4j.pax.web.service.WebContainer.registerLoginConfig()`
+** `org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()`
+
++
+These are called for `WebContainer` instance (an extension to standard OSGi HTTP Service) which is bundle-scoped for
+`keycloak-pax-web-undertow` bundle
+* `defaultCxfReregistration` bean is used to re-register `/cxf` servlet from a WebContainer of `cxf-rt-transport-http`
+bundle to a WebContainer of `keycloak-pax-web-undertow` - after registering login configuration and security constraints.
+
+The above approach works quite well, assuming:
+
+* `org.apache.cxf.osgi` PID doesn't change - because the change would be tracked by `cxf-rt-transport-http` bundle that
+may re-register `/cxf` servlet again - possibly leading to alias conflict
+* we don't mind it's a solution specific to CXF - if CXF changes `/cxf` servlet registration, there may be a problem.
+
+=== Securing embedded CXF server - new solution
+
+With https://ops4j1.jira.com/browse/PAXWEB-1167 there's new and more generic approach to _altering existing
+web contexts_.
+
+The documentation is available here: https://ops4j1.jira.com/wiki/spaces/paxweb/pages/354025473/HTTP+Context+processing.
+
+This time instead of using (with blueprint.xml) Keycloak-specific `<bean>` declarations that re-register `/cxf`
+servlet we can do the same using configuration admin configurations.
+
+If we create `${karaf.etc}/org.ops4j.pax.web.context-<anyName>.cfg` file, It'll be treated as _factory PID_ configuration
+that is _tracked_ by `pax-web-runtime` bundle. Such configuration may contain the following properties:
+
+[listing,options="nowrap"]
+----
+# for which bundle do we want to acquire bundle-scoped org.ops4j.pax.web.service.WebContainer service?
+bundle.symbolicName = org.apache.cxf.cxf-rt-transports-http
+
+# what's the ID of org.osgi.service.http.HttpContext we want to get from
+# org.ops4j.pax.web.service.WebContainer.createDefaultHttpContext(String contextId)?
+context.id = default
+
+# WEB-INF/web.xml's:
+# <context-param>
+#     <param-name>keycloak.config.resolver</param-name>
+#     <param-value>org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver</param-value>
+# </context-param>
+# PAX-WEB's org.ops4j.pax.web.service.WebContainer.setContextParam()
+context.param.keycloak.config.resolver = org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver
+
+# WEB-INF/web.xml's:
+# <login-config>
+#     <auth-method>KEYCLOAK</auth-method>
+#     <realm-name>_does_not_matter</realm-name>
+# </login-config>
+# PAX-WEB's org.ops4j.pax.web.service.WebContainer.registerLoginConfig()
+login.config.authMethod = KEYCLOAK
+login.config.realmName = _does_not_matter
+
+# WEB-INF/web.xml's:
+# <security-constraint>
+#     <web-resource-collection>
+#         <web-resource-name>secured</web-resource-name>
+#         <url-pattern>/cxf/*</url-pattern>
+#         <http-method>GET</http-method>
+#     </web-resource-collection>
+#     <auth-constraint>
+#         <role-name>admin</role-name>
+#         <role-name>superuser</role-name>
+#     </auth-constraint>
+# </security-constraint>
+#
+# <security-role>
+#     <role-name>admin</role-name>
+# </security-role>
+# <security-role>
+#     <role-name>superuser</role-name>
+# </security-role>
+# PAX-WEB's org.ops4j.pax.web.service.WebContainer.registerConstraintMapping()
+security.constraint.1.url = /cxf/*
+security.constraint.1.roles = admin, superuser, ...
+----
+
+This configuration can also be created using Karaf commands:
+[listing,options="nowrap"]
+----
+karaf@root()> config:edit --factory --alias cxf org.ops4j.pax.web.context
+karaf@root()> config:property-edit bundle.symbolicName org.apache.cxf.cxf-rt-transports-http
+karaf@root()> config:property-edit ...
+karaf@root()> config:update
+----
+
+Or even created programmatically by calling `org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration()`.
+
+Here's detailed instruction to secure JAX-RS/JAX-WS endpoints running on embedded server engine (`/cxf` servlet
+registered in PAX-WEB's HTTP Service):
+
+. Install relevant features
++
+[listing,options="nowrap"]
+----
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final-SNAPSHOT/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:install keycloak-pax-http-undertow
+----
+. Create `etc/org.ops4j.pax.web.context-cxf.cfg` file with:
++
+[listing,options="nowrap"]
+----
+bundle.symbolicName = org.apache.cxf.cxf-rt-transports-http
+context.id = default
+
+context.param.keycloak.config.resolver = org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver
+login.config.authMethod = KEYCLOAK
+security.cxf.url = /cxf/*
+security.cxf.roles = admin, superuser
+----
++
+We should see something like this in logs (indication of servlet context processing):
++
+[listing,options="nowrap"]
+----
+2018-06-26 18:06:01,880 INFO  {fileinstall-/data/servers/fuse-karaf-7.0.0.fuse-000191-redhat-1/etc} (PaxLoggingServiceImpl.java:398) : Creating configuration from org.ops4j.pax.web.context-cxf.cfg
+2018-06-26 18:06:01,891 INFO  {CM Configuration Updater (Update: pid=org.ops4j.pax.web.context.96c5265c-ac6e-45ef-8c26-7f2f7bab9144)} (HttpContextProcessing.java:88) : Updated configuration for pid=org.ops4j.pax.web.context.96c5265c-ac6e-45ef-8c26-7f2f7bab9144
+2018-06-26 18:06:01,901 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:366) : Found bundle "org.apache.cxf.cxf-rt-transports-http", scheduling customization of its WebContainer
+2018-06-26 18:06:01,903 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:216) : Customizing WebContainer for bundle org.apache.cxf.cxf-rt-transports-http/3.1.11.fuse-000276
+2018-06-26 18:06:01,905 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:233) : Setting context parameters in WebContainer for bundle "org.apache.cxf.cxf-rt-transports-http": {keycloak.config.resolver=org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver}
+2018-06-26 18:06:01,905 INFO  {paxweb-context-3-thread-1} (Context.java:171) : Stopping context /
+2018-06-26 18:06:01,907 INFO  {paxweb-context-3-thread-1} (Context.java:227) : destroying context DefaultHttpContext [bundle=org.apache.cxf.cxf-rt-transports-http [102], contextID=default], with context path:
+2018-06-26 18:06:01,914 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:239) : Registering login configuration in WebContainer for bundle "org.apache.cxf.cxf-rt-transports-http": method=KEYCLOAK, realm=76b1af0a-6a60-46fb-b4aa-aceb52fa6d28
+2018-06-26 18:06:01,916 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:251) : Registering security mappings in WebContainer for bundle "org.apache.cxf.cxf-rt-transports-http": SecurityConstraintsMapping{name='cxf', url='/cxf/*', roles=[admin, superuser]}
+----
+. Install the example:
++
+[listing,options="nowrap"]
+----
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-cxf/7.1.0.redhat-SNAPSHOT
+Bundle ID: 235
+----
+. Thanks to `HierarchicalPathBasedKeycloakConfigResolver` we can have the configuration for `http://localhost:8181/cxf/jaxws`
+in one of:
+* `etc/cxf-jaxws-keycloak.json`, or
+* `etc/cxf-keycloak.json`, or
+* `etc/keycloak.json`
+
+Here we can see the benefit of `HierarchicalPathBasedKeycloakConfigResolver` - we can have different configurations
+for different endpoints registered in default `/cxf` servlet without forcing user to create single Keycloak _client_.
+
+The `etc/cxf-jaxws|jaxrs-keycloak.json` configuration is:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "cxf",
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username",
+  "bearer-only": true
+}
+----
+
+`"bearer-only": true` means there's no OAuth2 flow used and endpoints simply expect `Authorization: Bearer xxx` header.
+
+However, we still can _see_ `http://localhost:8181/cxf` page in browser, that's why `cxf` Keycloak _client_
+maybe be configured with `public` or `confidential` _Access Type_ and `etc/cxf-keycloak.json` should contain
+`"public-client": true`:
+[source,json,options="nowrap"]
+----
+{
+  "realm": "fuse7karaf",
+  "auth-server-url": "http://localhost:8180/auth",
+  "ssl-required": "external",
+  "resource": "cxf",
+  "use-resource-role-mappings": true,
+  "confidential-port": 0,
+  "principal-attribute": "preferred_username",
+  "public-client": true
+}
+----
