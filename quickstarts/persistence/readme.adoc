@@ -259,7 +259,7 @@ Bundle ID: 307
 Install the example:
 [listing,options="nowrap"]
 ----
-karaf@root()> install -s mvn:org.jboss.fuse.quickstarts/camel-xa/7.0.0.redhat-SNAPSHOT
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts/camel-xa/7.0.1.redhat-SNAPSHOT
 Bundle ID: 308
 
 karaf@root()> camel:route-list
