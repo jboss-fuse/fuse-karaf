@@ -42,6 +42,7 @@
         <dependency>
             <groupId>org.apache.camel</groupId>
             <artifactId>camel-blueprint</artifactId>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
