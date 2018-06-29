@@ -197,7 +197,7 @@
         <version.org.osgi>6.0.0</version.org.osgi>
         <version.org.osgi.compendium>5.0.0</version.org.osgi.compendium>
         <version.org.ow2.asm>6.0</version.org.ow2.asm>
-        <version.org.slf4j>1.7.25</version.org.slf4j>
+        <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
         <version.org.springframework>4.3.14.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.19</version.org.yaml.snakeyaml>
         <version.org.wildfly.common>1.2.0.Beta3</version.org.wildfly.common>
