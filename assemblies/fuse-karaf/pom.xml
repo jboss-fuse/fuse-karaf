@@ -131,6 +131,13 @@
             <classifier>features</classifier>
             <scope>runtime</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.fuse.features</groupId>
+            <artifactId>brms-features</artifactId>
+            <type>xml</type>
+            <classifier>features</classifier>
+            <scope>provided</scope>
+        </dependency>
         <!--
             dependencies with "bundle" or "jar" type will be used as startup (scope=compile), boot (scope=runtime) or
             installed (scope=provided) bundles in karaf-maven-plugin
@@ -229,6 +236,7 @@
                     <installAllFeaturesByDefault>false</installAllFeaturesByDefault>
                     <installedBundles>
                         <installedBundle>${camel.sap.bundle}</installedBundle>
+                        <installedBundle>mvn:org.jline/jline/${version.org.jline}</installedBundle>
                     </installedBundles>
                     <startupFeatures>
                         <!--
@@ -327,6 +335,7 @@
                         <feature>spring-tx/[4.3,5)</feature>
                         <feature>spring-jms/[4.3,5)</feature>
                         <feature>spring-jdbc/[4.3,5)</feature>
+                        <feature>aries-blueprint-spring/[4.3,5)</feature>
 
                         <!-- Karaf Enterprise features -->
                         <feature>jms</feature>
@@ -357,9 +366,6 @@
                         <feature>pax-jms-pool-narayana</feature>
                         <feature>pax-jms-pool-transx</feature>
                     </installedFeatures>
-                    <installedBundles>
-                        <bundle>mvn:org.jline/jline/${version.org.jline}</bundle>
-                    </installedBundles>
                     <blacklistedFeatures>
                         <feature>httplite</feature>
                         <feature>jetty/[8,9)</feature>
@@ -419,6 +425,7 @@
 
                         <!-- Old Spring version -->
                         <feature>spring*/[3,4.3)</feature>
+                        <feature>aries-blueprint-spring/[4,4.3)</feature>
 
                         <!-- Jclouds -->
                         <feature>jclouds-chef</feature>
