@@ -23,7 +23,7 @@
     <parent>
       <groupId>org.jboss.fuse.quickstarts</groupId>
       <artifactId>persistence</artifactId>
-      <version>7.0.1.redhat-SNAPSHOT</version>
+      <version>7.0.1.fuse-000012</version>
     </parent>
 
     <artifactId>javaee-xa</artifactId>
