@@ -37,4 +37,8 @@
         <bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-credential-store-karaf/${project.version}</bundle>
     </feature>
 
+    <feature name="fuse-javaee-apis" description="fundamental bundles required by some important features" version="${project.version}">
+        <bundle start-level="20">mvn:javax.jms/javax.jms-api/${version.javax.jms}</bundle>
+    </feature>
+
 </features>

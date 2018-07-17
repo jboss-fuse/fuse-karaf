@@ -309,6 +309,7 @@
                         <feature>pax-jdbc-pool-narayana</feature>
                         <feature>transaction-manager-narayana</feature>
 
+                        <feature>fuse-javaee-apis</feature>
                         <feature>fuse-credential-store</feature>
                         <feature>patch</feature>
                     </bootFeatures>
