@@ -16,9 +16,9 @@
      permissions and limitations under the License.
 
 -->
-<blueprint xmlns="https://www.osgi.org/xmlns/blueprint/v1.0.0"
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="https://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
+        xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 https://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd">
 
     <!-- pax-transx-tm-narayana registers this interface if it finds the org.springframework.transaction.PlatformTransactionManager class  -->
     <reference id="springJtaTxManager" interface="org.springframework.transaction.PlatformTransactionManager" />
