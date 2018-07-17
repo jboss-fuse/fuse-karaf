@@ -37,4 +37,4 @@ Examples with instructions are in the `quickstarts` directory.
 
 You can find documentation online at:
 
-https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse
+https://access.redhat.com/documentation/en-us/red_hat_fuse
