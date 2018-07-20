@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+
+     Copyright 2005-2018 Red Hat, Inc.
+
+     Red Hat licenses this file to you under the Apache License, version
+     2.0 (the "License"); you may not use this file except in compliance
+     with the License.  You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
+     implied.  See the License for the specific language governing
+     permissions and limitations under the License.
+
+-->
+<features name="fuse-features-dependencies-droolsjbpm-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.5.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.5.0 http://karaf.apache.org/xmlns/features/v1.5.0">
+
+    <!-- features that define bundle dependencies for brms features defined in mvn:org.kie/kie-karaf-features/7.7.x/xml/features -->
+    <!-- this moves version management to karaf and brms provides only kie/drools/jbpm/optaplanner/kie-remote features/bundles -->
+
+    <feature name="drools7-dependencies">
+        <feature prerequisite="true">wrap</feature>
+        <bundle>mvn:com.google.protobuf/protobuf-java/${version.com.google.protobuf}</bundle>
+        <bundle>mvn:commons-codec/commons-codec/${version.commons-codec}</bundle>
+        <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.bundles.javax-el3}</bundle>
+        <bundle>mvn:javax.enterprise/cdi-api/${version.javax.enterprise.cdi-api}</bundle>
+        <bundle>mvn:javax.interceptor/javax.interceptor-api/${version.javax.interceptor}</bundle>
+        <bundle>mvn:org.antlr/antlr4-runtime/${version.org.antlr4}</bundle>
+        <bundle>mvn:org.apache.commons/commons-collections4/${version.org.apache.commons.collections4}</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
+        <bundle>mvn:org.apache.santuario/xmlsec/${version.org.apache.santuario}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${version.org.apache.servicemix.bundles.antlr}</bundle>
+        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-impl/${version.org.apache.servicemix.bundles.jaxb}</bundle>
+        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/${version.org.apache.servicemix.bundles.javax-inject}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.poi/${version.org.apache.servicemix.bundles.poi}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlresolver/${version.org.apache.servicemix.bundles.xmlresolver}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xstream-java8/${version.org.apache.servicemix.bundles.xstream-java8}</bundle>
+        <bundle>wrap:mvn:org.codehaus.janino/janino/${version.org.codehaus.janino}$Bundle-SymbolicName=Codehaus-Janino&amp;Bundle-Version=${version.org.codehaus.janino}</bundle>
+        <bundle>mvn:org.eclipse.jdt.core.compiler/ecj/${version.org.eclipse.jdt.core.compiler}</bundle>
+        <bundle>mvn:org.mvel/mvel2/${version.org.mvel}</bundle>
+    </feature>
+
+    <feature name="jbpm7-dependencies">
+        <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.scripting-api-1.0/${version.org.apache.servicemix.specs}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.quartz/${version.org.apache.servicemix.bundles.quartz}</bundle>
+        <bundle>mvn:org.jboss.spec.javax.security.jacc/jboss-jacc-api_1.5_spec/${version.org.jboss.spec.jacc}</bundle>
+        <bundle>mvn:joda-time/joda-time/${version.joda-time}</bundle>
+        <bundle>mvn:javax.interceptor/javax.interceptor-api/${version.javax.interceptor}</bundle>
+        <bundle>mvn:javax.jms/javax.jms-api/${version.javax.jms}</bundle>
+        <bundle>mvn:javax.transaction/javax.transaction-api/${version.javax.transaction}</bundle>
+        <bundle>mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/${version.org.hibernate.javax.persistence}</bundle>
+        <bundle>mvn:com.google.guava/guava/${version.com.google.guava20}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson.core}</bundle>
+        <bundle>mvn:com.sun.mail/javax.mail/${version.com.sun.mail}</bundle>
+    </feature>
+
+    <feature name="optaplanner-dependencies">
+        <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
+        <bundle>mvn:org.apache.commons/commons-math3/${version.org.apache.commons.math3}</bundle>
+        <bundle>mvn:commons-io/commons-io/${version.commons-io}</bundle>
+        <bundle>mvn:com.google.guava/guava/${version.com.google.guava20}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.reflections/${version.org.apache.servicemix.bundles.reflections}</bundle>
+    </feature>
+
+    <feature name="kie7-remote-dependencies">
+        <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jsr339-api-2.0.1/${version.org.apache.servicemix.specs}</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson.core}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${version.com.fasterxml.jackson.core}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${version.com.fasterxml.jackson.core.databind}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${version.com.fasterxml.jackson.module}</bundle>
+        <bundle>mvn:javax.transaction/javax.transaction-api/${version.javax.transaction}</bundle>
+        <bundle>mvn:javax.jms/javax.jms-api/${version.javax.jms}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/${version.org.apache.servicemix.bundles.xpp3}</bundle>
+    </feature>
+
+    <feature name="db-dependencies">
+        <bundle>mvn:javax.transaction/javax.transaction-api/${version.javax.transaction}</bundle>
+        <bundle start-level="100">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${version.org.apache.servicemix.bundles.dbcp}</bundle>
+        <bundle start-level="100">mvn:commons-pool/commons-pool/${version.commons-pool}</bundle>
+    </feature>
+
+    <feature name="hibernate-dependencies">
+        <!-- JBPM-adjusted version of hibernate-orm feature -->
+        <feature prerequisite="true">wrap</feature>
+        <feature version="[2,3)">jpa</feature>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.ant/${version.org.apache.servicemix.bundles.ant}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${version.org.apache.servicemix.bundles.antlr2}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/${version.org.apache.servicemix.bundles.dom4j}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.serp/${version.org.apache.servicemix.bundles.serp}</bundle>
+        <bundle>mvn:com.fasterxml/classmate/${version.com.fasterxml.classmate}</bundle>
+        <bundle>mvn:org.javassist/javassist/${version.org.javassist}</bundle>
+        <bundle>mvn:org.jboss.spec.javax.security.jacc/jboss-jacc-api_1.5_spec/${version.org.jboss.spec.jacc}</bundle>
+        <bundle>mvn:org.jboss/jandex/${version.org.jboss.jandex}</bundle>
+        <bundle>mvn:javax.transaction/javax.transaction-api/${version.javax.transaction}</bundle>
+        <bundle>mvn:javax.validation/validation-api/${version.javax.validation}</bundle>
+        <bundle>mvn:org.jboss.logging/jboss-logging/${version.org.jboss.logging}</bundle>
+        <bundle>mvn:org.hibernate.common/hibernate-commons-annotations/${version.org.hibernate.common}</bundle>
+        <bundle start-level="100">wrap:mvn:org.hibernate/hibernate-core/${version.org.hibernate}$overwrite=merge&amp;Import-Package=org.jbpm.services.task*,*</bundle>
+        <bundle start-level="100">wrap:mvn:org.hibernate/hibernate-entitymanager/${version.org.hibernate}$overwrite=merge&amp;DynamicImport-Package=*</bundle>
+        <bundle start-level="100">mvn:org.hibernate/hibernate-osgi/${version.org.hibernate}</bundle>
+    </feature>
+
+    <feature name="servlet-api-dependencies">
+        <bundle>mvn:javax.servlet/javax.servlet-api/${version.javax.servlet}</bundle>
+    </feature>
+
+</features>
