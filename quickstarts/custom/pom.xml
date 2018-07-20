@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.quickstarts</groupId>
         <artifactId>quickstarts-parent</artifactId>
-        <version>7.1.0.redhat-SNAPSHOT</version>
+        <version>7.1.0.fuse-710009</version>
     </parent>
 
     <artifactId>custom-distro</artifactId>
@@ -229,7 +229,7 @@
                     <!--</installedFeatures>-->
                     <blacklistedBundles>
                         <!-- we want to be sure jetty is not used since we are using undertow -->
-                        <bundle>camel-karaf-commands;url="mvn:org.apache.camel.karaf/camel-karaf-commands/2.18.0-SNAPSHOT"</bundle>
+                        <bundle>camel-karaf-commands;url="mvn:org.apache.camel.karaf/camel-karaf-commands/2.21.0.fuse-710009"</bundle>
                         <bundle>jetty-http;url="mvn:org.eclipse.jetty/jetty-http/9.3.11.v20160721"</bundle>
                         <bundle>jetty-all-server;url="mvn:org.eclipse.jetty.aggregate/jetty-all-server/8.1.14.v20131031"</bundle>
                     </blacklistedBundles>

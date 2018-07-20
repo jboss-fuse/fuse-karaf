@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.quickstarts</groupId>
         <artifactId>beginner</artifactId>
-        <version>7.1.0.redhat-SNAPSHOT</version>
+        <version>7.1.0.fuse-710009</version>
     </parent>
 
     <artifactId>beginner-camel-log</artifactId>
