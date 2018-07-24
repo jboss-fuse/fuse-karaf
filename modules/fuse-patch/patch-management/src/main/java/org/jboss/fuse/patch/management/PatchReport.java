@@ -28,6 +28,7 @@ public class PatchReport {
     private boolean rollup;
     private long updatedBundles;
     private long updatedFeatures;
+    private long removedFeatures;
     private long overridenFeatures;
 
     public String getId() {
@@ -68,6 +69,14 @@ public class PatchReport {
 
     public void setUpdatedFeatures(long updatedFeatures) {
         this.updatedFeatures = updatedFeatures;
+    }
+
+    public long getRemovedFeatures() {
+        return removedFeatures;
+    }
+
+    public void setRemovedFeatures(long removedFeatures) {
+        this.removedFeatures = removedFeatures;
     }
 
     public long getOverridenFeatures() {

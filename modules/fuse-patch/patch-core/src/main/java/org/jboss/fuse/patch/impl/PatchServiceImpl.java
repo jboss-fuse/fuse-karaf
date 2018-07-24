@@ -89,6 +89,7 @@ import org.osgi.service.component.annotations.Deactivate;
 import org.osgi.service.component.annotations.Reference;
 import org.osgi.service.component.annotations.ReferenceCardinality;
 import org.osgi.service.component.annotations.ReferencePolicy;
+import org.osgi.service.url.URLStreamHandlerService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,6 +124,7 @@ public class PatchServiceImpl implements PatchService {
     private FeaturesService featuresService;
 
     private BackupService backupService;
+    private URLStreamHandlerService mvnService;
 
     private File karafHome;
     // by default it's ${karaf.home}/system
@@ -234,10 +236,11 @@ public class PatchServiceImpl implements PatchService {
                         continue;
                     }
                 }
+
                 // feature time
 
                 Set<String> newRepositories = new LinkedHashSet<>();
-                Set<String> features = new LinkedHashSet<>();
+                Map<String, Boolean> features = new LinkedHashMap<>();
                 for (FeatureUpdate featureUpdate : result.getFeatureUpdates()) {
                     if (featureUpdate.getName() == null && featureUpdate.getPreviousRepository() != null) {
                         // feature was not shipped by patch
@@ -245,15 +248,20 @@ public class PatchServiceImpl implements PatchService {
                     } else if (featureUpdate.getNewRepository() == null) {
                         // feature was not changed by patch
                         newRepositories.add(featureUpdate.getPreviousRepository());
-                        features.add(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getPreviousVersion()));
+                        features.put(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getPreviousVersion()), true);
                     } else {
                         // feature was shipped by patch
                         if (what == Pending.ROLLUP_INSTALLATION) {
                             newRepositories.add(featureUpdate.getNewRepository());
-                            features.add(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getNewVersion()));
+                            if (featureUpdate.getNewVersion() != null) {
+                                features.put(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getNewVersion()), true);
+                            } else {
+                                // ENTESB-9155, ENTESB-9213: case of a feature that was removed in new feature repository
+                                features.put(String.format("%s|%s", featureUpdate.getName(), "-"), false);
+                            }
                         } else {
                             newRepositories.add(featureUpdate.getPreviousRepository());
-                            features.add(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getPreviousVersion()));
+                            features.put(String.format("%s|%s", featureUpdate.getName(), featureUpdate.getPreviousVersion()), true);
                         }
                     }
                 }
@@ -284,10 +292,12 @@ public class PatchServiceImpl implements PatchService {
                 EnumSet<FeaturesService.Option> options = EnumSet.noneOf(FeaturesService.Option.class);
                 Set<String> toInstall = new LinkedHashSet<>();
                 System.out.println("Restoring features");
-                for (String f : features) {
-                    if (installedFeatures == null || !installedFeatures.contains(f)) {
-                        String[] fv = f.split("\\|");
-                        String fid = String.format("%s/%s", fv[0], fv[1]);
+                for (String f : features.keySet()) {
+                    String[] fv = f.split("\\|");
+                    String fid = String.format("%s/%s", fv[0], fv[1]);
+                    if (!features.get(f)) {
+                        System.out.printf("Removing feature %s%n", fv[0]);
+                    } else if (installedFeatures == null || !installedFeatures.contains(f)) {
                         System.out.printf("Restoring feature %s%n", fid);
                         toInstall.add(fid);
                     }
@@ -360,6 +370,7 @@ public class PatchServiceImpl implements PatchService {
                     PatchReport report = patch.getResult().getReport();
                     System.out.printf(" - Bundles updated: %d%n", report.getUpdatedBundles());
                     System.out.printf(" - Features updated: %d%n", report.getUpdatedFeatures());
+                    System.out.printf(" - Features removed: %d%n", report.getRemovedFeatures());
                     System.out.printf(" - Features overriden: %d%n", report.getOverridenFeatures());
                     System.out.printf("Detailed report: %s%n", new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch.result.html").getCanonicalPath());
                     System.out.flush();
@@ -699,6 +710,7 @@ public class PatchServiceImpl implements PatchService {
                             PatchReport report = patch.getResult().getReport();
                             System.out.printf(" - Bundles updated: %d%n", report.getUpdatedBundles());
                             System.out.printf(" - Features updated: %d%n", report.getUpdatedFeatures());
+                            System.out.printf(" - Features removed: %d%n", report.getRemovedFeatures());
                             System.out.printf(" - Features overriden: %d%n", report.getOverridenFeatures());
                             System.out.flush();
 
@@ -995,6 +1007,15 @@ public class PatchServiceImpl implements PatchService {
             }
             after = getAvailableFeatureRepositories();
 
+            // versionless mvn: URI to full mvn: URI
+            Map<String, String> existingRepositoryGroupAndArtifactIds = new HashMap<>();
+            for (String uri : before.keySet()) {
+                Artifact a = Utils.mvnurlToArtifact(uri, true);
+                if (a != null) {
+                    existingRepositoryGroupAndArtifactIds.put(String.format("%s/%s", a.getGroupId(), a.getArtifactId()), uri);
+                }
+            }
+
             // track which old repos provide which features to find out if we have new repositories for those features
             // key is name|version (don't expect '|' to be part of name...)
             // assume that [feature-name, feature-version{major,minor,0,0}] is defined only in single repository
@@ -1018,6 +1039,23 @@ public class PatchServiceImpl implements PatchService {
             // Use the before and after set to figure out which repos were added.
             addedRepositoryNames = new HashSet<>(after.keySet());
             addedRepositoryNames.removeAll(before.keySet());
+
+            // By checking groupId and artifactId we can check which entire repositories were updated
+            Map<String, String> updatedRepositories = new HashMap<>();
+            for (String existing : before.keySet()) {
+                // first there's no update (key -> null)
+                updatedRepositories.put(existing, null);
+            }
+            for (String uri : addedRepositoryNames) {
+                Artifact a = Utils.mvnurlToArtifact(uri, true);
+                if (a != null) {
+                    String versionless = String.format("%s/%s", a.getGroupId(), a.getArtifactId());
+                    if (existingRepositoryGroupAndArtifactIds.containsKey(versionless)) {
+                        updatedRepositories.put(existingRepositoryGroupAndArtifactIds.get(versionless), uri);
+                    }
+                }
+            }
+
 
             // track the new repositories where we can find old features
             Map<String, String> featuresInNewRepositories = new HashMap<>();
@@ -1092,10 +1130,14 @@ public class PatchServiceImpl implements PatchService {
                             // we didn't find an update for installed features among feature repositories from patch
                             // which means we have to preserve both the feature and the repository - this may
                             // be user's feature
+                            // ENTESB-9155, ENTESB-9213: but we have to check if the feature was actually
+                            // removed when feature repository was updated
+                            // a feature update with new repository set, but without new version is meant
+                            // to mean "feature removed"
                             featureUpdate = new FeatureUpdate(feature.getName(),
                                     after.get(oldRepositoryName).getURI().toString(),
                                     feature.getVersion(),
-                                    null,
+                                    updatedRepositories.get(oldRepositoryName),
                                     null);
                         }
                         updatesInThisPatch.add(featureUpdate);
@@ -1180,7 +1222,6 @@ public class PatchServiceImpl implements PatchService {
     /**
      * Returns a list of feature identifiers specified in P-Patch' {@code org.apache.karaf.features.xml}
      * @param patch
-     * @param updatesForFeatureKeys
      * @param kind
      * @return
      */
@@ -1774,6 +1815,12 @@ public class PatchServiceImpl implements PatchService {
     @Reference(service = BackupService.class, cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.STATIC)
     public void setBackupService(BackupService backupService) {
         this.backupService = backupService;
+    }
+
+    @Reference(service = URLStreamHandlerService.class, cardinality = ReferenceCardinality.MANDATORY, policy = ReferencePolicy.STATIC,
+    target = "(url.handler.protocol=mvn)")
+    public void setURLStreamHandlerService(URLStreamHandlerService urlStreamHandlerService) {
+        this.mvnService = urlStreamHandlerService;
     }
 
     /**
