@@ -324,8 +324,10 @@ public class PatchResult {
             if (update.getName() != null) {
                 pw.write(FEATURE_UPDATES + "." + Integer.toString(i) + "." + FEATURE_NAME + " = " + update.getName() + "\n");
             }
-            if (update.getNewVersion() != null) {
-                pw.write(FEATURE_UPDATES + "." + Integer.toString(i) + "." + NEW_VERSION + " = " + update.getNewVersion() + "\n");
+            if (update.getNewRepository() != null) {
+                if (update.getNewVersion() != null) {
+                    pw.write(FEATURE_UPDATES + "." + Integer.toString(i) + "." + NEW_VERSION + " = " + update.getNewVersion() + "\n");
+                }
                 pw.write(FEATURE_UPDATES + "." + Integer.toString(i) + "." + FEATURE_NEW_REPOSITORY + " = " + update.getNewRepository() + "\n");
             }
             if (update.getPreviousVersion() != null) {
@@ -431,6 +433,9 @@ public class PatchResult {
             long featureUpdates = this.featureUpdates.stream()
                     .filter(fu -> fu.getNewVersion() != null && !fu.getNewVersion().equals(fu.getPreviousVersion()))
                     .count();
+            long featureRemoved = this.featureUpdates.stream()
+                    .filter(fu -> fu.getNewVersion() == null && fu.getNewRepository() != null)
+                    .count();
             long featureOverrides = this.featureOverrides.size();
 
             report.setId(getPatchData().getId());
@@ -438,6 +443,7 @@ public class PatchResult {
             report.setTimestamp(new Date(this.date));
             report.setUpdatedBundles(bundleUpdates);
             report.setUpdatedFeatures(featureUpdates);
+            report.setRemovedFeatures(featureRemoved);
             report.setOverridenFeatures(featureOverrides);
         }
 

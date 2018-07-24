@@ -235,8 +235,8 @@ public abstract class Presentation {
             for (FeatureUpdate fu : map.values()) {
                 System.out.printf("%-" + l1 + "s   %-" + l2 + "s   %-" + l3 + "s%n",
                         fu.getName(),
-                        install ? fu.getPreviousVersion() : fu.getNewVersion() == null ? "<reinstall>" : fu.getNewVersion(),
-                        install ? fu.getNewVersion() == null ? "<reinstall>" : fu.getNewVersion() : fu.getPreviousVersion()
+                        install ? fu.getPreviousVersion() : fu.getNewVersion() == null ? fu.getNewRepository() == null ? "<reinstall>" : "<restore>" : fu.getNewVersion(),
+                        install ? fu.getNewVersion() == null ? fu.getNewRepository() == null ? "<reinstall>" : "<remove>" : fu.getNewVersion() : fu.getPreviousVersion()
                 );
             }
         }
