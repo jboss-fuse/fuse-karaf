@@ -381,6 +381,8 @@
     "enabled" : true,
     "totp" : false,
     "emailVerified" : false,
+    "firstName" : "John",
+    "lastName" : "Doe",
     "email" : "admin@redhat.com",
     "credentials" : [ {
       "type" : "password",
