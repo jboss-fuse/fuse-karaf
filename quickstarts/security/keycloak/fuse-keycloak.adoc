@@ -5,7 +5,7 @@ This mini-guide describes how to integrate/use Keycloak security in Red Hat Fuse
 
 == Keycloak configuration
 
-The below sections refer to single Keycloak _realm_ created in Keycloak server 4.0.0.Final-SNAPSHOT for the purpose
+The below sections refer to single Keycloak _realm_ created in Keycloak server 4.1.0.Final for the purpose
 of Fuse 7 Security/Keycloak quickstarts.
 
 The keycloak server is running using standard distribution with shifed ports:
@@ -87,11 +87,11 @@ With https://issues.jboss.org/browse/KEYCLOAK-7425 fixed, we can install keycloa
 
 [listing,options="nowrap"]
 ----
-karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
-Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final/xml/features
 
 karaf@root()> feature:install -v keycloak-jaas
-Adding features: keycloak-jaas/[4.0.0.Final-SNAPSHOT,4.0.0.Final-SNAPSHOT]
+Adding features: keycloak-jaas/[4.1.0.Final,4.1.0.Final]
 ...
 
 karaf@root()> jaas:realm-list
@@ -255,7 +255,7 @@ Without keycloak enabled, accessing `/index.html` leads to *redirection* to `/au
 We only need single Keycloak feature:
 [listing,options="nowrap"]
 ----
-karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final/xml/features
 karaf@root()> feature:install keycloak-jaas
 ----
 
@@ -307,7 +307,7 @@ So let's create `hawtio-server` client in keycloak UI. With:
 * Access Type: `bearer-only`
 * Roles: `ssh`, `systembundles`, `manager`, `admin`, `viewer`
 
-By definition (in blueprint.xml inside `mvn:org.keycloak/keycloak-osgi-jaas/4.0.0.Final-SNAPSHOT` bundle),
+By definition (in blueprint.xml inside `mvn:org.keycloak/keycloak-osgi-jaas/4.1.0.Final` bundle),
 `org.keycloak.adapters.jaas.BearerTokenLoginModule` requires `${karaf.base}/etc/keycloak-hawtio.json`.
 
 The default location (`${karaf.base}/etc/keycloak-hawtio.json`) can be changed using `org.keycloak` PID:
@@ -484,11 +484,11 @@ The simplest way to have the above services enabled is to install relevant featu
 Fuse 7 supports Undertow container, so let's install Keycloak-specific features:
 [listing,options="nowrap"]
 ----
-karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
-Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final/xml/features
 
 karaf@root()> feature:install -v keycloak-pax-http-undertow
-Adding features: keycloak-pax-http-undertow/[4.0.0.Final-SNAPSHOT,4.0.0.Final-SNAPSHOT]
+Adding features: keycloak-pax-http-undertow/[4.1.0.Final,4.1.0.Final]
 ...
 ----
 
@@ -503,11 +503,11 @@ START LEVEL 100 , List Threshold: 0
 ...
 219 │ Active   │  80 │ 7.1.1.SNAPSHOT              │ OPS4J Pax Web - Undertow, Fragments: 359
 ...
-359 │ Resolved │  80 │ 4.0.0.Final-SNAPSHOT        │ Keycloak Fuse 7.0 Adapter - Undertow, Hosts: 219
+359 │ Resolved │  80 │ 4.1.0.Final                 │ Keycloak Fuse 7.0 Adapter - Undertow, Hosts: 219
 ----
 
 Now, pax-web-undertow will look for `io.undertow.servlet.ServletExtension` which is now exposed by
-`mvn:org.keycloak/keycloak-pax-web-undertow/4.0.0.Final-SNAPSHOT` fragment bundle.
+`mvn:org.keycloak/keycloak-pax-web-undertow/4.1.0.Final` fragment bundle.
 
 Now, after changing login configuaration in `web.xml` to:
 [source,xml,options="nowrap"]
@@ -1403,8 +1403,8 @@ registered in PAX-WEB's HTTP Service):
 +
 [listing,options="nowrap"]
 ----
-karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final-SNAPSHOT/xml/features
-Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final/xml/features
 karaf@root()> feature:install keycloak-pax-http-undertow
 ----
 . Create `etc/org.ops4j.pax.web.context-cxf.cfg` file with:

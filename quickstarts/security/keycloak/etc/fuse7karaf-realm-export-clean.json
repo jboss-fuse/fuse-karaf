@@ -1538,6 +1538,6 @@
     "_browser_header.contentSecurityPolicy": "frame-src 'self'; frame-ancestors 'self'; object-src 'none';",
     "waitIncrementSeconds": "60"
   },
-  "keycloakVersion": "4.0.0.Final-SNAPSHOT",
+  "keycloakVersion": "4.1.0.Final",
   "userManagedAccessAllowed": false
 }
