@@ -35,6 +35,8 @@ import org.keycloak.util.BasicAuthHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static org.junit.Assert.fail;
+
 public class CamelClientTest {
 
     public static Logger LOG = LoggerFactory.getLogger(CamelClientTest.class);
@@ -67,20 +69,23 @@ public class CamelClientTest {
                 LOG.info("token: {}", accessToken);
             } else {
                 LOG.warn("error: {}, description: {}", json.get("error"), json.get("error_description"));
+                fail();
             }
             response.close();
         }
 
-        try (CloseableHttpClient client = HttpClients.createMinimal()) {
-            // "The OAuth 2.0 Authorization Framework: Bearer Token Usage"
-            // https://tools.ietf.org/html/rfc6750
-            HttpGet get = new HttpGet("http://localhost:8484/restdsl/info");
+        if (accessToken != null) {
+            try (CloseableHttpClient client = HttpClients.createMinimal()) {
+                // "The OAuth 2.0 Authorization Framework: Bearer Token Usage"
+                // https://tools.ietf.org/html/rfc6750
+                HttpGet get = new HttpGet("http://localhost:8484/restdsl/info");
 
-            get.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-            CloseableHttpResponse response = client.execute(get);
+                get.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+                CloseableHttpResponse response = client.execute(get);
 
-            LOG.info("response: {}", EntityUtils.toString(response.getEntity()));
-            response.close();
+                LOG.info("response: {}", EntityUtils.toString(response.getEntity()));
+                response.close();
+            }
         }
     }
 
