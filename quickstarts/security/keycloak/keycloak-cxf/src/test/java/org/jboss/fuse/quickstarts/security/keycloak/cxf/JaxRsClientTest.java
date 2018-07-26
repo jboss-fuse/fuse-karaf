@@ -16,12 +16,9 @@
 package org.jboss.fuse.quickstarts.security.keycloak.cxf;
 
 import java.util.LinkedList;
-import javax.xml.namespace.QName;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.cxf.endpoint.Client;
-import org.apache.cxf.jaxws.JaxWsClientFactoryBean;
 import org.apache.http.HttpHeaders;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -40,6 +37,8 @@ import org.keycloak.util.BasicAuthHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
+
+import static org.junit.Assert.fail;
 
 public class JaxRsClientTest {
 
@@ -84,20 +83,23 @@ public class JaxRsClientTest {
                 LOG.info("token: {}", accessToken);
             } else {
                 LOG.warn("error: {}, description: {}", json.get("error"), json.get("error_description"));
+                fail();
             }
             response.close();
         }
 
-        try (CloseableHttpClient client = HttpClients.createMinimal()) {
-            // "The OAuth 2.0 Authorization Framework: Bearer Token Usage"
-            // https://tools.ietf.org/html/rfc6750
-            HttpGet get = new HttpGet("http://localhost:8282/jaxrs/service/hello/hi");
+        if (accessToken != null) {
+            try (CloseableHttpClient client = HttpClients.createMinimal()) {
+                // "The OAuth 2.0 Authorization Framework: Bearer Token Usage"
+                // https://tools.ietf.org/html/rfc6750
+                HttpGet get = new HttpGet("http://localhost:8282/jaxrs/service/hello/hi");
 
-            get.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-            CloseableHttpResponse response = client.execute(get);
+                get.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+                CloseableHttpResponse response = client.execute(get);
 
-            LOG.info("response: {}", EntityUtils.toString(response.getEntity()));
-            response.close();
+                LOG.info("response: {}", EntityUtils.toString(response.getEntity()));
+                response.close();
+            }
         }
     }
 
@@ -129,20 +131,23 @@ public class JaxRsClientTest {
                 LOG.info("token: {}", accessToken);
             } else {
                 LOG.warn("error: {}, description: {}", json.get("error"), json.get("error_description"));
+                fail();
             }
             response.close();
         }
 
-        try (CloseableHttpClient client = HttpClients.createMinimal()) {
-            // "The OAuth 2.0 Authorization Framework: Bearer Token Usage"
-            // https://tools.ietf.org/html/rfc6750
-            HttpGet get = new HttpGet("http://localhost:8181/cxf/jaxrs/service/hello/hi");
+        if (accessToken != null) {
+            try (CloseableHttpClient client = HttpClients.createMinimal()) {
+                // "The OAuth 2.0 Authorization Framework: Bearer Token Usage"
+                // https://tools.ietf.org/html/rfc6750
+                HttpGet get = new HttpGet("http://localhost:8181/cxf/jaxrs/service/hello/hi");
 
-            get.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
-            CloseableHttpResponse response = client.execute(get);
+                get.setHeader(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken);
+                CloseableHttpResponse response = client.execute(get);
 
-            LOG.info("response: {}", EntityUtils.toString(response.getEntity()));
-            response.close();
+                LOG.info("response: {}", EntityUtils.toString(response.getEntity()));
+                response.close();
+            }
         }
     }
 

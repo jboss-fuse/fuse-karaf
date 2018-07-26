@@ -48,6 +48,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.bridge.SLF4JBridgeHandler;
 
+import static org.junit.Assert.fail;
+
 public class JaxWsClientTest {
 
     public static Logger LOG = LoggerFactory.getLogger(JaxWsClientTest.class);
@@ -113,23 +115,26 @@ public class JaxWsClientTest {
                 LOG.info("token: {}", accessToken[0]);
             } else {
                 LOG.warn("error: {}, description: {}", json.get("error"), json.get("error_description"));
+                fail();
             }
             response.close();
         }
 
-        JaxWsClientFactoryBean clientFactory = new JaxWsClientFactoryBean();
-        clientFactory.setServiceClass(JaxWsService.class);
-        clientFactory.setAddress("http://localhost:8282/jaxws");
-        clientFactory.setOutInterceptors(Collections.singletonList(new AbstractPhaseInterceptor<Message>(Phase.PRE_PROTOCOL) {
-            @Override
-            public void handleMessage(Message message) throws Fault {
-                Map<String, List<String>> headers = Headers.getSetProtocolHeaders(message);
-                headers.put(HttpHeaders.AUTHORIZATION, Collections.singletonList("Bearer " + accessToken[0]));
-            }
-        }));
-        Client client = clientFactory.create();
-        Object[] result = client.invoke(new QName("urn:fuse:cxf:1", "hello"), "Hi");
-        LOG.info("Result: {}", result[0]);
+        if (accessToken[0] != null) {
+            JaxWsClientFactoryBean clientFactory = new JaxWsClientFactoryBean();
+            clientFactory.setServiceClass(JaxWsService.class);
+            clientFactory.setAddress("http://localhost:8282/jaxws");
+            clientFactory.setOutInterceptors(Collections.singletonList(new AbstractPhaseInterceptor<Message>(Phase.PRE_PROTOCOL) {
+                @Override
+                public void handleMessage(Message message) throws Fault {
+                    Map<String, List<String>> headers = Headers.getSetProtocolHeaders(message);
+                    headers.put(HttpHeaders.AUTHORIZATION, Collections.singletonList("Bearer " + accessToken[0]));
+                }
+            }));
+            Client client = clientFactory.create();
+            Object[] result = client.invoke(new QName("urn:fuse:cxf:1", "hello"), "Hi");
+            LOG.info("Result: {}", result[0]);
+        }
     }
 
     @Test
@@ -160,23 +165,26 @@ public class JaxWsClientTest {
                 LOG.info("token: {}", accessToken[0]);
             } else {
                 LOG.warn("error: {}, description: {}", json.get("error"), json.get("error_description"));
+                fail();
             }
             response.close();
         }
 
-        JaxWsClientFactoryBean clientFactory = new JaxWsClientFactoryBean();
-        clientFactory.setServiceClass(JaxWsService.class);
-        clientFactory.setAddress("http://localhost:8181/cxf/jaxws");
-        clientFactory.setOutInterceptors(Collections.singletonList(new AbstractPhaseInterceptor<Message>(Phase.PRE_PROTOCOL) {
-            @Override
-            public void handleMessage(Message message) throws Fault {
-                Map<String, List<String>> headers = Headers.getSetProtocolHeaders(message);
-                headers.put(HttpHeaders.AUTHORIZATION, Collections.singletonList("Bearer " + accessToken[0]));
-            }
-        }));
-        Client client = clientFactory.create();
-        Object[] result = client.invoke(new QName("urn:fuse:cxf:1", "hello"), "Hi");
-        LOG.info("Result: {}", result[0]);
+        if (accessToken[0] != null) {
+            JaxWsClientFactoryBean clientFactory = new JaxWsClientFactoryBean();
+            clientFactory.setServiceClass(JaxWsService.class);
+            clientFactory.setAddress("http://localhost:8181/cxf/jaxws");
+            clientFactory.setOutInterceptors(Collections.singletonList(new AbstractPhaseInterceptor<Message>(Phase.PRE_PROTOCOL) {
+                @Override
+                public void handleMessage(Message message) throws Fault {
+                    Map<String, List<String>> headers = Headers.getSetProtocolHeaders(message);
+                    headers.put(HttpHeaders.AUTHORIZATION, Collections.singletonList("Bearer " + accessToken[0]));
+                }
+            }));
+            Client client = clientFactory.create();
+            Object[] result = client.invoke(new QName("urn:fuse:cxf:1", "hello"), "Hi");
+            LOG.info("Result: {}", result[0]);
+        }
     }
 
 }

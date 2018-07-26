@@ -5,7 +5,7 @@ This mini-guide describes how to integrate/use Keycloak security in Red Hat Fuse
 
 == Keycloak configuration
 
-The below sections refer to single Keycloak _realm_ created in Keycloak server 4.0.0.Final-SNAPSHOT for the purpose
+The below sections refer to single Keycloak _realm_ created in Keycloak server ${version.org.keycloak} for the purpose
 of Fuse 7 Security/Keycloak quickstarts.
 
 The keycloak server is running using standard distribution with shifed ports:
@@ -74,10 +74,10 @@ the credentials from `etc/users.properties`.
 login modules:
 
 * `org.keycloak.adapters.jaas.DirectAccessGrantsLoginModule` (_sufficient_) with
- `keycloak-config-file=${karaf.base}/etc/keycloak-direct-access.json` by default. This module implements
+ `keycloak-config-file=\${karaf.base}/etc/keycloak-direct-access.json` by default. This module implements
  _Resource Owner Password Credentials Grant_ OAuth2 flow
 * `org.keycloak.adapters.jaas.BearerTokenLoginModule` (_sufficient_) with
- `keycloak-config-file=${karaf.base}/etc/keycloak-hawtio.json` by default. This module is used we already have OAuth2
+ `keycloak-config-file=\${karaf.base}/etc/keycloak-hawtio.json` by default. This module is used we already have OAuth2
  access token (bearer token) available - usually after performing standard OAuth2 flow using browser redirects.
 
 These files have to be customized and they are not provided by default (e.g., by installing the features).
@@ -87,11 +87,11 @@ With https://issues.jboss.org/browse/KEYCLOAK-7425 fixed, we can install keycloa
 
 [listing,options="nowrap"]
 ----
-karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
-Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/${version.org.keycloak}/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/${version.org.keycloak}/xml/features
 
 karaf@root()> feature:install -v keycloak-jaas
-Adding features: keycloak-jaas/[4.0.0.Final-SNAPSHOT,4.0.0.Final-SNAPSHOT]
+Adding features: keycloak-jaas/[${version.org.keycloak},${version.org.keycloak}]
 ...
 
 karaf@root()> jaas:realm-list
@@ -155,7 +155,7 @@ Finally, ssh console has to switch the realm:
 ----
 karaf@root()> config:property-list --pid org.apache.karaf.shell
    completionMode = GLOBAL
-   hostKey = /data/servers/fuse-karaf-7.0.0.fuse-000191-redhat-1/etc/host.key
+   hostKey = /data/servers/fuse-karaf-${project.version}/etc/host.key
    hostKeyFormat = simple
    sftpEnabled = true
    sshHost = 0.0.0.0
@@ -178,7 +178,7 @@ Logging in as admin
 |  _ <  __/ (_| | |  _  | (_| | |_  |  _|| |_| \__ \  __/
 |_| \_\___|\__,_| |_| |_|\__,_|\__| |_|   \__,_|___/___|
 
-  Red Hat Fuse (7.0.0.fuse-000191-redhat-1)
+  Red Hat Fuse (${project.version})
 ...
 
 $ ssh -p 8101 admin@localhost
@@ -190,7 +190,7 @@ Password:
 |  _ <  __/ (_| | |  _  | (_| | |_  |  _|| |_| \__ \  __/
 |_| \_\___|\__,_| |_| |_|\__,_|\__| |_|   \__,_|___/___|
 
-  Red Hat Fuse (7.0.0.fuse-000191-redhat-1)
+  Red Hat Fuse (${project.version})
 ...
 ----
 
@@ -218,7 +218,7 @@ result = {javax.security.auth.Subject@12433} "Subject:\n\tPrincipal: ClientPrinc
 JMX, as SSH, requires `DirectAccessGrantsLoginModule` which uses Oauth2
 https://tools.ietf.org/html/rfc6749#section-4.3[_Resource Owner Password Credentials Grant_].
 
-As with SSH, the same keycloak features are required and the same `${karaf.base}/etc/keycloak-direct-access.json` may
+As with SSH, the same keycloak features are required and the same `\${karaf.base}/etc/keycloak-direct-access.json` may
 be used. If it points to the same _client_ in keycloak server, we only have to switch realm for JMS Access:
 
 [listing,options="nowrap"]
@@ -255,7 +255,7 @@ Without keycloak enabled, accessing `/index.html` leads to *redirection* to `/au
 We only need single Keycloak feature:
 [listing,options="nowrap"]
 ----
-karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/${version.org.keycloak}/xml/features
 karaf@root()> feature:install keycloak-jaas
 ----
 
@@ -268,8 +268,8 @@ overriden by system properties. Altering `etc/system.properties` requires restar
 ----
 # io.hawt.web.auth.AuthenticationConfiguration#keycloakEnabled
 hawtio.keycloakEnabled = true
-# io.hawt.web.auth.keycloak.KeycloakServlet#keycloakConfig - defaults to ${karaf.base}/etc/keycloak.json
-hawtio.keycloakClientConfig = ${karaf.etc}/keycloak-hawtio-client.json
+# io.hawt.web.auth.keycloak.KeycloakServlet#keycloakConfig - defaults to \${karaf.base}/etc/keycloak.json
+hawtio.keycloakClientConfig = \${karaf.etc}/keycloak-hawtio-client.json
 hawtio.realm = keycloak
 # split by ",", not by "\s*,\s*"
 hawtio.rolePrincipalClasses = org.keycloak.adapters.jaas.RolePrincipal,org.apache.karaf.jaas.boot.principal.RolePrincipal
@@ -307,13 +307,13 @@ So let's create `hawtio-server` client in keycloak UI. With:
 * Access Type: `bearer-only`
 * Roles: `ssh`, `systembundles`, `manager`, `admin`, `viewer`
 
-By definition (in blueprint.xml inside `mvn:org.keycloak/keycloak-osgi-jaas/4.0.0.Final-SNAPSHOT` bundle),
-`org.keycloak.adapters.jaas.BearerTokenLoginModule` requires `${karaf.base}/etc/keycloak-hawtio.json`.
+By definition (in blueprint.xml inside `mvn:org.keycloak/keycloak-osgi-jaas/${version.org.keycloak}` bundle),
+`org.keycloak.adapters.jaas.BearerTokenLoginModule` requires `\${karaf.base}/etc/keycloak-hawtio.json`.
 
-The default location (`${karaf.base}/etc/keycloak-hawtio.json`) can be changed using `org.keycloak` PID:
+The default location (`\${karaf.base}/etc/keycloak-hawtio.json`) can be changed using `org.keycloak` PID:
 [listing,options="nowrap"]
 ----
-karaf@root()> config:property-set --pid org.keycloak jaasBearerKeycloakConfigFile "${karaf.base}/etc/keycloak-hawtio-server.json"
+karaf@root()> config:property-set --pid org.keycloak jaasBearerKeycloakConfigFile "\${karaf.base}/etc/keycloak-hawtio-server.json"
 ----
 
 This configuration can be taken from _Installation_ tab of `hawtio-server` client in keycloak admin UI. We have to
@@ -351,7 +351,7 @@ applications.
 Original documentation (for Fuse 6.3.x): https://www.keycloak.org/docs/latest/securing_apps/index.html#_fuse_adapter_classic_war.
 
 `pax-web-extender-war` detects _bundles_ that are WAR archives (installed with `war` type, like hawtio:
-`mvn:io.hawt/hawtio-war/2.0.0.fuse-SNAPSHOT/war`. The key discriminator is this `MANIFEST.MF` entry:
+`mvn:io.hawt/hawtio-war/${version.io.hawt}/war`. The key discriminator is this `MANIFEST.MF` entry:
 [listing,options="nowrap"]
 ----
 Web-ContextPath: /war-keycloak
@@ -376,7 +376,7 @@ Let's start with minimal Maven project that can be used to build WAR bundle.
                     <failOnMissingWebXml>true</failOnMissingWebXml>
                     <packagingExcludes>WEB-INF/lib/*.jar</packagingExcludes>
                     <archive>
-                        <manifestFile>${basedir}/target/classes/META-INF/MANIFEST.MF</manifestFile>
+                        <manifestFile>\${basedir}/target/classes/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
             </plugin>
@@ -401,7 +401,7 @@ Let's start with minimal Maven project that can be used to build WAR bundle.
                     </supportedProjectTypes>
                     <instructions>
                         <Web-ContextPath>/war-keycloak</Web-ContextPath>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+                        <Bundle-SymbolicName>\${project.artifactId}</Bundle-SymbolicName>
                         <Import-Package>
                             javax.servlet,
                             javax.servlet.http,
@@ -456,14 +456,14 @@ It performs standard, JAAS-based authentication - that's enough to be able to au
 It can be installed using:
 [listing,options="nowrap"]
 ----
-karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-war/7.1.0.redhat-SNAPSHOT/war
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-war/${project.version}/war
 Bundle ID: 331
 
 karaf@root()> web:list
 ID  │ State       │ Web-State   │ Level │ Web-ContextPath │ Name
 ────┼─────────────┼─────────────┼───────┼─────────────────┼───────────────────────────────────────────────────────────────────────────────────
-26  │ Active      │ Deployed    │ 80    │ /hawtio         │ Fuse Console (2.0.0.fuse-SNAPSHOT)
-331 │ Active      │ Deployed    │ 80    │ /keycloak-war   │ Red Hat Fuse :: Quickstarts :: Security :: Keycloak :: WAR (7.1.0.redhat-SNAPSHOT)
+26  │ Active      │ Deployed    │ 80    │ /hawtio         │ Fuse Console (${version.io.hawt})
+331 │ Active      │ Deployed    │ 80    │ /keycloak-war   │ Red Hat Fuse :: Quickstarts :: Security :: Keycloak :: WAR (${project.version})
 ----
 
 When accessing `http://localhost:8181/keycloak-war/info` URL, standard Basic authentication dialog appears and we can
@@ -484,11 +484,11 @@ The simplest way to have the above services enabled is to install relevant featu
 Fuse 7 supports Undertow container, so let's install Keycloak-specific features:
 [listing,options="nowrap"]
 ----
-karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
-Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.0.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/${version.org.keycloak}/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/${version.org.keycloak}/xml/features
 
 karaf@root()> feature:install -v keycloak-pax-http-undertow
-Adding features: keycloak-pax-http-undertow/[4.0.0.Final-SNAPSHOT,4.0.0.Final-SNAPSHOT]
+Adding features: keycloak-pax-http-undertow/[${version.org.keycloak},${version.org.keycloak}]
 ...
 ----
 
@@ -501,13 +501,13 @@ START LEVEL 100 , List Threshold: 0
  ID │ State    │ Lvl │ Version                     │ Name
 ────┼──────────┼─────┼─────────────────────────────┼──────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
 ...
-219 │ Active   │  80 │ 7.1.1.SNAPSHOT              │ OPS4J Pax Web - Undertow, Fragments: 359
+219 │ Active   │  80 │ 7.2.1                       │ OPS4J Pax Web - Undertow, Fragments: 359
 ...
-359 │ Resolved │  80 │ 4.0.0.Final-SNAPSHOT        │ Keycloak Fuse 7.0 Adapter - Undertow, Hosts: 219
+359 │ Resolved │  80 │ ${version.org.keycloak}                 │ Keycloak Fuse 7.0 Adapter - Undertow, Hosts: 219
 ----
 
 Now, pax-web-undertow will look for `io.undertow.servlet.ServletExtension` which is now exposed by
-`mvn:org.keycloak/keycloak-pax-web-undertow/4.0.0.Final-SNAPSHOT` fragment bundle.
+`mvn:org.keycloak/keycloak-pax-web-undertow/${version.org.keycloak}` fragment bundle.
 
 Now, after changing login configuaration in `web.xml` to:
 [source,xml,options="nowrap"]
@@ -693,14 +693,14 @@ The profiles select different bundle activators which register the web elements 
 The difference between _deafult_ and named contexts affects Keycloak configuration. Both examples use
 `org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver`. This Keycloak configuration resolver
 analyzes request path (see https://issues.jboss.org/browse/KEYCLOAK-7523) and try to find _context name_.
-In case of `app1` context, `${karaf.etc}/app1-keycloak.json` is used. In case of _default_ context, actual
+In case of `app1` context, `\${karaf.etc}/app1-keycloak.json` is used. In case of _default_ context, actual
 servlet mapping is used and first _segment_ of URI after `host:port` is used.
 
 So if the example registers two servlets (`/info` and `/logout`), actually two Keycloak configurations are
 needed:
 
-* `${karaf.etc}/info-keycloak.json`
-* `${karaf.etc}/logout-keycloak.json`
+* `\${karaf.etc}/info-keycloak.json`
+* `\${karaf.etc}/logout-keycloak.json`
 
 The reason for that is that _default_ context is a _place_ where totally different servlets may be registered.
 For example, CXF's `org.apache.cxf.transport.http.osgi.ServletExporter` registers `/cxf` servlet
@@ -1035,7 +1035,7 @@ The config resolver is specified as:
 better.
 
 Previously (when configuring security for WARs, servlets and OSGi HTTP Service) we were using `PathBasedKeycloakConfigResolver`
-which was looking for configuration files under `${karaf.etc}/<context-path>-keycloak.json` - there's nothing
+which was looking for configuration files under `\${karaf.etc}/<context-path>-keycloak.json` - there's nothing
 that prevents us using this resolver for Camel routes.
 
 .Authentication
@@ -1073,7 +1073,7 @@ To install the quickstart, we need:
 [listing,options="nowrap"]
 ----
 karaf@root()> feature:install keycloak-pax-http-undertow
-karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-camel-blueprint/7.1.0.redhat-SNAPSHOT
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-camel-blueprint/${project.version}
 Bundle ID: 285
 ----
 
@@ -1332,7 +1332,7 @@ The documentation is available here: https://ops4j1.jira.com/wiki/spaces/paxweb/
 This time instead of using (with blueprint.xml) Keycloak-specific `<bean>` declarations that re-register `/cxf`
 servlet we can do the same using configuration admin configurations.
 
-If we create `${karaf.etc}/org.ops4j.pax.web.context-<anyName>.cfg` file, It'll be treated as _factory PID_ configuration
+If we create `\${karaf.etc}/org.ops4j.pax.web.context-<anyName>.cfg` file, It'll be treated as _factory PID_ configuration
 that is _tracked_ by `pax-web-runtime` bundle. Such configuration may contain the following properties:
 
 [listing,options="nowrap"]
@@ -1403,8 +1403,8 @@ registered in PAX-WEB's HTTP Service):
 +
 [listing,options="nowrap"]
 ----
-karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final-SNAPSHOT/xml/features
-Adding feature url mvn:org.keycloak/keycloak-osgi-features/4.1.0.Final-SNAPSHOT/xml/features
+karaf@root()> feature:repo-add mvn:org.keycloak/keycloak-osgi-features/${version.org.keycloak}/xml/features
+Adding feature url mvn:org.keycloak/keycloak-osgi-features/${version.org.keycloak}/xml/features
 karaf@root()> feature:install keycloak-pax-http-undertow
 ----
 . Create `etc/org.ops4j.pax.web.context-cxf.cfg` file with:
@@ -1424,7 +1424,7 @@ We should see something like this in logs (indication of servlet context process
 +
 [listing,options="nowrap"]
 ----
-2018-06-26 18:06:01,880 INFO  {fileinstall-/data/servers/fuse-karaf-7.0.0.fuse-000191-redhat-1/etc} (PaxLoggingServiceImpl.java:398) : Creating configuration from org.ops4j.pax.web.context-cxf.cfg
+2018-06-26 18:06:01,880 INFO  {fileinstall-/data/servers/fuse-karaf-${project.version}/etc} (PaxLoggingServiceImpl.java:398) : Creating configuration from org.ops4j.pax.web.context-cxf.cfg
 2018-06-26 18:06:01,891 INFO  {CM Configuration Updater (Update: pid=org.ops4j.pax.web.context.96c5265c-ac6e-45ef-8c26-7f2f7bab9144)} (HttpContextProcessing.java:88) : Updated configuration for pid=org.ops4j.pax.web.context.96c5265c-ac6e-45ef-8c26-7f2f7bab9144
 2018-06-26 18:06:01,901 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:366) : Found bundle "org.apache.cxf.cxf-rt-transports-http", scheduling customization of its WebContainer
 2018-06-26 18:06:01,903 INFO  {paxweb-context-3-thread-1} (HttpContextProcessing.java:216) : Customizing WebContainer for bundle org.apache.cxf.cxf-rt-transports-http/3.1.11.fuse-000276
@@ -1438,7 +1438,7 @@ We should see something like this in logs (indication of servlet context process
 +
 [listing,options="nowrap"]
 ----
-karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-cxf/7.1.0.redhat-SNAPSHOT
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts.security/keycloak-cxf/${project.version}
 Bundle ID: 235
 ----
 . Thanks to `HierarchicalPathBasedKeycloakConfigResolver` we can have the configuration for `http://localhost:8181/cxf/jaxws`
