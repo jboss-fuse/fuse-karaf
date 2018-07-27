@@ -52,6 +52,13 @@
         -->
         <route id="cbr-route">
             <from uri="file:work/cbr/input" />
+            <onException>
+                <exception>org.xml.sax.SAXParseException</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+                <log message="XML Error: ${exception.message}" loggingLevel="ERROR" />
+            </onException>
             <log message="Receiving order ${file:name}" />
             <choice>
                 <when>
