@@ -29,8 +29,8 @@ For more information see:
 
 [comment]: <> (TODO Update to Fuse 7 docs once they are available)
 
-* https://access.redhat.com/documentation/en-us/red_hat_jboss_fuse/6.3/html/apache_camel_component_reference/idu-salesforce for more information about the Camel Salesforce component
-* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using Red Hat Fuse
+* https://access.redhat.com/documentation/en-us/red_hat_fuse/7.0/html/apache_camel_component_reference/salesforce-component for more information about the Camel Box component
+* https://access.redhat.com/documentation/en-us/red_hat_fuse/ for more information about using Red Hat Fuse
 
 System requirements
 -------------------
