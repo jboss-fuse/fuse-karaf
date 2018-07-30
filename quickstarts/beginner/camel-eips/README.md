@@ -45,7 +45,7 @@ For more information see:
 * http://www.enterpriseintegrationpatterns.com/WireTap.html
 * http://www.enterpriseintegrationpatterns.com/Filter.html
 * http://www.enterpriseintegrationpatterns.com/Sequencer.html
-* https://access.redhat.com/documentation/en/red-hat-jboss-fuse for more information about using Red Hat Fuse
+* https://access.redhat.com/documentation/en-us/red-hat-fuse for more information about using Red Hat Fuse
 
 
 System requirements
