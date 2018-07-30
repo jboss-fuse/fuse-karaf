@@ -20,7 +20,7 @@ Before building and running this quick start you need:
 
 * Maven 3.3.1 or higher
 * JDK 1.8
-* JBoss Fuse 7
+* Red Hat Fuse 7
 * AMQ Broker 7 running
 
 AMQ Broker 7
@@ -35,12 +35,12 @@ Build and Deploy the Quickstart
 
 1. Change your working directory to `camel-jms` directory.
 * Run `mvn clean install` to build the quickstart.
-* Start JBoss Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
+* Start Red Hat Fuse 7 by running bin/fuse (on Linux) or bin\fuse.bat (on Windows).
 * Copy the file `org.ops4j.connectionfactory-amq7.cfg` you find in this quickstart's `src/main/resources/etc` directory
- to the `etc` directory. In your  JBoss Fuse installation. Verify it's content for the correct broker URL and 
+ to the `etc` directory. In your Red Hat Fuse installation. Verify it's content for the correct broker URL and
  credentials. By default, the broker URL is set to tcp://localhost:61616 accepting AMQ 7's CORE protocol.
   Credentials are set to admin/admin.  
-* In the JBoss Fuse console, enter the following commands:
+* In the Red Hat Fuse console, enter the following commands:
 
         feature:install pax-jms-pool artemis-jms-client pax-jms-artemis camel-blueprint camel-jms 
         install -s mvn:org.jboss.fuse.quickstarts/camel-jms/${project.version}
@@ -70,7 +70,7 @@ Use the bundle
 
 To use the application be sure to have deployed the quickstart in Fuse as described above. 
 
-1. As soon as the Camel routes have started, you will see a directory `work/jms/input` in your JBoss Fuse installation.
+1. As soon as the Camel routes have started, you will see a directory `work/jms/input` in your Red Hat Fuse installation.
 2. Copy the files you find in this quickstart's `src/main/data` directory to the newly created `work/jms/input` directory.
 3. Wait a few moments and you will find the same files organized by country under the `work/jms/output` directory.
   * `order1.xml`, `order2.xml` and `order4.xml` in `work/jms/output/others`

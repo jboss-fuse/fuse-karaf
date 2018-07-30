@@ -29,7 +29,7 @@ This example picks up XML files, and depending on the error that occurs during p
 For more information see:
 
 * http://www.enterpriseintegrationpatterns.com/DeadLetterChannel.html for the Dead Letter Channel EIP
-* https://access.redhat.com/documentation/red-hat-jboss-fuse for more information about using Red Hat Fuse
+* https://access.redhat.com/documentation/en-us/red-hat-fuse for more information about using Red Hat Fuse
 
 
 System requirements

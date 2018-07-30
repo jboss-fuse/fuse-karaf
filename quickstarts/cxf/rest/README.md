@@ -20,7 +20,7 @@ In studying this quick start you will learn:
 
 For more information see:
 
-* <https://access.redhat.com/documentation/red-hat-jboss-fuse> for more information about using Red Hat Fuse
+* <https://access.redhat.com/documentation/en-us/red-hat-fuse> for more information about using Red Hat Fuse
 
 System requirements
 -------------------
