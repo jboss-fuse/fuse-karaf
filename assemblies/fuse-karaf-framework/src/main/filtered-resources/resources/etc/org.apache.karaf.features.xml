@@ -199,6 +199,8 @@
                 replacement="mvn:org.eclipse.jdt.core.compiler/ecj/${version.org.eclipse.jdt.core.compiler}" mode="maven" />
         <bundle originalUri="mvn:org.mvel/mvel2/[2,3)"
                 replacement="mvn:org.mvel/mvel2/${version.org.mvel}" mode="maven" />
+        <bundle originalUri="mvn:net.sf.ehcache/ehcache/[2.10,3)"
+                replacement="mvn:net.sf.ehcache/ehcache/${version.net.sf.ehcache}" mode="maven" />
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
