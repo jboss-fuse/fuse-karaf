@@ -204,6 +204,7 @@
         <version.org.jboss.xnio>3.3.8.Final</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.jline>3.6.2</version.org.jline>
+        <version.org.keycloak>4.2.0.Final</version.org.keycloak>
         <version.org.messaginghub.pooled-jms>0.3.0</version.org.messaginghub.pooled-jms>
         <version.org.mockito>2.13.0</version.org.mockito>
         <version.org.mvel>2.4.0.Final-redhat-1</version.org.mvel>
@@ -701,6 +702,21 @@
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${version.org.apache.cxf}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-ws-security</artifactId>
+                <version>${version.org.apache.cxf}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-databinding-jaxb</artifactId>
+                <version>${version.org.apache.cxf}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-bindings-soap</artifactId>
                 <version>${version.org.apache.cxf}</version>
             </dependency>
 
