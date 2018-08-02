@@ -73,6 +73,13 @@
         -->
         <route id="jms-cbr-route">
             <from uri="jms:queue:incomingOrders?transacted=true" />
+            <onException>
+                <exception>org.xml.sax.SAXParseException</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+                <log message="XML Error: ${exception.message}" loggingLevel="ERROR" />
+            </onException>
             <choice>
                 <when>
                     <xpath>/order:order/order:customer/order:country = 'FR'</xpath>
