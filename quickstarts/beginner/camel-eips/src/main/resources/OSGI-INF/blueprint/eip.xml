@@ -80,6 +80,13 @@
         -->
         <route id="splitterRoute">
             <from uri="direct:splitter" />
+            <onException>
+                <exception>org.xml.sax.SAXParseException</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+                <log message="XML Error: ${exception.message}" loggingLevel="ERROR" />
+            </onException>
             <split>
                 <!--
                   We are using XPath to split the message body. The namespace prefix, order, used in the XPath expression was
@@ -120,12 +127,18 @@
         -->
         <route id="filterRoute">
             <from uri="direct:filter" />
+            <onException>
+                <exception>org.xml.sax.SAXParseException</exception>
+                <handled>
+                    <constant>true</constant>
+                </handled>
+                <log message="XML Error: ${exception.message}" loggingLevel="ERROR" />
+            </onException>
             <filter>
                 <xpath resultType="java.lang.String">sum(//order:quantity/text()) > 100</xpath>
                 <log message="[filter]   Order ${header.orderId} is an order for more than 100 animals" />
             </filter>
         </route>
-
 
     </camelContext>
 
