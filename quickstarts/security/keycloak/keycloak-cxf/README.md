@@ -195,15 +195,19 @@ The content of the file is:
     bundle.symbolicName = org.apache.cxf.cxf-rt-transports-http
     context.id = default
     
-    context.param.keycloak.config.resolver = org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver
+    context.param.keycloak.config.resolver = org.keycloak.adapters.osgi.HierarchicalPathBasedKeycloakConfigResolver
     
     login.config.authMethod = KEYCLOAK
     login.config.realmName = _does_not_matter
     
-    security.constraint.1.url = /cxf/*
+    security.constraint.1.url = /cxf/jaxws/*
     security.constraint.1.roles = admin
+    security.constraint.2.url = /cxf/jaxrs/*
+    security.constraint.2.roles = admin
 
-We have to configure `etc/cxf-keycloak.json` with the following content configuring Keycloak integration:
+Because we've used `HierarchicalPathBasedKeycloakConfigResolver` instead of `PathBasedKeycloakConfigResolver`,
+we can separately secure two endpoints. We can do it by creating `etc/cxf-jaxrs-keycloak.json` and
+`etc/cxf-jaxws-keycloak.json` with the following content configuring Keycloak integration:
                                                 
     {
       "realm": "fuse7karaf",
@@ -215,6 +219,9 @@ We have to configure `etc/cxf-keycloak.json` with the following content configur
       "principal-attribute": "preferred_username",
       "public-client": true
     }
+
+With `PathBasedKeycloakConfigResolver` we'd have to use single `etc/cxf-keycloak.json` file that would affect *all*
+the CXF endpoints.
 
 To test the endpoints running on embedded Undertow servlet engine, we can run the unit tests inside `keycloak-cxf`
 directory:
@@ -323,8 +330,14 @@ directory:
     [INFO] Finished at: 2018-07-26T14:44:54+02:00
     [INFO] ------------------------------------------------------------------------
 
-Because we used `etc/cxf-keycloak.json` file, also http://localhost:8181/cxf URL is protected and we can access
-a list of CXF deployed endpoints after successful OAuth2 authentication.
+Because we didn't use `etc/cxf-keycloak.json` file, http://localhost:8181/cxf URL is **not** protected and we can access
+a list of CXF deployed endpoints without a need to authenticate via Keycloak.
+But we can copy `etc/cxf-jaxrs-keycloak.json` to `etc/cxf-keycloak.json` so the list of CXF endpoints is
+also protected and we can access it only after successful OAuth2 authentication. Also,
+`\${karaf.etc}/org.ops4j.pax.web.context-cxf.cfg` would have to contain additional lines:
+
+    security.constraint.3.url = /cxf
+    security.constraint.3.roles = admin
 
 
 Undeploy the Bundle

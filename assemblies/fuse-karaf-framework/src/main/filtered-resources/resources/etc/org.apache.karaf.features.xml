@@ -125,6 +125,8 @@
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el2}" mode="maven" />
         <bundle originalUri="mvn:org.glassfish.web/javax.el/[3,4)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el3}" mode="maven" />
+        <bundle originalUri="mvn:org.hibernate.common/hibernate-commons-annotations/[5.0,5.1)"
+                replacement="mvn:org.hibernate.common/hibernate-commons-annotations/${version.org.hibernate.common}" mode="maven" />
         <bundle originalUri="mvn:org.hibernate/hibernate-validator/[5.2,5.3)"
                 replacement="mvn:org.hibernate/hibernate-validator/${version.org.hibernate.validator}" mode="maven" />
         <bundle originalUri="mvn:org.javassist/javassist/[3,4)"
@@ -197,6 +199,22 @@
                 replacement="mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/${version.org.hibernate.javax.persistence}" mode="maven" />
         <bundle originalUri="mvn:org.eclipse.jdt.core.compiler/ecj/[4,5)"
                 replacement="mvn:org.eclipse.jdt.core.compiler/ecj/${version.org.eclipse.jdt.core.compiler}" mode="maven" />
+        <bundle originalUri="mvn:org.mvel/mvel2/[2,3)"
+                replacement="mvn:org.mvel/mvel2/${version.org.mvel}" mode="maven" />
+        <bundle originalUri="mvn:net.sf.ehcache/ehcache/[2.10,3)"
+                replacement="mvn:net.sf.ehcache/ehcache/${version.net.sf.ehcache}" mode="maven" />
+        <bundle originalUri="mvn:org.jboss/jandex/[2,3)"
+                replacement="mvn:org.jboss/jandex/${version.org.jboss.jandex}" mode="maven" />
+        <bundle originalUri="mvn:org.ow2.asm/asm/[6,7)"
+                replacement="mvn:org.ow2.asm/asm/${version.org.ow2.asm}" mode="maven" />
+        <bundle originalUri="mvn:org.ow2.asm/asm-analysis/[6,7)"
+                replacement="mvn:org.ow2.asm/asm-analysis/${version.org.ow2.asm}" mode="maven" />
+        <bundle originalUri="mvn:org.ow2.asm/asm-commons/[6,7)"
+                replacement="mvn:org.ow2.asm/asm-commons/${version.org.ow2.asm}" mode="maven" />
+        <bundle originalUri="mvn:org.ow2.asm/asm-tree/[6,7)"
+                replacement="mvn:org.ow2.asm/asm-tree/${version.org.ow2.asm}" mode="maven" />
+        <bundle originalUri="mvn:org.ow2.asm/asm-util/[6,7)"
+                replacement="mvn:org.ow2.asm/asm-util/${version.org.ow2.asm}" mode="maven" />
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->

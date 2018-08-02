@@ -165,7 +165,7 @@
         <version.org.apache.servicemix.bundles.reflections>0.9.11_2</version.org.apache.servicemix.bundles.reflections>
         <version.org.apache.servicemix.bundles.rhino>1.7.7.1_1</version.org.apache.servicemix.bundles.rhino>
         <version.org.apache.servicemix.bundles.serp>1.14.1_1</version.org.apache.servicemix.bundles.serp>
-        <version.org.apache.servicemix.bundles.spring>4.3.16.RELEASE_1</version.org.apache.servicemix.bundles.spring>
+        <version.org.apache.servicemix.bundles.spring>4.3.17.RELEASE_1</version.org.apache.servicemix.bundles.spring>
         <version.org.apache.servicemix.bundles.velocity>1.7_6</version.org.apache.servicemix.bundles.velocity>
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
@@ -189,7 +189,7 @@
         <version.org.eclipse.jgit>4.10.0.201712302008-r</version.org.eclipse.jgit>
         <version.org.eclipse.persistence>2.1.0</version.org.eclipse.persistence>
         <version.org.glassfish.web.javax.el>2.2.5</version.org.glassfish.web.javax.el>
-        <version.org.hibernate>5.1.10.Final-redhat-1</version.org.hibernate>
+        <version.org.hibernate>5.1.13.Final-redhat-1</version.org.hibernate>
         <version.org.hibernate.common>5.0.1.Final</version.org.hibernate.common>
         <version.org.hibernate.validator>5.3.5.Final-redhat-2</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.0.Final</version.org.hibernate.javax.persistence>
@@ -204,6 +204,7 @@
         <version.org.jboss.xnio>3.3.8.Final</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.jline>3.6.2</version.org.jline>
+        <version.org.keycloak>4.2.0.Final</version.org.keycloak>
         <version.org.messaginghub.pooled-jms>0.3.0</version.org.messaginghub.pooled-jms>
         <version.org.mockito>2.13.0</version.org.mockito>
         <version.org.mvel>2.4.0.Final-redhat-1</version.org.mvel>
@@ -701,6 +702,21 @@
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${version.org.apache.cxf}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-ws-security</artifactId>
+                <version>${version.org.apache.cxf}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-databinding-jaxb</artifactId>
+                <version>${version.org.apache.cxf}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-bindings-soap</artifactId>
                 <version>${version.org.apache.cxf}</version>
             </dependency>
 
