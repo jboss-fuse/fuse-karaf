@@ -165,7 +165,7 @@
         <version.org.apache.servicemix.bundles.reflections>0.9.11_2</version.org.apache.servicemix.bundles.reflections>
         <version.org.apache.servicemix.bundles.rhino>1.7.7.1_1</version.org.apache.servicemix.bundles.rhino>
         <version.org.apache.servicemix.bundles.serp>1.14.1_1</version.org.apache.servicemix.bundles.serp>
-        <version.org.apache.servicemix.bundles.spring>4.3.16.RELEASE_1</version.org.apache.servicemix.bundles.spring>
+        <version.org.apache.servicemix.bundles.spring>4.3.17.RELEASE_1</version.org.apache.servicemix.bundles.spring>
         <version.org.apache.servicemix.bundles.velocity>1.7_6</version.org.apache.servicemix.bundles.velocity>
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
