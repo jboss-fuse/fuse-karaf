@@ -35,7 +35,7 @@
       <version.net.java.dev.jna>4.4.0</version.net.java.dev.jna>
       <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
       <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
-      <version.org.apache.servicemix.bundles.xerces>2.11.0_1</version.org.apache.servicemix.bundles.xerces>
+      <version.org.apache.servicemix.bundles.xerces>2.12.0_1</version.org.apache.servicemix.bundles.xerces>
       <version.org.apache.servicemix.specs>2.9.0</version.org.apache.servicemix.specs>
       <version.org.osgi>6.0.0</version.org.osgi>
     </properties>
