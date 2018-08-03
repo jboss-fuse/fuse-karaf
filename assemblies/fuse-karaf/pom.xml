@@ -456,6 +456,9 @@
                         <!-- Unsupported Karaf features -->
                         <feature>minimal</feature>
                         <feature>standard</feature>
+
+                        <!-- Features unsupported due to API incompatibility -->
+                        <feature>eclipselink</feature>
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>

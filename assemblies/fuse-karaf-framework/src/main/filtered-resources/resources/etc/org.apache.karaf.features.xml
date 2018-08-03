@@ -113,6 +113,8 @@
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.reflections/${version.org.apache.servicemix.bundles.reflections}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.rhino/[1,2)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.rhino/${version.org.apache.servicemix.bundles.rhino}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/[2.11,3)"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/[1.1,1.2)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/${version.org.apache.servicemix.bundles.xpp3}" mode="maven" />
         <bundle originalUri="mvn:org.apache.sshd/sshd-core/[1,2)"
