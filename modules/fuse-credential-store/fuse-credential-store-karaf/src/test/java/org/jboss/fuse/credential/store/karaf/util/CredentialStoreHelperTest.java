@@ -21,7 +21,10 @@ import java.security.Security;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
+import java.util.TreeSet;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +52,7 @@ public class CredentialStoreHelperTest {
 
     @Test
     public void accessCredentialStore() throws Exception {
+        Security.addProvider(new BouncyCastleProvider());
         Security.addProvider(new WildFlyElytronProvider());
 
         // KeyStoreCredentialStore is default algorithm when using
@@ -73,6 +77,30 @@ public class CredentialStoreHelperTest {
 
         // from $JAVA_HOME/jre/lib/security/java.security, keystore.type
         LOG.info("Default KeyStore type: {}", KeyStore.getDefaultType());
+
+        Set<String> providers = new TreeSet<>();
+        Set<String> serviceTypes = new TreeSet<>();
+//        Set<String> serviceClasses = new TreeSet<>();
+        for (Provider p : Providers.getProviderList().providers()) {
+            providers.add(p.getName());
+            for (Provider.Service s : p.getServices()) {
+                serviceTypes.add(s.getType());
+//                serviceClasses.add(s.getClassName());
+            }
+        }
+        LOG.info("Providers:");
+        for (String p : providers) {
+            LOG.info(" - {}", p);
+        }
+        LOG.info("Service types:");
+        for (String st : serviceTypes) {
+            LOG.info(" - {}", st);
+        }
+//        LOG.info("Service classes:");
+//        for (String sc : serviceClasses) {
+//            LOG.info(" - {}", sc);
+//        }
+
         LOG.info("KeyStore providers / algorithms:");
         for (Provider p : Providers.getProviderList().providers()) {
             for (Provider.Service s : p.getServices()) {
@@ -109,6 +137,15 @@ public class CredentialStoreHelperTest {
             }
         }
 
+        LOG.info("AlgorithmParameters providers / algorithms:");
+        for (Provider p : Providers.getProviderList().providers()) {
+            for (Provider.Service s : p.getServices()) {
+                if ("AlgorithmParameters".equals(s.getType())) {
+                    LOG.info(" - {} / {}", s.getProvider().getName(), s.getAlgorithm());
+                }
+            }
+        }
+
         //CHECKSTYLE:ON
 
         Password pwd1 = PasswordFactory.getInstance("clear")
@@ -121,6 +158,7 @@ public class CredentialStoreHelperTest {
         Map<String, String> attrs = new HashMap<>();
         attrs.put("keyStoreType", "PKCS12");
         attrs.put("location", String.format("target/credentials-%12d.store", new Date().getTime()));
+        attrs.put("create", "true");
         cs1.initialize(attrs, pp);
         cs1.store("alias1", new PasswordCredential(pwd2));
         cs1.flush();
