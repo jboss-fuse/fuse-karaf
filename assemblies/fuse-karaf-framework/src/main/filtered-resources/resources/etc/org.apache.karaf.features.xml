@@ -199,6 +199,8 @@
                 replacement="mvn:io.swagger/swagger-models/${version.io.swagger}" mode="maven" />
         <bundle originalUri="mvn:org.eclipse.persistence/javax.persistence/[2,3)"
                 replacement="mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/${version.org.hibernate.javax.persistence}" mode="maven" />
+        <bundle originalUri="mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/[1,2)"
+                replacement="mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/${version.org.hibernate.javax.persistence}" mode="maven" />
         <bundle originalUri="mvn:org.eclipse.jdt.core.compiler/ecj/[4,5)"
                 replacement="mvn:org.eclipse.jdt.core.compiler/ecj/${version.org.eclipse.jdt.core.compiler}" mode="maven" />
         <bundle originalUri="mvn:org.mvel/mvel2/[2,3)"
