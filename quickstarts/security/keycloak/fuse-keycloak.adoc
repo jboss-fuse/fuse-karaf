@@ -8,7 +8,7 @@ This mini-guide describes how to integrate/use Keycloak security in Red Hat Fuse
 The below sections refer to single Keycloak _realm_ created in Keycloak server ${version.org.keycloak} for the purpose
 of Fuse 7 Security/Keycloak quickstarts.
 
-The keycloak server is running using standard distribution with shifed ports:
+The keycloak server is running using standard distribution with shifted ports:
 [listing,options="nowrap"]
 ----
 $ bin/standalone.sh -Djboss.socket.binding.port-offset=100 --debug 5006
@@ -262,7 +262,7 @@ karaf@root()> feature:install keycloak-jaas
 In order to configure hawtio to use keycloak, we have to alter `etc/system.properties`.
 
 NOTE: Hawtio uses configuration contained in `WEB-INF/web.xml` itself or `web.xml` configuration options may be
-overriden by system properties. Altering `etc/system.properties` requires restart of Red Hat Fuse 7 container.
+overridden by system properties. Altering `etc/system.properties` requires restart of Red Hat Fuse 7 container.
 
 [listing,options="nowrap"]
 ----
@@ -509,7 +509,7 @@ START LEVEL 100 , List Threshold: 0
 Now, pax-web-undertow will look for `io.undertow.servlet.ServletExtension` which is now exposed by
 `mvn:org.keycloak/keycloak-pax-web-undertow/${version.org.keycloak}` fragment bundle.
 
-Now, after changing login configuaration in `web.xml` to:
+Now, after changing login configuration in `web.xml` to:
 [source,xml,options="nowrap"]
 ----
 <login-config>
@@ -608,7 +608,7 @@ Hello admin (org.keycloak.KeycloakPrincipal)!
 === OSGi HTTP Service
 
 The _canonical_ way of using servlets in OSGi environment is to use `org.osgi.service.http.HttpService` specified
-in "102 Http Service Specification" in OSGi Enteprise R6 document.
+in "102 Http Service Specification" in OSGi Enterprise R6 document.
 However it allows to register only `javax.servlet.Servlet` instances and _resources_ (which are effectively
 resource-service servlets).
 
@@ -762,7 +762,7 @@ during application deployment.
 
 `mvn:org.jboss.fuse.quickstarts.security/keycloak-httpservice-blueprint/<version>` is an example
 where servlets are still registered using HTTP Service (and its pax-web extension), but using Blueprint
-XML descriptor. The bundle embedds `/WEB-INF/keycloak.json`:
+XML descriptor. The bundle embeds `/WEB-INF/keycloak.json`:
 [source,json,options="nowrap"]
 ----
 {
@@ -1204,7 +1204,7 @@ which is used to configure `org.apache.cxf.transport.http_undertow.UndertowHTTPS
 
 `org.keycloak.adapters.osgi.undertow.CxfKeycloakAuthHandler` is one of such handlers that's integrating CXF
 engine with Keycloak. Using `org.keycloak.adapters.osgi.PathBasedKeycloakConfigResolver` as Keycloak configuration
-resolver allows us to configure an endpoing using well known `etc/<context>-keycloak.json`.
+resolver allows us to configure an endpoint using well known `etc/<context>-keycloak.json`.
 
 because we have two endpoints registered in separate CXF server engine, we need two files:
 
