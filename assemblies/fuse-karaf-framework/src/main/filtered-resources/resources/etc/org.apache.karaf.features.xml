@@ -189,6 +189,8 @@
                 replacement="mvn:org.bouncycastle/bcpkix-jdk15on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcprov-jdk15on/[1.50,1.60)"
                 replacement="mvn:org.bouncycastle/bcprov-jdk15on/${version.org.bouncycastle}" mode="maven" />
+        <bundle originalUri="mvn:org.bouncycastle/bcprov-ext-jdk15on/[1.50,1.60)"
+                replacement="mvn:org.bouncycastle/bcprov-ext-jdk15on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:io.swagger/swagger-annotations/[1.5,1.6)"
                 replacement="mvn:io.swagger/swagger-annotations/${version.io.swagger}" mode="maven" />
         <bundle originalUri="mvn:io.swagger/swagger-core/[1.5,1.6)"
