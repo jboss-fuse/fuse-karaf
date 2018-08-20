@@ -38,6 +38,7 @@
     </feature>
 
     <feature name="fuse-javaee-apis" description="fundamental bundles required by some important features" version="${project.version}">
+        <feature version="1.2.0">transaction-api</feature>
         <bundle start-level="20">mvn:javax.jms/javax.jms-api/${version.javax.jms}</bundle>
     </feature>
 
