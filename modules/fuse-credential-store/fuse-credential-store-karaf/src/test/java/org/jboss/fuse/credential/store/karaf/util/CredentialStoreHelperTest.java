@@ -15,9 +15,13 @@
  */
 package org.jboss.fuse.credential.store.karaf.util;
 
+import java.io.File;
+import java.security.AlgorithmParameters;
 import java.security.KeyStore;
 import java.security.Provider;
 import java.security.Security;
+import java.security.spec.AlgorithmParameterSpec;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,22 +37,27 @@ import org.wildfly.security.auth.server.IdentityCredentials;
 import org.wildfly.security.credential.PasswordCredential;
 import org.wildfly.security.credential.source.CredentialSource;
 import org.wildfly.security.credential.store.CredentialStore;
+import org.wildfly.security.credential.store.impl.KeyStoreCredentialStore;
 import org.wildfly.security.password.Password;
 import org.wildfly.security.password.PasswordFactory;
 import org.wildfly.security.password.interfaces.ClearPassword;
+import org.wildfly.security.password.interfaces.MaskedPassword;
 import org.wildfly.security.password.spec.ClearPasswordSpec;
 //CHECKSTYLE:OFF
+import org.wildfly.security.password.spec.EncryptablePasswordSpec;
+import org.wildfly.security.password.spec.IteratedPasswordAlgorithmSpec;
+import org.wildfly.security.password.spec.IteratedSaltedPasswordAlgorithmSpec;
+import org.wildfly.security.password.spec.MaskedPasswordAlgorithmSpec;
+import org.wildfly.security.password.spec.MaskedPasswordSpec;
 import sun.security.jca.Providers;
+
+import static java.lang.Integer.parseInt;
+import static org.junit.Assert.assertTrue;
 //CHECKSTYLE:ON
 
 public class CredentialStoreHelperTest {
 
     public static final Logger LOG = LoggerFactory.getLogger(CredentialStoreHelperTest.class);
-
-    @Test
-    public void shouldCreateProtectionParameter() {
-
-    }
 
     @Test
     public void accessCredentialStore() throws Exception {
@@ -166,6 +175,87 @@ public class CredentialStoreHelperTest {
         LOG.info("Credential Store 1: {}, aliases: {}", cs1, cs1.getAliases());
         PasswordCredential pwd = cs1.retrieve("alias1", PasswordCredential.class);
         LOG.info("Retrieved password: {}", new String(((ClearPassword)pwd.getPassword()).getPassword()));
+    }
+
+    @Test
+    public void asBefore() throws Exception {
+        Provider provider = new WildFlyElytronProvider();
+
+        Map<String, String> attributes1 = new HashMap<>();
+        attributes1.put("create", "true");
+        attributes1.put("location", "target/credential.store");
+        attributes1.put("keyStoreType", "PKCS12");
+
+        Map<String, String> attributes2 = new HashMap<>();
+        attributes2.put("password", "password");
+        attributes2.put("algorithm", "masked-SHA1-DES-EDE");
+//        attributes2.put("salt", "abcdefgh"); // not required
+//        attributes2.put("iterations", "1000"); // not required
+
+        String algorithm = attributes2.get("algorithm");
+        PasswordFactory passwordFactory = PasswordFactory.getInstance(algorithm, provider);
+
+        String password = attributes2.get("password");
+        String salt = attributes2.get("salt");
+        String iterations = attributes2.get("iterations");
+
+        AlgorithmParameterSpec algorithmParameterSpec;
+        // salt && iterations:
+        if (salt == null && iterations == null) {
+            algorithmParameterSpec = null;
+        } else if (salt == null || salt.isEmpty()) {
+            algorithmParameterSpec = new IteratedPasswordAlgorithmSpec(parseInt(iterations));
+        } else {
+            final byte[] saltBytes = Base64.getDecoder().decode(salt);
+            algorithmParameterSpec = new IteratedSaltedPasswordAlgorithmSpec(parseInt(iterations), saltBytes);
+        }
+        final EncryptablePasswordSpec keySpec = new EncryptablePasswordSpec(password.toCharArray(), algorithmParameterSpec);
+
+        MaskedPassword maskedPassword = passwordFactory.generatePassword(keySpec).castAs(MaskedPassword.class);
+        MaskedPasswordAlgorithmSpec maskedPasswordAlgorithmSpec = maskedPassword.getParameterSpec();
+
+        AlgorithmParameters params = AlgorithmParameters.getInstance(algorithm, provider);
+        // initialize parameters with decoded spec
+        params.init(maskedPasswordAlgorithmSpec);
+        byte[] paramsBytes = params.getEncoded();
+
+        Base64.Encoder encoder = Base64.getEncoder();
+
+        Map<String, String> configuration = new HashMap<>();
+        configuration.put("CREDENTIAL_STORE_PROTECTION_ALGORITHM", algorithm);
+        configuration.put("CREDENTIAL_STORE_PROTECTION_PARAMS", encoder.encodeToString(paramsBytes));
+        configuration.put("CREDENTIAL_STORE_PROTECTION", encoder.encodeToString(maskedPassword.getMaskedPasswordBytes()));
+
+        // we have credential store key, now let's create the credential store itself
+        params = AlgorithmParameters.getInstance(algorithm, provider);
+        // initialize parameters with encodd spec
+        params.init(paramsBytes);
+
+        maskedPasswordAlgorithmSpec = params.getParameterSpec(MaskedPasswordAlgorithmSpec.class);
+        // specification of all that's needed to create MaskedPassword
+        MaskedPasswordSpec spec = new MaskedPasswordSpec(maskedPasswordAlgorithmSpec.getInitialKeyMaterial(),
+                maskedPasswordAlgorithmSpec.getIterationCount(),
+                maskedPasswordAlgorithmSpec.getSalt(),
+                Base64.getDecoder().decode(configuration.get("CREDENTIAL_STORE_PROTECTION")));
+
+        maskedPassword = passwordFactory.generatePassword(spec).castAs(MaskedPassword.class);
+
+        // masked -> clear text
+        PasswordFactory ctPasswordFactory = PasswordFactory.getInstance(ClearPassword.ALGORITHM_CLEAR, provider);
+        ClearPasswordSpec clearPasswordSpec = passwordFactory.getKeySpec(maskedPassword, ClearPasswordSpec.class);
+        Password ctPassword = ctPasswordFactory.generatePassword(clearPasswordSpec);
+
+        // org.wildfly.security.credential.source.CredentialSource is needed to initialize CredentialStore
+        CredentialSource source = IdentityCredentials.NONE.withCredential(new PasswordCredential(ctPassword));
+
+        CredentialStore cs = CredentialStore.getInstance(KeyStoreCredentialStore.KEY_STORE_CREDENTIAL_STORE,
+                provider);
+        CredentialStore.CredentialSourceProtectionParameter csProtection
+                = new CredentialStore.CredentialSourceProtectionParameter(source);
+        cs.initialize(attributes1, csProtection);
+        cs.flush();
+
+        assertTrue(new File(attributes1.get("location")).isFile());
     }
 
 }

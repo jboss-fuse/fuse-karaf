@@ -30,7 +30,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jboss.fuse.credential.store.karaf.util.ProtectionType;
+import org.apache.karaf.shell.api.console.Session;
+import org.jboss.fuse.credential.store.karaf.Activator;
+import org.jboss.fuse.credential.store.karaf.util.CredentialStoreConfiguration;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -49,6 +52,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyChar;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class CreateCredentialStoreTest {
 
@@ -57,26 +64,24 @@ public class CreateCredentialStoreTest {
     @Rule
     public TemporaryFolder tmp = new TemporaryFolder();
 
-    @Test
-    public void shouldCreateCredentialSource() throws Exception {
-        final Map<String, String> configuration = CreateCredentialStore.createCredentialSourceConfiguration(
-                ProtectionType.masked,
-                Collections.singletonList("password=The quick brown fox jumped over the lazy dog"));
-
-        assertThat(configuration).containsKeys("CREDENTIAL_STORE_PROTECTION_PARAMS", "CREDENTIAL_STORE_PROTECTION");
+    @Before
+    public void init() throws Exception {
+        new Activator().start(null);
     }
 
     @Test
     public void shouldCreateCredentialStoreFromCommand() throws Exception {
         final File storeFile = new File(tmp.getRoot(), "credential.store");
 
+        Session session = mock(Session.class);
+        when(session.readLine(anyString(), anyChar())).thenReturn("The quick brown fox jumped over the lazy dog");
+
         final CreateCredentialStore command = new CreateCredentialStore();
 
-        command.storeAttributes = Arrays.asList("location=" + storeFile.getAbsolutePath(),
-                "keyStoreType=PKCS12",
-                "create=true");
-        command.credentialAttributes = Arrays.asList("algorithm=masked-MD5-DES",
-                "password=The quick brown fox jumped over the lazy dog");
+        command.iterationCount = 1000;
+        command.location = storeFile.getAbsolutePath();
+        command.algorithm = "masked-MD5-DES";
+        command.session = session;
 
         final PrintStream original = System.out;
         try {
@@ -88,33 +93,51 @@ public class CreateCredentialStoreTest {
 
             final String output = new String(capture.toByteArray());
 
-            assertThat(output).contains("In order to use this credential store set the following environment variables")
-                    .contains("export CREDENTIAL_STORE_PROTECTION_PARAMS=")
-                    .contains("export CREDENTIAL_STORE_PROTECTION=").contains("export CREDENTIAL_STORE_ATTR_location=")
-                    .contains("export CREDENTIAL_STORE_ATTR_keyStoreType=");
+            assertThat(output).contains("Credential store configuration was not persisted")
+                    .contains("CREDENTIAL_STORE_PROTECTION_PARAMS=")
+                    .contains("CREDENTIAL_STORE_PROTECTION=")
+                    .contains("CREDENTIAL_STORE_LOCATION=");
+        } finally {
+            System.setOut(original);
+        }
+    }
+
+    @Test
+    public void shouldCreateInitializeAndPersistCredentialStore() throws Exception {
+        final File storeFile = new File(tmp.getRoot(), "credential.store");
+
+        Session session = mock(Session.class);
+        when(session.readLine(anyString(), anyChar())).thenReturn("test");
+
+        final CreateCredentialStore command = new CreateCredentialStore();
+
+        command.iterationCount = 1000;
+        command.location = storeFile.getAbsolutePath();
+        command.algorithm = "masked-MD5-DES";
+        command.session = session;
+        command.persist = true;
+
+        final PrintStream original = System.out;
+        try {
+            final ByteArrayOutputStream capture = new ByteArrayOutputStream();
+
+            System.setOut(new PrintStream(capture));
+
+            command.execute();
         } finally {
             System.setOut(original);
         }
 
-    }
-
-    @Test
-    public void shouldCreateInitializeAndPersistCredentialStore() throws IOException, GeneralSecurityException {
-        final File storeFile = new File(tmp.getRoot(), "credential.store");
-
-        final Map<String, String> attributes = new HashMap<>();
-        attributes.put("location", storeFile.getAbsolutePath());
-        attributes.put("create", "true");
-
-        final Provider provider = new WildFlyElytronProvider();
-
-        final CredentialSource credentialSource = IdentityCredentials.NONE.withCredential(
-                new PasswordCredential(ClearPassword.createRaw(ClearPassword.ALGORITHM_CLEAR, "test".toCharArray())));
-
-        CreateCredentialStore.createCredentialStore(KeyStoreCredentialStore.KEY_STORE_CREDENTIAL_STORE, attributes,
-                credentialSource, provider);
-
         assertThat(storeFile).exists().isFile();
+        assertNotNull(Activator.credentialStore);
+
+        StoreInCredentialStore store = new StoreInCredentialStore();
+        store.alias = "my.password";
+        store.secret = "sec4et";
+        store.execute();
+
+        PasswordCredential credential = Activator.credentialStore.retrieve("my.password", PasswordCredential.class);
+        assertNotNull(credential);
     }
 
     @Test
@@ -175,16 +198,6 @@ public class CreateCredentialStoreTest {
 
         cs.store("my-alias", new PasswordCredential(ClearPassword.createRaw(ClearPassword.ALGORITHM_CLEAR, "passw0rd".toCharArray())));
         cs.flush();
-    }
-
-    @Test
-    public void createCredentialStoreAsInFuse() throws Exception {
-        Security.addProvider(new WildFlyElytronProvider());
-
-        for (Provider provider : Security.getProviders()) {
-            provider.getServices();
-        }
-
     }
 
     @Test

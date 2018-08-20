@@ -48,6 +48,10 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>org.apache.felix.utils</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.karaf.shell</groupId>
             <artifactId>org.apache.karaf.shell.core</artifactId>
             <scope>provided</scope>
@@ -67,6 +71,7 @@
         <dependency>
             <groupId>org.wildfly.security</groupId>
             <artifactId>wildfly-elytron</artifactId>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.wildfly.common</groupId>
@@ -108,6 +113,12 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
 
@@ -166,6 +177,10 @@
                             org.slf4j
                         </Import-Package>
                         <Export-Package>!*</Export-Package>
+                        <Private-Package>
+                            org.jboss.fuse.credential.store.karaf.*,
+                            org.wildfly.security.*
+                        </Private-Package>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Bundle-Activator>org.jboss.fuse.credential.store.karaf.Activator</Bundle-Activator>
                         <Karaf-Commands>org.jboss.fuse.credential.store.karaf.command</Karaf-Commands>

@@ -79,16 +79,9 @@ public class ElytronTest {
 
     @BeforeClass
     public static void init() {
-        Security.addProvider(new WildFlyElytronProvider());
-        provider = Security.getProvider("WildFlyElytron");
-    }
-
-    @Test
-    public void elytronProvider() throws Exception {
-        // https://docs.oracle.com/javase/8/docs/technotes/guides/security/crypto/CryptoSpec.html
-        // https://docs.oracle.com/javase/9/security/howtoimplaprovider.htm
-        Provider provider = Security.getProvider("WildFlyElytron");
-        assertFalse(provider.getServices().isEmpty());
+//        Security.addProvider(new WildFlyElytronProvider());
+//        provider = Security.getProvider("WildFlyElytron");
+        provider = new WildFlyElytronProvider();
     }
 
     @Test
@@ -299,7 +292,7 @@ public class ElytronTest {
         //  - iv: org.wildfly.security.password.impl.MaskedPasswordImpl.DEFAULT_PBE_KEY = "somearbitrarycrazystringthatdoesnotmatter"
         //  - ic: org.wildfly.security.password.impl.MaskedPasswordImpl.DEFAULT_ITERATION_COUNT = 1000
         //  - salt: random byte[8]
-        //  algorithm is chnaged using org.wildfly.security.password.interfaces.MaskedPassword.getPBEName()
+        //  algorithm is changed using org.wildfly.security.password.interfaces.MaskedPassword.getPBEName()
         //  e.g., ALGORITHM_MASKED_HMAC_SHA512_AES_256 -> PBEWithHmacSHA512AndAES_256
         //  new javax.crypto.spec.PBEParameterSpec(salt, ic)
         //  new javax.crypto.spec.PBEKeySpec(iv)
@@ -484,10 +477,10 @@ public class ElytronTest {
         IOUtils.write("", new FileOutputStream("target/passwords.txt"), "UTF-8");
         assertFalse(FileUtils.readFileToString(new File("target/passwords.txt"), "UTF-8").contains("alias"));
 
-        KeyStore ks = KeyStore.getInstance("PasswordFile");
+        KeyStore ks = KeyStore.getInstance("PasswordFile", provider);
         ks.load(new FileInputStream("target/passwords.txt"), null);
 
-        Password password = PasswordFactory.getInstance(UnixSHACryptPassword.ALGORITHM_CRYPT_SHA_512)
+        Password password = PasswordFactory.getInstance(UnixSHACryptPassword.ALGORITHM_CRYPT_SHA_512, provider)
                 .generatePassword(new ClearPasswordSpec("passw0rd".toCharArray()));
         PasswordEntry entry = new PasswordEntry(password);
         ks.setEntry("alias", entry, null);

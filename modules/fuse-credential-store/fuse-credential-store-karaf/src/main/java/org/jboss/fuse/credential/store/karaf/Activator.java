@@ -18,7 +18,9 @@ package org.jboss.fuse.credential.store.karaf;
 import java.lang.management.ManagementFactory;
 import java.lang.management.RuntimeMXBean;
 import java.lang.reflect.Proxy;
+import java.security.SecureRandom;
 import java.security.Security;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -30,8 +32,8 @@ import javax.management.JMException;
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
 
+import org.jboss.fuse.credential.store.karaf.util.CredentialStoreConfiguration;
 import org.jboss.fuse.credential.store.karaf.util.CredentialStoreHelper;
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -47,15 +49,12 @@ import org.wildfly.security.password.Password;
 import org.wildfly.security.password.interfaces.ClearPassword;
 
 /**
- * Standard OSGI {@link BundleActivator}: sets up the Credential Store from the environment variables, and replaces the
- * system properties with the values stored within it. Failing to setup the Credential Store it stops the OSGI container
- * by stopping the framework bundle (ID:0).
+ * <p>Standard OSGI {@link BundleActivator}: sets up the Credential Store from the environment variables or
+ * system properties and replaces the system properties with the values stored within it.</p>
  *
- * On startup, installs the {@link WildFlyElytronProvider} provider and replaces the {@link RuntimeMXBean} to hide the
- * clear text values from viewing through JMX.
+ * <p>On startup, replaces the {@link RuntimeMXBean} to hide the clear text values from viewing through JMX.</p>
  *
- * When stopping, removes the {@link WildFlyElytronProvider} and restores the original {@link RuntimeMXBean} and
- * original system property values.
+ * <p>When stopping, restores the original {@link RuntimeMXBean} and original system property values.</p>
  */
 public final class Activator implements BundleActivator, ServiceTrackerCustomizer<MBeanServer, MBeanServer> {
 
@@ -63,18 +62,28 @@ public final class Activator implements BundleActivator, ServiceTrackerCustomize
 
     private static final String SENSITIVE_VALUE_REPLACEMENT = "<sensitive>";
 
+    public static SecureRandom RANDOM = new SecureRandom();
+    public static Base64.Encoder ENCODER = Base64.getEncoder();
+    public static Base64.Decoder DECODER = Base64.getDecoder();
+
+    // CredentialStore available to everyone
+    public static CredentialStore credentialStore = null;
+    // configuration may tell us why Credential Store was not loaded (due to missing or invalid configuration)
+    public static CredentialStoreConfiguration config = null;
+
+    // Elytron classes are private packaged, so it's better to use it explicitly than via Security.addProvider()
+    private static WildFlyElytronProvider elytronProvider;
+
     private BundleContext context;
 
-    private ServiceReference<MBeanServer> mbeanServerReference;
+    private ObjectName runtimeBeanName;
     private RuntimeMXBean originalRuntimeBean;
 
-    private String providerName;
-
-    private final Map<String, String> replacedProperties = new HashMap<>();
-
-    private ObjectName runtimeBeanName;
-
+    private ServiceReference<MBeanServer> mbeanServerReference;
     private ServiceTracker<MBeanServer, MBeanServer> mbeanServerTracker;
+
+    // a map of all initially available system properties that were replaced by decrypted versions
+    private final Map<String, String> replacedProperties = new HashMap<>();
 
     /**
      * If there are any Credential store references as values in the system properties, adds
@@ -88,38 +97,26 @@ public final class Activator implements BundleActivator, ServiceTrackerCustomize
     public void start(final BundleContext context) throws Exception {
         this.context = context;
 
-        final WildFlyElytronProvider elytronProvider = new WildFlyElytronProvider();
-        providerName = elytronProvider.getName();
-        Security.addProvider(elytronProvider);
+        // we won't Security.addProvider() it, because this provider's classes are private-packaged in our bundle
+        elytronProvider = new WildFlyElytronProvider();
 
         final Properties properties = System.getProperties();
 
-        @SuppressWarnings("unchecked")
-        final Collection<String> values = (Collection) properties.values();
-
-        final boolean hasValuesFromCredentialStore = CredentialStoreHelper.containsStoreReferences(values);
-
-        if (!hasValuesFromCredentialStore) {
+        config = new CredentialStoreConfiguration();
+        if (!config.discover()) {
+            LOG.info("Credential Store configuration not found. System properties and configuration encryption not supported.");
             return;
         }
 
-        CredentialStore credentialStore;
         try {
-            credentialStore = CredentialStoreHelper.credentialStoreFromEnvironment();
+            credentialStore = config.loadCredentialStore();
         } catch (final Exception e) {
             final String message = e.getMessage();
-            System.err.println("\r\nUnable to initialize credential store, destroying container: " + message);
-            LOG.error("Unable to initialize credential store, destroying container: {}", message);
-
-            if (LOG.isDebugEnabled()) {
-                LOG.debug("Logging exception stack trace", e);
-            }
-
-            final Bundle frameworkBundle = context.getBundle(0);
-            frameworkBundle.stop();
-
+            LOG.error("Unable to initialize credential store, system properties and configuration encryption not supported: ", message, e);
             return;
         }
+
+        LOG.info("Processing system properties...");
 
         @SuppressWarnings("unchecked")
         final Hashtable<String, String> propertiesAsStringEntries = (Hashtable) properties;
@@ -133,10 +130,14 @@ public final class Activator implements BundleActivator, ServiceTrackerCustomize
             }
         }
 
+        runtimeBeanName = ObjectName.getInstance("java.lang", "type", "Runtime");
+
         if (!replacedProperties.isEmpty()) {
             mbeanServerTracker = new ServiceTracker<>(context, MBeanServer.class, this);
             mbeanServerTracker.open();
         }
+
+        LOG.info("Processing system properties - done");
     }
 
     /**
@@ -148,12 +149,6 @@ public final class Activator implements BundleActivator, ServiceTrackerCustomize
      */
     @Override
     public void stop(final BundleContext context) throws Exception {
-        // remove WildFlyElytronProvider, there could be a classloader leak if we do not remove it as we package it
-        // within the bundle
-        if (providerName != null) {
-            Security.removeProvider(providerName);
-        }
-
         restoreRuntimeMBean();
 
         if (!replacedProperties.isEmpty()) {
@@ -168,6 +163,22 @@ public final class Activator implements BundleActivator, ServiceTrackerCustomize
     }
 
     /**
+     * When {@code credential-store:create} command is called, it can replace existing store.
+     * @param cs
+     */
+    public static void setCredentialStore(CredentialStore cs) {
+        credentialStore = cs;
+    }
+
+    /**
+     * Returns currently instantiated (for this bundle revision/wiring) {@link WildFlyElytronProvider}
+     * @return
+     */
+    public static WildFlyElytronProvider getElytronProvider() {
+        return elytronProvider;
+    }
+
+    /**
      * Using the {@link MBeanServer} from the OSGI {@link BundleContext} finds the {@link RuntimeMXBean} and replaces it
      * with a {@link Proxy} that filters access to replaced system property values from the Credential store. Values
      * will be presented as {@link #SENSITIVE_VALUE_REPLACEMENT} instead of them being in the clear.
@@ -176,9 +187,7 @@ public final class Activator implements BundleActivator, ServiceTrackerCustomize
      *            OSGI bundle context
      * @throws JMException
      */
-    void installFilteringRuntimeBean(final BundleContext context, final MBeanServer mbeanServer) throws JMException {
-        runtimeBeanName = ObjectName.getInstance("java.lang", "type", "Runtime");
-
+    private void installFilteringRuntimeBean(final BundleContext context, final MBeanServer mbeanServer) throws JMException {
         originalRuntimeBean = ManagementFactory.getRuntimeMXBean();
 
         final Object proxy = Proxy.newProxyInstance(runtimeBeanName.getClass().getClassLoader(),

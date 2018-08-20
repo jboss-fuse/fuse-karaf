@@ -20,6 +20,7 @@ import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.apache.karaf.shell.support.table.Col;
 import org.apache.karaf.shell.support.table.ShellTable;
+import org.jboss.fuse.credential.store.karaf.Activator;
 import org.jboss.fuse.credential.store.karaf.util.CredentialStoreHelper;
 import org.wildfly.security.credential.store.CredentialStore;
 
@@ -28,15 +29,19 @@ import org.wildfly.security.credential.store.CredentialStore;
  */
 @Command(scope = "credential-store", name = "list", description = "List the content of the credential store")
 @Service
-public class ListCredentialStore implements Action {
+public class ListCredentialStore extends AbstractCredentialStoreCommand {
 
     @Override
     public Object execute() throws Exception {
+        if (!validate()) {
+            return null;
+        }
+
         final ShellTable table = new ShellTable();
         table.column(new Col("Alias"));
         table.column(new Col("Reference"));
 
-        final CredentialStore credentialStore = CredentialStoreHelper.credentialStoreFromEnvironment();
+        final CredentialStore credentialStore = Activator.credentialStore;
 
         for (final String alias : credentialStore.getAliases()) {
             table.addRow().addContent(alias, CredentialStoreHelper.referenceForAlias(alias));

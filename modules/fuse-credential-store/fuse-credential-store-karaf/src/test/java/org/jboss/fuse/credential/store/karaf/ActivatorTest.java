@@ -74,6 +74,7 @@ public class ActivatorTest {
         final Map<String, String> parameters = new HashMap<>();
         parameters.put("location", storePath);
         parameters.put("keyStoreType", "JCEKS");
+        parameters.put("create", "true");
 
         credentialStore.initialize(parameters,
                 new CredentialStore.CredentialSourceProtectionParameter(credentialSource));

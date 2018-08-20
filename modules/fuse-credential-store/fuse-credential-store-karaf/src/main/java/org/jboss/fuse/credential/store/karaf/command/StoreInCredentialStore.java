@@ -15,16 +15,18 @@
  */
 package org.jboss.fuse.credential.store.karaf.command;
 
-import org.apache.karaf.shell.api.action.Action;
+import java.security.Security;
+
+import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
-import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
+import org.jboss.fuse.credential.store.karaf.Activator;
 import org.jboss.fuse.credential.store.karaf.util.CredentialStoreHelper;
-import org.jboss.fuse.credential.store.karaf.util.ProviderHelper;
 import org.wildfly.security.credential.PasswordCredential;
 import org.wildfly.security.credential.store.CredentialStore;
 import org.wildfly.security.password.Password;
 import org.wildfly.security.password.PasswordFactory;
+import org.wildfly.security.password.interfaces.ClearPassword;
 import org.wildfly.security.password.spec.ClearPasswordSpec;
 
 /**
@@ -32,23 +34,34 @@ import org.wildfly.security.password.spec.ClearPasswordSpec;
  */
 @Command(scope = "credential-store", name = "store", description = "Store secret in the credential store")
 @Service
-public class StoreInCredentialStore implements Action {
+public class StoreInCredentialStore extends AbstractCredentialStoreCommand {
 
-    @Option(name = "-a", aliases = {"--alias"}, description = "Alias for the secret", required = true,
-            multiValued = false)
-    private String alias;
+    @Argument(index = 0, required = true, description = "Alias for credential Store entry")
+    String alias;
 
-    @Option(name = "-s", aliases = {"--secret"}, description = "Secret value", required = true, multiValued = false)
-    private String secret;
+    @Argument(index = 1, required = true, description = "Secret value to put into Credential Store")
+    String secret;
 
     @Override
     public Object execute() throws Exception {
-        final CredentialStore credentialStore = CredentialStoreHelper.credentialStoreFromEnvironment();
-        final PasswordFactory passwordFactory = PasswordFactory.getInstance("clear",
-                ProviderHelper.provider(ProviderHelper.WILDFLY_PROVIDER));
+        if (!validate()) {
+            return null;
+        }
+
+        final CredentialStore credentialStore = Activator.credentialStore;
+        final PasswordFactory passwordFactory = PasswordFactory.getInstance(ClearPassword.ALGORITHM_CLEAR,
+                Activator.getElytronProvider());
         final Password password = passwordFactory.generatePassword(new ClearPasswordSpec(secret.toCharArray()));
 
-        credentialStore.store(alias, new PasswordCredential(password));
+        try {
+            // this is a bit dangerous - we *need* Elytron registered, because KeyStoreCredentialStore invokes
+            // some factory methods without passing the provider...
+            // but we don't want Elytron (private packaged) to be available in JVM
+            Security.addProvider(Activator.getElytronProvider());
+            credentialStore.store(alias, new PasswordCredential(password));
+        } finally {
+            Security.removeProvider(Activator.getElytronProvider().getName());
+        }
 
         credentialStore.flush();
 

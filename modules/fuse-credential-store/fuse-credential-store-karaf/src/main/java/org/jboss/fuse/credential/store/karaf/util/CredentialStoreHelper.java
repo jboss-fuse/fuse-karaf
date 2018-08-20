@@ -15,35 +15,19 @@
  */
 package org.jboss.fuse.credential.store.karaf.util;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
-import java.security.Provider;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jboss.fuse.credential.store.karaf.Defaults;
-import org.wildfly.security.credential.source.CredentialSource;
 import org.wildfly.security.credential.store.CredentialStore;
-import org.wildfly.security.credential.store.CredentialStore.ProtectionParameter;
 import org.wildfly.security.credential.store.impl.KeyStoreCredentialStore;
-
-import static java.lang.System.getenv;
-import static org.jboss.fuse.credential.store.karaf.util.EnvironmentHelper.attributesFromEnvironment;
 
 /**
  * Utility class with methods relating to {@link CredentialStore} usage.
  */
 public final class CredentialStoreHelper {
-
-    private static final String CREDENTIAL_STORE_ALGORITHM_ENV = "CREDENTIAL_STORE_ALGORITHM";
-
-    private static final String CREDENTIAL_STORE_ATTR_ENV_PREFIX = "CREDENTIAL_STORE_ATTR_";
-
-    private static final String CREDENTIAL_STORE_PROVIDER_ENV = "CREDENTIAL_STORE_PROVIDER";
 
     /**
      * Regular expression that matches store reference syntax
@@ -69,32 +53,6 @@ public final class CredentialStoreHelper {
         return STORE_REFERENCE_REGEX.matcher(value).matches();
     }
 
-    /**
-     * Creates the credential store specified by the configuration in environment variables.
-     *
-     * @return the credential store
-     * @throws GeneralSecurityException
-     * @throws IOException
-     */
-    public static CredentialStore credentialStoreFromEnvironment() throws GeneralSecurityException, IOException {
-        final String credentialStoreAlgorithm = Optional.ofNullable(getenv(CREDENTIAL_STORE_ALGORITHM_ENV))
-                .orElse(Defaults.CREDENTIAL_STORE_ALGORITHM);
-
-        final Provider provider = ProviderHelper.provider(
-                Optional.ofNullable(getenv(CREDENTIAL_STORE_PROVIDER_ENV)).orElse(ProviderHelper.WILDFLY_PROVIDER));
-
-        final CredentialStore credentialStore = CredentialStore.getInstance(credentialStoreAlgorithm, provider);
-
-        final Map<String, String> attributes = defaultCredentialStoreAttributesFor(credentialStoreAlgorithm);
-        attributes.putAll(attributesFromEnvironment(CREDENTIAL_STORE_ATTR_ENV_PREFIX));
-
-        final ProtectionParameter protectionParameter = createProtectionParameterFromEnvironment();
-
-        credentialStore.initialize(attributes, protectionParameter);
-
-        return credentialStore;
-    }
-
     public static Map<String, String> defaultCredentialStoreAttributesFor(final String credentialStoreAlgorithm) {
         final Map<String, String> defaults = new HashMap<>();
 
@@ -115,16 +73,6 @@ public final class CredentialStoreHelper {
         matcher.matches();
 
         return matcher.group(1);
-    }
-
-    static ProtectionParameter createProtectionParameterFromEnvironment() throws GeneralSecurityException, IOException {
-        final String credentialTypeParam = Optional.ofNullable(getenv("CREDENTIAL_STORE_PROTECTION_TYPE"))
-                .orElse(Defaults.CREDENTIAL_TYPE.name());
-        final ProtectionType credentialType = ProtectionType.valueOf(credentialTypeParam);
-
-        final CredentialSource credentialSource = credentialType.createCredentialSource(getenv());
-
-        return new CredentialStore.CredentialSourceProtectionParameter(credentialSource);
     }
 
 }

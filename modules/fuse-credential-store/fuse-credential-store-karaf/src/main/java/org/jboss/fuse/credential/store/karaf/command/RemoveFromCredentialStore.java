@@ -16,10 +16,11 @@
 package org.jboss.fuse.credential.store.karaf.command;
 
 import org.apache.karaf.shell.api.action.Action;
+import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
-import org.jboss.fuse.credential.store.karaf.util.CredentialStoreHelper;
+import org.jboss.fuse.credential.store.karaf.Activator;
 import org.wildfly.security.credential.Credential;
 import org.wildfly.security.credential.store.CredentialStore;
 
@@ -28,15 +29,18 @@ import org.wildfly.security.credential.store.CredentialStore;
  */
 @Command(scope = "credential-store", name = "remove", description = "Remove secret from the credential store")
 @Service
-public class RemoveFromCredentialStore implements Action {
+public class RemoveFromCredentialStore extends AbstractCredentialStoreCommand {
 
-    @Option(name = "-a", aliases = {"--alias"}, description = "Alias of the secret to remove", required = true,
-            multiValued = false)
+    @Argument(index = 0, required = true, description = "Alias for credential Store entry")
     private String alias;
 
     @Override
     public Object execute() throws Exception {
-        final CredentialStore credentialStore = CredentialStoreHelper.credentialStoreFromEnvironment();
+        if (!validate()) {
+            return null;
+        }
+
+        final CredentialStore credentialStore = Activator.credentialStore;
 
         credentialStore.remove(alias, Credential.class);
 
