@@ -189,6 +189,8 @@
                 replacement="mvn:org.bouncycastle/bcpkix-jdk15on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcprov-jdk15on/[1.50,1.60)"
                 replacement="mvn:org.bouncycastle/bcprov-jdk15on/${version.org.bouncycastle}" mode="maven" />
+        <bundle originalUri="mvn:org.bouncycastle/bcprov-ext-jdk15on/[1.50,1.60)"
+                replacement="mvn:org.bouncycastle/bcprov-ext-jdk15on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:io.swagger/swagger-annotations/[1.5,1.6)"
                 replacement="mvn:io.swagger/swagger-annotations/${version.io.swagger}" mode="maven" />
         <bundle originalUri="mvn:io.swagger/swagger-core/[1.5,1.6)"
@@ -198,6 +200,8 @@
         <bundle originalUri="mvn:io.swagger/swagger-models/[1.5,1.6)"
                 replacement="mvn:io.swagger/swagger-models/${version.io.swagger}" mode="maven" />
         <bundle originalUri="mvn:org.eclipse.persistence/javax.persistence/[2,3)"
+                replacement="mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/${version.org.hibernate.javax.persistence}" mode="maven" />
+        <bundle originalUri="mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/[1,2)"
                 replacement="mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/${version.org.hibernate.javax.persistence}" mode="maven" />
         <bundle originalUri="mvn:org.eclipse.jdt.core.compiler/ecj/[4,5)"
                 replacement="mvn:org.eclipse.jdt.core.compiler/ecj/${version.org.eclipse.jdt.core.compiler}" mode="maven" />
