@@ -101,6 +101,8 @@
                 replacement="mvn:org.apache.santuario/xmlsec/${version.org.apache.santuario}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/[1,2)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aopalliance/${version.org.apache.servicemix.bundles.aopalliance}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.c3p0/[0.9,1)"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.c3p0/${version.org.apache.servicemix.bundles.c3p0}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/[3.2,4)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.cglib/${version.org.apache.servicemix.bundles.cglib}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jasypt/[1.9,2)"
