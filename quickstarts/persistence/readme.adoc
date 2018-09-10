@@ -93,7 +93,7 @@ drwxrwxr-x. 5 ggrzybek ggrzybek    4096 04-13 16:22 ..
 $ pwd
 /home/ggrzybek/sources/github.com/jboss-fuse/fuse-karaf/quickstarts/persistence
 
-$ mvn clean test -Pquickstarts-test -Pwmq9 -f standalone-xa/ -Dmq9library.path='/data/downloads/ibm.com/IBM MQ/9.0.5.0-IBM-MQ-Install-Java-All/JavaSE' -Dtest=StandaloneWMQ9AccessTest
+$ mvn clean test -Pqtest -Pwmq9 -f standalone-xa/ -Dmq9library.path='/data/downloads/ibm.com/IBM MQ/9.0.5.0-IBM-MQ-Install-Java-All/JavaSE' -Dtest=StandaloneWMQ9AccessTest
 [INFO] Scanning for projects...
 [INFO]
 [INFO] --------------< org.jboss.fuse.quickstarts:standalone-xa >--------------
