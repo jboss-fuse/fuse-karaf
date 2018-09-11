@@ -29,7 +29,7 @@ $ mvn clean process-resources
 [INFO] Scanning for projects...
 [INFO]
 [INFO] -----------------< org.jboss.fuse.quickstarts:manual >------------------
-[INFO] Building Red Hat Fuse :: Quickstarts :: persistence :: manual 7.1.0.redhat-SNAPSHOT
+[INFO] Building Red Hat Fuse :: Quickstarts :: persistence :: manual 7.1.1.redhat-SNAPSHOT
 [INFO] --------------------------------[ pom ]---------------------------------
 [INFO]
 ...
@@ -97,7 +97,7 @@ $ mvn clean test -Pquickstarts-test -Pwmq9 -f standalone-xa/ -Dmq9library.path='
 [INFO] Scanning for projects...
 [INFO]
 [INFO] --------------< org.jboss.fuse.quickstarts:standalone-xa >--------------
-[INFO] Building Red Hat Fuse :: Quickstarts :: persistence :: standalone transaction support 7.1.0.redhat-SNAPSHOT
+[INFO] Building Red Hat Fuse :: Quickstarts :: persistence :: standalone transaction support 7.1.1.redhat-SNAPSHOT
 [INFO] --------------------------------[ jar ]---------------------------------
 [INFO]
 [INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ standalone-xa ---
@@ -188,7 +188,7 @@ karaf@root()> install -s mvn:org.postgresql/postgresql/42.2.2
 Bundle ID: 233
 karaf@root()> feature:install jdbc pax-jdbc-pool-dbcp2
 
-karaf@root()> install -s mvn:org.jboss.fuse.quickstarts/camel-jdbc/7.1.0.redhat-SNAPSHOT
+karaf@root()> install -s mvn:org.jboss.fuse.quickstarts/camel-jdbc/7.1.1.redhat-SNAPSHOT
 Bundle ID: 238
 ----
 
