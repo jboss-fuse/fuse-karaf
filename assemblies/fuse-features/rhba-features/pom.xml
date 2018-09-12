@@ -28,9 +28,9 @@
     </parent>
 
     <groupId>org.jboss.fuse.features</groupId>
-    <artifactId>brms-features</artifactId>
+    <artifactId>rhba-features</artifactId>
 
-    <name>Red Hat Fuse :: Features :: BxMS</name>
+    <name>Red Hat Fuse :: Features :: RHBA</name>
 
     <build>
         <resources>

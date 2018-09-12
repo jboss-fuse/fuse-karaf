@@ -479,7 +479,7 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.features</groupId>
-                <artifactId>brms-features</artifactId>
+                <artifactId>rhba-features</artifactId>
                 <version>${project.version}</version>
                 <type>xml</type>
                 <classifier>features</classifier>
