@@ -2627,7 +2627,7 @@
       "autheticatorFlow" : true
     } ]
   }, {
-    "id" : "64301c99-e040-4261-9cdf-eec52b77150b",
+    "id" : "2a355a9f-6ee1-452a-92c2-e12d836f7b80",
     "alias" : "clients",
     "description" : "Base authentication for clients",
     "providerId" : "client-flow",
@@ -2653,7 +2653,7 @@
       "autheticatorFlow" : false
     } ]
   }, {
-    "id" : "f2ec6d5c-772e-49da-b393-4ea7e1346bd2",
+    "id" : "fe3feb31-2982-4fdd-8ee5-9e3d60717ee7",
     "alias" : "direct grant",
     "description" : "OpenID Connect Resource Owner Grant",
     "providerId" : "basic-flow",
@@ -2679,7 +2679,7 @@
       "autheticatorFlow" : false
     } ]
   }, {
-    "id" : "85324f78-ac1a-4475-9c34-4d34f69505e3",
+    "id" : "0c91c6f5-0417-4d21-9d89-e90d7cec8acf",
     "alias" : "docker auth",
     "description" : "Used by Docker clients to authenticate against the IDP",
     "providerId" : "basic-flow",
@@ -2693,7 +2693,7 @@
       "autheticatorFlow" : false
     } ]
   }, {
-    "id" : "c6e2e14d-43b2-48c6-aa29-fc986a62f69d",
+    "id" : "26d2ad28-0eca-4608-9a78-da04a0310a8f",
     "alias" : "first broker login",
     "description" : "Actions taken after first broker login with identity provider account, which is not yet linked to any Keycloak account",
     "providerId" : "basic-flow",
@@ -2721,7 +2721,7 @@
       "autheticatorFlow" : true
     } ]
   }, {
-    "id" : "c06c33c0-f7de-487f-98e2-93299c3bb72b",
+    "id" : "5f8ffffc-7a27-41ef-90eb-89cc6f35107c",
     "alias" : "forms",
     "description" : "Username, password, otp and other auth forms.",
     "providerId" : "basic-flow",
@@ -2741,7 +2741,7 @@
       "autheticatorFlow" : false
     } ]
   }, {
-    "id" : "4887f118-cfb4-469e-9813-edc877bafdff",
+    "id" : "e6509a12-4b1d-4ca0-9173-18e7a5ae8e1e",
     "alias" : "registration",
     "description" : "registration flow",
     "providerId" : "basic-flow",
@@ -2756,7 +2756,7 @@
       "autheticatorFlow" : true
     } ]
   }, {
-    "id" : "2e361ff7-1162-44fe-8dce-c57801b234b6",
+    "id" : "5de04209-d735-4f51-bb13-10b255bc1a01",
     "alias" : "registration form",
     "description" : "registration form",
     "providerId" : "form-flow",
@@ -2788,7 +2788,7 @@
       "autheticatorFlow" : false
     } ]
   }, {
-    "id" : "ff706cc1-fd87-470b-8ff9-35c998bb7ebd",
+    "id" : "e55d91a6-ce00-4126-beca-3f00bd2c915e",
     "alias" : "reset credentials",
     "description" : "Reset credentials for a user if they forgot their password or something",
     "providerId" : "basic-flow",
@@ -2820,7 +2820,7 @@
       "autheticatorFlow" : false
     } ]
   }, {
-    "id" : "7e7d3da6-a8e7-46b9-9abf-37b6b4a18962",
+    "id" : "975c8258-04dd-4eaa-b5e4-a601d1748f0d",
     "alias" : "saml ecp",
     "description" : "SAML ECP Profile Authentication Flow",
     "providerId" : "basic-flow",
@@ -2835,13 +2835,13 @@
     } ]
   } ],
   "authenticatorConfig" : [ {
-    "id" : "6e77eac4-356a-4c2e-bb56-22ddb6624c54",
+    "id" : "63bf6ee8-33f2-498c-b73b-ae1a474446cf",
     "alias" : "create unique user config",
     "config" : {
       "require.password.update.after.registration" : "false"
     }
   }, {
-    "id" : "1a4eab56-104e-4e2b-bc8e-b6d61b8d4c7c",
+    "id" : "2b134e81-392e-4f89-af74-d72278aa5bd3",
     "alias" : "review profile config",
     "config" : {
       "update.profile.on.first.login" : "missing"
@@ -2853,27 +2853,7 @@
     "providerId" : "CONFIGURE_TOTP",
     "enabled" : true,
     "defaultAction" : false,
-    "config" : { }
-  }, {
-    "alias" : "UPDATE_PASSWORD",
-    "name" : "Update Password",
-    "providerId" : "UPDATE_PASSWORD",
-    "enabled" : true,
-    "defaultAction" : false,
-    "config" : { }
-  }, {
-    "alias" : "UPDATE_PROFILE",
-    "name" : "Update Profile",
-    "providerId" : "UPDATE_PROFILE",
-    "enabled" : true,
-    "defaultAction" : false,
-    "config" : { }
-  }, {
-    "alias" : "VERIFY_EMAIL",
-    "name" : "Verify Email",
-    "providerId" : "VERIFY_EMAIL",
-    "enabled" : true,
-    "defaultAction" : false,
+    "priority" : 10,
     "config" : { }
   }, {
     "alias" : "terms_and_conditions",
@@ -2881,6 +2861,31 @@
     "providerId" : "terms_and_conditions",
     "enabled" : false,
     "defaultAction" : false,
+    "priority" : 20,
+    "config" : { }
+  }, {
+    "alias" : "UPDATE_PASSWORD",
+    "name" : "Update Password",
+    "providerId" : "UPDATE_PASSWORD",
+    "enabled" : true,
+    "defaultAction" : false,
+    "priority" : 30,
+    "config" : { }
+  }, {
+    "alias" : "UPDATE_PROFILE",
+    "name" : "Update Profile",
+    "providerId" : "UPDATE_PROFILE",
+    "enabled" : true,
+    "defaultAction" : false,
+    "priority" : 40,
+    "config" : { }
+  }, {
+    "alias" : "VERIFY_EMAIL",
+    "name" : "Verify Email",
+    "providerId" : "VERIFY_EMAIL",
+    "enabled" : true,
+    "defaultAction" : false,
+    "priority" : 50,
     "config" : { }
   } ],
   "browserFlow" : "browser",
@@ -2909,6 +2914,6 @@
     "waitIncrementSeconds" : "60",
     "offlineSessionMaxLifespanEnabled" : "false"
   },
-  "keycloakVersion" : "4.1.0.Final",
+  "keycloakVersion" : "4.4.0.Final",
   "userManagedAccessAllowed" : false
 }

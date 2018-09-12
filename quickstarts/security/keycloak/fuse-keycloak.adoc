@@ -5,34 +5,53 @@ This mini-guide describes how to integrate/use Keycloak security in Red Hat Fuse
 
 == Keycloak configuration
 
-The below sections refer to single Keycloak _realm_ created in Keycloak server ${version.org.keycloak} for the purpose
+This guide was tested with two configurations:
+
+* Running on community version of Keycloak ${version.org.keycloak}
+* Running on Red Hat SSO ${version.org.keycloak.rhsso} that uses Keycloak ${version.org.keycloak.product}
+
+The examples use Keycloak ${version.org.keycloak}, but all examples will work on RH-SSO ${version.org.keycloak.rhsso}.
+
+The below sections refer to single Keycloak _realm_ created in Keycloak/RH-SSO server for the purpose
 of Fuse 7 Security/Keycloak quickstarts.
 
+Before starting Keycloak/RH-SSO, we have to create single administrator - if existing installation
+is used, current administrator should be used to administer the realm. The realm itself can be imported from
+`etc/fuse7karaf-realm-export.json` for Keycloak server or `etc/fuse7karaf-realm-export-rh-sso.json` for RH-SSO server.
+Here's an example of configuring default `admin` user to manage Keycloak server:
+
+[listing,options="nowrap"]
+----
+$ pwd
+/data/servers/keycloak-4.4.0.Final
+
+$ bin/add-user-keycloak.sh -u admin
+Press ctrl-d (Unix) or ctrl-z (Windows) to exit
+Password: passw0rd
+Added 'admin' to '/data/servers/keycloak-4.4.0.Final/standalone/configuration/keycloak-add-user.json', restart server to load user
+----
+
 The keycloak server is running using standard distribution with shifted ports:
+
 [listing,options="nowrap"]
 ----
 $ bin/standalone.sh -Djboss.socket.binding.port-offset=100 --debug 5006
 ----
 
-The base URL of keycloak server (used in following examples) is: `http://127.0.0.1:8180/auth`.
+The base URL of keycloak/RH-SSO server (used in following examples) is: `http://127.0.0.1:8180/auth`.
 
 The realm has ID `fuse7karaf` and is exported (with clients, groups and roles) to:
 
-* `etc/fuse7karaf-realm-export-clean.json` - that's fresh export of newly created realm. It's purpose is to show
-changes I made to the realm using UI when checking different scenarios.
-* `etc/fuse7karaf-realm-export.json` - export of newly `fuse7karaf` realm after all the changes I made for the examples.
-
-When new realm is created, it contains several default _clients_:
-
-* `account` (`/auth/realms/fuse7karaf/account`)
-* `admin-cli`
-* `broker`
-* `realm-management`
-* `security-admin-console` (`/auth/admin/fuse7karaf/console/index.html`)
+* `etc/fuse7karaf-realm-export.json` for Keycloak ${version.org.keycloak}
+* `etc/fuse7karaf-realm-export-rh-sso.json` for RH-SSO ${version.org.keycloak.rhsso}
 
 There are no default users in new realm. Following examples will use just `admin` user with `passw0rd` password with
 different roles assigned (as required by given scenario). I'll only use roles assigned per given client - there'll be
 no realm-wide roles assigned to user(s).
+
+In order to import `etc/fuse7karaf-realm-export.json` or `etc/fuse7karaf-realm-export-rh-sso.json` into
+Keycloak/RH-SSI instance, we can't log into `master` realm and click `Import`, We have to click
+`Add realm` and select JSON file there - `fuse7karaf` realm name will be taken from the imported file.
 
 == SSH
 
