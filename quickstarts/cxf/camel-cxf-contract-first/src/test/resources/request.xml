@@ -17,8 +17,10 @@
 -->
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ord="http://order.camelinaction">
    <soapenv:Body>
-      <ord:partName>motor</ord:partName>
-      <ord:amount>1</ord:amount>
-      <ord:customerName>honda</ord:customerName>
+      <ord:purchaseOrder>
+          <partName>motor</partName>
+          <amount>1</amount>
+          <customerName>honda</customerName>
+      </ord:purchaseOrder>
    </soapenv:Body>
 </soapenv:Envelope>

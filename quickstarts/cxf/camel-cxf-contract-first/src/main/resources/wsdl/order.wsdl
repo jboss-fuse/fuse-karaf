@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 
      Copyright 2005-2018 Red Hat, Inc.
@@ -26,18 +26,21 @@
   <!-- Type definitions for input- and output parameters for webservice -->
   <wsdl:types>
     <xs:schema targetNamespace="http://order.camelinaction">
-      <xs:element type="xs:string" name="partName" />
-      <xs:element type="xs:int" name="amount" />
-      <xs:element type="xs:string" name="customerName" />
       <xs:element type="xs:string" name="resultCode" />
+      <xs:element name="purchaseOrder" type="tns:purchaseOrder"/>
+      <xs:complexType name="purchaseOrder">
+          <xs:sequence>
+              <xs:element type="xs:string" name="partName" />
+              <xs:element type="xs:int" name="amount" />
+              <xs:element type="xs:string" name="customerName" />
+           </xs:sequence>
+      </xs:complexType>
     </xs:schema>
   </wsdl:types>
 
   <!-- Message definitions for input and output -->
   <wsdl:message name="purchaseOrder">
-    <wsdl:part name="partName" element="tns:partName" />
-    <wsdl:part name="amount" element="tns:amount"/>
-    <wsdl:part name="customerName" element="tns:customerName"/>
+    <wsdl:part name="parameters" element="tns:purchaseOrder" />
   </wsdl:message>
   <wsdl:message name="orderResult">
     <wsdl:part name="resultCode" element="tns:resultCode" />
