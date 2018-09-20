@@ -408,6 +408,7 @@
       "cxf-external" : [ "admin" ],
       "camel-undertow-restdsl-endpoint" : [ "admin" ],
       "whiteboard-blueprint-info" : [ "admin" ],
+      "account" : [ "view-profile", "manage-account" ],
       "whiteboard-info" : [ "admin" ],
       "hs-blueprint-info" : [ "admin" ]
     },
