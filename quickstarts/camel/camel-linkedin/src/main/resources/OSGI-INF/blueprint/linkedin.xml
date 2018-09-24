@@ -74,7 +74,7 @@
         -->
         <route id="linkedin-route">
 
-            <from uri="linkedin://search/searchCompanies?fields=:(companies:(name,twitter-id,website-url))&amp;keywords=Red%20Hat&amp;consumer.timeUnit=SECONDS&amp;consumer.delay=60&amp;consumer.initialDelay=15" />
+            <from uri="linkedin:search/searchCompanies?fields=:(companies:(name,twitter-id,website-url))&amp;keywords=Red%20Hat&amp;consumer.timeUnit=SECONDS&amp;consumer.delay=60&amp;consumer.initialDelay=15" />
             <log message="Poll received ${body.companies.companyList.size} companies for search term 'Red Hat'" />
 
             <!-- Count of number of messages to aggregate later -->
