@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.quickstarts</groupId>
         <artifactId>quickstarts-parent</artifactId>
-        <version>7.1.1.redhat-SNAPSHOT</version>
+        <version>7.1.1.fuse-711003</version>
     </parent>
 
     <artifactId>cxf</artifactId>
