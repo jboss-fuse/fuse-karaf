@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.quickstarts</groupId>
         <artifactId>beginner</artifactId>
-        <version>7.1.1.redhat-SNAPSHOT</version>
+        <version>7.1.1.fuse-711004</version>
     </parent>
 
     <artifactId>beginner-camel-errorhandler</artifactId>

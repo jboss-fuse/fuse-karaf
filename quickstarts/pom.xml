@@ -22,7 +22,7 @@
 
     <groupId>org.jboss.fuse.quickstarts</groupId>
     <artifactId>quickstarts-parent</artifactId>
-    <version>7.1.1.redhat-SNAPSHOT</version>
+    <version>7.1.1.fuse-711004</version>
     <packaging>pom</packaging>
 
     <name>Red Hat Fuse :: Quickstarts :: quickstarts</name>
@@ -34,8 +34,8 @@
         <skip.quickstarts.tests>true</skip.quickstarts.tests>
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
-        <version.org.apache.cxf>3.1.11.fuse-000231</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-000226</version.org.apache.karaf>
+        <version.org.apache.cxf>3.1.11.fuse-711004</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.0.fuse-711004</version.org.apache.karaf>
 
         <!-- versions of Maven plugins -->
         <version.plugin.asciidoctor-maven-plugin>1.5.6</version.plugin.asciidoctor-maven-plugin>
@@ -191,7 +191,7 @@
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>jboss-fuse-parent</artifactId>
-                <version>7.1.1.redhat-SNAPSHOT</version>
+                <version>7.1.1.fuse-711004</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
