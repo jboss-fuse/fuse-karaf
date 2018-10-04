@@ -21,14 +21,18 @@
 
     <!-- A list of bundle URI replacements that allows changing external feature definitions -->
     <bundleReplacements>
-        <bundle originalUri="mvn:commons-beanutils/commons-beanutils/[1.9,2)"
+        <bundle originalUri="mvn:commons-beanutils/commons-beanutils/[1.8,2)"
                 replacement="mvn:commons-beanutils/commons-beanutils/${version.commons-beanutils}" mode="maven" />
         <bundle originalUri="mvn:commons-codec/commons-codec/[1,2)"
                 replacement="mvn:commons-codec/commons-codec/${version.commons-codec}" mode="maven" />
         <bundle originalUri="mvn:commons-collections/commons-collections/[3,4)"
                 replacement="mvn:commons-collections/commons-collections/${version.commons-collections}" mode="maven" />
+        <bundle originalUri="mvn:commons-io/commons-io/[2,3)"
+                replacement="mvn:commons-io/commons-io/${version.commons-io}" mode="maven" />
         <bundle originalUri="mvn:commons-lang/commons-lang/[2.6,3)"
                 replacement="mvn:commons-lang/commons-lang/${version.commons-lang}" mode="maven" />
+        <bundle originalUri="mvn:commons-net/commons-net/[3,4)"
+                replacement="mvn:commons-net/commons-net/${version.commons-net}" mode="maven" />
         <bundle originalUri="mvn:commons-pool/commons-pool/[1.6,2)"
                 replacement="mvn:commons-pool/commons-pool/${version.commons-pool}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml/classmate/[1.3,1.4)"
@@ -115,6 +119,8 @@
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.reflections/${version.org.apache.servicemix.bundles.reflections}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.rhino/[1,2)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.rhino/${version.org.apache.servicemix.bundles.rhino}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saxon/[9,10)"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.saxon/${version.org.apache.servicemix.bundles.saxon}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/[2.11,3)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/[1.1,1.2)"
@@ -223,6 +229,8 @@
                 replacement="mvn:org.ow2.asm/asm-tree/${version.org.ow2.asm}" mode="maven" />
         <bundle originalUri="mvn:org.ow2.asm/asm-util/[6,7)"
                 replacement="mvn:org.ow2.asm/asm-util/${version.org.ow2.asm}" mode="maven" />
+        <bundle originalUri="mvn:com.google.code.gson/gson/[2.8,3)"
+                replacement="mvn:com.google.code.gson/gson/${version.com.google.code.gson}" mode="maven" />
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
