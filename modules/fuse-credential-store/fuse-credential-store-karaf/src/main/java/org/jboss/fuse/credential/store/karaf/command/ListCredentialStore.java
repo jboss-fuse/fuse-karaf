@@ -17,12 +17,16 @@ package org.jboss.fuse.credential.store.karaf.command;
 
 import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Command;
+import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.apache.karaf.shell.support.table.Col;
+import org.apache.karaf.shell.support.table.Row;
 import org.apache.karaf.shell.support.table.ShellTable;
 import org.jboss.fuse.credential.store.karaf.Activator;
 import org.jboss.fuse.credential.store.karaf.util.CredentialStoreHelper;
+import org.wildfly.security.credential.PasswordCredential;
 import org.wildfly.security.credential.store.CredentialStore;
+import org.wildfly.security.password.interfaces.ClearPassword;
 
 /**
  * Lists the content of the Credential store configured by the environment variables.
@@ -30,6 +34,9 @@ import org.wildfly.security.credential.store.CredentialStore;
 @Command(scope = "credential-store", name = "list", description = "List the content of the credential store")
 @Service
 public class ListCredentialStore extends AbstractCredentialStoreCommand {
+
+    @Option(name = "-x", aliases = { "--show-secrets" }, description = "Additionally shows actual decrypted secret values")
+    boolean secrets;
 
     @Override
     public Object execute() throws Exception {
@@ -40,11 +47,19 @@ public class ListCredentialStore extends AbstractCredentialStoreCommand {
         final ShellTable table = new ShellTable();
         table.column(new Col("Alias"));
         table.column(new Col("Reference"));
+        if (secrets) {
+            table.column(new Col("Secret value"));
+        }
 
         final CredentialStore credentialStore = Activator.credentialStore;
 
         for (final String alias : credentialStore.getAliases()) {
-            table.addRow().addContent(alias, CredentialStoreHelper.referenceForAlias(alias));
+            Row row = table.addRow();
+            row.addContent(alias, CredentialStoreHelper.referenceForAlias(alias));
+            if (secrets) {
+                PasswordCredential credential = credentialStore.retrieve(alias, PasswordCredential.class);
+                row.addContent(credential == null ? "<null>" : new String(credential.getPassword().castAs(ClearPassword.class).getPassword()));
+            }
         }
 
         table.print(System.out);

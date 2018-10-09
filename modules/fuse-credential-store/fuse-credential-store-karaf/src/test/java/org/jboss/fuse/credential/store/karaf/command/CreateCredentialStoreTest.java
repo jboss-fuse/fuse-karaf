@@ -66,6 +66,7 @@ public class CreateCredentialStoreTest {
 
     @Before
     public void init() throws Exception {
+        System.setProperty("karaf.etc", "target");
         new Activator().start(null);
     }
 
@@ -82,6 +83,7 @@ public class CreateCredentialStoreTest {
         command.location = storeFile.getAbsolutePath();
         command.algorithm = "masked-MD5-DES";
         command.session = session;
+        command.force = true;
 
         final PrintStream original = System.out;
         try {
@@ -116,6 +118,7 @@ public class CreateCredentialStoreTest {
         command.algorithm = "masked-MD5-DES";
         command.session = session;
         command.persist = true;
+        command.force = true;
 
         final PrintStream original = System.out;
         try {

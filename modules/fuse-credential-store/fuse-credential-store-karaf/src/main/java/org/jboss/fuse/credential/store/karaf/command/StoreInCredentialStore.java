@@ -15,8 +15,6 @@
  */
 package org.jboss.fuse.credential.store.karaf.command;
 
-import java.security.Security;
-
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
@@ -53,16 +51,7 @@ public class StoreInCredentialStore extends AbstractCredentialStoreCommand {
                 Activator.getElytronProvider());
         final Password password = passwordFactory.generatePassword(new ClearPasswordSpec(secret.toCharArray()));
 
-        try {
-            // this is a bit dangerous - we *need* Elytron registered, because KeyStoreCredentialStore invokes
-            // some factory methods without passing the provider...
-            // but we don't want Elytron (private packaged) to be available in JVM
-            Security.addProvider(Activator.getElytronProvider());
-            credentialStore.store(alias, new PasswordCredential(password));
-        } finally {
-            Security.removeProvider(Activator.getElytronProvider().getName());
-        }
-
+        credentialStore.store(alias, new PasswordCredential(password));
         credentialStore.flush();
 
         System.out.println("Value stored in the credential store to reference it use: "

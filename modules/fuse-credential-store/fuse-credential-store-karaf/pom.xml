@@ -65,7 +65,6 @@
         <dependency>
             <groupId>org.jboss.logging</groupId>
             <artifactId>jboss-logging</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -76,7 +75,6 @@
         <dependency>
             <groupId>org.wildfly.common</groupId>
             <artifactId>wildfly-common</artifactId>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
@@ -179,7 +177,7 @@
                         <Export-Package>!*</Export-Package>
                         <Private-Package>
                             org.jboss.fuse.credential.store.karaf.*,
-                            org.wildfly.security.*
+                            org.wildfly.security.*;-split-package:=merge-first
                         </Private-Package>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Bundle-Activator>org.jboss.fuse.credential.store.karaf.Activator</Bundle-Activator>
