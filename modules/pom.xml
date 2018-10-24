@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse</groupId>
         <artifactId>jboss-fuse-parent</artifactId>
-        <version>7.1.0.fuse-710023</version>
+        <version>7.1.0.fuse-710026</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
