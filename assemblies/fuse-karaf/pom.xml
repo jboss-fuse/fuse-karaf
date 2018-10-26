@@ -158,6 +158,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>org.jboss.fuse.modules</groupId>
+            <artifactId>fuse-pax-transx-tm-narayana</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.jboss.fuse</groupId>
             <artifactId>quickstarts</artifactId>
             <scope>provided</scope>
@@ -352,7 +357,7 @@
                         <!-- Artemis client features -->
                         <feature>artemis-core-client</feature>
                         <feature>artemis-jms-client</feature>
-                        <feature>artemis-amqp-client</feature>
+                        <feature>artemis-openwire-client</feature>
                         <feature>pax-jms-artemis</feature>
 
                         <!-- JDBC/JMS features for offline use -->
@@ -434,6 +439,7 @@
                         <feature>artemis</feature>
                         <feature>artemis-core</feature>
                         <feature>artemis-amqp</feature>
+                        <feature>artemis-amqp-client</feature>
                         <feature>artemis-stomp</feature>
                         <feature>artemis-mqtt</feature>
                         <feature>artemis-hornetq</feature>
@@ -461,6 +467,7 @@
                     </blacklistedFeatures>
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
+                        <bundle>wrap:mvn:org.apache.activemq/activemq-client</bundle>
                     </blacklistedBundles>
                     <blacklistedRepositories>
                         <!-- Blacklisting some repositories because the closure is not consistent -->
