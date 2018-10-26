@@ -42,4 +42,13 @@
         <bundle start-level="20">mvn:javax.jms/javax.jms-api/${version.javax.jms}</bundle>
     </feature>
 
+    <!-- Temporary feature which is hidden in org.apache.activemq/artermis-features/${version.org.apache.activemq.artemis} -->
+    <feature name="artemis-amqp-client" version="${version.org.apache.activemq.artemis}" description="ActiveMQ Artemis AMQP Client libraries">
+        <feature>transaction</feature>
+        <feature>netty-core</feature>
+        <bundle dependency="true">mvn:org.apache.geronimo.specs/geronimo-jms_2.0_spec/${version.org.apache.geronimo.specs.jms_2.0}</bundle>
+        <bundle>mvn:org.apache.qpid/proton-j/${version.org.apache.qpid.proton-j}</bundle>
+        <bundle>mvn:org.apache.qpid/qpid-jms-client/${version.org.apache.qpid.qpid-jms-client}</bundle>
+    </feature>
+
 </features>
