@@ -78,8 +78,8 @@
         <version.io.hawt>2.0.0.fuse-720024</version.io.hawt>
         <version.org.apache.activemq.artemis>2.6.3.redhat-00004</version.org.apache.activemq.artemis>
         <version.org.apache.camel>2.21.0.fuse-720035</version.org.apache.camel>
-        <version.org.apache.cxf>3.1.11.fuse-720033</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-720035</version.org.apache.karaf>
+        <version.org.apache.cxf>3.1.11.fuse-720041</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.0.fuse-720043</version.org.apache.karaf>
         <version.org.fusesource.activemq>7.2.0.fuse-720025</version.org.fusesource.activemq>
         <version.org.fusesource.camel-sap>7.2.0.fuse-720025</version.org.fusesource.camel-sap>
         <version.org.apache-extras.camel-extra>2.21.0.fuse-720035</version.org.apache-extras.camel-extra>
