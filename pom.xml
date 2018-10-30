@@ -76,7 +76,7 @@
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
         <version.io.hawt>2.0.0.fuse-720024</version.io.hawt>
-        <version.org.apache.activemq.artemis>2.6.3.redhat-00004</version.org.apache.activemq.artemis>
+        <version.org.apache.activemq.artemis>2.4.0.amq-711002-redhat-1</version.org.apache.activemq.artemis>
         <version.org.apache.camel>2.21.0.fuse-720035</version.org.apache.camel>
         <version.org.apache.cxf>3.1.11.fuse-720041</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.0.fuse-720043</version.org.apache.karaf>
@@ -105,7 +105,7 @@
         <version.commons-net>3.6</version.commons-net>
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
         <version.io.dropwizard.metrics>3.1.5</version.io.dropwizard.metrics>
-        <version.io.netty>4.1.25.Final-redhat-00003</version.io.netty>
+        <version.io.netty>4.1.16.Final-redhat-2</version.io.netty>
         <version.io.swagger>1.5.18.fuse70-1-redhat-1</version.io.swagger>
         <version.io.undertow>1.4.18.SP7-redhat-1</version.io.undertow>
         <version.javax.el2>2.2.5</version.javax.el2>
@@ -148,8 +148,8 @@
         <version.org.apache.httpcomponents.httpcore>4.4.8</version.org.apache.httpcomponents.httpcore>
         <version.org.apache.logging.log4j>2.9.0</version.org.apache.logging.log4j>
         <version.org.apache.maven>3.5.2</version.org.apache.maven>
-        <version.org.apache.qpid.proton-j>0.29.0.redhat-00001</version.org.apache.qpid.proton-j>
-        <version.org.apache.qpid.qpid-jms-client>0.37.0.redhat-00001</version.org.apache.qpid.qpid-jms-client>
+        <version.org.apache.qpid.proton-j>0.26.0</version.org.apache.qpid.proton-j>
+        <version.org.apache.qpid.qpid-jms-client>0.30.0.redhat-1</version.org.apache.qpid.qpid-jms-client>
         <version.org.apache.santuario>2.0.10</version.org.apache.santuario>
         <version.org.apache.servicemix.bundles.ant>1.7.0_6</version.org.apache.servicemix.bundles.ant>
         <version.org.apache.servicemix.bundles.antlr2>2.7.7_5</version.org.apache.servicemix.bundles.antlr2>
