@@ -24,7 +24,7 @@
     <parent>
         <groupId>org.jboss.fuse.quickstarts</groupId>
         <artifactId>cxf</artifactId>
-        <version>7.2.0.redhat-SNAPSHOT</version>
+        <version>7.2.0.fuse-720029</version>
     </parent>
 
     <artifactId>cxf-camel-cxf-code-first</artifactId>
