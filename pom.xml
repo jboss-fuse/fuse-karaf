@@ -159,7 +159,7 @@
         <version.org.apache.servicemix.bundles.cglib>3.2.4_1</version.org.apache.servicemix.bundles.cglib>
         <version.org.apache.servicemix.bundles.dbcp>1.4_3</version.org.apache.servicemix.bundles.dbcp>
         <version.org.apache.servicemix.bundles.dom4j>1.6.1_5</version.org.apache.servicemix.bundles.dom4j>
-        <version.org.apache.servicemix.bundles.jasypt>1.9.2_1</version.org.apache.servicemix.bundles.jasypt>
+        <version.org.apache.servicemix.bundles.jasypt>1.9.3.redhat_3</version.org.apache.servicemix.bundles.jasypt>
         <version.org.apache.servicemix.bundles.jaxb>2.2.11_1</version.org.apache.servicemix.bundles.jaxb>
         <version.org.apache.servicemix.bundles.javax-inject>1_2</version.org.apache.servicemix.bundles.javax-inject>
         <version.org.apache.servicemix.bundles.jsch>0.1.54_1</version.org.apache.servicemix.bundles.jsch>
