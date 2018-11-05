@@ -22,7 +22,7 @@
 
     <groupId>org.jboss.fuse.quickstarts</groupId>
     <artifactId>quickstarts-parent</artifactId>
-    <version>7.2.0.redhat-SNAPSHOT</version>
+    <version>7.3.0.redhat-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Red Hat Fuse :: Quickstarts :: quickstarts</name>
@@ -191,7 +191,7 @@
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>jboss-fuse-parent</artifactId>
-                <version>7.2.0.redhat-SNAPSHOT</version>
+                <version>7.3.0.redhat-SNAPSHOT</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
