@@ -21,36 +21,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.jboss.fuse.quickstarts</groupId>
-    <artifactId>quickstarts-parent</artifactId>
+    <artifactId>quickstarts-download</artifactId>
     <version>7.3.0.redhat-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Red Hat Fuse :: Quickstarts :: quickstarts</name>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-
-        <skip.quickstarts.tests>true</skip.quickstarts.tests>
-
-        <!-- versions of "subprojects" of Red Hat Fuse -->
-        <version.org.apache.cxf>3.1.11.fuse-730004</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-730004</version.org.apache.karaf>
-
-        <!-- versions of Maven plugins -->
-        <version.plugin.asciidoctor-maven-plugin>1.5.6</version.plugin.asciidoctor-maven-plugin>
-        <version.org.asciidoctor>1.5.8</version.org.asciidoctor>
-        <version.plugin.felix.maven-bundle-plugin>3.5.1</version.plugin.felix.maven-bundle-plugin>
-        <version.plugin.mojo.build-helper-maven-plugin>3.0.0</version.plugin.mojo.build-helper-maven-plugin>
-        <!-- Plugins from org.apache.maven.plugins -->
-        <version.plugin.maven-compiler-plugin>3.7.0</version.plugin.maven-compiler-plugin>
-        <version.plugin.maven-deploy-plugin>2.8.2</version.plugin.maven-deploy-plugin>
-        <version.plugin.maven-install-plugin>2.5.2</version.plugin.maven-install-plugin>
-        <version.plugin.maven-resources-plugin>3.0.2</version.plugin.maven-resources-plugin>
-        <version.plugin.maven-source-plugin>3.0.1</version.plugin.maven-source-plugin>
-        <version.plugin.maven-surefire-plugin>2.20.1</version.plugin.maven-surefire-plugin>
-        <version.plugin.maven-war-plugin>3.1.0</version.plugin.maven-war-plugin>
-    </properties>
 
     <repositories>
         <repository>
@@ -185,162 +160,14 @@
 
     <dependencyManagement>
         <dependencies>
-
-            <!-- Fuse BOM to import all non-plugin dependencies -->
-
-            <dependency>
-                <groupId>org.jboss.fuse</groupId>
-                <artifactId>jboss-fuse-parent</artifactId>
-                <version>7.3.0.redhat-SNAPSHOT</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-
         </dependencies>
     </dependencyManagement>
 
+
+    <!-- Do some magic here to download and unpack whatever the most recent version
+         of the quickstarts is -->
     <build>
-        <pluginManagement>
-            <plugins>
-
-                <!-- Core plugins -->
-
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>${version.plugin.maven-compiler-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-deploy-plugin</artifactId>
-                    <version>${version.plugin.maven-deploy-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>${version.plugin.maven-install-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>${version.plugin.maven-resources-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>${version.plugin.maven-surefire-plugin}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-source-plugin</artifactId>
-                    <version>${version.plugin.maven-source-plugin}</version>
-                </plugin>
-
-                <!-- CXF plugins -->
-
-                <plugin>
-                    <groupId>org.apache.cxf</groupId>
-                    <artifactId>cxf-java2ws-plugin</artifactId>
-                    <version>${version.org.apache.cxf}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.cxf</groupId>
-                    <artifactId>cxf-java2swagger-plugin</artifactId>
-                    <version>${version.org.apache.cxf}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.cxf</groupId>
-                    <artifactId>cxf-codegen-plugin</artifactId>
-                    <version>${version.org.apache.cxf}</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>${version.plugin.maven-war-plugin}</version>
-                </plugin>
-
-                <!-- Felix plugins -->
-
-                <plugin>
-                    <groupId>org.apache.felix</groupId>
-                    <artifactId>maven-bundle-plugin</artifactId>
-                    <version>${version.plugin.felix.maven-bundle-plugin}</version>
-                    <extensions>true</extensions>
-                </plugin>
-
-                <!-- Karaf plugins -->
-
-                <plugin>
-                    <groupId>org.apache.karaf.tooling</groupId>
-                    <artifactId>karaf-maven-plugin</artifactId>
-                    <version>${version.org.apache.karaf}</version>
-                </plugin>
-
-                <!-- MojoHaus plugins -->
-
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <version>${version.plugin.mojo.build-helper-maven-plugin}</version>
-                </plugin>
-
-                <!-- Other plugins -->
-
-                <plugin>
-                    <groupId>org.asciidoctor</groupId>
-                    <artifactId>asciidoctor-maven-plugin</artifactId>
-                    <version>${version.plugin.asciidoctor-maven-plugin}</version>
-                </plugin>
-
-            </plugins>
-        </pluginManagement>
-
-        <plugins>
-            <!-- Core plugins -->
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <!-- Skip tests by default and enable them only in "qtest" profile -->
-                    <skipTests>${skip.quickstarts.tests}</skipTests>
-                </configuration>
-            </plugin>
-
-            <!-- Felix plugins -->
-
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>${version.plugin.felix.maven-bundle-plugin}</version>
-                <inherited>true</inherited>
-                <extensions>true</extensions>
-                <configuration>
-                    <obrRepository>NONE</obrRepository>
-                    <instructions>
-                        <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
-                    </instructions>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
-
-    <modules>
-        <module>beginner</module>
-        <module>camel</module>
-        <module>custom</module>
-        <module>cxf</module>
-        <module>persistence</module>
-        <module>security</module>
-    </modules>
 
     <!-- Distribution Management                                                     -->
     <!-- Workaround for NEXUS-14460 : https://issues.sonatype.org/browse/NEXUS-14460 -->
