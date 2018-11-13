@@ -1,1 +1,0 @@
-CLASSPATH="${KARAF_HOME}/system/org/jboss/fuse/fuse-tranquility/1.2.0/fuse-tranquility-1.2.0.jar:${KARAF_HOME}/system/org.apache.commons/commons-42/1.0/commons-42-1.0.jar"

@@ -1,1 +1,0 @@
-Test file for Red Hat Fuse Quickstarts Camel Box example.
