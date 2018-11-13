@@ -1,7 +1,0 @@
-
-#
-# This file contains the general platform information required by the itests to find out
-# about the current versions.
-#
-karafVersion = ${version.org.apache.karaf}
-name = Red Hat Fuse 7
