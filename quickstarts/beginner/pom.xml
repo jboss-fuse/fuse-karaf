@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.quickstarts</groupId>
         <artifactId>quickstarts-parent</artifactId>
-        <version>7.3.0.redhat-SNAPSHOT</version>
+        <version>7.3.0.fuse-730009</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
