@@ -128,7 +128,7 @@ import static org.jboss.fuse.patch.management.Utils.*;
 public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchManagementService {
 
     private static final String[] MANAGED_DIRECTORIES = new String[] {
-            "bin", "etc", "lib", "quickstarts", "welcome-content"
+            "bin", "etc", "lib", "welcome-content"
     };
 
     private static final Pattern VERSION_PATTERN =

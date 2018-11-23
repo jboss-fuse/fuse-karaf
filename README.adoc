@@ -31,7 +31,7 @@ To start Fuse, run `bin/fuse` on Linux/Unix or `bin\fuse.bat` on Windows.
 
 == Examples
 
-Examples with instructions are in the `quickstarts` directory.
+Examples are available as separate download.
 
 == Documentation
 

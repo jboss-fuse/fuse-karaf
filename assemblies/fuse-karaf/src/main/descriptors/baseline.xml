@@ -34,7 +34,6 @@
             <includes>
                 <include>etc/**</include>
                 <include>lib/**</include>
-                <include>quickstarts/**</include>
                 <include>welcome-content/**</include>
             </includes>
             <fileMode>0644</fileMode>

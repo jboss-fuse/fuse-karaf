@@ -37,7 +37,6 @@
         <module>fuse-karaf-framework</module>
         <module>fuse-patch-management</module>
         <module>fuse-features</module>
-        <module>quickstarts</module>
         <module>fuse-karaf-minimal</module>
         <module>fuse-karaf</module>
     </modules>

@@ -416,11 +416,6 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
-                <artifactId>quickstarts</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.fuse</groupId>
                 <artifactId>fuse-karaf-minimal</artifactId>
                 <version>${project.version}</version>
                 <type>zip</type>
@@ -450,12 +445,6 @@
                         <artifactId>org.apache.karaf.client</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.fuse.quickstarts</groupId>
-                <artifactId>quickstarts-parent</artifactId>
-                <version>${project.version}</version>
-                <type>pom</type>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
@@ -1870,7 +1859,6 @@
 
     <modules>
         <module>modules</module>
-        <module>quickstarts</module>
         <module>assemblies</module>
     </modules>
 
