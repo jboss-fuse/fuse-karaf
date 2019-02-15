@@ -278,6 +278,23 @@
                 <f:bundle>mvn:org.hibernate/hibernate-ehcache/${version.org.hibernate}</f:bundle>
             </feature>
         </replacement>
+        <replacement>
+            <feature name="hibernate-orm" version="${hibernate.version}" description="Combines all Hibernate core dependencies and required modules into a single feature">
+                <f:feature prerequisite="true">wrap</f:feature>
+                <f:feature>transaction-api</f:feature>
+                <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${version.org.apache.servicemix.bundles.antlr2}</f:bundle>
+                <f:bundle>mvn:org.jboss.logging/jboss-logging/${version.org.jboss.logging}</f:bundle>
+                <f:bundle>mvn:javax.persistence/javax.persistence-api/${version.javax.persistence}</f:bundle>
+                <f:bundle>mvn:org.javassist/javassist/${version.org.javassist}</f:bundle>
+                <f:bundle>mvn:net.bytebuddy/byte-buddy/${version.net.bytebuddy}</f:bundle>
+                <f:bundle>mvn:org.jboss/jandex/${version.org.jboss.jandex}</f:bundle>
+                <f:bundle>mvn:com.fasterxml/classmate/${version.com.fasterxml.classmate}</f:bundle>
+                <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/${version.org.apache.servicemix.bundles.dom4j2}</f:bundle>
+                <f:bundle>mvn:org.hibernate.common/hibernate-commons-annotations/${version.org.hibernate.common}</f:bundle>
+                <f:bundle>mvn:org.hibernate/hibernate-core/${hibernate.version}</f:bundle>
+                <f:bundle>mvn:org.hibernate/hibernate-osgi/${hibernate.version}</f:bundle>
+            </feature>
+        </replacement>
     </featureReplacements>
 
 </featuresProcessing>
