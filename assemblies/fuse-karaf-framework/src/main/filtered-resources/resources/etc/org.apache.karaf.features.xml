@@ -51,6 +51,20 @@
                 replacement="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${version.com.fasterxml.jackson.core}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/[2.8,2.9)"
                 replacement="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${version.com.fasterxml.jackson.core}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-annotations/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson29}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-core/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.core/jackson-core/${version.com.fasterxml.jackson29}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-databind/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.core/jackson-databind/${version.com.fasterxml.jackson29}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/${version.com.fasterxml.jackson29}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${version.com.fasterxml.jackson29}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${version.com.fasterxml.jackson29}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${version.com.fasterxml.jackson29}" mode="maven" />
         <bundle originalUri="mvn:com.google.guava/guava/[16,17)"
                 replacement="mvn:com.google.guava/guava/${version.com.google.guava16}" mode="maven" />
         <bundle originalUri="mvn:com.google.guava/guava/[19,20)"
@@ -63,16 +77,18 @@
                 replacement="mvn:io.dropwizard.metrics/metrics-core/${version.io.dropwizard.metrics}" mode="maven" />
         <bundle originalUri="mvn:io.dropwizard.metrics/metrics-json/[3.1,3.2)"
                 replacement="mvn:io.dropwizard.metrics/metrics-json/${version.io.dropwizard.metrics}" mode="maven" />
-        <bundle originalUri="mvn:io.undertow/undertow-core/[1.4,1.5)"
+        <bundle originalUri="mvn:io.undertow/undertow-core/[1.4,3)"
                 replacement="mvn:io.undertow/undertow-core/${version.io.undertow}" mode="maven" />
-        <bundle originalUri="mvn:io.undertow/undertow-servlet/[1.4,1.5)"
+        <bundle originalUri="mvn:io.undertow/undertow-servlet/[1.4,3)"
                 replacement="mvn:io.undertow/undertow-servlet/${version.io.undertow}" mode="maven" />
-        <bundle originalUri="mvn:io.undertow/undertow-websockets-jsr/[1.4,1.5)"
+        <bundle originalUri="mvn:io.undertow/undertow-websockets-jsr/[1.4,3)"
                 replacement="mvn:io.undertow/undertow-websockets-jsr/${version.io.undertow}" mode="maven" />
         <bundle originalUri="wrap:mvn:io.undertow/undertow-core/*"
                 replacement="mvn:io.undertow/undertow-core/${version.io.undertow}" mode="maven" />
         <bundle originalUri="wrap:mvn:io.undertow/undertow-servlet/*"
                 replacement="mvn:io.undertow/undertow-servlet/${version.io.undertow}" mode="maven" />
+        <bundle originalUri="mvn:javax.annotation/javax.annotation-api/[1,2)"
+                replacement="mvn:javax.annotation/javax.annotation-api/${version.javax.annotation}" mode="maven" />
         <bundle originalUri="mvn:javax.el/javax.el-api/[2.2,3)"
                 replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-2.2.5/${version.org.apache.servicemix.specs.javax-el2}" mode="maven" />
         <bundle originalUri="mvn:javax.el/javax.el-api/[3,4)"
@@ -239,6 +255,12 @@
                 replacement="mvn:com.google.code.gson/gson/${version.com.google.code.gson}" mode="maven" />
         <bundle originalUri="mvn:org.fusesource.hawtbuf/hawtbuf/[1.11,2)"
                 replacement="mvn:org.fusesource.hawtbuf/hawtbuf/${version.org.fusesource.hawtbuf}" mode="maven" />
+        <bundle originalUri="mvn:net.bytebuddy/byte-buddy/[1.8,2)"
+                replacement="mvn:net.bytebuddy/byte-buddy/${version.net.bytebuddy}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.mina/mina-core/[2.0,2.1)"
+                replacement="mvn:org.apache.mina/mina-core/${version.org.apache.mina}" mode="maven" />
+        <bundle originalUri="mvn:org.codehaus.groovy/groovy-all/[2.4,3)"
+                replacement="mvn:org.codehaus.groovy/groovy-all/${version.org.codehaus.groovy}" mode="maven" />
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->

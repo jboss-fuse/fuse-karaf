@@ -371,6 +371,7 @@
                         <feature>jetty/[8,9)</feature>
                         <feature>pax-*jetty*</feature>
                         <feature>cxf-*-jetty</feature>
+                        <feature>blueprint-web</feature>
                         <feature>pax-keycloak*</feature>
                         <feature>camel-jetty8</feature>
                         <feature>*openwebbeans*</feature>
@@ -439,6 +440,9 @@
                         <feature>artemis-mqtt</feature>
                         <feature>artemis-hornetq</feature>
                         <feature>artemis-openwire</feature>
+
+                        <!-- ActiveMQ broker -->
+                        <feature>activemq-karaf</feature>
 
                         <!-- Unsupported TX managers -->
                         <feature>pax-transx-tm-geronimo</feature>
@@ -515,6 +519,7 @@
                         <karaf.delay.console>true</karaf.delay.console>
                     </config>
                     <generateConsistencyReport>${project.build.directory}/assembly/welcome-content</generateConsistencyReport>
+                    <consistencyReportProjectName>Red Hat Fuse</consistencyReportProjectName>
                 </configuration>
                 <dependencies>
                     <!--

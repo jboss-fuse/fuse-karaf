@@ -75,20 +75,21 @@
         -->
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
-        <version.io.hawt>2.0.0.fuse-730029</version.io.hawt>
-        <version.org.apache.activemq.artemis>2.4.0.amq-711002-redhat-1</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.21.0.fuse-730033</version.org.apache.camel>
-        <version.org.apache.cxf>3.2.7.fuse-730011</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-730016</version.org.apache.karaf>
-        <version.org.fusesource.activemq>7.3.0.fuse-730034</version.org.fusesource.activemq>
-        <version.org.fusesource.camel-sap>7.3.0.fuse-730034</version.org.fusesource.camel-sap>
-        <version.org.apache-extras.camel-extra>2.21.0.fuse-730035</version.org.apache-extras.camel-extra>
+        <version.io.hawt>2.0.0.fuse-730043</version.io.hawt>
+        <version.org.apache.activemq.artemis>2.6.3.redhat-00015</version.org.apache.activemq.artemis>
+        <version.org.apache.camel>2.21.0.fuse-730046</version.org.apache.camel>
+        <version.org.apache.cxf>3.2.7.fuse-730015</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.0.fuse-730018</version.org.apache.karaf>
+        <version.org.fusesource.activemq>7.3.0.fuse-730049</version.org.fusesource.activemq>
+        <version.org.fusesource.camel-sap>7.3.0.fuse-730049</version.org.fusesource.camel-sap>
+        <version.org.apache-extras.camel-extra>2.21.0.fuse-730048</version.org.apache-extras.camel-extra>
 
         <!-- versions of normal dependencies of Red Hat Fuse -->
         <version.com.fasterxml.classmate>1.3.4</version.com.fasterxml.classmate>
         <version.com.fasterxml.jackson.core>2.8.11</version.com.fasterxml.jackson.core>
         <version.com.fasterxml.jackson.core.databind>2.8.11.2</version.com.fasterxml.jackson.core.databind>
         <version.com.fasterxml.jackson.module>2.8.11</version.com.fasterxml.jackson.module>
+        <version.com.fasterxml.jackson29>2.9.7</version.com.fasterxml.jackson29>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
         <version.com.google.guava16>16.0.1</version.com.google.guava16>
         <version.com.google.guava19>19.0.0.redhat-1</version.com.google.guava19>
@@ -97,28 +98,30 @@
         <version.com.ning.async-http-client>1.9.40</version.com.ning.async-http-client>
         <version.com.sun.mail>1.6.1.redhat-1</version.com.sun.mail>
         <version.com.thoughtworks.paranamer>2.8</version.com.thoughtworks.paranamer>
-        <version.commons-beanutils>1.9.3</version.commons-beanutils>
-        <version.commons-codec>1.11</version.commons-codec>
+        <version.commons-beanutils>1.9.3.redhat-1</version.commons-beanutils>
+        <version.commons-codec>1.10.0.redhat-5</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
-        <version.commons-io>2.6</version.commons-io>
-        <version.commons-lang>2.6.0.redhat-6</version.commons-lang>
+        <version.commons-io>2.5.0.redhat-3</version.commons-io>
+        <version.commons-lang>2.6.0.redhat-7</version.commons-lang>
         <version.commons-net>3.6</version.commons-net>
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
         <version.io.dropwizard.metrics>3.1.5</version.io.dropwizard.metrics>
-        <version.io.netty>4.1.16.Final-redhat-2</version.io.netty>
+        <version.io.netty>4.1.25.Final-redhat-00003</version.io.netty>
         <version.io.swagger>1.5.18.fuse70-1-redhat-1</version.io.swagger>
-        <version.io.undertow>1.4.18.SP7-redhat-1</version.io.undertow>
+        <version.io.undertow>2.0.15.Final-redhat-00001</version.io.undertow>
+        <version.javax.annotation>1.3</version.javax.annotation>
         <version.javax.el2>2.2.5</version.javax.el2>
         <version.javax.enterprise.cdi-api>1.2</version.javax.enterprise.cdi-api>
         <version.javax.interceptor>1.2</version.javax.interceptor>
         <version.javax.jms>2.0.1</version.javax.jms>
         <version.javax.resource>1.7.1</version.javax.resource>
-        <version.javax.servlet>3.1.0.redhat-1</version.javax.servlet>
+        <version.javax.servlet>4.0.1</version.javax.servlet>
         <version.javax.transaction>1.2</version.javax.transaction>
         <version.javax.validation>1.1.0.Final-redhat-1</version.javax.validation>
         <version.javax.ws.rs>2.0.1</version.javax.ws.rs>
         <version.joda-time>2.9.9</version.joda-time>
         <version.junit>4.12</version.junit>
+        <version.net.bytebuddy>1.8.17.redhat-00001</version.net.bytebuddy>
         <version.net.java.dev.jna>4.5.1</version.net.java.dev.jna>
         <version.net.sf.ehcache>2.10.3</version.net.sf.ehcache>
         <version.org.antlr4>4.5.3</version.org.antlr4>
@@ -133,21 +136,22 @@
         <version.org.apache.commons.lang3>3.8</version.org.apache.commons.lang3>
         <version.org.apache.commons.math3>3.6.1</version.org.apache.commons.math3>
         <version.org.apache.commons.pool2>2.5.0</version.org.apache.commons.pool2>
-        <version.org.apache.felix>5.6.10</version.org.apache.felix>
-        <version.org.apache.felix.configadmin>1.8.16</version.org.apache.felix.configadmin>
+        <version.org.apache.felix>5.6.12</version.org.apache.felix>
+        <version.org.apache.felix.configadmin>1.9.10</version.org.apache.felix.configadmin>
         <version.org.apache.felix.fileinstall>3.6.4</version.org.apache.felix.fileinstall>
-        <version.org.apache.felix.gogo>1.0.10</version.org.apache.felix.gogo>
-        <version.org.apache.felix.scr>2.0.14</version.org.apache.felix.scr>
+        <version.org.apache.felix.gogo>1.1.2</version.org.apache.felix.gogo>
+        <version.org.apache.felix.scr>2.1.14</version.org.apache.felix.scr>
         <version.org.apache.felix.scr.annotations>1.12.0</version.org.apache.felix.scr.annotations>
-        <version.org.apache.felix.utils>1.10.4</version.org.apache.felix.utils>
+        <version.org.apache.felix.utils>1.11.2</version.org.apache.felix.utils>
         <version.org.apache.geronimo.specs.annotation_1.0>1.1.1.redhat-2</version.org.apache.geronimo.specs.annotation_1.0>
         <version.org.apache.geronimo.specs.jms_1.1>1.1.1.redhat-2</version.org.apache.geronimo.specs.jms_1.1>
         <version.org.apache.geronimo.specs.jms_2.0>1.0.0.alpha-2-redhat-2</version.org.apache.geronimo.specs.jms_2.0>
         <version.org.apache.geronimo.specs.jta_1.1>1.1.1.redhat-2</version.org.apache.geronimo.specs.jta_1.1>
-        <version.org.apache.httpcomponents.httpclient>4.5.4</version.org.apache.httpcomponents.httpclient>
-        <version.org.apache.httpcomponents.httpcore>4.4.8</version.org.apache.httpcomponents.httpcore>
+        <version.org.apache.httpcomponents.httpclient>4.5.2.redhat-2</version.org.apache.httpcomponents.httpclient>
+        <version.org.apache.httpcomponents.httpcore>4.4.4.redhat-2</version.org.apache.httpcomponents.httpcore>
         <version.org.apache.logging.log4j>2.9.0</version.org.apache.logging.log4j>
         <version.org.apache.maven>3.5.2</version.org.apache.maven>
+        <version.org.apache.mina>2.0.19</version.org.apache.mina>
         <version.org.apache.qpid.proton-j>0.26.0</version.org.apache.qpid.proton-j>
         <version.org.apache.qpid.qpid-jms-client>0.30.0.redhat-1</version.org.apache.qpid.qpid-jms-client>
         <version.org.apache.santuario>2.0.10</version.org.apache.santuario>
@@ -186,6 +190,7 @@
         <version.org.assertj>3.8.0</version.org.assertj>
         <version.org.atmosphere>2.4.16</version.org.atmosphere>
         <version.org.bouncycastle>1.60</version.org.bouncycastle>
+        <version.org.codehaus.groovy>2.4.13</version.org.codehaus.groovy>
         <version.org.codehaus.janino>2.5.16</version.org.codehaus.janino>
         <version.org.codehaus.woodstox.core>4.4.1</version.org.codehaus.woodstox.core>
         <version.org.codehaus.woodstox.stax2-api>3.1.4</version.org.codehaus.woodstox.stax2-api>
@@ -194,17 +199,18 @@
         <version.org.eclipse.persistence>2.1.0</version.org.eclipse.persistence>
         <version.org.fusesource.hawtbuf>1.11.0.redhat-1</version.org.fusesource.hawtbuf>
         <version.org.glassfish.web.javax.el>2.2.5</version.org.glassfish.web.javax.el>
-        <version.org.hibernate>5.1.16.Final-redhat-00001</version.org.hibernate>
-        <version.org.hibernate.common>5.0.1.Final</version.org.hibernate.common>
+        <version.org.hibernate>5.3.7.Final-redhat-00001</version.org.hibernate>
+        <version.org.hibernate.common>5.0.4.Final-redhat-00001</version.org.hibernate.common>
         <version.org.hibernate.validator>5.3.5.Final-redhat-2</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.0.Final-redhat-2</version.org.hibernate.javax.persistence>
-        <version.org.javassist>3.21.0-GA</version.org.javassist>
+        <version.org.javassist>3.23.1.GA-redhat-00001</version.org.javassist>
         <version.org.jboss.jandex>2.0.3.Final</version.org.jboss.jandex>
-        <version.org.jboss.logging>3.3.1.Final-redhat-1</version.org.jboss.logging>
+        <version.org.jboss.logging>3.3.2.Final-redhat-00001</version.org.jboss.logging>
         <version.org.jboss.modules>1.5.2.Final</version.org.jboss.modules>
-        <version.org.jboss.narayana>5.5.31.Final-redhat-1</version.org.jboss.narayana>
+        <version.org.jboss.narayana>5.9.0.Final-redhat-00001</version.org.jboss.narayana>
         <version.org.jboss.spec.jacc>1.0.0.Final</version.org.jboss.spec.jacc>
         <version.org.jboss.transaction>7.6.0.Final-redhat-1</version.org.jboss.transaction>
+        <!-- Can't use yet 3.6.5.Final-redhat-00001 from EAP 7.2, because it imports org.jboss.threads and wildfly-client -->
         <version.org.jboss.xnio>3.3.8.Final</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.jline>3.6.2.redhat-2</version.org.jline>
@@ -215,18 +221,18 @@
         <version.org.mockito>2.13.0</version.org.mockito>
         <version.org.mvel>2.4.0.Final-redhat-1</version.org.mvel>
         <version.org.ops4j.base>1.5.0</version.org.ops4j.base>
-        <version.org.ops4j.pax.exam>4.11.0</version.org.ops4j.pax.exam>
-        <version.org.ops4j.pax.jdbc>1.3.0</version.org.ops4j.pax.jdbc>
-        <version.org.ops4j.pax.jms>1.0.0</version.org.ops4j.pax.jms>
-        <version.org.ops4j.pax.keycloak>0.2.0</version.org.ops4j.pax.keycloak>
+        <version.org.ops4j.pax.cdi>1.1.2</version.org.ops4j.pax.cdi>
+        <version.org.ops4j.pax.exam>4.13.1</version.org.ops4j.pax.exam>
+        <version.org.ops4j.pax.jdbc>1.3.4</version.org.ops4j.pax.jdbc>
+        <version.org.ops4j.pax.jms>1.0.3</version.org.ops4j.pax.jms>
         <version.org.ops4j.pax.logging>1.10.1</version.org.ops4j.pax.logging>
         <version.org.ops4j.pax.swissbox>1.8.3</version.org.ops4j.pax.swissbox>
-        <version.org.ops4j.pax.transx>0.4.0</version.org.ops4j.pax.transx>
-        <version.org.ops4j.pax.url>2.5.4</version.org.ops4j.pax.url>
-        <version.org.ops4j.pax.web>7.2.4</version.org.ops4j.pax.web>
+        <version.org.ops4j.pax.transx>0.4.2</version.org.ops4j.pax.transx>
+        <version.org.ops4j.pax.url>2.6.1</version.org.ops4j.pax.url>
+        <version.org.ops4j.pax.web>7.3.0</version.org.ops4j.pax.web>
         <version.org.osgi>6.0.0</version.org.osgi>
         <version.org.osgi.compendium>5.0.0</version.org.osgi.compendium>
-        <version.org.ow2.asm>6.0</version.org.ow2.asm>
+        <version.org.ow2.asm>7.0</version.org.ow2.asm>
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
         <version.org.springframework>4.3.17.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.23</version.org.yaml.snakeyaml>
