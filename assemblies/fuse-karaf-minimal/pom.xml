@@ -196,9 +196,10 @@
                     <libraries>
                         <!--
                             type:=
-                                endorsed - library will be stored in lib/endorsed/
+                                endorsed - library will be stored in lib/endorsed/ (is ignored in jdk9+)
                                 extension - library will be stored in lib/ext/
                                 boot - library will be stored in lib/boot/
+                                jdk9plus - library will be stored in lib/jdk9plus (another boot folder for jdk9+)
                                 default (or no type directive) - library will be stored in lib/
                             export:=true - packages from Export-Package MANIFEST.MF header will be added to
                                 org.osgi.framework.system.packages.extra property in etc/config.properties
@@ -216,6 +217,10 @@
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/${version.org.apache.servicemix.bundles.xalan};type:=endorsed;export:=true</library>
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${version.org.apache.servicemix.bundles.xalan-serializer};type:=endorsed;export:=true</library>
                         <library>mvn:javax.annotation/javax.annotation-api/1.2;type:=endorsed;export:=true</library>
+                        <!-- lib/jdk9plus -->
+                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces};type:=jdk9plus;export:=false;delegate:=false</library>
+                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/${version.org.apache.servicemix.bundles.xalan};type:=jdk9plus;export:=false</library>
+                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${version.org.apache.servicemix.bundles.xalan-serializer};type:=jdk9plus;export:=false</library>
                         <!-- lib -->
                         <library>mvn:org.jboss.fuse.modules/fuse-branding/${project.version};type:=default;export:=false</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
