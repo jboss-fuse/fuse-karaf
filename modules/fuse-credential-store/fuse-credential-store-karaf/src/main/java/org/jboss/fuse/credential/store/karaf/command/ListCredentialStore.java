@@ -15,7 +15,6 @@
  */
 package org.jboss.fuse.credential.store.karaf.command;
 
-import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;

@@ -141,6 +141,7 @@ public class CredentialStoreConfiguration {
         }
 
         boolean discovered = false;
+
         if (protection != null && !"".equals(protection.trim()) && params != null && !"".equals(params.trim())) {
             setProtectionAlgorithmName(algorithm);
             setEncodedKey(protection);

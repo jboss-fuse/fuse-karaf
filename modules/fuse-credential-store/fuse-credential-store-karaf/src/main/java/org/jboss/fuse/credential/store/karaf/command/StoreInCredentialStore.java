@@ -20,6 +20,7 @@ import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.jboss.fuse.credential.store.karaf.Activator;
 import org.jboss.fuse.credential.store.karaf.util.CredentialStoreHelper;
+import org.wildfly.security.credential.Credential;
 import org.wildfly.security.credential.PasswordCredential;
 import org.wildfly.security.credential.store.CredentialStore;
 import org.wildfly.security.password.Password;
@@ -47,6 +48,12 @@ public class StoreInCredentialStore extends AbstractCredentialStoreCommand {
         }
 
         final CredentialStore credentialStore = Activator.credentialStore;
+
+        if (credentialStore.exists(alias, Credential.class)) {
+            System.out.println("Entry with alias \"" + alias + "\" already exists in credential store.");
+            return null;
+        }
+
         final PasswordFactory passwordFactory = PasswordFactory.getInstance(ClearPassword.ALGORITHM_CLEAR,
                 Activator.getElytronProvider());
         final Password password = passwordFactory.generatePassword(new ClearPasswordSpec(secret.toCharArray()));
@@ -54,7 +61,7 @@ public class StoreInCredentialStore extends AbstractCredentialStoreCommand {
         credentialStore.store(alias, new PasswordCredential(password));
         credentialStore.flush();
 
-        System.out.println("Value stored in the credential store to reference it use: "
+        System.out.println("Value stored in the credential store. To reference it use: "
             + CredentialStoreHelper.referenceForAlias(alias));
 
         return null;

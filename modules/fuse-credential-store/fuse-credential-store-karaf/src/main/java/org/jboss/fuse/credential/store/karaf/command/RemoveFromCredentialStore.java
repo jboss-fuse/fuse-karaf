@@ -15,10 +15,8 @@
  */
 package org.jboss.fuse.credential.store.karaf.command;
 
-import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
-import org.apache.karaf.shell.api.action.Option;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.jboss.fuse.credential.store.karaf.Activator;
 import org.wildfly.security.credential.Credential;
@@ -42,8 +40,12 @@ public class RemoveFromCredentialStore extends AbstractCredentialStoreCommand {
 
         final CredentialStore credentialStore = Activator.credentialStore;
 
-        credentialStore.remove(alias, Credential.class);
+        if (!credentialStore.exists(alias, Credential.class)) {
+            System.out.println("No entry with alias \"" + alias + "\" in credential store");
+            return null;
+        }
 
+        credentialStore.remove(alias, Credential.class);
         credentialStore.flush();
 
         return null;

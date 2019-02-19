@@ -100,8 +100,6 @@ public final class Activator implements BundleActivator, ServiceTrackerCustomize
         // we won't Security.addProvider() it, because this provider's classes are private-packaged in our bundle
         elytronProvider = new WildFlyElytronProvider();
 
-        final Properties properties = System.getProperties();
-
         config = new CredentialStoreConfiguration();
         if (!config.discover()) {
             LOG.info("Credential Store configuration not found. System properties and configuration encryption not supported.");
@@ -112,11 +110,13 @@ public final class Activator implements BundleActivator, ServiceTrackerCustomize
             credentialStore = config.loadCredentialStore();
         } catch (final Exception e) {
             final String message = e.getMessage();
-            LOG.error("Unable to initialize credential store, system properties and configuration encryption not supported: ", message, e);
+            LOG.error("Unable to initialize credential store, system properties and configuration encryption not supported: " + message, e);
             return;
         }
 
         LOG.info("Processing system properties...");
+
+        final Properties properties = System.getProperties();
 
         @SuppressWarnings("unchecked")
         final Hashtable<String, String> propertiesAsStringEntries = (Hashtable) properties;
