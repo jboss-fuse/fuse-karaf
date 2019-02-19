@@ -340,6 +340,17 @@
             </snapshots>
         </repository>
         <repository>
+            <!-- For Hibernate 5.3.x -->
+            <id>brew-jb-eap-7.2-maven</id>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.2-maven-build/latest/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
             <id>apache-snapshots-repository</id>
             <url>https://repository.apache.org/content/groups/snapshots</url>
             <releases>
