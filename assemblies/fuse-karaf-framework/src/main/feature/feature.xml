@@ -33,8 +33,14 @@
 
     <!-- Red Hat Fuse Karaf features -->
 
-    <feature name="fuse-credential-store" description="fuse-credential-store" version="${project.version}">
-        <bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-credential-store-karaf/${project.version}</bundle>
+    <feature name="fuse-credential-store-core" description="fuse-credential-store-core" version="${project.version}">
+        <bundle start-level="12">mvn:org.jboss.fuse.modules/fuse-credential-store-core/${project.version}</bundle>
+    </feature>
+
+    <feature name="fuse-credential-store" description="fuse-credential-store-commands" version="${project.version}">
+        <feature>fuse-credential-store-core</feature>
+        <bundle>mvn:org.jboss.fuse.modules/fuse-credential-store-commands/${project.version}</bundle>
+        <bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jasypt/${version.org.apache.servicemix.bundles.jasypt}</bundle>
     </feature>
 
     <feature name="fuse-javaee-apis" description="fundamental bundles required by some important features" version="${project.version}">

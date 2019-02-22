@@ -105,8 +105,9 @@
         <version.commons-lang>2.6.0.redhat-7</version.commons-lang>
         <version.commons-net>3.6</version.commons-net>
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
-        <version.io.dropwizard.metrics>3.1.5</version.io.dropwizard.metrics>
+        <version.io.dropwizard.metrics>3.2.6</version.io.dropwizard.metrics>
         <version.io.netty>4.1.25.Final-redhat-00003</version.io.netty>
+        <version.io.opentracing>0.31.0</version.io.opentracing>
         <version.io.swagger>1.5.18.fuse70-1-redhat-1</version.io.swagger>
         <version.io.undertow>2.0.15.Final-redhat-00001</version.io.undertow>
         <version.javax.annotation>1.3</version.javax.annotation>
@@ -116,6 +117,7 @@
         <version.javax.jms>2.0.1</version.javax.jms>
         <version.javax.persistence>2.2</version.javax.persistence>
         <version.javax.resource>1.7.1</version.javax.resource>
+        <version.javax.security.jacc>1.6</version.javax.security.jacc>
         <version.javax.servlet>4.0.1</version.javax.servlet>
         <version.javax.transaction>1.2</version.javax.transaction>
         <version.javax.validation>1.1.0.Final-redhat-1</version.javax.validation>
@@ -126,10 +128,11 @@
         <version.net.java.dev.jna>4.5.1</version.net.java.dev.jna>
         <version.net.sf.ehcache>2.10.3</version.net.sf.ehcache>
         <version.org.antlr4>4.5.3</version.org.antlr4>
-        <version.org.apache.activemq.amq6>5.11.0.redhat-630356</version.org.apache.activemq.amq6>
-        <version.org.apache.aries.jpa>2.6.1</version.org.apache.aries.jpa>
+        <version.org.apache.activemq.amq6>5.11.0.redhat-630377</version.org.apache.activemq.amq6>
+        <version.org.apache.aries.jpa>2.7.2</version.org.apache.aries.jpa>
         <version.org.apache.aries.proxy.api>1.1.0</version.org.apache.aries.proxy.api>
-        <version.org.apache.aries.proxy>1.1.1</version.org.apache.aries.proxy>
+        <version.org.apache.aries.proxy>1.1.4</version.org.apache.aries.proxy>
+        <version.org.apache.aries.spifly>1.2</version.org.apache.aries.spifly>
         <version.org.apache.commons.collections4>4.1</version.org.apache.commons.collections4>
         <version.org.apache.commons.compress>1.16.1</version.org.apache.commons.compress>
         <!-- DBCP2 2.2.0 has bad import for javax.transaction.xa package -->
@@ -137,6 +140,7 @@
         <version.org.apache.commons.lang3>3.8</version.org.apache.commons.lang3>
         <version.org.apache.commons.math3>3.6.1</version.org.apache.commons.math3>
         <version.org.apache.commons.pool2>2.5.0</version.org.apache.commons.pool2>
+        <version.org.apache.commons.text>1.4</version.org.apache.commons.text>
         <version.org.apache.felix>5.6.12</version.org.apache.felix>
         <version.org.apache.felix.configadmin>1.9.10</version.org.apache.felix.configadmin>
         <version.org.apache.felix.fileinstall>3.6.4</version.org.apache.felix.fileinstall>
@@ -148,14 +152,16 @@
         <version.org.apache.geronimo.specs.jms_1.1>1.1.1.redhat-2</version.org.apache.geronimo.specs.jms_1.1>
         <version.org.apache.geronimo.specs.jms_2.0>1.0.0.alpha-2-redhat-2</version.org.apache.geronimo.specs.jms_2.0>
         <version.org.apache.geronimo.specs.jta_1.1>1.1.1.redhat-2</version.org.apache.geronimo.specs.jta_1.1>
+        <version.org.apache.httpcomponents.httpasyncclient>4.1.3.redhat-2</version.org.apache.httpcomponents.httpasyncclient>
         <version.org.apache.httpcomponents.httpclient>4.5.2.redhat-2</version.org.apache.httpcomponents.httpclient>
         <version.org.apache.httpcomponents.httpcore>4.4.4.redhat-2</version.org.apache.httpcomponents.httpcore>
+        <version.org.apache.johnzon>1.1.0</version.org.apache.johnzon>
         <version.org.apache.logging.log4j>2.9.0</version.org.apache.logging.log4j>
         <version.org.apache.maven>3.5.2</version.org.apache.maven>
         <version.org.apache.mina>2.0.19</version.org.apache.mina>
-        <version.org.apache.qpid.proton-j>0.26.0</version.org.apache.qpid.proton-j>
-        <version.org.apache.qpid.qpid-jms-client>0.30.0.redhat-1</version.org.apache.qpid.qpid-jms-client>
-        <version.org.apache.santuario>2.0.10</version.org.apache.santuario>
+        <version.org.apache.qpid.proton-j>0.29.0.redhat-00001</version.org.apache.qpid.proton-j>
+        <version.org.apache.qpid.qpid-jms-client>0.37.0.redhat-00001</version.org.apache.qpid.qpid-jms-client>
+        <version.org.apache.santuario>2.1.2</version.org.apache.santuario>
         <version.org.apache.servicemix.bundles.ant>1.7.0_6</version.org.apache.servicemix.bundles.ant>
         <version.org.apache.servicemix.bundles.antlr2>2.7.7_5</version.org.apache.servicemix.bundles.antlr2>
         <version.org.apache.servicemix.bundles.antlr>3.5.2_1</version.org.apache.servicemix.bundles.antlr>
@@ -169,8 +175,10 @@
         <version.org.apache.servicemix.bundles.jaxb>2.2.11_1</version.org.apache.servicemix.bundles.jaxb>
         <version.org.apache.servicemix.bundles.javax-inject>1_2</version.org.apache.servicemix.bundles.javax-inject>
         <version.org.apache.servicemix.bundles.jsch>0.1.54_1</version.org.apache.servicemix.bundles.jsch>
-        <version.org.apache.servicemix.bundles.quartz>1.8.6_1</version.org.apache.servicemix.bundles.quartz>
+        <version.org.apache.servicemix.bundles.jzlib>1.1.3_2</version.org.apache.servicemix.bundles.jzlib>
+        <version.org.apache.servicemix.bundles.okio>1.13.0_1</version.org.apache.servicemix.bundles.okio>
         <version.org.apache.servicemix.bundles.poi>3.15_1</version.org.apache.servicemix.bundles.poi>
+        <version.org.apache.servicemix.bundles.quartz>1.8.6_1</version.org.apache.servicemix.bundles.quartz>
         <version.org.apache.servicemix.bundles.reflections>0.9.11_2</version.org.apache.servicemix.bundles.reflections>
         <version.org.apache.servicemix.bundles.rhino>1.7.7.1_1</version.org.apache.servicemix.bundles.rhino>
         <version.org.apache.servicemix.bundles.saxon>9.8.0-8_1</version.org.apache.servicemix.bundles.saxon>
@@ -210,7 +218,7 @@
         <version.org.jboss.logging>3.3.2.Final-redhat-00001</version.org.jboss.logging>
         <version.org.jboss.modules>1.5.2.Final</version.org.jboss.modules>
         <version.org.jboss.narayana>5.9.0.Final-redhat-00001</version.org.jboss.narayana>
-        <version.org.jboss.spec.jacc>1.0.0.Final</version.org.jboss.spec.jacc>
+        <version.org.jboss.spec.jacc>1.0.2.Final</version.org.jboss.spec.jacc>
         <version.org.jboss.transaction>7.6.0.Final-redhat-1</version.org.jboss.transaction>
         <!-- Can't use yet 3.6.5.Final-redhat-00001 from EAP 7.2, because it imports org.jboss.threads and wildfly-client -->
         <version.org.jboss.xnio>3.3.8.Final</version.org.jboss.xnio>
@@ -233,13 +241,13 @@
         <version.org.ops4j.pax.url>2.6.1</version.org.ops4j.pax.url>
         <version.org.ops4j.pax.web>7.3.0</version.org.ops4j.pax.web>
         <version.org.osgi>6.0.0</version.org.osgi>
-        <version.org.osgi.compendium>5.0.0</version.org.osgi.compendium>
+        <version.org.osgi.compendium>6.0.0</version.org.osgi.compendium>
         <version.org.ow2.asm>7.0</version.org.ow2.asm>
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
         <version.org.springframework>4.3.17.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.23</version.org.yaml.snakeyaml>
         <version.org.wildfly.common>1.2.0.Beta3</version.org.wildfly.common>
-        <version.org.wildfly.security.elytron>1.1.0.Beta22</version.org.wildfly.security.elytron>
+        <version.org.wildfly.security.elytron>1.1.10.Final</version.org.wildfly.security.elytron>
         <version.org.wildfly.transaction.client>1.0.2.Final-redhat-1</version.org.wildfly.transaction.client>
 
         <!-- versions of Maven plugins (and their important dependencies) -->
@@ -332,6 +340,17 @@
             <!-- For Artemis -->
             <id>jb-amq-7-brew</id>
             <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-amq-7-build/latest/maven</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <!-- For Hibernate 5.3.x -->
+            <id>brew-jb-eap-7.2-maven</id>
+            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.2-maven-build/latest/maven</url>
             <releases>
                 <enabled>true</enabled>
             </releases>
@@ -452,6 +471,10 @@
                         <groupId>org.apache.karaf</groupId>
                         <artifactId>org.apache.karaf.client</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.osgi</groupId>
+                        <artifactId>org.osgi.compendium</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
             <dependency>
@@ -468,7 +491,7 @@
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules</groupId>
-                <artifactId>fuse-credential-store-karaf</artifactId>
+                <artifactId>fuse-credential-store-core</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -521,7 +544,7 @@
             </dependency>
             <dependency>
                 <groupId>org.osgi</groupId>
-                <artifactId>org.osgi.compendium</artifactId>
+                <artifactId>osgi.cmpn</artifactId>
                 <version>${version.org.osgi.compendium}</version>
             </dependency>
 
@@ -964,6 +987,12 @@
 
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.jasypt</artifactId>
+                <version>${version.org.apache.servicemix.bundles.jasypt}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.servicemix.bundles</groupId>
                 <artifactId>org.apache.servicemix.bundles.spring-beans</artifactId>
                 <version>${version.org.apache.servicemix.bundles.spring}</version>
             </dependency>
@@ -1026,17 +1055,35 @@
                 <groupId>org.ops4j.pax.transx</groupId>
                 <artifactId>pax-transx-tm-core</artifactId>
                 <version>${version.org.ops4j.pax.transx}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.osgi</groupId>
+                        <artifactId>org.osgi.compendium</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.ops4j.pax.transx</groupId>
                 <artifactId>pax-transx-tm-narayana</artifactId>
                 <version>${version.org.ops4j.pax.transx}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.osgi</groupId>
+                        <artifactId>org.osgi.compendium</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.ops4j.pax.transx</groupId>
                 <artifactId>pax-transx-tm-narayana</artifactId>
                 <version>${version.org.ops4j.pax.transx}</version>
                 <classifier>sources</classifier>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.osgi</groupId>
+                        <artifactId>org.osgi.compendium</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.ops4j.pax.web</groupId>
@@ -1178,6 +1225,12 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-osgi</artifactId>
                 <version>${version.org.hibernate}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.osgi</groupId>
+                        <artifactId>org.osgi.compendium</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
             <dependency>
                 <groupId>org.hibernate</groupId>

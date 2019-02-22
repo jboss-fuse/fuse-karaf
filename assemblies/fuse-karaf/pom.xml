@@ -245,6 +245,7 @@
                             pax-logging and pax-url-aether
                         -->
                         <feature>framework</feature>
+                        <feature>fuse-credential-store-core</feature>
                         <feature>patch-management</feature>
                     </startupFeatures>
                     <bootFeatures>
