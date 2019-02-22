@@ -35,7 +35,8 @@
     <description>Parent POM for Fuse Credential Store support for Apache Karaf</description>
 
     <modules>
-        <module>fuse-credential-store-karaf</module>
+        <module>fuse-credential-store-core</module>
+        <module>fuse-credential-store-commands</module>
     </modules>
 
 </project>

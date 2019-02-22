@@ -41,7 +41,7 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.fuse.modules</groupId>
-            <artifactId>fuse-credential-store-karaf</artifactId>
+            <artifactId>fuse-credential-store-core</artifactId>
             <scope>test</scope>
         </dependency>
 
