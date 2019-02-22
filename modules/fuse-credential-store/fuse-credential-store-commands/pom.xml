@@ -69,6 +69,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.apache.servicemix.bundles</groupId>
+            <artifactId>org.apache.servicemix.bundles.jasypt</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <scope>provided</scope>
@@ -146,13 +151,20 @@
                             org.apache.karaf.shell.support.completers,
                             org.apache.karaf.shell.support.table,
                             org.jboss.fuse.credential.store,
+                            org.jasypt.*,
                             org.slf4j
                         </Import-Package>
                         <Export-Package>!*</Export-Package>
                         <Private-Package>
                             org.jboss.fuse.credential.store.command.*,
+                            org.jboss.fuse.jasypt.commands.*
                         </Private-Package>
-                        <Karaf-Commands>org.jboss.fuse.credential.store.command</Karaf-Commands>
+                        <Karaf-Commands>
+                            org.jboss.fuse.credential.store.command,
+                            org.jboss.fuse.credential.store.command.completers,
+                            org.jboss.fuse.jasypt.commands,
+                            org.jboss.fuse.jasypt.commands.completers
+                        </Karaf-Commands>
                     </instructions>
                 </configuration>
             </plugin>

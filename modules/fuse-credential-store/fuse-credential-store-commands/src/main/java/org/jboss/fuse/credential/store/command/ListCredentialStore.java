@@ -60,5 +60,4 @@ public class ListCredentialStore extends AbstractCredentialStoreCommand {
         return null;
     }
 
-
 }

@@ -39,7 +39,8 @@
 
     <feature name="fuse-credential-store" description="fuse-credential-store-commands" version="${project.version}">
         <feature>fuse-credential-store-core</feature>
-        <bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-credential-store-commands/${project.version}</bundle>
+        <bundle>mvn:org.jboss.fuse.modules/fuse-credential-store-commands/${project.version}</bundle>
+        <bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jasypt/${version.org.apache.servicemix.bundles.jasypt}</bundle>
     </feature>
 
     <feature name="fuse-javaee-apis" description="fundamental bundles required by some important features" version="${project.version}">

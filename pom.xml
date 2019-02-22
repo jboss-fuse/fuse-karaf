@@ -987,6 +987,12 @@
 
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
+                <artifactId>org.apache.servicemix.bundles.jasypt</artifactId>
+                <version>${version.org.apache.servicemix.bundles.jasypt}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.servicemix.bundles</groupId>
                 <artifactId>org.apache.servicemix.bundles.spring-beans</artifactId>
                 <version>${version.org.apache.servicemix.bundles.spring}</version>
             </dependency>

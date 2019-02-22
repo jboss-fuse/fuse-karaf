@@ -33,7 +33,7 @@ import org.apache.karaf.shell.support.completers.StringsCompleter;
 public class CredentialStoreAlgorithmCompletionSupport implements Completer {
 
     /**
-     * Instead o discovering {@link MaskedPassword} algorithms, we just list the ones we'd like to support
+     * Instead o discovering {@code MaskedPassword} algorithms, we just list the ones we'd like to support
      */
     private static final String[] EXPLICITLY_SUPPORTED_ALGORITHMS = new String[] {
             // MD5-DES is kept for simplicity (for i in {1..ic}; do md5(pwd+iv); done) - not recommended
