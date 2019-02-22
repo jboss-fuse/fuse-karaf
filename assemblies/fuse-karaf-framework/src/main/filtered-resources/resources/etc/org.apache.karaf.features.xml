@@ -277,7 +277,7 @@
             </feature>
         </replacement>
         <replacement>
-            <feature name="hibernate-orm" version="${hibernate.version}" description="Combines all Hibernate core dependencies and required modules into a single feature">
+            <feature name="hibernate-orm" version="${version.org.hibernate}" description="Combines all Hibernate core dependencies and required modules into a single feature">
                 <f:feature prerequisite="true">wrap</f:feature>
                 <f:feature>transaction-api</f:feature>
                 <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${version.org.apache.servicemix.bundles.antlr2}</f:bundle>
@@ -289,8 +289,8 @@
                 <f:bundle>mvn:com.fasterxml/classmate/${version.com.fasterxml.classmate}</f:bundle>
                 <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/${version.org.apache.servicemix.bundles.dom4j2}</f:bundle>
                 <f:bundle>mvn:org.hibernate.common/hibernate-commons-annotations/${version.org.hibernate.common}</f:bundle>
-                <f:bundle>mvn:org.hibernate/hibernate-core/${hibernate.version}</f:bundle>
-                <f:bundle>mvn:org.hibernate/hibernate-osgi/${hibernate.version}</f:bundle>
+                <f:bundle>mvn:org.hibernate/hibernate-core/${version.org.hibernate}</f:bundle>
+                <f:bundle>mvn:org.hibernate/hibernate-osgi/${version.org.hibernate}</f:bundle>
             </feature>
         </replacement>
     </featureReplacements>
