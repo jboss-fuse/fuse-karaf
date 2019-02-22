@@ -123,7 +123,7 @@ public class CredentialStoreConfiguration {
                 algorithm = DEFAULT_ALGORITHM;
             }
         }
-        if (location == null || "".equals(location.trim())) {
+        if (location == null || "".equals(location.trim()) || !new File(location).isFile()) {
             location = System.getenv(ENV_CREDENTIAL_STORE_LOCATION);
             if (location == null || "".equals(location.trim())) {
                 location = defaultLocation;

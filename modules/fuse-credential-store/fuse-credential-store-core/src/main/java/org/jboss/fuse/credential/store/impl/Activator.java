@@ -103,7 +103,7 @@ public final class Activator implements BundleActivator,
 
         // for test purposes
         boolean osgi = FrameworkUtil.getBundle(getClass()) != null;
-        boolean elytronCm = "elytron".equals(context.getProperty("felix.cm.pm"));
+        boolean elytronCm = osgi && "elytron".equals(context.getProperty("felix.cm.pm"));
 
         credentialStoreService = new CredentialStoreServiceImpl(this.context, elytronProvider);
 
