@@ -59,6 +59,8 @@
                 replacement="mvn:com.fasterxml.jackson.core/jackson-databind/${version.com.fasterxml.jackson29}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/[2.9,2.10)"
                 replacement="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/${version.com.fasterxml.jackson29}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.datatype/jackson-datatype-jsr310/[2.9,2.10)"
+                replacement="mvn:com.fasterxml.jackson.datatype/jackson-datatype-jsr310/${version.com.fasterxml.jackson29}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/[2.9,2.10)"
                 replacement="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${version.com.fasterxml.jackson29}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/[2.9,2.10)"
@@ -273,6 +275,8 @@
                 replacement="mvn:org.codehaus.groovy/groovy-all/${version.org.codehaus.groovy}" mode="maven" />
         <bundle originalUri="wrap:mvn:io.opentracing/opentracing-api/0.*"
                 replacement="wrap:mvn:io.opentracing/opentracing-api/${version.io.opentracing}" mode="maven" />
+        <bundle originalUri="mvn:org.jboss.spec.javax.security.jacc/jboss-jacc-api_1.5_spec/[1.0,2.0)"
+                replacement="mvn:javax.security.jacc/javax.security.jacc-api/${version.javax.security.jacc}" mode="maven" />
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->

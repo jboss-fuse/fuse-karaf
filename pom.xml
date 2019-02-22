@@ -117,6 +117,7 @@
         <version.javax.jms>2.0.1</version.javax.jms>
         <version.javax.persistence>2.2</version.javax.persistence>
         <version.javax.resource>1.7.1</version.javax.resource>
+        <version.javax.security.jacc>1.6</version.javax.security.jacc>
         <version.javax.servlet>4.0.1</version.javax.servlet>
         <version.javax.transaction>1.2</version.javax.transaction>
         <version.javax.validation>1.1.0.Final-redhat-1</version.javax.validation>
@@ -217,7 +218,7 @@
         <version.org.jboss.logging>3.3.2.Final-redhat-00001</version.org.jboss.logging>
         <version.org.jboss.modules>1.5.2.Final</version.org.jboss.modules>
         <version.org.jboss.narayana>5.9.0.Final-redhat-00001</version.org.jboss.narayana>
-        <version.org.jboss.spec.jacc>1.0.0.Final</version.org.jboss.spec.jacc>
+        <version.org.jboss.spec.jacc>1.0.2.Final</version.org.jboss.spec.jacc>
         <version.org.jboss.transaction>7.6.0.Final-redhat-1</version.org.jboss.transaction>
         <!-- Can't use yet 3.6.5.Final-redhat-00001 from EAP 7.2, because it imports org.jboss.threads and wildfly-client -->
         <version.org.jboss.xnio>3.3.8.Final</version.org.jboss.xnio>
