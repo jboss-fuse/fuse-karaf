@@ -31,7 +31,7 @@
     <artifactId>fuse-credential-store-core</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Red Hat Fuse :: Fuse Modules :: Fuse Credential Store :: Core</name>
+    <name>Red Hat Fuse :: Modules :: Credential Store :: Core</name>
     <description>OSGI Bundle containing support for WildFly Elytron Credential Store</description>
 
     <dependencies>

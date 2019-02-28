@@ -31,9 +31,8 @@
     <artifactId>fuse-pax-transx-tm-narayana</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Red Hat Fuse :: Fuse Modules :: Transaction</name>
+    <name>Red Hat Fuse :: Modules :: Transaction</name>
     <description>Repackaged version of pax-transx-tm-narayana bundle with managed dependencies</description>
-
 
     <build>
         <plugins>

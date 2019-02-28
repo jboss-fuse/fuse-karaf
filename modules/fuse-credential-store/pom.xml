@@ -31,7 +31,7 @@
     <artifactId>fuse-credential-store</artifactId>
     <packaging>pom</packaging>
 
-    <name>Red Hat Fuse :: Fuse Modules :: Fuse Credential Store</name>
+    <name>Red Hat Fuse :: Modules :: Credential Store</name>
     <description>Parent POM for Fuse Credential Store support for Apache Karaf</description>
 
     <modules>

@@ -31,7 +31,7 @@
     <artifactId>patch-commands</artifactId>
     <packaging>bundle</packaging>
 
-    <name>Red Hat Fuse :: Fuse Modules :: Fuse Patch :: Commands</name>
+    <name>Red Hat Fuse :: Modules :: Patch :: Commands</name>
     <description>OSGi bundle with patch commands</description>
 
     <dependencies>

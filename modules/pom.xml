@@ -31,7 +31,7 @@
     <artifactId>fuse-modules</artifactId>
     <packaging>pom</packaging>
 
-    <name>Red Hat Fuse :: Fuse Modules</name>
+    <name>Red Hat Fuse :: Modules</name>
 
     <description>Additional components for Red Hat Fuse (commands, services, libraries, etc.)</description>
 
