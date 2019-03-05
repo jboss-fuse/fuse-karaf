@@ -121,7 +121,7 @@
         <version.javax.servlet>4.0.1</version.javax.servlet>
         <version.javax.transaction>1.2</version.javax.transaction>
         <version.javax.validation>1.1.0.Final-redhat-1</version.javax.validation>
-        <version.javax.ws.rs>2.0.1</version.javax.ws.rs>
+        <version.javax.ws.rs>2.1.1</version.javax.ws.rs>
         <version.joda-time>2.9.9</version.joda-time>
         <version.junit>4.12</version.junit>
         <version.net.bytebuddy>1.9.5.redhat-00001</version.net.bytebuddy>
