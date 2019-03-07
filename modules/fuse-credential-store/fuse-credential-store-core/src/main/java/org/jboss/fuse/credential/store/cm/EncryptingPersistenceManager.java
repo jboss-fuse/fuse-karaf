@@ -21,6 +21,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Vector;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
@@ -171,7 +172,15 @@ public class EncryptingPersistenceManager implements PersistenceManager {
     @Override
     public Enumeration getDictionaries() throws IOException {
         if (filePm != null) {
-            return filePm.getDictionaries();
+            Enumeration dictionaries = filePm.getDictionaries();
+            Vector<Dictionary> decrypted = new Vector<>();
+            while (dictionaries.hasMoreElements()) {
+                Dictionary next = (Dictionary) dictionaries.nextElement();
+                if (next != null) {
+                    decrypted.add(decrypt(next));
+                }
+            }
+            return decrypted.elements();
         }
         return null;
     }
