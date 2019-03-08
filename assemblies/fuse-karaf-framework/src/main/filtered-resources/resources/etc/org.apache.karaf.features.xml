@@ -163,7 +163,7 @@
                 replacement="mvn:org.atmosphere/atmosphere-runtime/${version.org.atmosphere}" mode="maven" />
         <bundle originalUri="mvn:org.glassfish.web/javax.el/[2,3)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el2}" mode="maven" />
-        <bundle originalUri="mvn:org.glassfish.web/javax.el/[3,4)"
+        <bundle originalUri="mvn:org.glassfish/javax.el/[3,4)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el3}" mode="maven" />
         <bundle originalUri="mvn:org.hibernate.common/hibernate-commons-annotations/[5.0,5.1)"
                 replacement="mvn:org.hibernate.common/hibernate-commons-annotations/${version.org.hibernate.common}" mode="maven" />
