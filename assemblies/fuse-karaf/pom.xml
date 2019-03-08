@@ -464,10 +464,13 @@
 
                         <!-- Unsupported PAX JMS features -->
                         <feature>pax-jms-activemq</feature>
+                        <feature>pax-jms-oracleaq</feature>
 
                         <!-- Unsupported Karaf features -->
                         <feature>minimal</feature>
                         <feature>standard</feature>
+                        <feature>openjpa</feature>
+                        <feature>openjpa3</feature>
 
                         <!-- Features unsupported due to API incompatibility -->
                         <feature>eclipselink</feature>
