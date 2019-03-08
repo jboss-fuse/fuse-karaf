@@ -369,7 +369,7 @@
                     </installedFeatures>
                     <blacklistedFeatures>
                         <feature>httplite</feature>
-                        <feature>jetty/[8,9)</feature>
+                        <feature>jetty</feature>
                         <feature>pax-*jetty*</feature>
                         <feature>cxf-*-jetty</feature>
                         <feature>blueprint-web</feature>
@@ -397,6 +397,14 @@
                         <feature>camel-vtdxml</feature>
                         <feature>camel-wmq</feature>
                         <feature>camel-zeromq</feature>
+                        <!-- unsupported due to servlet API requirements -->
+                        <feature>camel-atmosphere-websocket</feature>
+                        <feature>camel-cometd</feature>
+                        <feature>camel-jetty</feature>
+                        <feature>camel-jetty9</feature>
+                        <feature>camel-spark-rest</feature>
+                        <feature>camel-urlrewrite</feature>
+                        <feature>camel-websocket</feature>
 
                         <!-- deprecated components -->
                         <feature>camel-context</feature>
