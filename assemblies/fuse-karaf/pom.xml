@@ -237,6 +237,8 @@
                     <installedBundles>
                         <installedBundle>${camel.sap.bundle}</installedBundle>
                         <installedBundle>mvn:org.jline/jline/${version.org.jline}</installedBundle>
+                        <installedBundle>mvn:org.apache.httpcomponents/httpclient-osgi/${version.org.apache.httpcomponents.httpclient}</installedBundle>
+                        <installedBundle>mvn:org.apache.httpcomponents/httpcore-osgi/${version.org.apache.httpcomponents.httpcore}</installedBundle>
                     </installedBundles>
                     <startupFeatures>
                         <!--
