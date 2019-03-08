@@ -143,8 +143,6 @@
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jsch/${version.org.apache.servicemix.bundles.jsch}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jzlib/[1.9,2)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jzlib/${version.org.apache.servicemix.bundles.jzlib}" mode="maven" />
-        <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okio/[1.0,2)"
-                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okio/${version.org.apache.servicemix.bundles.okio}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.reflections/[0.9,1)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.reflections/${version.org.apache.servicemix.bundles.reflections}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.rhino/[1,2)"
