@@ -279,6 +279,8 @@
                 replacement="wrap:mvn:io.opentracing/opentracing-api/${version.io.opentracing}" mode="maven" />
         <bundle originalUri="mvn:org.jboss.spec.javax.security.jacc/jboss-jacc-api_1.5_spec/[1.0,2.0)"
                 replacement="mvn:javax.security.jacc/javax.security.jacc-api/${version.javax.security.jacc}" mode="maven" />
+        <bundle originalUri="mvn:javax.ws.rs/javax.ws.rs-api/[2.0,2.2)"
+                replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxrs-api-2.1/${version.org.apache.servicemix.specs.jaxrs}" mode="maven" />
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
