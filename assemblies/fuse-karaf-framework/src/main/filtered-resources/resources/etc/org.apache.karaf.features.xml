@@ -279,6 +279,8 @@
                 replacement="mvn:javax.security.jacc/javax.security.jacc-api/${version.javax.security.jacc}" mode="maven" />
         <bundle originalUri="mvn:javax.ws.rs/javax.ws.rs-api/[2.0,2.2)"
                 replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxrs-api-2.1/${version.org.apache.servicemix.specs.jaxrs}" mode="maven" />
+        <bundle originalUri="mvn:io.swagger.core.v3/swagger-jaxrs2/[2.0,3)"
+                replacement="wrap:mvn:io.swagger.core.v3/swagger-jaxrs2/${version.io.swagger.core.v3}$overwrite=merge&amp;Import-Package=javax.ws.rs.*;version=2.0,com.fasterxml.jackson.*;version=&quot;[2.9,3)&quot;,com.google.common.base;version=&quot;[20.0,21)&quot;,org.apache.commons.lang3.*;version=&quot;[3.7,4)&quot;,org.reflections.*;version=&quot;[0.9,1)&quot;,org.slf4j;version=&quot;[1.7,2)&quot;,io.swagger.*;version=&quot;[2.0,3)&quot;,javax.ws.rs.*,javax.servlet;version=&quot;[3.1,5)&quot;,javax.servlet.http;version=&quot;[3.1,5)&quot;" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
