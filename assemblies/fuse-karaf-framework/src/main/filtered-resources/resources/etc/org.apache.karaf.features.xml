@@ -285,6 +285,8 @@
                 replacement="wrap:mvn:org.eclipse.jetty/jetty-util/${version.org.eclipse.jetty}$overwrite=merge&amp;Import-Package=javax.imageio,javax.naming,javax.naming.ldap,javax.net.ssl,javax.security.auth.x500,javax.xml.parsers,org.slf4j.*;resolution:=optional;version=&quot;[1.7.25,2)&quot;,javax.servlet.*;version=&quot;[3.1,5)&quot;" mode="maven"/>
         <bundle originalUri="mvn:org.eclipse.jetty/jetty-http/[9,10)"
                 replacement="wrap:mvn:org.eclipse.jetty/jetty-http/${version.org.eclipse.jetty}$overwrite=merge&amp;Import-Package=org.eclipse.jetty.*;version=&quot;[9.4.12,10)&quot;,javax.servlet.*;version=&quot;[3.1,5)&quot;" mode="maven"/>
+        <bundle originalUri="mvn:org.postgresql/postgresql/[9.4,10)"
+                replacement="mvn:org.postgresql/postgresql/${version.org.postgresql}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
