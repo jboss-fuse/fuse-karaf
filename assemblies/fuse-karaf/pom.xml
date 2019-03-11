@@ -480,6 +480,8 @@
                     <blacklistedBundles>
                         <bundle>mvn:org.ops4j.pax.cdi/pax-cdi-jetty-weld</bundle>
                         <bundle>wrap:mvn:org.apache.activemq/activemq-client</bundle>
+                        <!-- CXF-7725 -->
+                        <bundle>mvn:org.apache.geronimo.specs/geronimo-ws-metadata_2.0_spec</bundle>
                     </blacklistedBundles>
                     <blacklistedRepositories>
                         <!-- Blacklisting some repositories because the closure is not consistent -->
