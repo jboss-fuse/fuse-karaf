@@ -21,9 +21,7 @@ import java.lang.reflect.Proxy;
 import java.security.GeneralSecurityException;
 import java.security.Provider;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 
 import javax.management.JMException;
@@ -144,12 +142,8 @@ public final class Activator implements BundleActivator,
 
         final Properties properties = System.getProperties();
 
-        @SuppressWarnings("unchecked")
-        final Hashtable<String, String> propertiesAsStringEntries = (Hashtable) properties;
-
-        for (final Entry<String, String> property : propertiesAsStringEntries.entrySet()) {
-            final String key = property.getKey();
-            final String value = property.getValue();
+        for (final String key : properties.stringPropertyNames()) {
+            final String value = properties.getProperty(key);
 
             if (replaced(credentialStoreService, key, value)) {
                 replacedProperties.put(key, value);
