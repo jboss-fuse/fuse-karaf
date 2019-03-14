@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse</groupId>
         <artifactId>assemblies</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -34,15 +34,13 @@
 
     <name>Red Hat Fuse :: Assemblies :: Features :: Framework</name>
 
-    <description>
-        In Apache Karaf there's org.apache.karaf.features:base and org.apache.karaf.features:framework
+    <description>In Apache Karaf there's org.apache.karaf.features:base and org.apache.karaf.features:framework
         In Red Hat Fuse both are combined in single "framework KAR", which contains all fundamental resources.
         These resources include:
         - bin scripts
         - libs (ext, boot, endorsed)
         - basic etc config files
-        - fundamental system libraries (e.g., Felix framework)
-    </description>
+        - fundamental system libraries (e.g., Felix framework)</description>
 
     <dependencies>
 
@@ -188,27 +186,25 @@
                         </goals>
                         <configuration>
                             <target>
-                                <echo message="Fixing start/stop scripts in assembly" />
-                                <replace file="${project.build.outputDirectory}/resources/bin/start.bat" token="karaf.bat" value="fuse.bat" />
-                                <replace file="${project.build.outputDirectory}/resources/bin/stop.bat" token="karaf.bat" value="fuse.bat" />
-                                <replace file="${project.build.outputDirectory}/resources/bin/start" token="bin/karaf" value="bin/fuse" />
-                                <replace file="${project.build.outputDirectory}/resources/bin/stop" token="bin/karaf" value="bin/fuse" />
+                                <echo message="Fixing start/stop scripts in assembly"></echo>
+                                <replace file="${project.build.outputDirectory}/resources/bin/start.bat" token="karaf.bat" value="fuse.bat"></replace>
+                                <replace file="${project.build.outputDirectory}/resources/bin/stop.bat" token="karaf.bat" value="fuse.bat"></replace>
+                                <replace file="${project.build.outputDirectory}/resources/bin/start" token="bin/karaf" value="bin/fuse"></replace>
+                                <replace file="${project.build.outputDirectory}/resources/bin/stop" token="bin/karaf" value="bin/fuse"></replace>
 
                                 <!-- I don't quite like it - think about changing it -->
-                                <echo message="Fixing versions in bin scripts" />
-                                <replace file="${project.build.outputDirectory}/resources/bin/client"
-                                        token="org/slf4j/slf4j-api/1.7.12/slf4j-api-1.7.12" value="org/slf4j/slf4j-api/${version.org.slf4j}/slf4j-api-${version.org.slf4j}" />
-                                <replace file="${project.build.outputDirectory}/resources/bin/client.bat"
-                                        token="org\slf4j\slf4j-api\1.7.12\slf4j-api-1.7.12" value="org\slf4j\slf4j-api\${version.org.slf4j}\slf4j-api-${version.org.slf4j}" />
+                                <echo message="Fixing versions in bin scripts"></echo>
+                                <replace file="${project.build.outputDirectory}/resources/bin/client" token="org/slf4j/slf4j-api/1.7.12/slf4j-api-1.7.12" value="org/slf4j/slf4j-api/${version.org.slf4j}/slf4j-api-${version.org.slf4j}"></replace>
+                                <replace file="${project.build.outputDirectory}/resources/bin/client.bat" token="org\slf4j\slf4j-api\1.7.12\slf4j-api-1.7.12" value="org\slf4j\slf4j-api\${version.org.slf4j}\slf4j-api-${version.org.slf4j}"></replace>
 
-                                <echo message="Customizing etc configuration files" />
+                                <echo message="Customizing etc configuration files"></echo>
                                 <concat destfile="${project.build.outputDirectory}/resources/etc/config.properties" append="true" encoding="UTF-8">
-                                    <filelist dir="${project.build.directory}/appended-resources" files="append-header.part" />
+                                    <filelist dir="${project.build.directory}/appended-resources" files="append-header.part"></filelist>
                                 </concat>
                                 <concat destfile="${project.build.outputDirectory}/resources/etc/config.properties" append="true" encoding="UTF-8">
-                                    <filelist dir="${project.build.directory}/appended-resources/etc" files="config.properties" />
+                                    <filelist dir="${project.build.directory}/appended-resources/etc" files="config.properties"></filelist>
                                     <filterchain>
-                                        <headfilter lines="-1" skip="15" />
+                                        <headfilter lines="-1" skip="15"></headfilter>
                                     </filterchain>
                                 </concat>
                             </target>

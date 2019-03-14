@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse</groupId>
         <artifactId>assemblies</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -31,7 +31,7 @@
     <packaging>pom</packaging>
 
     <properties>
-        <camel.sap.bundle />
+        <camel.sap.bundle></camel.sap.bundle>
     </properties>
 
     <name>Red Hat Fuse :: Assemblies :: Fuse - Karaf distro</name>
@@ -526,9 +526,7 @@
                         <library>mvn:net.java.dev.jna/jna/${version.net.java.dev.jna};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna-platform/${version.net.java.dev.jna};type:=boot;export:=false</library>
                     </libraries>
-                    <pidsToExtract>
-                        *
-                    </pidsToExtract>
+                    <pidsToExtract>*</pidsToExtract>
                     <javase>1.8</javase>
                     <config>
                         <karaf.delay.console>true</karaf.delay.console>
@@ -584,8 +582,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <copy file="${project.build.directory}/${project.artifactId}-${project.version}-baseline.zip"
-                                        todir="${project.build.directory}/assembly/system/org/jboss/fuse/fuse-karaf/${project.version}" />
+                                <copy file="${project.build.directory}/${project.artifactId}-${project.version}-baseline.zip" todir="${project.build.directory}/assembly/system/org/jboss/fuse/fuse-karaf/${project.version}"></copy>
                             </target>
                         </configuration>
                     </execution>
@@ -753,7 +750,7 @@
                             <projectName>Red Hat Fuse</projectName>
                             <organizationName>Red Hat, Inc. All Rights Reserved.</organizationName>
                             <organizationURL>http://redhat.com</organizationURL>
-                            <preamble>In addition to the Red Hat products, this disk contains certain third party software or components ("Third Party Components"), which are bundled as separate files or modules and separately licensed to you by said third parties. This file contains a listing of all NOTICE/NOTICE.txt files included with the Third Party Component jars in this distribution of Fuse ESB. Please see the dependencies.txt file for the complete listing of Third Party Components and their attributed license agreements. Your use of the Third Party Components is subject to the terms and conditions set forth in the applicable third party license agreement. The Third Party Components are provided by Red Hat, Inc. solely on an "AS IS" basis, without any warranty. Red Hat, Inc. disclaims all warranties and indemnities with respect to the Third Party Components, express or implied, and assumes no liability with respect to the Third Party Components. You acknowledge that the authors of the Third Party Components have no obligation to provide support to you for the Third Party Components. You hereby undertake to comply with all licenses related to the applicable Third Party Components. All third party license agreements are contained in the licenses directory of </preamble>
+                            <preamble>In addition to the Red Hat products, this disk contains certain third party software or components ("Third Party Components"), which are bundled as separate files or modules and separately licensed to you by said third parties. This file contains a listing of all NOTICE/NOTICE.txt files included with the Third Party Component jars in this distribution of Fuse ESB. Please see the dependencies.txt file for the complete listing of Third Party Components and their attributed license agreements. Your use of the Third Party Components is subject to the terms and conditions set forth in the applicable third party license agreement. The Third Party Components are provided by Red Hat, Inc. solely on an "AS IS" basis, without any warranty. Red Hat, Inc. disclaims all warranties and indemnities with respect to the Third Party Components, express or implied, and assumes no liability with respect to the Third Party Components. You acknowledge that the authors of the Third Party Components have no obligation to provide support to you for the Third Party Components. You hereby undertake to comply with all licenses related to the applicable Third Party Components. All third party license agreements are contained in the licenses directory of</preamble>
                             <listDependencies>false</listDependencies>
                             <licensesConfigFile>${project.basedir}/src/license/licenses.xml</licensesConfigFile>
                             <generateLicensesXml>true</generateLicensesXml>

@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules.patch</groupId>
         <artifactId>fuse-patch</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -123,20 +123,15 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                         <Bundle-Activator>org.jboss.fuse.patch.management.impl.Activator</Bundle-Activator>
-                        <Import-Package>
-                            javax.net.ssl,
+                        <Import-Package>javax.net.ssl,
                             javax.xml*,
                             org.xml.sax*,
                             org.osgi.framework,
                             org.osgi.framework.startlevel,
                             org.osgi.service.log;resolution:=optional,
-                            org.osgi.util.tracker
-                        </Import-Package>
-                        <Export-Package>
-                            org.jboss.fuse.patch.management
-                        </Export-Package>
-                        <Private-Package>
-                            org.eclipse.jgit.errors;-split-package:=merge-first,
+                            org.osgi.util.tracker</Import-Package>
+                        <Export-Package>org.jboss.fuse.patch.management</Export-Package>
+                        <Private-Package>org.eclipse.jgit.errors;-split-package:=merge-first,
                             org.eclipse.jgit.nls;-split-package:=merge-first,
                             !org.osgi*,
                             org.slf4j,
@@ -149,12 +144,9 @@
                             !org.apache.karaf*,
                             !org.apache.felix.resolver*,
                             org.apache.felix.utils*;-split-package:=merge-first,
-                            *
-                        </Private-Package>
-                        <Provide-Capability>
-                            osgi.service;effective:=active;objectClass="org.jboss.fuse.patch.management.PatchManagement",
-                            osgi.service;effective:=active;objectClass="org.jboss.fuse.patch.management.BackupService"
-                        </Provide-Capability>
+                            *</Private-Package>
+                        <Provide-Capability>osgi.service;effective:=active;objectClass="org.jboss.fuse.patch.management.PatchManagement",
+                            osgi.service;effective:=active;objectClass="org.jboss.fuse.patch.management.BackupService"</Provide-Capability>
                     </instructions>
                 </configuration>
             </plugin>

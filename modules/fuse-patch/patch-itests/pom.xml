@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules.patch</groupId>
         <artifactId>fuse-patch</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -262,18 +262,18 @@
                         <phase>process-test-resources</phase>
                         <configuration>
                             <target>
-                                <mkdir dir="${karaf.home}/../patches/_baseline-root" />
+                                <mkdir dir="${karaf.home}/../patches/_baseline-root"></mkdir>
                                 <copy todir="${karaf.home}/../patches/_baseline-root">
-                                    <fileset dir="${karaf.home}"/>
+                                    <fileset dir="${karaf.home}"></fileset>
                                 </copy>
                                 <copy todir="${karaf.home}/../patches/_baseline-root/etc">
                                     <fileset dir="${project.basedir}/src/test/resources/etc">
-                                        <include name="version.properties" />
+                                        <include name="version.properties"></include>
                                     </fileset>
                                 </copy>
                                 <zip destfile="${karaf.home}/../patches/fuse-karaf-7.0.0-baseline.zip">
-                                    <fileset dir="${karaf.home}/../patches" >
-                                        <include name="_baseline-root/**" />
+                                    <fileset dir="${karaf.home}/../patches">
+                                        <include name="_baseline-root/**"></include>
                                     </fileset>
                                 </zip>
                             </target>

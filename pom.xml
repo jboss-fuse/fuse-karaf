@@ -22,7 +22,7 @@
 
     <groupId>org.jboss.fuse</groupId>
     <artifactId>jboss-fuse-parent</artifactId>
-    <version>7.3.0.fuse-730065</version>
+    <version>7.3.0.fuse-730065-redhat-00001</version>
     <packaging>pom</packaging>
 
     <name>Red Hat Fuse :: Parent</name>
@@ -45,7 +45,7 @@
         <developer>
             <id>fuseteam</id>
             <name>Red Hat Fuse Development Team</name>
-            <organization>Red Hat </organization>
+            <organization>Red Hat</organization>
             <organizationUrl>http://jboss.org/</organizationUrl>
         </developer>
     </developers>
@@ -75,14 +75,14 @@
         -->
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
-        <version.io.hawt>2.0.0.fuse-730063</version.io.hawt>
-        <version.org.apache.activemq.artemis>2.6.3.redhat-00015</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.21.0.fuse-730067</version.org.apache.camel>
-        <version.org.apache.cxf>3.2.7.fuse-730033</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-730030</version.org.apache.karaf>
-        <version.org.fusesource.activemq>7.3.0.fuse-730069</version.org.fusesource.activemq>
-        <version.org.fusesource.camel-sap>7.3.0.fuse-730069</version.org.fusesource.camel-sap>
-        <version.org.apache-extras.camel-extra>2.21.0.fuse-730069</version.org.apache-extras.camel-extra>
+        <version.io.hawt>2.0.0.fuse-730063-redhat-00001</version.io.hawt>
+        <version.org.apache.activemq.artemis>2.6.3.redhat-00053</version.org.apache.activemq.artemis>
+        <version.org.apache.camel>2.21.0.fuse-730067-redhat-00001</version.org.apache.camel>
+        <version.org.apache.cxf>3.2.7.fuse-730033-redhat-00002</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.0.fuse-730030-redhat-00002</version.org.apache.karaf>
+        <version.org.fusesource.activemq>7.3.0.fuse-730069-redhat-00001</version.org.fusesource.activemq>
+        <version.org.fusesource.camel-sap>7.3.0.fuse-730069-redhat-00001</version.org.fusesource.camel-sap>
+        <version.org.apache-extras.camel-extra>2.21.0.fuse-730069-redhat-00001</version.org.apache-extras.camel-extra>
 
         <!-- versions of normal dependencies of Red Hat Fuse -->
         <version.com.fasterxml.classmate>1.3.4</version.com.fasterxml.classmate>
@@ -116,15 +116,15 @@
         <version.javax.enterprise.cdi-api>1.2</version.javax.enterprise.cdi-api>
         <version.javax.interceptor>1.2</version.javax.interceptor>
         <version.javax.jms>2.0.1</version.javax.jms>
-        <version.javax.persistence>2.2</version.javax.persistence>
+        <version.javax.persistence>2.2.0.redhat-1</version.javax.persistence>
         <version.javax.resource>1.7.1</version.javax.resource>
         <version.javax.security.jacc>1.6</version.javax.security.jacc>
         <version.javax.servlet>4.0.1</version.javax.servlet>
         <version.javax.transaction>1.2</version.javax.transaction>
         <version.javax.validation>1.1.0.Final-redhat-1</version.javax.validation>
-        <version.javax.ws.rs>2.1.1</version.javax.ws.rs>
+        <version.javax.ws.rs>2.1.1.redhat-00002</version.javax.ws.rs>
         <version.joda-time>2.9.9</version.joda-time>
-        <version.junit>4.12</version.junit>
+        <version.junit>4.12.0.redhat-003</version.junit>
         <version.net.bytebuddy>1.9.5.redhat-00001</version.net.bytebuddy>
         <version.net.java.dev.jna>4.5.1</version.net.java.dev.jna>
         <version.net.sf.ehcache>2.10.3</version.net.sf.ehcache>
@@ -138,9 +138,9 @@
         <version.org.apache.commons.compress>1.16.1</version.org.apache.commons.compress>
         <!-- DBCP2 2.2.0 has bad import for javax.transaction.xa package -->
         <version.org.apache.commons.dbcp2>2.1.1</version.org.apache.commons.dbcp2>
-        <version.org.apache.commons.lang3>3.8</version.org.apache.commons.lang3>
+        <version.org.apache.commons.lang3>3.8.0.redhat-00001</version.org.apache.commons.lang3>
         <version.org.apache.commons.math3>3.6.1</version.org.apache.commons.math3>
-        <version.org.apache.commons.pool2>2.5.0</version.org.apache.commons.pool2>
+        <version.org.apache.commons.pool2>2.5.0.redhat-00001</version.org.apache.commons.pool2>
         <version.org.apache.commons.text>1.4</version.org.apache.commons.text>
         <version.org.apache.felix>5.6.12</version.org.apache.felix>
         <version.org.apache.felix.configadmin>1.9.14</version.org.apache.felix.configadmin>
@@ -218,7 +218,7 @@
         <version.org.javassist>3.24.1-GA</version.org.javassist>
         <version.org.jboss.jandex>2.0.3.Final</version.org.jboss.jandex>
         <version.org.jboss.logging>3.3.2.Final-redhat-00001</version.org.jboss.logging>
-        <version.org.jboss.modules>1.5.2.Final</version.org.jboss.modules>
+        <version.org.jboss.modules>1.5.2.Final-redhat-1</version.org.jboss.modules>
         <version.org.jboss.narayana>5.9.0.Final-redhat-00001</version.org.jboss.narayana>
         <version.org.jboss.spec.jacc>1.0.2.Final</version.org.jboss.spec.jacc>
         <version.org.jboss.transaction>7.6.0.Final-redhat-1</version.org.jboss.transaction>
@@ -226,7 +226,7 @@
         <version.org.jboss.xnio>3.3.8.Final</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.jline>3.6.2.redhat-2</version.org.jline>
-        <version.org.keycloak>4.8.3.Final</version.org.keycloak>
+        <version.org.keycloak>4.8.3.Final-redhat-00001</version.org.keycloak>
         <version.org.keycloak.product>4.8.3.Final-redhat-00001</version.org.keycloak.product>
         <version.org.keycloak.rhsso>7.3.0.GA</version.org.keycloak.rhsso>
         <version.org.messaginghub.pooled-jms>0.3.0</version.org.messaginghub.pooled-jms>
@@ -249,8 +249,8 @@
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
         <version.org.springframework>4.3.20.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.23</version.org.yaml.snakeyaml>
-        <version.org.wildfly.common>1.2.0.Beta3</version.org.wildfly.common>
-        <version.org.wildfly.security.elytron>1.1.10.Final</version.org.wildfly.security.elytron>
+        <version.org.wildfly.common>1.2.0.Beta3-redhat-1</version.org.wildfly.common>
+        <version.org.wildfly.security.elytron>1.1.10.Final-redhat-1</version.org.wildfly.security.elytron>
         <version.org.wildfly.transaction.client>1.0.2.Final-redhat-1</version.org.wildfly.transaction.client>
 
         <!-- versions of Maven plugins (and their important dependencies) -->
@@ -286,148 +286,6 @@
         <version.plugin.maven-war-plugin>3.1.0</version.plugin.maven-war-plugin>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>redhat-ga-repository</id>
-            <url>https://maven.repository.redhat.com/ga</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>redhat-ea-repository</id>
-            <url>https://maven.repository.redhat.com/earlyaccess/all</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>jboss-ea</id>
-            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Swagger 1.5.18.fuse70-1-redhat-1 -->
-            <id>jb-fuse-7-brew</id>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-fuse-7-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Narayana 5.5.31.Final-redhat-1 -->
-            <id>jb-eap-7.1-brew</id>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.1-rhel-7-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Artemis -->
-            <id>jb-amq-7-brew</id>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-amq-7-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Hibernate 5.3.x -->
-            <id>brew-jb-eap-7.2-maven</id>
-            <url>http://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.2-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>apache-snapshots-repository</id>
-            <url>https://repository.apache.org/content/groups/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>ops4j-snapshots-repository</id>
-            <url>https://oss.sonatype.org/content/repositories/ops4j-snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>redhat-ga-repository</id>
-            <url>https://maven.repository.redhat.com/ga</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>redhat-ea-repository</id>
-            <url>https://maven.repository.redhat.com/earlyaccess/all</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>jboss-ea</id>
-            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>apache-snapshots-repository</id>
-            <url>https://repository.apache.org/content/groups/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>interval:120</updatePolicy>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-
     <dependencyManagement>
         <dependencies>
 
@@ -436,18 +294,18 @@
             <dependency>
                 <groupId>org.jboss.fuse.features</groupId>
                 <artifactId>base</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>fuse-karaf-framework</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
                 <type>kar</type>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>fuse-karaf-minimal</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
                 <type>zip</type>
                 <exclusions>
                     <exclusion>
@@ -463,7 +321,7 @@
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>fuse-karaf</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
                 <type>zip</type>
                 <exclusions>
                     <exclusion>
@@ -483,31 +341,31 @@
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>fuse-karaf-framework</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
                 <type>xml</type>
                 <classifier>features</classifier>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.itests</groupId>
                 <artifactId>fuse-itests-common</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules</groupId>
                 <artifactId>fuse-credential-store-core</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-features</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
                 <type>xml</type>
                 <classifier>features</classifier>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.features</groupId>
                 <artifactId>rhba-features</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
                 <type>xml</type>
                 <classifier>features</classifier>
             </dependency>
@@ -515,27 +373,27 @@
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-management</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-core-api</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-core</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-commands</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules</groupId>
                 <artifactId>fuse-pax-transx-tm-narayana</artifactId>
-                <version>${project.version}</version>
+                <version>7.3.0.fuse-730065-redhat-00001</version>
             </dependency>
 
             <!-- OSGi/Karaf dependencies -->
@@ -1763,7 +1621,7 @@
                          </goals>
                          <configuration>
                              <rules>
-                                 <banDuplicatePomDependencyVersions />
+                                 <banDuplicatePomDependencyVersions></banDuplicatePomDependencyVersions>
                                  <requirePluginVersions>
                                      <banSnapshots>${enforcer.pluginVersions.banSnapshots}</banSnapshots>
                                  </requirePluginVersions>
@@ -1822,6 +1680,21 @@
                 </configuration>
             </plugin>
 
+            <plugin>
+        <groupId>org.commonjava.maven.plugins</groupId>
+        <artifactId>project-sources-maven-plugin</artifactId>
+        <version>1.0</version>
+        <executions>
+          <execution>
+            <id>project-sources-archive</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>archive</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
         </plugins>
     </build>
 
@@ -1863,7 +1736,7 @@
                                 <include>**/*.properties</include>
                                 <include>**/bin/fuse*</include>
                             </includes>
-                            <excludes />
+                            <excludes></excludes>
                             <mapping>
                                 <wsdl>XML_STYLE</wsdl>
                                 <md>XML_STYLE</md>
@@ -1937,3 +1810,7 @@
     </modules>
 
 </project>
+<!--
+Modified by POM Manipulation Extension for Maven 3.3.1 ( SHA: b8dd07d4 ) 
+-->
+

@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules</groupId>
         <artifactId>fuse-credential-store</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -131,8 +131,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Import-Package>
-                            javax.crypto,
+                        <Import-Package>javax.crypto,
                             javax.crypto.spec,
                             javax.management,
                             javax.security.auth,
@@ -152,19 +151,14 @@
                             org.apache.karaf.shell.support.table,
                             org.jboss.fuse.credential.store,
                             org.jasypt.*,
-                            org.slf4j
-                        </Import-Package>
+                            org.slf4j</Import-Package>
                         <Export-Package>!*</Export-Package>
-                        <Private-Package>
-                            org.jboss.fuse.credential.store.command.*,
-                            org.jboss.fuse.jasypt.commands.*
-                        </Private-Package>
-                        <Karaf-Commands>
-                            org.jboss.fuse.credential.store.command,
+                        <Private-Package>org.jboss.fuse.credential.store.command.*,
+                            org.jboss.fuse.jasypt.commands.*</Private-Package>
+                        <Karaf-Commands>org.jboss.fuse.credential.store.command,
                             org.jboss.fuse.credential.store.command.completers,
                             org.jboss.fuse.jasypt.commands,
-                            org.jboss.fuse.jasypt.commands.completers
-                        </Karaf-Commands>
+                            org.jboss.fuse.jasypt.commands.completers</Karaf-Commands>
                     </instructions>
                 </configuration>
             </plugin>

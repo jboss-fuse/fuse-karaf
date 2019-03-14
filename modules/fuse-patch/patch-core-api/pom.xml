@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules.patch</groupId>
         <artifactId>fuse-patch</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -51,12 +51,8 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Import-Package>
-                            *
-                        </Import-Package>
-                        <Export-Package>
-                            org.jboss.fuse.patch;version="${project.version}"
-                        </Export-Package>
+                        <Import-Package>*</Import-Package>
+                        <Export-Package>org.jboss.fuse.patch;version="${project.version}"</Export-Package>
                     </instructions>
                 </configuration>
             </plugin>

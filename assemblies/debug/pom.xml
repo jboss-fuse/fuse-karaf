@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse</groupId>
         <artifactId>assemblies</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -157,11 +157,7 @@
             <artifactId>org.apache.aries.jpa.container</artifactId>
             <version>${version.org.apache.aries.jpa}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.aries.jpa</groupId>
-            <artifactId>org.apache.aries.jpa.container</artifactId>
-            <version>${version.org.apache.aries.jpa}</version>
-        </dependency>
+        
 
     </dependencies>
 

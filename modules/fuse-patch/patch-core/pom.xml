@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules.patch</groupId>
         <artifactId>fuse-patch</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -112,11 +112,8 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Import-Package>
-                            *
-                        </Import-Package>
-                        <Private-Package>
-                            org.jboss.fuse.patch.impl,
+                        <Import-Package>*</Import-Package>
+                        <Private-Package>org.jboss.fuse.patch.impl,
                             org.apache.felix.utils.manifest;-split-package:=merge-first,
                             org.apache.felix.utils.version;-split-package:=merge-first,
                             org.apache.karaf.util;-split-package:=merge-first,
@@ -126,8 +123,7 @@
                             org.apache.commons.io.comparator;-split-package:=merge-first,
                             org.apache.commons.io.input;-split-package:=merge-first,
                             org.apache.commons.io.monitor;-split-package:=merge-first,
-                            org.apache.commons.io.output;-split-package:=merge-first
-                        </Private-Package>
+                            org.apache.commons.io.output;-split-package:=merge-first</Private-Package>
                         <Service-Component>*</Service-Component>
                     </instructions>
                 </configuration>

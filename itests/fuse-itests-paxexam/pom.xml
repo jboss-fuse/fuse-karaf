@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.itests</groupId>
         <artifactId>fuse-itests</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -143,7 +143,7 @@
                         <include>**/*IntegrationTest.java</include>
                     </includes>
                     <reuseForks>false</reuseForks>
-                    <systemPropertyVariables />
+                    <systemPropertyVariables></systemPropertyVariables>
                     <runOrder>alphabetical</runOrder>
                     <redirectTestOutputToFile>false</redirectTestOutputToFile>
                     <forkedProcessExitTimeoutInSeconds>3</forkedProcessExitTimeoutInSeconds>

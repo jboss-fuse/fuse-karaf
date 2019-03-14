@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules</groupId>
         <artifactId>fuse-credential-store</artifactId>
-        <version>7.3.0.fuse-730065</version>
+        <version>7.3.0.fuse-730065-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -153,8 +153,7 @@
                 <configuration>
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
-                        <Import-Package>
-                            javax.crypto,
+                        <Import-Package>javax.crypto,
                             javax.crypto.spec,
                             javax.management,
                             javax.security.auth,
@@ -168,15 +167,10 @@
                             org.osgi.service.cm;version="[1.6,2)",
                             org.osgi.util.tracker,
                             org.apache.felix.cm,
-                            org.slf4j
-                        </Import-Package>
-                        <Export-Package>
-                            org.jboss.fuse.credential.store
-                        </Export-Package>
-                        <Private-Package>
-                            org.jboss.fuse.credential.store.*,
-                            org.wildfly.security.*;-split-package:=merge-first
-                        </Private-Package>
+                            org.slf4j</Import-Package>
+                        <Export-Package>org.jboss.fuse.credential.store</Export-Package>
+                        <Private-Package>org.jboss.fuse.credential.store.*,
+                            org.wildfly.security.*;-split-package:=merge-first</Private-Package>
                         <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency>
                         <Bundle-Activator>org.jboss.fuse.credential.store.impl.Activator</Bundle-Activator>
                     </instructions>
