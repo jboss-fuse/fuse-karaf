@@ -90,6 +90,7 @@
         <version.com.fasterxml.jackson.core.databind>2.8.11.3</version.com.fasterxml.jackson.core.databind>
         <version.com.fasterxml.jackson.module>2.8.11</version.com.fasterxml.jackson.module>
         <version.com.fasterxml.jackson29>2.9.8</version.com.fasterxml.jackson29>
+        <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
         <version.com.google.guava16>16.0.1</version.com.google.guava16>
         <version.com.google.guava19>19.0.0.redhat-1</version.com.google.guava19>
@@ -150,6 +151,7 @@
         <version.org.apache.felix.scr.annotations>1.12.0</version.org.apache.felix.scr.annotations>
         <version.org.apache.felix.utils>1.11.2</version.org.apache.felix.utils>
         <version.org.apache.geronimo.specs.annotation_1.0>1.1.1.redhat-2</version.org.apache.geronimo.specs.annotation_1.0>
+        <version.org.apache.geronimo.specs.j2ee-management_1.1>1.0.1.redhat-3</version.org.apache.geronimo.specs.j2ee-management_1.1>
         <version.org.apache.geronimo.specs.jms_1.1>1.1.1.redhat-2</version.org.apache.geronimo.specs.jms_1.1>
         <version.org.apache.geronimo.specs.jms_2.0>1.0.0.alpha-2-redhat-2</version.org.apache.geronimo.specs.jms_2.0>
         <version.org.apache.geronimo.specs.jta_1.1>1.1.1.redhat-2</version.org.apache.geronimo.specs.jta_1.1>

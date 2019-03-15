@@ -95,7 +95,7 @@
                 replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-2.2.5/${version.org.apache.servicemix.specs.javax-el2}" mode="maven" />
         <bundle originalUri="mvn:javax.el/javax.el-api/[3,4)"
                 replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.specs.javax-el3}" mode="maven" />
-        <bundle originalUri="mvn:javax.servlet/javax.servlet-api/3.1.0"
+        <bundle originalUri="mvn:javax.servlet/javax.servlet-api/[3,4)"
                 replacement="mvn:javax.servlet/javax.servlet-api/${version.javax.servlet}" mode="maven" />
         <bundle originalUri="mvn:javax.validation/validation-api/[1.1,1.2)"
                 replacement="mvn:javax.validation/validation-api/${version.javax.validation}" mode="maven" />
@@ -119,6 +119,8 @@
                 replacement="mvn:javax.jms/javax.jms-api/${version.javax.jms}" mode="maven" />
         <bundle originalUri="mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec"
                 replacement="mvn:org.apache.geronimo.specs/geronimo-jta_1.1_spec/${version.org.apache.geronimo.specs.jta_1.1}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.geronimo.specs/geronimo-j2ee-management_1.1_spec"
+                replacement="mvn:org.apache.geronimo.specs/geronimo-j2ee-management_1.1_spec/${version.org.apache.geronimo.specs.j2ee-management_1.1}" mode="maven" />
         <bundle originalUri="mvn:org.apache.httpcomponents/httpasyncclient-osgi/[4.1,4.2)"
                 replacement="mvn:org.apache.httpcomponents/httpasyncclient-osgi/${version.org.apache.httpcomponents.httpasyncclient}" mode="maven" />
         <bundle originalUri="mvn:org.apache.httpcomponents/httpclient-osgi/[4.3,4.6)"
@@ -287,6 +289,8 @@
                 replacement="wrap:mvn:org.eclipse.jetty/jetty-http/${version.org.eclipse.jetty}$overwrite=merge&amp;Import-Package=org.eclipse.jetty.*;version=&quot;[9.4.12,10)&quot;,javax.servlet.*;version=&quot;[3.1,5)&quot;" mode="maven"/>
         <bundle originalUri="mvn:org.postgresql/postgresql/[9.4,10)"
                 replacement="mvn:org.postgresql/postgresql/${version.org.postgresql}" mode="maven"/>
+        <bundle originalUri="mvn:com.github.ben-manes.caffeine/caffeine/[2.6,3)"
+                replacement="mvn:com.github.ben-manes.caffeine/caffeine/${version.com.github.ben-manes.caffeine}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
