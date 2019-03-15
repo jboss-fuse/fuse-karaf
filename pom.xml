@@ -174,6 +174,7 @@
         <version.org.apache.servicemix.bundles.dom4j2>2.1.1_1</version.org.apache.servicemix.bundles.dom4j2>
         <version.org.apache.servicemix.bundles.jasypt>1.9.3.redhat_3</version.org.apache.servicemix.bundles.jasypt>
         <version.org.apache.servicemix.bundles.jaxb>2.2.11_1</version.org.apache.servicemix.bundles.jaxb>
+        <version.org.apache.servicemix.bundles.javax-el-impl>3.0.0_1</version.org.apache.servicemix.bundles.javax-el-impl>
         <version.org.apache.servicemix.bundles.javax-inject>1_2</version.org.apache.servicemix.bundles.javax-inject>
         <version.org.apache.servicemix.bundles.jsch>0.1.54_1</version.org.apache.servicemix.bundles.jsch>
         <version.org.apache.servicemix.bundles.jzlib>1.1.3_2</version.org.apache.servicemix.bundles.jzlib>
@@ -241,7 +242,7 @@
         <version.org.ops4j.pax.swissbox>1.8.3</version.org.ops4j.pax.swissbox>
         <version.org.ops4j.pax.transx>0.4.2</version.org.ops4j.pax.transx>
         <version.org.ops4j.pax.url>2.6.1</version.org.ops4j.pax.url>
-        <version.org.ops4j.pax.web>7.3.0</version.org.ops4j.pax.web>
+        <version.org.ops4j.pax.web>7.3.3</version.org.ops4j.pax.web>
         <version.org.osgi>6.0.0</version.org.osgi>
         <version.org.osgi.compendium>6.0.0</version.org.osgi.compendium>
         <version.org.ow2.asm>7.0</version.org.ow2.asm>

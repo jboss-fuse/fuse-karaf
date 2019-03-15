@@ -321,6 +321,11 @@
                 <f:bundle>mvn:org.hibernate/hibernate-osgi/${version.org.hibernate}</f:bundle>
             </feature>
         </replacement>
+        <replacement mode="merge">
+            <feature name="pax-http-whiteboard" version="${version.org.ops4j.pax.web}">
+                <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el-impl}</f:bundle>
+            </feature>
+        </replacement>
     </featureReplacements>
 
 </featuresProcessing>
