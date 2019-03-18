@@ -157,11 +157,6 @@
             <artifactId>org.apache.aries.jpa.container</artifactId>
             <version>${version.org.apache.aries.jpa}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.aries.jpa</groupId>
-            <artifactId>org.apache.aries.jpa.container</artifactId>
-            <version>${version.org.apache.aries.jpa}</version>
-        </dependency>
 
     </dependencies>
 
