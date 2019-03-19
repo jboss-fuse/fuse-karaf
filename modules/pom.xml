@@ -40,6 +40,7 @@
         <module>fuse-credential-store</module>
         <module>fuse-patch</module>
         <module>fuse-pax-transx-tm-narayana</module>
+        <module>fuse-servlet-compatibility</module>
     </modules>
 
 </project>
