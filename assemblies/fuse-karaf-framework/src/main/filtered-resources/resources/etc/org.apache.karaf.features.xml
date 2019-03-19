@@ -16,7 +16,7 @@
      permissions and limitations under the License.
 
 -->
-<featuresProcessing xmlns="http://karaf.apache.org/xmlns/features-processing/v1.1.0"
+<featuresProcessing xmlns="http://karaf.apache.org/xmlns/features-processing/v1.0.0"
         xmlns:f="http://karaf.apache.org/xmlns/features/v1.5.0">
 
     <!-- A list of bundle URI replacements that allows changing external feature definitions -->
@@ -326,37 +326,11 @@
                 <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el-impl}</f:bundle>
             </feature>
         </replacement>
+        <replacement mode="merge">
+            <feature name="pax-http-undertow" version="${version.org.ops4j.pax.web}">
+                <f:bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-servlet-compatibility/${project.version}</f:bundle>
+            </feature>
+        </replacement>
     </featureReplacements>
-
-    <bundleProcessing>
-        <bundle location="mvn:org.eclipse.jetty*/*">
-            <add header="Processed-By" value="Karaf Bundle Processor" />
-            <clause header="Import-Package" name="javax.servlet" value="javax.servlet;version=&quot;[3.1.0,5)&quot;" />
-            <clause header="Import-Package" name="javax.servlet.annotation" value="javax.servlet.annotation;version=&quot;[3.1.0,5)&quot;" />
-            <clause header="Import-Package" name="javax.servlet.descriptor" value="javax.servlet.descriptor;version=&quot;[3.1.0,5)&quot;" />
-            <clause header="Import-Package" name="javax.servlet.http" value="javax.servlet.http;version=&quot;[3.1.0,5)&quot;" />
-        </bundle>
-        <bundle location="mvn:org.atmosphere/atmosphere-runtime">
-            <add header="Processed-By" value="Karaf Bundle Processor"/>
-            <clause header="Import-Package" name="javax.servlet" value="javax.servlet;version=&quot;[3.1.0,5)&quot;"/>
-            <clause header="Import-Package" name="javax.servlet.annotation" value="javax.servlet.annotation;version=&quot;[3.1.0,5)&quot;"/>
-            <clause header="Import-Package" name="javax.servlet.descriptor" value="javax.servlet.descriptor;version=&quot;[3.1.0,5)&quot;"/>
-            <clause header="Import-Package" name="javax.servlet.http" value="javax.servlet.http;version=&quot;[3.1.0,5)&quot;"/>
-        </bundle>
-        <bundle location="mvn:org.cometd.java/*">
-            <add header="Processed-By" value="Karaf Bundle Processor" />
-            <clause header="Import-Package" name="javax.servlet" value="javax.servlet;version=&quot;[3.1.0,5)&quot;" />
-            <clause header="Import-Package" name="javax.servlet.annotation" value="javax.servlet.annotation;version=&quot;[3.1.0,5)&quot;" />
-            <clause header="Import-Package" name="javax.servlet.descriptor" value="javax.servlet.descriptor;version=&quot;[3.1.0,5)&quot;" />
-            <clause header="Import-Package" name="javax.servlet.http" value="javax.servlet.http;version=&quot;[3.1.0,5)&quot;" />
-        </bundle>
-        <bundle location="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.sparkjava-core">
-            <add header="Processed-By" value="Karaf Bundle Processor" />
-            <clause header="Import-Package" name="javax.servlet" value="javax.servlet;version=&quot;[3.1.0,5)&quot;" />
-            <clause header="Import-Package" name="javax.servlet.annotation" value="javax.servlet.annotation;version=&quot;[3.1.0,5)&quot;" />
-            <clause header="Import-Package" name="javax.servlet.descriptor" value="javax.servlet.descriptor;version=&quot;[3.1.0,5)&quot;" />
-            <clause header="Import-Package" name="javax.servlet.http" value="javax.servlet.http;version=&quot;[3.1.0,5)&quot;" />
-        </bundle>
-    </bundleProcessing>
 
 </featuresProcessing>
