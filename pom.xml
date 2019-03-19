@@ -1321,7 +1321,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>${version.com.fasterxml.jackson.core}</version>
+                <version>${version.com.fasterxml.jackson.core.databind}</version>
                 <optional>true</optional>
             </dependency>
             <dependency>
