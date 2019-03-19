@@ -22,7 +22,7 @@
 
     <groupId>org.jboss.fuse</groupId>
     <artifactId>jboss-fuse-parent</artifactId>
-    <version>7.3.0.fuse-730065-redhat-00001-1</version>
+    <version>7.3.0.fuse-730065-redhat-00002</version>
     <packaging>pom</packaging>
 
     <name>Red Hat Fuse :: Parent</name>
@@ -311,18 +311,18 @@
             <dependency>
                 <groupId>org.jboss.fuse.features</groupId>
                 <artifactId>base</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>fuse-karaf-framework</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
                 <type>kar</type>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>fuse-karaf-minimal</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
                 <type>zip</type>
                 <exclusions>
                     <exclusion>
@@ -338,7 +338,7 @@
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>fuse-karaf</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
                 <type>zip</type>
                 <exclusions>
                     <exclusion>
@@ -358,31 +358,31 @@
             <dependency>
                 <groupId>org.jboss.fuse</groupId>
                 <artifactId>fuse-karaf-framework</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
                 <type>xml</type>
                 <classifier>features</classifier>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.itests</groupId>
                 <artifactId>fuse-itests-common</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules</groupId>
                 <artifactId>fuse-credential-store-core</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-features</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
                 <type>xml</type>
                 <classifier>features</classifier>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.features</groupId>
                 <artifactId>rhba-features</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
                 <type>xml</type>
                 <classifier>features</classifier>
             </dependency>
@@ -390,27 +390,27 @@
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-management</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-core-api</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-core</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules.patch</groupId>
                 <artifactId>patch-commands</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.fuse.modules</groupId>
                 <artifactId>fuse-pax-transx-tm-narayana</artifactId>
-                <version>7.3.0.fuse-730065-redhat-00001-1</version>
+                <version>7.3.0.fuse-730065-redhat-00002</version>
             </dependency>
 
             <!-- OSGi/Karaf dependencies -->
