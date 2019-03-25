@@ -465,6 +465,7 @@
                         <feature>standard</feature>
                         <feature>openjpa</feature>
                         <feature>openjpa3</feature>
+                        <feature>felix-http</feature>
 
                         <!-- Features unsupported due to API incompatibility -->
                         <feature>eclipselink</feature>
