@@ -75,14 +75,14 @@
         -->
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
-        <version.io.hawt>2.0.0.fuse-730043</version.io.hawt>
+        <version.io.hawt>2.0.0.fuse-730070</version.io.hawt>
         <version.org.apache.activemq.artemis>2.6.3.redhat-00015</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.21.0.fuse-730046</version.org.apache.camel>
-        <version.org.apache.cxf>3.2.7.fuse-730015</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.0.fuse-730018</version.org.apache.karaf>
-        <version.org.fusesource.activemq>7.3.0.fuse-730049</version.org.fusesource.activemq>
-        <version.org.fusesource.camel-sap>7.3.0.fuse-730049</version.org.fusesource.camel-sap>
-        <version.org.apache-extras.camel-extra>2.21.0.fuse-730048</version.org.apache-extras.camel-extra>
+        <version.org.apache.camel>2.21.0.fuse-730074</version.org.apache.camel>
+        <version.org.apache.cxf>3.2.7.fuse-730037</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.0.fuse-730033</version.org.apache.karaf>
+        <version.org.fusesource.activemq>7.3.0.fuse-730075</version.org.fusesource.activemq>
+        <version.org.fusesource.camel-sap>7.3.0.fuse-730075</version.org.fusesource.camel-sap>
+        <version.org.apache-extras.camel-extra>2.21.0.fuse-730075</version.org.apache-extras.camel-extra>
 
         <!-- versions of normal dependencies of Red Hat Fuse -->
         <version.com.fasterxml.classmate>1.3.4</version.com.fasterxml.classmate>
