@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules</groupId>
         <artifactId>fuse-credential-store</artifactId>
-        <version>7.4.0.redhat-SNAPSHOT</version>
+        <version>7.4.0.fuse-740002</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
