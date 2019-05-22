@@ -360,12 +360,14 @@
 
                         <!-- JDBC/JMS features for offline use -->
                         <feature>pax-jdbc-config</feature>
+                        <feature>pax-jdbc-pool-dbcp2</feature>
                         <feature>pax-jdbc-pool-narayana</feature>
                         <feature>pax-jdbc-pool-transx</feature>
                         <feature>pax-jdbc-oracle</feature>
                         <feature>pax-jdbc-db2</feature>
                         <feature>pax-jdbc-mssql</feature>
                         <feature>pax-jms-config</feature>
+                        <feature>pax-jms-pool-pooledjms</feature>
                         <feature>pax-jms-pool-narayana</feature>
                         <feature>pax-jms-pool-transx</feature>
                     </installedFeatures>
