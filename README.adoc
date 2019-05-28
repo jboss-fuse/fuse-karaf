@@ -31,7 +31,11 @@ To start Fuse, run `bin/fuse` on Linux/Unix or `bin\fuse.bat` on Windows.
 
 == Examples
 
-Examples are available as separate download.
+Examples are available as a separate download.
+
+Fuse on Karaf quickstarts demonstrate how to get started with Red Hat Fuse.
+
+You can access Fuse on Karaf quickstarts in a separate downloadable file from the customer portal download page at https://access.redhat.com/jbossnetwork/restricted/listSoftware.html?downloadType=distributions&product=jboss.fuse
 
 == Documentation
 
