@@ -51,11 +51,25 @@ public class Digest implements Action {
     @Option(name = "-h", aliases = { "--hex" }, description = "Use HEX output format. By default, Base64 is used.")
     boolean hex;
 
-    @Argument(description = "Input data to digest.", required = true)
+    @Argument(description = "Input data to digest. If not specified, the value will be read from standard input.", required = false)
     String input;
 
     @Override
     public Object execute() throws Exception {
+
+        if (input == null || "".equals(input)) {
+            String input1 = session.readLine("Input data to digest: ", '*');
+            String input2 = session.readLine("Input data to digest (repeat): ", '*');
+            if (input1 == null || input2 == null || "".equals(input1.trim()) || "".equals(input2)) {
+                System.err.println("Please specify input data to digest - either as argument or from standard input.");
+                return null;
+            }
+            if (!input1.equals(input2)) {
+                System.err.println("Input values do not match.");
+                return null;
+            }
+            input = input1;
+        }
 
         JasyptStatelessService service = new JasyptStatelessService();
         String digest = service.digest(

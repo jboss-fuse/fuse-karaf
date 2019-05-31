@@ -51,14 +51,35 @@ public class Encrypt implements Action {
     @Option(name = "-h", aliases = { "--hex" }, description = "Use HEX output format. By default, Base64 is used.")
     boolean hex;
 
-    @Argument(index = 0, description = "Password to derive PBE key.", required = true)
+    @Option(name = "-w", aliases = { "--password-property" }, description = "Specify password as environmental variable or system property (checked in this order)")
+    String passwordProperty;
+
+    @Option(name = "-W", aliases = { "--password" }, description = "Specify password to derive PBE key (will be visible in history). If neither `-w` nor `-W` options are specified, password will be read from standard input.")
     String password;
 
-    @Argument(index = 1, description = "Input data to encrypt.", required = true)
+    @Argument(index = 0, description = "Input data to encrypt. If no data is specified, it'll be read from standard input.", required = false)
     String input;
 
     @Override
     public Object execute() throws Exception {
+        String password = Helpers.getPassword(passwordProperty, this.password, session, false);
+        if (password == null) {
+            return null;
+        }
+
+        if (input == null || "".equals(input)) {
+            String input1 = session.readLine("Data to encrypt: ", '*');
+            String input2 = session.readLine("Data to encrypt (repeat): ", '*');
+            if (input1 == null || input2 == null || "".equals(input1.trim()) || "".equals(input2)) {
+                System.err.println("Please specify data to encrypt.");
+                return null;
+            }
+            if (!input1.equals(input2)) {
+                System.err.println("Values do not match.");
+                return null;
+            }
+            input = input1;
+        }
 
         JasyptStatelessService service = new JasyptStatelessService();
         String secret = service.encrypt(

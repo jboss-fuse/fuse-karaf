@@ -30,7 +30,7 @@ public class StoreInCredentialStore extends AbstractCredentialStoreCommand {
     @Argument(index = 0, required = true, description = "Alias for credential Store entry")
     String alias;
 
-    @Argument(index = 1, required = true, description = "Secret value to put into Credential Store")
+    @Argument(index = 1, required = false, description = "Secret value to put into Credential Store. If not specified, secret value will be read from standard input.")
     String secret;
 
     @Override
@@ -42,6 +42,20 @@ public class StoreInCredentialStore extends AbstractCredentialStoreCommand {
         if (credentialStoreService.aliasExists(alias)) {
             System.out.println("Entry with alias \"" + alias + "\" already exists in credential store.");
             return null;
+        }
+
+        if (secret == null || "".equals(secret)) {
+            String secret1 = session.readLine("Secret value to store: ", '*');
+            String secret2 = session.readLine("Secret value to store (repeat): ", '*');
+            if (secret1 == null || secret2 == null || "".equals(secret1.trim()) || "".equals(secret2)) {
+                System.err.println("Please specify secret value to store - either as argument or from standard input.");
+                return null;
+            }
+            if (!secret1.equals(secret2)) {
+                System.err.println("Secret values do not match.");
+                return null;
+            }
+            secret = secret1;
         }
 
         credentialStoreService.addAlias(alias, secret);
