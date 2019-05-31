@@ -355,6 +355,7 @@
                         <!-- Artemis client features -->
                         <feature>artemis-core-client</feature>
                         <feature>artemis-jms-client</feature>
+                        <feature>artemis-amqp-client</feature>
                         <feature>artemis-openwire-client</feature>
                         <feature>pax-jms-artemis</feature>
 
