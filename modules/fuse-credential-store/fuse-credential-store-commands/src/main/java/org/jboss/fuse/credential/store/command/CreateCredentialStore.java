@@ -54,6 +54,12 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
     @Option(name = "-f", aliases = { "--force" }, description = "Force replacement of existing Credential Store configuration")
     boolean force;
 
+    @Option(name = "-w", aliases = { "--password-property" }, description = "Specify password as environmental variable or system property (checked in this order)")
+    String passwordProperty;
+
+    @Option(name = "-W", aliases = { "--password" }, description = "Specify password for credential store (will be visible in history). If neither `-w` nor `-W` options are specified, password will be read from standard input.")
+    String password;
+
     /**
      * Performs the creation of Credential store according to the given command line options.
      */
@@ -76,6 +82,11 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
 
         if (!CredentialStoreAlgorithmCompletionSupport.isSupported(algorithm)) {
             System.err.println("Algorithm " + algorithm + " is not supported");
+            return null;
+        }
+
+        if (passwordProperty != null && !"".equals(passwordProperty) && password != null && !"".equals(password)) {
+            System.err.println("Password is specified both as argument as property. Please choose one option.");
             return null;
         }
 
@@ -104,15 +115,27 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
         // master password - will be encrypted using masked algorithm (iv, ic, salt) and together with algorithm specification
         // presented to user - or written to etc/system.properties
         // this password will be used both to encrypt credential store and to encrypt the passwords in store
-        String password = session.readLine("Credential store password: ", '*');
-        String password2 = session.readLine("Credential store password (repeat): ", '*');
-        if (password == null || password2 == null || "".equals(password.trim()) || "".equals(password2)) {
-            System.err.println("Please specify password to protect credential store.");
-            return null;
-        }
-        if (!password.equals(password2)) {
-            System.err.println("Passwords do not match.");
-            return null;
+        if (passwordProperty != null) {
+            if (System.getenv(passwordProperty) != null) {
+                password = System.getenv(passwordProperty);
+            } else if (System.getProperty(passwordProperty) != null) {
+                password = System.getProperty(passwordProperty);
+            }
+            if (password == null) {
+                System.err.println("There's no environmental variable or system property \"" + passwordProperty + "\"");
+                return null;
+            }
+        } else if (password == null || "".equals(password)) {
+            String password1 = session.readLine("Credential store password: ", '*');
+            String password2 = session.readLine("Credential store password (repeat): ", '*');
+            if (password1 == null || password2 == null || "".equals(password1.trim()) || "".equals(password2)) {
+                System.err.println("Please specify password to protect credential store.");
+                return null;
+            }
+            if (!password1.equals(password2)) {
+                System.err.println("Passwords do not match.");
+                return null;
+            }
         }
 
         byte[] salt = RANDOM.generateSeed(8);
