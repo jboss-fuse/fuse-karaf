@@ -136,6 +136,7 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
                 System.err.println("Passwords do not match.");
                 return null;
             }
+            password = password1;
         }
 
         byte[] salt = RANDOM.generateSeed(8);
