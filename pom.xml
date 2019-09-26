@@ -139,7 +139,7 @@
         <version.org.apache.commons.compress>1.18</version.org.apache.commons.compress>
         <!-- DBCP2 2.2.0 has bad import for javax.transaction.xa package -->
         <version.org.apache.commons.dbcp2>2.1.1</version.org.apache.commons.dbcp2>
-        <version.org.apache.commons.lang3>3.8</version.org.apache.commons.lang3>
+        <version.org.apache.commons.lang3>3.9</version.org.apache.commons.lang3>
         <version.org.apache.commons.math3>3.6.1</version.org.apache.commons.math3>
         <version.org.apache.commons.pool2>2.5.0</version.org.apache.commons.pool2>
         <version.org.apache.commons.text>1.6.0.redhat-00001</version.org.apache.commons.text>
