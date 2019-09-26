@@ -17,7 +17,7 @@
 
 -->
 <featuresProcessing xmlns="http://karaf.apache.org/xmlns/features-processing/v1.0.0"
-        xmlns:f="http://karaf.apache.org/xmlns/features/v1.5.0">
+        xmlns:f="http://karaf.apache.org/xmlns/features/v1.6.0">
 
     <!-- A list of bundle URI replacements that allows changing external feature definitions -->
     <bundleReplacements>
@@ -171,7 +171,7 @@
                 replacement="mvn:org.hibernate/hibernate-validator/${version.org.hibernate.validator}" mode="maven" />
         <bundle originalUri="mvn:org.javassist/javassist/[3,4)"
                 replacement="mvn:org.javassist/javassist/${version.org.javassist}" mode="maven" />
-        <bundle originalUri="mvn:org.jboss.logging/jboss-logging/[3.3,3.4)"
+        <bundle originalUri="mvn:org.jboss.logging/jboss-logging/[3.3,3.5)"
                 replacement="mvn:org.jboss.logging/jboss-logging/${version.org.jboss.logging}" mode="maven" />
         <bundle originalUri="mvn:org.jboss.narayana.osgi/narayana-osgi-jta/[5,6)"
                 replacement="mvn:org.jboss.narayana.osgi/narayana-osgi-jta/${version.org.jboss.narayana}" mode="maven" />
