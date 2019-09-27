@@ -24,7 +24,7 @@
 
     <feature name="drools7-dependencies">
         <feature prerequisite="true">wrap</feature>
-        <bundle>mvn:com.google.protobuf/protobuf-java/${version.com.google.protobuf}</bundle>
+        <bundle>mvn:com.google.protobuf/protobuf-java/${version.com.google.protobuf-drools}</bundle>
         <bundle>mvn:commons-codec/commons-codec/${version.commons-codec}</bundle>
         <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.bundles.javax-el3}</bundle>
         <bundle>mvn:javax.enterprise/cdi-api/${version.javax.enterprise.cdi-api}</bundle>
