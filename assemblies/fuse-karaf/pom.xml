@@ -373,6 +373,8 @@
                         <feature>pax-jms-pool-transx</feature>
                     </installedFeatures>
                     <blacklistedFeatures>
+                        <feature>wrapper</feature>
+                        <feature>service-wrapper</feature>
                         <feature>httplite</feature>
                         <feature>jetty/[8,9)</feature>
                         <feature>pax-*jetty*</feature>
