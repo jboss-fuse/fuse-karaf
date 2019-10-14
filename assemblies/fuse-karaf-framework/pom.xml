@@ -128,9 +128,10 @@
                                         <include>lib/**/README</include>
                                     </includes>
                                     <excludes>
-                                        <exlude>etc/equinox-debug.properties</exlude>
-                                        <exlude>etc/distribution.info</exlude>
-                                        <exlude>etc/custom.properties</exlude>
+                                        <exclude>etc/equinox-debug.properties</exclude>
+                                        <exclude>etc/distribution.info</exclude>
+                                        <exclude>etc/custom.properties</exclude>
+                                        <exclude>bin/instance*</exclude>
                                     </excludes>
                                 </resource>
                             </resources>
