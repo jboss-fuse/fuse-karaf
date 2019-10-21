@@ -434,6 +434,8 @@
                         <!-- Old Spring version -->
                         <feature>spring*/[3,4.3)</feature>
                         <feature>aries-blueprint-spring/[4,4.3)</feature>
+                        <!-- New Spring version -->
+                        <feature>spring*/[5,6)</feature>
 
                         <!-- Jclouds -->
                         <feature>jclouds-chef</feature>
