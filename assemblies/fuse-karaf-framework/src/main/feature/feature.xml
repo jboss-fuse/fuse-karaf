@@ -43,6 +43,15 @@
         <bundle dependency="true">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jasypt/${version.org.apache.servicemix.bundles.jasypt}</bundle>
     </feature>
 
+    <feature name="pax-url-classpath" description="classpath prefix url handler feature" version="${project.version}">
+        <bundle start-level="30" dependency="true">mvn:org.ops4j.base/ops4j-base-util-property/${version.org.ops4j.base}</bundle>
+        <bundle start-level="30" dependency="true">mvn:org.ops4j.base/ops4j-base-lang/${version.org.ops4j.base}</bundle>
+        <bundle start-level="30" dependency="true">mvn:org.ops4j.pax.swissbox/pax-swissbox-core/${version.org.ops4j.pax.swissbox}</bundle>
+        <bundle start-level="30" dependency="true">mvn:org.ops4j.pax.swissbox/pax-swissbox-property/${version.org.ops4j.pax.swissbox}</bundle>
+        <bundle start-level="30" dependency="true">mvn:org.ops4j.pax.url/pax-url-commons/${version.org.ops4j.pax.url}</bundle>
+        <bundle start-level="30">mvn:org.ops4j.pax.url/pax-url-classpath/${version.org.ops4j.pax.url}</bundle>
+    </feature>
+
     <feature name="fuse-javaee-apis" description="fundamental bundles required by some important features" version="${project.version}">
         <feature version="1.2.0">transaction-api</feature>
         <bundle start-level="20">mvn:javax.jms/javax.jms-api/${version.javax.jms}</bundle>
