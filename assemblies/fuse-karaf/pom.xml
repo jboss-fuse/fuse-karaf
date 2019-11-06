@@ -253,6 +253,8 @@
                     <bootFeatures>
                         <!-- wrap: protocol -->
                         <feature>wrap</feature>
+                        <!-- classpath: protocol -->
+                        <feature>pax-url-classpath</feature>
                         <!-- feature:* commands -->
                         <feature>feature</feature>
                         <!-- bundle:* commands -->
