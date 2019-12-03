@@ -162,8 +162,8 @@
         <version.org.apache.logging.log4j>2.12.1</version.org.apache.logging.log4j>
         <version.org.apache.maven>3.5.2</version.org.apache.maven>
         <version.org.apache.mina>2.0.19</version.org.apache.mina>
-        <version.org.apache.qpid.proton-j>0.33.1.redhat-00001</version.org.apache.qpid.proton-j>
-        <version.org.apache.qpid.qpid-jms-client>0.42.0.redhat-00002</version.org.apache.qpid.qpid-jms-client>
+        <version.org.apache.qpid.proton-j>0.33.2.redhat-00001</version.org.apache.qpid.proton-j>
+        <version.org.apache.qpid.qpid-jms-client>0.45.0.redhat-00002</version.org.apache.qpid.qpid-jms-client>
         <version.org.apache.santuario>2.1.2</version.org.apache.santuario>
         <version.org.apache.servicemix.bundles.ant>1.7.0_6</version.org.apache.servicemix.bundles.ant>
         <version.org.apache.servicemix.bundles.antlr2>2.7.7_5</version.org.apache.servicemix.bundles.antlr2>
