@@ -169,7 +169,7 @@
         <version.org.apache.servicemix.bundles.antlr2>2.7.7_5</version.org.apache.servicemix.bundles.antlr2>
         <version.org.apache.servicemix.bundles.antlr>3.5.2_1</version.org.apache.servicemix.bundles.antlr>
         <version.org.apache.servicemix.bundles.aopalliance>1.0_6</version.org.apache.servicemix.bundles.aopalliance>
-        <version.org.apache.servicemix.bundles.c3p0>0.9.5.2_2</version.org.apache.servicemix.bundles.c3p0>
+        <version.org.apache.servicemix.bundles.c3p0>0.9.5.4_1</version.org.apache.servicemix.bundles.c3p0>
         <version.org.apache.servicemix.bundles.cglib>3.2.4_1</version.org.apache.servicemix.bundles.cglib>
         <version.org.apache.servicemix.bundles.dbcp>1.4_3</version.org.apache.servicemix.bundles.dbcp>
         <version.org.apache.servicemix.bundles.dom4j>1.6.1_5</version.org.apache.servicemix.bundles.dom4j>
