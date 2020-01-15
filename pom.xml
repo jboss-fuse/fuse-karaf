@@ -144,7 +144,7 @@
         <version.org.apache.commons.pool2>2.6.2</version.org.apache.commons.pool2>
         <version.org.apache.commons.text>1.6.0.redhat-00001</version.org.apache.commons.text>
         <version.org.apache.felix>5.6.12</version.org.apache.felix>
-        <version.org.apache.felix.configadmin>1.9.14</version.org.apache.felix.configadmin>
+        <version.org.apache.felix.configadmin>1.9.16</version.org.apache.felix.configadmin>
         <version.org.apache.felix.fileinstall>3.6.4</version.org.apache.felix.fileinstall>
         <version.org.apache.felix.gogo>1.1.2</version.org.apache.felix.gogo>
         <version.org.apache.felix.scr>2.1.16</version.org.apache.felix.scr>
