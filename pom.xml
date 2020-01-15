@@ -133,7 +133,7 @@
         <version.org.apache.activemq.amq6>5.11.0.redhat-630416</version.org.apache.activemq.amq6>
         <version.org.apache.aries.jpa>2.7.2</version.org.apache.aries.jpa>
         <version.org.apache.aries.proxy.api>1.1.0</version.org.apache.aries.proxy.api>
-        <version.org.apache.aries.proxy>1.1.4</version.org.apache.aries.proxy>
+        <version.org.apache.aries.proxy>1.1.6</version.org.apache.aries.proxy>
         <version.org.apache.aries.spifly>1.2</version.org.apache.aries.spifly>
         <version.org.apache.commons.collections4>4.1</version.org.apache.commons.collections4>
         <version.org.apache.commons.compress>1.18</version.org.apache.commons.compress>
