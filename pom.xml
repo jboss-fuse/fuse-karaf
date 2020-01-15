@@ -126,7 +126,7 @@
         <version.javax.ws.rs>2.1.1</version.javax.ws.rs>
         <version.joda-time>2.9.9</version.joda-time>
         <version.junit>4.12</version.junit>
-        <version.net.bytebuddy>1.9.5.redhat-00001</version.net.bytebuddy>
+        <version.net.bytebuddy>1.9.11.redhat-00002</version.net.bytebuddy>
         <version.net.java.dev.jna>5.5.0</version.net.java.dev.jna>
         <version.net.sf.ehcache>2.10.5</version.net.sf.ehcache>
         <version.org.antlr4>4.5.3</version.org.antlr4>
