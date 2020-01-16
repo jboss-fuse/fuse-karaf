@@ -289,6 +289,8 @@
                 replacement="mvn:org.postgresql/postgresql/${version.org.postgresql}" mode="maven"/>
         <bundle originalUri="mvn:com.github.ben-manes.caffeine/caffeine/[2.6,3)"
                 replacement="mvn:com.github.ben-manes.caffeine/caffeine/${version.com.github.ben-manes.caffeine}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.xbean/xbean-bundleutils/[4.0,5)"
+                replacement="mvn:org.apache.xbean/xbean-bundleutils/${version.org.apache.xbean}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
