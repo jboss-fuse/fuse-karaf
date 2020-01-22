@@ -56,7 +56,7 @@
         <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-core/[2.9,2.10)"
                 replacement="mvn:com.fasterxml.jackson.core/jackson-core/${version.com.fasterxml.jackson29}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-databind/[2.9,2.10)"
-                replacement="mvn:com.fasterxml.jackson.core/jackson-databind/${version.com.fasterxml.jackson29}" mode="maven" />
+                replacement="mvn:com.fasterxml.jackson.core/jackson-databind/${version.com.fasterxml.jackson29.databind}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/[2.9,2.10)"
                 replacement="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/${version.com.fasterxml.jackson29}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.datatype/jackson-datatype-jsr310/[2.9,2.10)"
