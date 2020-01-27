@@ -221,6 +221,7 @@
         <version.org.hibernate.validator>5.3.5.Final-redhat-2</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.2.Final-redhat-1</version.org.hibernate.javax.persistence>
         <version.org.javassist>3.24.1-GA</version.org.javassist>
+        <version.org.jasypt>1.9.3</version.org.jasypt>
         <version.org.jboss.jandex>2.0.5.Final-redhat-1</version.org.jboss.jandex>
         <version.org.jboss.logging>3.4.0.Final-redhat-00001</version.org.jboss.logging>
         <version.org.jboss.modules>1.8.8.Final-redhat-00001</version.org.jboss.modules>
@@ -993,6 +994,11 @@
                 <version>${version.org.apache.servicemix.specs}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.jasypt</groupId>
+                <artifactId>jasypt</artifactId>
+                <version>${version.org.jasypt}</version>
+            </dependency>
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
                 <artifactId>org.apache.servicemix.bundles.jasypt</artifactId>

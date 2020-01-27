@@ -37,8 +37,8 @@ public class ListAlgorithms implements Action {
     @Override
     public Object execute() throws Exception {
 
-        final Set digestAlgos = AlgorithmRegistry.getAllDigestAlgorithms();
-        final Set pbeAlgos = AlgorithmRegistry.getAllPBEAlgorithms();
+        final Set<?> digestAlgos = AlgorithmRegistry.getAllDigestAlgorithms();
+        final Set<?> pbeAlgos = AlgorithmRegistry.getAllPBEAlgorithms();
 
         System.out.println("DIGEST ALGORITHMS:");
         for (Object algo : digestAlgos) {
