@@ -24,11 +24,8 @@ import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.apache.karaf.shell.api.console.Session;
 import org.jasypt.commons.CommonUtils;
-import org.jasypt.digest.StandardByteDigester;
 import org.jasypt.encryption.pbe.StandardPBEByteEncryptor;
-import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.intf.service.JasyptStatelessService;
-import org.jboss.fuse.jasypt.commands.completers.JasyptDigestAlgorithmsCompletionSupport;
 import org.jboss.fuse.jasypt.commands.completers.JasyptPbeAlgorithmsCompletionSupport;
 
 /**
@@ -90,7 +87,8 @@ public class Encrypt implements Action {
                 null, null, null,
                 null, null, null,
                 null, null, null,
-                hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null);
+                hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null,
+                null, null, null);
 
         System.out.println("Algorithm used: " + algorithm);
         System.out.println("Encrypted data: " + secret);

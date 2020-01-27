@@ -82,7 +82,8 @@ public class Decrypt implements Action {
                 null, null, null,
                 null, null, null,
                 null, null, null,
-                hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null);
+                hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null,
+                null, null, null);
 
         System.out.println("Algorithm used: " + algorithm);
         System.out.println("Decrypted data: " + clear);
