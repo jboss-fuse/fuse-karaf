@@ -137,7 +137,7 @@
         <version.org.apache.aries.proxy>1.1.6</version.org.apache.aries.proxy>
         <version.org.apache.aries.spifly>1.2.3</version.org.apache.aries.spifly>
         <version.org.apache.commons.collections4>4.1</version.org.apache.commons.collections4>
-        <version.org.apache.commons.compress>1.18</version.org.apache.commons.compress>
+        <version.org.apache.commons.compress>1.19</version.org.apache.commons.compress>
         <!-- DBCP2 2.2.0 has bad import for javax.transaction.xa package -->
         <version.org.apache.commons.dbcp2>2.1.1</version.org.apache.commons.dbcp2>
         <version.org.apache.commons.lang3>3.9</version.org.apache.commons.lang3>
