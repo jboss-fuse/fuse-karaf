@@ -26,6 +26,7 @@ import org.apache.karaf.shell.api.console.Session;
 import org.jasypt.commons.CommonUtils;
 import org.jasypt.encryption.pbe.StandardPBEByteEncryptor;
 import org.jasypt.intf.service.JasyptStatelessService;
+import org.jasypt.iv.RandomIvGenerator;
 import org.jboss.fuse.jasypt.commands.completers.JasyptPbeAlgorithmsCompletionSupport;
 
 /**
@@ -73,20 +74,29 @@ public class Decrypt implements Action {
             input = input1;
         }
 
-        JasyptStatelessService service = new JasyptStatelessService();
-        String clear = service.decrypt(
-                input,
-                password, null, null,
-                algorithm, null, null,
-                Integer.toString(iterations), null, null,
-                null, null, null,
-                null, null, null,
-                null, null, null,
-                hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null,
-                null, null, null);
+        ClassLoader tccl = Thread.currentThread().getContextClassLoader();
+        try {
+            Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
+            JasyptStatelessService service = new JasyptStatelessService();
 
-        System.out.println("Algorithm used: " + algorithm);
-        System.out.println("Decrypted data: " + clear);
+            String clear = service.decrypt(
+                    input,
+                    password, null, null,
+                    algorithm, null, null,
+                    Integer.toString(iterations), null, null,
+                    null, null, null,
+                    null, null, null,
+                    null, null, null,
+                    hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null,
+                    RandomIvGenerator.class.getName(), null, null);
+
+            System.out.println("Algorithm used: " + algorithm);
+            System.out.println("Decrypted data: " + clear);
+        } finally {
+            if (tccl != null) {
+                Thread.currentThread().setContextClassLoader(tccl);
+            }
+        }
 
         return null;
     }
