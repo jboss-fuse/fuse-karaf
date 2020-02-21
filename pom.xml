@@ -76,7 +76,7 @@
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
         <version.io.hawt>2.0.0.fuse-760011</version.io.hawt>
-        <version.org.apache.activemq.artemis>2.11.0.redhat-00002</version.org.apache.activemq.artemis>
+        <version.org.apache.activemq.artemis>2.11.0.redhat-00004</version.org.apache.activemq.artemis>
         <version.org.apache.camel>2.21.0.fuse-740037</version.org.apache.camel>
         <version.org.apache.cxf>3.2.7.fuse-760013</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.6.fuse-760020</version.org.apache.karaf>
@@ -131,7 +131,7 @@
         <version.net.java.dev.jna>5.5.0</version.net.java.dev.jna>
         <version.net.sf.ehcache>2.10.5</version.net.sf.ehcache>
         <version.org.antlr4>4.5.3</version.org.antlr4>
-        <version.org.apache.activemq.amq6>5.11.0.redhat-630424</version.org.apache.activemq.amq6>
+        <version.org.apache.activemq.amq6>5.11.0.redhat-630434</version.org.apache.activemq.amq6>
         <version.org.apache.aries.jpa>2.7.2</version.org.apache.aries.jpa>
         <version.org.apache.aries.proxy.api>1.1.0</version.org.apache.aries.proxy.api>
         <version.org.apache.aries.proxy>1.1.6</version.org.apache.aries.proxy>
