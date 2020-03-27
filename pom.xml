@@ -100,7 +100,7 @@
         <version.com.ning.async-http-client>1.9.40</version.com.ning.async-http-client>
         <version.com.sun.mail>1.6.1.redhat-1</version.com.sun.mail>
         <version.com.thoughtworks.paranamer>2.8</version.com.thoughtworks.paranamer>
-        <version.commons-beanutils>1.9.4.redhat-00001</version.commons-beanutils>
+        <version.commons-beanutils>1.9.4.redhat-00002</version.commons-beanutils>
         <version.commons-codec>1.13</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
         <version.commons-io>2.5.0.redhat-3</version.commons-io>
