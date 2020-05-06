@@ -232,9 +232,9 @@
         <version.org.jboss.xnio>3.3.8.Final</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.jline>3.10.0</version.org.jline>
-        <version.org.keycloak>4.8.15.Final-redhat-00001</version.org.keycloak>
-        <version.org.keycloak.product>4.8.15.Final-redhat-00001</version.org.keycloak.product>
-        <version.org.keycloak.rhsso>7.3.5.GA</version.org.keycloak.rhsso>
+        <version.org.keycloak>4.8.18.Final-redhat-00001</version.org.keycloak>
+        <version.org.keycloak.product>4.8.18.Final-redhat-00001</version.org.keycloak.product>
+        <version.org.keycloak.rhsso>7.3.7.GA</version.org.keycloak.rhsso>
         <version.org.messaginghub.pooled-jms>0.3.0</version.org.messaginghub.pooled-jms>
         <version.org.mockito>2.13.0</version.org.mockito>
         <version.org.mvel>2.4.0.Final-redhat-1</version.org.mvel>
