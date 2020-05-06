@@ -131,7 +131,7 @@
         <version.net.java.dev.jna>5.5.0</version.net.java.dev.jna>
         <version.net.sf.ehcache>2.10.5</version.net.sf.ehcache>
         <version.org.antlr4>4.5.3</version.org.antlr4>
-        <version.org.apache.activemq.amq6>5.11.0.redhat-630434</version.org.apache.activemq.amq6>
+        <version.org.apache.activemq.amq6>5.11.0.redhat-630446</version.org.apache.activemq.amq6>
         <version.org.apache.aries.jpa>2.7.2</version.org.apache.aries.jpa>
         <version.org.apache.aries.proxy.api>1.1.0</version.org.apache.aries.proxy.api>
         <version.org.apache.aries.proxy>1.1.6</version.org.apache.aries.proxy>
