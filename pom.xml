@@ -76,7 +76,7 @@
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
         <version.io.hawt>2.0.0.fuse-760011</version.io.hawt>
-        <version.org.apache.activemq.artemis>2.11.0.redhat-00004</version.org.apache.activemq.artemis>
+        <version.org.apache.activemq.artemis>2.11.0.redhat-00005</version.org.apache.activemq.artemis>
         <version.org.apache.camel>2.21.0.fuse-740037</version.org.apache.camel>
         <version.org.apache.cxf>3.2.7.fuse-760013</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.6.fuse-760020</version.org.apache.karaf>
