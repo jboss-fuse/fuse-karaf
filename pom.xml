@@ -1340,6 +1340,12 @@
                 <optional>true</optional>
             </dependency>
             <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-scala_2.10</artifactId>
+                <version>${version.com.fasterxml.jackson.module}</version>
+                <optional>true</optional>
+            </dependency>
+            <dependency>
                 <groupId>io.hawt</groupId>
                 <artifactId>hawtio-karaf</artifactId>
                 <version>${version.io.hawt}</version>
