@@ -16,13 +16,36 @@
 package org.jboss.fuse.jasypt.commands;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.karaf.shell.api.console.Session;
 
-public class Helpers {
+public final class Helpers {
+
+
+
+     static final Set<String> ALGORITHMS_THAT_REQUIRE_IV = new HashSet<>(
+            Arrays.asList(
+                    "PBEWITHHMACSHA1ANDAES_128",
+                    "PBEWITHHMACSHA1ANDAES_256",
+                    "PBEWITHHMACSHA224ANDAES_128",
+                    "PBEWITHHMACSHA224ANDAES_256",
+                    "PBEWITHHMACSHA256ANDAES_128",
+                    "PBEWITHHMACSHA256ANDAES_256",
+                    "PBEWITHHMACSHA384ANDAES_128",
+                    "PBEWITHHMACSHA384ANDAES_256",
+                    "PBEWITHHMACSHA512ANDAES_128",
+                    "PBEWITHHMACSHA512ANDAES_256"
+            )
+    );
+
+    private Helpers() { }
 
     /**
      * Helper for commands to get secret value from different sources.
+     *
      * @param passwordProperty
      * @param passwordValue
      * @param session
@@ -68,4 +91,7 @@ public class Helpers {
         return password;
     }
 
+    static boolean isIVNeeded(String algorithm) {
+        return ALGORITHMS_THAT_REQUIRE_IV.contains(algorithm.toUpperCase());
+    }
 }

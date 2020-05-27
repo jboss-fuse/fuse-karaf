@@ -57,7 +57,8 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
     @Option(name = "-w", aliases = { "--password-property" }, description = "Specify password as environmental variable or system property (checked in this order)")
     String passwordProperty;
 
-    @Option(name = "-W", aliases = { "--password" }, description = "Specify password for credential store (will be visible in history). If neither `-w` nor `-W` options are specified, password will be read from standard input.")
+    @Option(name = "-W", aliases = { "--password" }, description = "Specify password for credential store (will be visible in history). "
+            + "If neither `-w` nor `-W` options are specified, password will be read from standard input.")
     String password;
 
     /**

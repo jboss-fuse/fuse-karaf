@@ -29,6 +29,8 @@ import org.jasypt.intf.service.JasyptStatelessService;
 import org.jasypt.iv.RandomIvGenerator;
 import org.jboss.fuse.jasypt.commands.completers.JasyptPbeAlgorithmsCompletionSupport;
 
+import static org.jboss.fuse.jasypt.commands.Helpers.isIVNeeded;
+
 /**
  * Lists algorithms available for jasypt encryption
  */
@@ -52,14 +54,21 @@ public class Decrypt implements Action {
     @Option(name = "-w", aliases = { "--password-property" }, description = "Specify password as environmental variable or system property (checked in this order)")
     String passwordProperty;
 
-    @Option(name = "-W", aliases = { "--password" }, description = "Specify password to derive PBE key (will be visible in history). If neither `-w` nor `-W` options are specified, password will be read from standard input.")
+    @Option(name = "-W", aliases = { "--password" }, description = "Specify password to derive PBE key (will be visible in history)."
+            + " If neither `-w` nor `-W` options are specified, password will be read from standard input.")
     String password;
+
+    @Option(name = "-I", aliases = { "--use-iv-generator" }, description = "Use RandomIvGenerator for decryption. Default is false except for the following algorithms: "
+            + "PBEWITHHMACSHA384ANDAES_128, PBEWITHHMACSHA224ANDAES_256, PBEWITHHMACSHA512ANDAES_256, PBEWITHHMACSHA256ANDAES_128, "
+            + "PBEWITHHMACSHA256ANDAES_256, PBEWITHHMACSHA1ANDAES_128, PBEWITHHMACSHA384ANDAES_256, PBEWITHHMACSHA1ANDAES_256, PBEWITHHMACSHA224ANDAES_128, PBEWITHHMACSHA512ANDAES_128 ")
+    boolean useIVGenerator = false;
 
     @Argument(index = 0, description = "Input data to decrypt. If no data is specified, it'll be read from standard input.", required = false)
     String input;
 
     @Override
     public Object execute() throws Exception {
+        this.useIVGenerator = this.useIVGenerator || isIVNeeded(algorithm);
         String password = Helpers.getPassword(passwordProperty, this.password, session, false);
         if (password == null) {
             return null;
@@ -88,7 +97,8 @@ public class Decrypt implements Action {
                     null, null, null,
                     null, null, null,
                     hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null,
-                    RandomIvGenerator.class.getName(), null, null);
+                    useIVGenerator ? RandomIvGenerator.class.getName() : null,
+                    null, null);
 
             System.out.println("Algorithm used: " + algorithm);
             System.out.println("Decrypted data: " + clear);
