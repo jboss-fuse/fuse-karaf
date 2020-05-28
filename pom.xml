@@ -95,6 +95,7 @@
         <version.com.fasterxml.jackson29.databind>2.9.10.4-redhat-00001</version.com.fasterxml.jackson29.databind>
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
+        <version.com.google.guava>27.1-jre</version.com.google.guava>
         <version.com.google.guava16>16.0.1</version.com.google.guava16>
         <version.com.google.guava19>19.0.0.redhat-1</version.com.google.guava19>
         <version.com.google.guava20>20.0.0.redhat-1</version.com.google.guava20>
@@ -1441,6 +1442,12 @@
                 <groupId>org.apache.httpcomponents</groupId>
                 <artifactId>httpclient</artifactId>
                 <version>${version.org.apache.httpcomponents.httpclient}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${version.com.google.guava}</version>
             </dependency>
 
             <!-- Test dependencies -->
