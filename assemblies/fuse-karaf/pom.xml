@@ -240,6 +240,8 @@
                         <installedBundle>mvn:org.apache.httpcomponents/httpclient-osgi/${version.org.apache.httpcomponents.httpclient}</installedBundle>
                         <installedBundle>mvn:org.apache.httpcomponents/httpcore-osgi/${version.org.apache.httpcomponents.httpcore}</installedBundle>
                         <installedBundle>mvn:org.jboss.fuse.modules/fuse-pax-jms-ibmmq-compatibility/${project.version}</installedBundle>
+                        <installedBundle>mvn:com.google.guava/guava/${version.com.google.guava}</installedBundle>
+                        <installedBundle>mvn:com.google.guava/failureaccess/${version.com.google.guava.failureaccess}</installedBundle>
                     </installedBundles>
                     <startupFeatures>
                         <!--

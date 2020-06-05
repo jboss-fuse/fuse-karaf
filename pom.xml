@@ -96,6 +96,7 @@
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
         <version.com.google.guava>27.1-jre</version.com.google.guava>
+        <version.com.google.guava.failureaccess>1.0.1</version.com.google.guava.failureaccess>
         <version.com.google.guava16>16.0.1</version.com.google.guava16>
         <version.com.google.guava19>19.0.0.redhat-1</version.com.google.guava19>
         <version.com.google.guava20>20.0.0.redhat-1</version.com.google.guava20>
@@ -1448,6 +1449,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${version.com.google.guava}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>failureaccess</artifactId>
+                <version>${version.com.google.guava.failureaccess}</version>
             </dependency>
 
             <!-- Test dependencies -->
