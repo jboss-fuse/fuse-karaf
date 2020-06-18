@@ -291,6 +291,8 @@
                 replacement="mvn:com.github.ben-manes.caffeine/caffeine/${version.com.github.ben-manes.caffeine}" mode="maven"/>
         <bundle originalUri="mvn:org.apache.xbean/xbean-bundleutils/[4.0,5)"
                 replacement="mvn:org.apache.xbean/xbean-bundleutils/${version.org.apache.xbean}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.logging.log4j/log4j-core/[2.0,3)"
+                replacement="mvn:org.apache.logging.log4j/log4j-core/${version.org.apache.logging.log4j}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
