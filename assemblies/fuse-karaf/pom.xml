@@ -524,7 +524,7 @@
                         <library>mvn:javax.annotation/javax.annotation-api/${version.javax.annotation};type:=endorsed;export:=true</library>
                         <!-- lib -->
                         <library>mvn:org.jboss.fuse.modules/fuse-branding/${project.version};type:=default;export:=false</library>
-                         <library>mvn:io.prometheus.jmx/jmx_prometheus_javaagent/${version.io.prometheus};type:=default;export:=false</library>
+                        <library>mvn:io.prometheus.jmx/jmx_prometheus_javaagent/${version.io.prometheus};type:=default;export:=false</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.locator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <!-- lib/boot -->
