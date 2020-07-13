@@ -206,6 +206,10 @@
                                 <concat destfile="${project.build.outputDirectory}/resources/etc/config.properties" append="true" encoding="UTF-8">
                                     <filelist dir="${project.build.directory}/appended-resources" files="append-header.part" />
                                 </concat>
+                                <concat destfile="${project.build.outputDirectory}/resources/etc/prometheus-config.yml" append="true" encoding="UTF-8">
+                                    <filelist dir="${project.build.directory}/appended-resources" files="append-header.part" />
+                                </concat>
+
                                 <concat destfile="${project.build.outputDirectory}/resources/etc/config.properties" append="true" encoding="UTF-8">
                                     <filelist dir="${project.build.directory}/appended-resources/etc" files="config.properties" />
                                     <filterchain>
