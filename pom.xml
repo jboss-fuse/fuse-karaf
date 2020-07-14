@@ -191,7 +191,7 @@
         <version.org.apache.servicemix.bundles.rhino>1.7.7.1_1</version.org.apache.servicemix.bundles.rhino>
         <version.org.apache.servicemix.bundles.saxon>9.8.0-8_1</version.org.apache.servicemix.bundles.saxon>
         <version.org.apache.servicemix.bundles.serp>1.14.1_1</version.org.apache.servicemix.bundles.serp>
-        <version.org.apache.servicemix.bundles.spring>4.3.25.RELEASE_1</version.org.apache.servicemix.bundles.spring>
+        <version.org.apache.servicemix.bundles.spring>5.1.8.RELEASE_1</version.org.apache.servicemix.bundles.spring>
         <version.org.apache.servicemix.bundles.velocity>1.7_6</version.org.apache.servicemix.bundles.velocity>
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
@@ -257,7 +257,7 @@
         <version.org.ow2.asm>7.2</version.org.ow2.asm>
         <version.org.postgresql>42.2.12</version.org.postgresql>
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
-        <version.org.springframework>4.3.25.RELEASE</version.org.springframework>
+        <version.org.springframework>5.1.8.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.26</version.org.yaml.snakeyaml>
         <version.org.wildfly.common>1.5.1.Final-redhat-00001</version.org.wildfly.common>
         <version.org.wildfly.security.elytron>1.6.5.Final-redhat-00001</version.org.wildfly.security.elytron>
