@@ -101,6 +101,7 @@
         <version.com.google.guava19>19.0.0.redhat-1</version.com.google.guava19>
         <version.com.google.guava20>20.0.0.redhat-1</version.com.google.guava20>
         <version.com.google.protobuf-drools>3.5.1</version.com.google.protobuf-drools>
+        <version.com.hazelcast>3.12.3</version.com.hazelcast>
         <version.com.ning.async-http-client>1.9.40</version.com.ning.async-http-client>
         <version.com.sun.mail>1.6.1.redhat-1</version.com.sun.mail>
         <version.com.thoughtworks.paranamer>2.8</version.com.thoughtworks.paranamer>
