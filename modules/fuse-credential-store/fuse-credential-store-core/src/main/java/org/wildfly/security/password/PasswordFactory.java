@@ -1,19 +1,25 @@
-/**
- *  Copyright 2005-2018 Red Hat, Inc.
+/*
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2014 Red Hat, Inc., and individual contributors
+ * as indicated by the @author tags.
  *
- *  Red Hat licenses this file to you under the Apache License, version
- *  2.0 (the "License"); you may not use this file except in compliance
- *  with the License.  You may obtain a copy of the License at
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- *  Unless required by applicable law or agreed to in writing, software
- *  distributed under the License is distributed on an "AS IS" BASIS,
- *  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or
- *  implied.  See the License for the specific language governing
- *  permissions and limitations under the License.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.wildfly.security.password;
+
+import static org.wildfly.security.credential._private.ElytronMessages.log;
+import static org.wildfly.security.provider.util.ProviderUtil.INSTALLED_PROVIDERS;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -28,8 +34,6 @@ import java.util.function.Supplier;
 
 import org.jboss.fuse.credential.store.impl.Activator;
 import org.wildfly.common.Assert;
-
-import static org.wildfly.security._private.ElytronMessages.log;
 
 /**
  * A factory for passwords.
@@ -83,9 +87,7 @@ public final class PasswordFactory {
      */
     public static PasswordFactory getInstance(String algorithm, String providerName) throws NoSuchAlgorithmException, NoSuchProviderException {
         final Provider provider = Security.getProvider(providerName);
-        if (provider == null) {
-            throw new NoSuchProviderException(providerName);
-        }
+        if (provider == null) throw new NoSuchProviderException(providerName);
         return getInstance(algorithm, provider);
     }
 
@@ -99,9 +101,7 @@ public final class PasswordFactory {
      */
     public static PasswordFactory getInstance(String algorithm, Provider provider) throws NoSuchAlgorithmException {
         final Provider.Service service = provider.getService("PasswordFactory", algorithm);
-        if (service == null) {
-            throw log.noSuchAlgorithmInvalidAlgorithm(algorithm);
-        }
+        if (service == null) throw log.noSuchAlgorithmInvalidAlgorithm(algorithm);
         return new PasswordFactory((PasswordFactorySpi) service.newInstance(null), provider, algorithm);
     }
 
