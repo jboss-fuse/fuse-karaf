@@ -222,7 +222,7 @@
         <version.org.glassfish.web.javax.el>2.2.5</version.org.glassfish.web.javax.el>
         <version.org.hibernate>5.3.17.Final-redhat-00001</version.org.hibernate>
         <version.org.hibernate.common>5.0.5.Final-redhat-00002</version.org.hibernate.common>
-        <version.org.hibernate.validator>5.3.5.Final-redhat-2</version.org.hibernate.validator>
+        <version.org.hibernate.validator>6.0.20.Final-redhat-00001</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.2.Final-redhat-1</version.org.hibernate.javax.persistence>
         <version.org.javassist>3.24.1-GA</version.org.javassist>
         <version.org.jasypt>1.9.3</version.org.jasypt>
@@ -1267,7 +1267,7 @@
                 <version>${version.org.hibernate}</version>
             </dependency>
             <dependency>
-                <groupId>org.hibernate</groupId>
+                <groupId>org.hibernate.validator</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${version.org.hibernate.validator}</version>
             </dependency>
