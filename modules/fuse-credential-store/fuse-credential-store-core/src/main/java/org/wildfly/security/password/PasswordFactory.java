@@ -32,6 +32,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.function.Supplier;
 
+import org.jboss.fuse.credential.store.impl.Activator;
 import org.wildfly.common.Assert;
 
 /**
@@ -73,7 +74,7 @@ public final class PasswordFactory {
      * @throws NoSuchAlgorithmException if the given algorithm has no available implementations
      */
     public static PasswordFactory getInstance(String algorithm) throws NoSuchAlgorithmException {
-        return getInstance(algorithm, INSTALLED_PROVIDERS);
+        return getInstance(algorithm, () -> new Provider[] { Activator.getElytronProvider() });
     }
 
     /**
