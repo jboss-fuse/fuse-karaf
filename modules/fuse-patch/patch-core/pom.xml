@@ -122,11 +122,14 @@
                             org.apache.karaf.util;-split-package:=merge-first,
                             org.apache.karaf.util.bundles;-split-package:=merge-first,
                             org.apache.commons.io;-split-package:=merge-first,
+                            org.apache.commons.io.file;-split-package:=merge-first,
                             org.apache.commons.io.filefilter;-split-package:=merge-first,
+                            org.apache.commons.io.function;-split-package:=merge-first,
                             org.apache.commons.io.comparator;-split-package:=merge-first,
                             org.apache.commons.io.input;-split-package:=merge-first,
                             org.apache.commons.io.monitor;-split-package:=merge-first,
-                            org.apache.commons.io.output;-split-package:=merge-first
+                            org.apache.commons.io.output;-split-package:=merge-first,
+                            org.apache.commons.io.serialization;-split-package:=merge-first
                         </Private-Package>
                         <Service-Component>*</Service-Component>
                     </instructions>
