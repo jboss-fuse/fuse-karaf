@@ -293,6 +293,8 @@
                 replacement="mvn:org.apache.xbean/xbean-bundleutils/${version.org.apache.xbean}" mode="maven"/>
         <bundle originalUri="mvn:org.apache.logging.log4j/log4j-core/[2.0,3)"
                 replacement="mvn:org.apache.logging.log4j/log4j-core/${version.org.apache.logging.log4j}" mode="maven"/>
+        <bundle originalUri="mvn:com.hazelcast/hazelcast/[3.0,4)"
+                replacement="mvn:com.hazelcast/hazelcast/${version.com.hazelcast}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
