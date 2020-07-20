@@ -107,7 +107,7 @@
         <version.commons-beanutils>1.9.4.redhat-00002</version.commons-beanutils>
         <version.commons-codec>1.14</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
-        <version.commons-io>2.5.0.redhat-3</version.commons-io>
+        <version.commons-io>2.7</version.commons-io>
         <version.commons-lang>2.6.0.redhat-7</version.commons-lang>
         <version.commons-net>3.6</version.commons-net>
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
