@@ -672,7 +672,7 @@
             </dependency>
             <dependency>
                 <groupId>org.apache.karaf.features</groupId>
-                <artifactId>spring-legacy</artifactId>
+                <artifactId>spring</artifactId>
                 <version>${version.org.apache.karaf}</version>
                 <type>xml</type>
                 <classifier>features</classifier>
