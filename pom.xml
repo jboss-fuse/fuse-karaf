@@ -1335,25 +1335,71 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
                 <version>${version.com.fasterxml.jackson.core}</version>
-                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${version.com.fasterxml.jackson.core.databind}</version>
-                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-jsonSchema</artifactId>
                 <version>${version.com.fasterxml.jackson.module}</version>
-                <optional>true</optional>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-scala_2.10</artifactId>
                 <version>${version.com.fasterxml.jackson.module}</version>
-                <optional>true</optional>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.core</groupId>
+              <artifactId>jackson-annotations</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.dataformat</groupId>
+              <artifactId>jackson-dataformat-cbor</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.dataformat</groupId>
+              <artifactId>jackson-dataformat-smile</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.dataformat</groupId>
+              <artifactId>jackson-dataformat-xml</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.dataformat</groupId>
+              <artifactId>jackson-dataformat-yaml</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.datatype</groupId>
+              <artifactId>jackson-datatype-joda</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.jaxrs</groupId>
+              <artifactId>jackson-jaxrs-base</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.jaxrs</groupId>
+              <artifactId>jackson-jaxrs-json-provider</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.module</groupId>
+              <artifactId>jackson-module-jaxb-annotations</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
+            </dependency>
+            <dependency>
+              <groupId>com.fasterxml.jackson.jr</groupId>
+              <artifactId>jackson-jr-objects</artifactId>
+              <version>${version.com.fasterxml.jackson.core}</version>
             </dependency>
             <dependency>
                 <groupId>io.hawt</groupId>
