@@ -21,29 +21,33 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.jboss.fuse</groupId>
-        <artifactId>jboss-fuse-parent</artifactId>
+        <groupId>org.jboss.fuse.modules</groupId>
+        <artifactId>fuse-modules</artifactId>
         <version>7.8.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>org.jboss.fuse.modules</groupId>
-    <artifactId>fuse-modules</artifactId>
+    <groupId>io.fabric8</groupId>
+    <artifactId>fabric8-karaf</artifactId>
     <packaging>pom</packaging>
 
-    <name>Red Hat Fuse :: Modules</name>
-
-    <description>Additional components for Red Hat Fuse (commands, services, libraries, etc.)</description>
+    <name>Fabric8 :: Components :: Karaf</name>
 
     <modules>
-        <module>fuse-branding</module>
-        <module>fuse-credential-store</module>
-        <module>fuse-patch</module>
-        <module>fuse-pax-transx-tm-narayana</module>
-        <module>fuse-servlet-compatibility</module>
-        <module>fuse-pax-jms-ibmmq-compatibility</module>
-        <!-- module moved from jboss-fuse/fabric8/components -->
-        <module>fabric8-karaf</module>
+        <module>fabric8-karaf-core</module>
+        <module>fabric8-karaf-blueprint</module>
+        <module>fabric8-karaf-checks</module>
+        <module>fabric8-karaf-cm</module>
+        <module>fabric8-karaf-features</module>
     </modules>
+
+    <profiles>
+        <profile>
+            <id>test</id>
+            <modules>
+                <module>fabric8-karaf-itests</module>
+            </modules>
+        </profile>
+    </profiles>
 
 </project>

@@ -113,6 +113,8 @@
         <version.commons-net>3.6</version.commons-net>
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
         <version.io.dropwizard.metrics>3.2.6</version.io.dropwizard.metrics>
+        <version.io.fabric8.kubernetes-model>4.2.2</version.io.fabric8.kubernetes-model>
+        <version.io.fabric8.kubernetes-client>4.2.2</version.io.fabric8.kubernetes-client>
         <version.io.netty>4.1.48.Final-redhat-00001</version.io.netty>
         <version.io.opentracing>0.31.0</version.io.opentracing>
         <version.io.prometheus>0.13.0</version.io.prometheus>
@@ -175,17 +177,20 @@
         <version.org.apache.servicemix.bundles.antlr2>2.7.7_5</version.org.apache.servicemix.bundles.antlr2>
         <version.org.apache.servicemix.bundles.antlr>3.5.2_1</version.org.apache.servicemix.bundles.antlr>
         <version.org.apache.servicemix.bundles.aopalliance>1.0_6</version.org.apache.servicemix.bundles.aopalliance>
+        <version.org.apache.servicemix.bundles.aspectj>1.9.5_1</version.org.apache.servicemix.bundles.aspectj>
         <version.org.apache.servicemix.bundles.c3p0>0.9.5.4_1</version.org.apache.servicemix.bundles.c3p0>
         <version.org.apache.servicemix.bundles.cglib>3.2.4_1</version.org.apache.servicemix.bundles.cglib>
         <version.org.apache.servicemix.bundles.dbcp>1.4_3</version.org.apache.servicemix.bundles.dbcp>
         <version.org.apache.servicemix.bundles.dom4j>1.6.1_5</version.org.apache.servicemix.bundles.dom4j>
         <version.org.apache.servicemix.bundles.dom4j2>2.1.1_1</version.org.apache.servicemix.bundles.dom4j2>
+        <version.org.apache.servicemix.bundles.generex>1.0.1_2</version.org.apache.servicemix.bundles.generex>
         <version.org.apache.servicemix.bundles.jasypt>1.9.3_1</version.org.apache.servicemix.bundles.jasypt>
         <version.org.apache.servicemix.bundles.jaxb>2.2.11_1</version.org.apache.servicemix.bundles.jaxb>
         <version.org.apache.servicemix.bundles.javax-el-impl>3.0.0_1</version.org.apache.servicemix.bundles.javax-el-impl>
         <version.org.apache.servicemix.bundles.javax-inject>1_2</version.org.apache.servicemix.bundles.javax-inject>
         <version.org.apache.servicemix.bundles.jsch>0.1.54_1</version.org.apache.servicemix.bundles.jsch>
         <version.org.apache.servicemix.bundles.jzlib>1.1.3_2</version.org.apache.servicemix.bundles.jzlib>
+        <version.org.apache.servicemix.bundles.okhttp>3.12.0_1</version.org.apache.servicemix.bundles.okhttp>
         <version.org.apache.servicemix.bundles.poi>3.15_1</version.org.apache.servicemix.bundles.poi>
         <version.org.apache.servicemix.bundles.quartz>1.8.6_1</version.org.apache.servicemix.bundles.quartz>
         <version.org.apache.servicemix.bundles.reflections>0.9.11_2</version.org.apache.servicemix.bundles.reflections>
@@ -546,6 +551,36 @@
             <dependency>
                 <groupId>org.jboss.fuse.modules</groupId>
                 <artifactId>fuse-pax-transx-tm-narayana</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- Fuse own artifacts, but moved from fabric8 project -->
+
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>fabric8-karaf-core</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>fabric8-karaf-features</artifactId>
+                <type>xml</type>
+                <classifier>features</classifier>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>fabric8-karaf-checks</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>fabric8-karaf-blueprint</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>fabric8-karaf-cm</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
@@ -1332,6 +1367,22 @@
             <!-- Other dependencies -->
 
             <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>kubernetes-model</artifactId>
+                <version>${version.io.fabric8.kubernetes-model}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>kubernetes-client</artifactId>
+                <version>${version.io.fabric8.kubernetes-client}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.fabric8</groupId>
+                <artifactId>openshift-server-mock</artifactId>
+                <version>${version.io.fabric8.kubernetes-client}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
                 <version>${version.com.fasterxml.jackson.core}</version>
@@ -1444,6 +1495,11 @@
                 <version>${version.org.eclipse.persistence}</version>
             </dependency>
 
+            <dependency>
+                <groupId>commons-codec</groupId>
+                <artifactId>commons-codec</artifactId>
+                <version>${version.commons-codec}</version>
+            </dependency>
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>

@@ -295,6 +295,18 @@
                 replacement="mvn:org.apache.logging.log4j/log4j-core/${version.org.apache.logging.log4j}" mode="maven"/>
         <bundle originalUri="mvn:com.hazelcast/hazelcast/[3.0,4)"
                 replacement="mvn:com.hazelcast/hazelcast/${version.com.hazelcast}" mode="maven"/>
+        <bundle originalUri="mvn:io.fabric8/kubernetes-client/[4.0,5)/jar/bundle"
+                replacement="mvn:io.fabric8/kubernetes-client/${version.io.fabric8.kubernetes-client}/jar/bundle" mode="maven"/>
+        <bundle originalUri="mvn:io.fabric8/kubernetes-model/[4.0,5)"
+                replacement="mvn:io.fabric8/kubernetes-model/${version.io.fabric8.kubernetes-model}" mode="maven"/>
+        <bundle originalUri="mvn:io.fabric8/openshift-client/[4.0,5)/jar/bundle"
+                replacement="mvn:io.fabric8/openshift-client/${version.io.fabric8.kubernetes-client}/jar/bundle" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aspectj/[1.9,2)"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.aspectj/${version.org.apache.servicemix.bundles.aspectj}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.generex/[1.0,2)"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.generex/${version.org.apache.servicemix.bundles.generex}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okhttp/[3.11,4)"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okhttp/${version.org.apache.servicemix.bundles.okhttp}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
