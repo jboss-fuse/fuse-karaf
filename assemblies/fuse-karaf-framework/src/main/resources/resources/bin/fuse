@@ -15,27 +15,9 @@
 #  permissions and limitations under the License.
 #
 
-detectPrometheusConfig() {
-    if [ -d "${KARAF_HOME}/etc/prometheus-config.yml" ] || [ -d "${KARAF_HOME}/etc/prometheus-config.yaml" ]; then
-
-        if [ -d "${KARAF_HOME}/etc/prometheus-config.yml" ]; then
-            KARAF_PROMETHEUS_CONFIG="${KARAF_HOME}/etc/prometheus-config.yml"
-        else
-            KARAF_PROMETHEUS_CONFIG="${KARAF_HOME}/etc/prometheus-config.yaml"
-        fi
-
-        # if there's no prometheus port set, let's set the port to 9779
-        if [ "x${KARAF_PROMETHEUS_PORT}" = "x" ]; then
-            KARAF_PROMETHEUS_PORT=9779
-        fi
-        KARAF_PROMETHEUS_VERSION="0.13.0"
-
-        KARAF_PROMETHEUS_OPTS="-javaagent:${KARAF_HOME}/lib/jmx_prometheus_javaagent-${KARAF_PROMETHEUS_VERSION}.jar=${KARAF_PROMETHEUS_PORT}:${KARAF_PROMETHEUS_CONFIG}"
-    fi
-}
-
 DIRNAME=`dirname "$0"`
 . "${DIRNAME}/inc"
+. "${DIRNAME}/fuse-inc"
 locateHome
 detectPrometheusConfig
 
