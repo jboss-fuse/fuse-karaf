@@ -182,7 +182,7 @@
         <version.org.apache.servicemix.bundles.cglib>3.2.4_1</version.org.apache.servicemix.bundles.cglib>
         <version.org.apache.servicemix.bundles.dbcp>1.4_3</version.org.apache.servicemix.bundles.dbcp>
         <version.org.apache.servicemix.bundles.dom4j>1.6.1_5</version.org.apache.servicemix.bundles.dom4j>
-        <version.org.apache.servicemix.bundles.dom4j2>2.1.1_1</version.org.apache.servicemix.bundles.dom4j2>
+        <version.org.apache.servicemix.bundles.dom4j2>2.1.3_1</version.org.apache.servicemix.bundles.dom4j2>
         <version.org.apache.servicemix.bundles.generex>1.0.1_2</version.org.apache.servicemix.bundles.generex>
         <version.org.apache.servicemix.bundles.jasypt>1.9.3_1</version.org.apache.servicemix.bundles.jasypt>
         <version.org.apache.servicemix.bundles.jaxb>2.2.11_1</version.org.apache.servicemix.bundles.jaxb>
