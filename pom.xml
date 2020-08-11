@@ -113,8 +113,8 @@
         <version.commons-net>3.6</version.commons-net>
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
         <version.io.dropwizard.metrics>3.2.6</version.io.dropwizard.metrics>
-        <version.io.fabric8.kubernetes-model>4.2.2</version.io.fabric8.kubernetes-model>
-        <version.io.fabric8.kubernetes-client>4.2.2</version.io.fabric8.kubernetes-client>
+        <version.io.fabric8.kubernetes-model>4.6.2</version.io.fabric8.kubernetes-model>
+        <version.io.fabric8.kubernetes-client>4.6.2</version.io.fabric8.kubernetes-client>
         <version.io.netty>4.1.48.Final-redhat-00001</version.io.netty>
         <version.io.opentracing>0.31.0</version.io.opentracing>
         <version.io.prometheus>0.13.0</version.io.prometheus>
