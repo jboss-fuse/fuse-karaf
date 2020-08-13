@@ -166,7 +166,17 @@
         </dependency>
         <dependency>
             <groupId>org.jboss.fuse.modules</groupId>
+            <artifactId>fuse-servlet-compatibility</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.fuse.modules</groupId>
             <artifactId>fuse-pax-transx-tm-narayana</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.fuse.modules</groupId>
+            <artifactId>fuse-pax-jms-ibmmq-compatibility</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>

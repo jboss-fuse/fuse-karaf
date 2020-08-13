@@ -553,6 +553,16 @@
                 <artifactId>fuse-pax-transx-tm-narayana</artifactId>
                 <version>${project.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jboss.fuse.modules</groupId>
+                <artifactId>fuse-pax-jms-ibmmq-compatibility</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.fuse.modules</groupId>
+                <artifactId>fuse-servlet-compatibility</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
             <!-- Fuse own artifacts, but moved from fabric8 project -->
 
