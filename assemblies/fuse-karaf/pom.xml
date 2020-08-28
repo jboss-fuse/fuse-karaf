@@ -445,6 +445,7 @@
                         <feature>camel-routebox</feature>
                         <feature>camel-jbpm</feature>
                         <feature>camel-optaplanner</feature>
+                        <feature>camel-xmljson</feature>
 
                         <!-- Tomcat -->
                         <feature>*tomcat*</feature>
