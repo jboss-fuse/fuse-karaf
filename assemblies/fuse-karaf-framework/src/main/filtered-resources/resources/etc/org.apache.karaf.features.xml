@@ -307,6 +307,10 @@
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.generex/${version.org.apache.servicemix.bundles.generex}" mode="maven"/>
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okhttp/[3.11,4)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okhttp/${version.org.apache.servicemix.bundles.okhttp}" mode="maven"/>
+        <bundle originalUri="mvn:org.jboss.xnio/xnio-api/[3.3,4)"
+                replacement="mvn:org.jboss.xnio/xnio-api/${version.org.jboss.xnio}" mode="maven"/>
+        <bundle originalUri="mvn:org.jboss.xnio/xnio-nio/[3.3,4)"
+                replacement="mvn:org.jboss.xnio/xnio-nio/${version.org.jboss.xnio}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
@@ -343,6 +347,12 @@
         <replacement mode="merge">
             <feature name="pax-http-undertow" version="${version.org.ops4j.pax.web}">
                 <f:bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-servlet-compatibility/${project.version}</f:bundle>
+            </feature>
+        </replacement>
+        <replacement mode="merge">
+            <feature name="undertow" version="${version.io.undertow-pax-web}">
+                <f:bundle start-level="35">mvn:org.wildfly.common/wildfly-common/${version.org.wildfly.common-xnio}</f:bundle>
+                <f:bundle start-level="35">mvn:org.wildfly.client/wildfly-client-config/${version.org.wildfly.client-xnio}</f:bundle>
             </feature>
         </replacement>
         <replacement mode="merge">
