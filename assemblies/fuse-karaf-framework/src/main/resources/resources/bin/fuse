@@ -22,7 +22,6 @@ locateHome
 detectPrometheusConfig
 
 JAVA_OPTS="${KARAF_PROMETHEUS_OPTS} ${JAVA_OPTS}"
-KARAF_OPTS="$KARAF_OPTS"
-export KARAF_OPTS
+export JAVA_OPTS
 
 exec "${DIRNAME}/karaf" "$@"
