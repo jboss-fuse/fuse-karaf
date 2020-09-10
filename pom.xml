@@ -93,6 +93,7 @@
         <!-- ENTESB-12869: versions from com.fasterxml.jackson/jackson-bom/2.9.10.20200411-redhat-00001 -->
         <version.com.fasterxml.jackson29>2.9.10</version.com.fasterxml.jackson29>
         <version.com.fasterxml.jackson29.databind>2.9.10.4-redhat-00001</version.com.fasterxml.jackson29.databind>
+        <version.com.fasterxml.jackson29.module>2.9.10</version.com.fasterxml.jackson29.module>
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
         <version.com.google.guava>27.1-jre</version.com.google.guava>
@@ -1406,82 +1407,82 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
-                <version>${version.com.fasterxml.jackson.core}</version>
+                <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>${version.com.fasterxml.jackson.core.databind}</version>
+                <version>${version.com.fasterxml.jackson29.databind}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-jsonSchema</artifactId>
-                <version>${version.com.fasterxml.jackson.module}</version>
+                <version>${version.com.fasterxml.jackson29.module}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-scala_2.10</artifactId>
-                <version>${version.com.fasterxml.jackson.module}</version>
+                <version>${version.com.fasterxml.jackson29.module}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.core</groupId>
               <artifactId>jackson-annotations</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.dataformat</groupId>
               <artifactId>jackson-dataformat-cbor</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.dataformat</groupId>
               <artifactId>jackson-dataformat-smile</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.dataformat</groupId>
               <artifactId>jackson-dataformat-xml</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.dataformat</groupId>
               <artifactId>jackson-dataformat-yaml</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.datatype</groupId>
               <artifactId>jackson-datatype-joda</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.datatype</groupId>
               <artifactId>jackson-datatype-jdk8</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.datatype</groupId>
               <artifactId>jackson-datatype-jsr310</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.jaxrs</groupId>
               <artifactId>jackson-jaxrs-base</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.jaxrs</groupId>
               <artifactId>jackson-jaxrs-json-provider</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.module</groupId>
               <artifactId>jackson-module-jaxb-annotations</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
               <groupId>com.fasterxml.jackson.jr</groupId>
               <artifactId>jackson-jr-objects</artifactId>
-              <version>${version.com.fasterxml.jackson.core}</version>
+              <version>${version.com.fasterxml.jackson29}</version>
             </dependency>
             <dependency>
                 <groupId>io.hawt</groupId>
