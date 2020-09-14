@@ -136,7 +136,7 @@
         <version.javax.transaction>1.2</version.javax.transaction>
         <version.javax.validation>2.0.1.Final-redhat-1</version.javax.validation>
         <version.javax.ws.rs>2.1.1</version.javax.ws.rs>
-        <version.javax.xml.bind>2.2.12</version.javax.xml.bind>
+        <version.javax.xml.bind>2.3.0</version.javax.xml.bind>
         <version.joda-time>2.9.9</version.joda-time>
         <version.junit>4.12</version.junit>
         <version.net.bytebuddy>1.9.11.redhat-00002</version.net.bytebuddy>
@@ -211,6 +211,7 @@
         <version.org.apache.servicemix.bundles.xstream-java8>1.4.11_1</version.org.apache.servicemix.bundles.xstream-java8>
         <version.org.apache.servicemix.bundles.javax-el3>3.0.0_1</version.org.apache.servicemix.bundles.javax-el3>
         <version.org.apache.servicemix.specs>2.9.0</version.org.apache.servicemix.specs>
+        <version.org.apache.servicemix.specs.jaxb>2.3_3</version.org.apache.servicemix.specs.jaxb>
         <version.org.apache.servicemix.specs.jaxrs>2.9.1</version.org.apache.servicemix.specs.jaxrs>
         <version.org.apache.servicemix.specs.javax-el3>3.0.0_1</version.org.apache.servicemix.specs.javax-el3>
         <version.org.apache.servicemix.bundles.javax-el2>2.2.5_1</version.org.apache.servicemix.bundles.javax-el2>
