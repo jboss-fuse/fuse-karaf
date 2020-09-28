@@ -42,8 +42,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import io.fabric8.karaf.checks.Check;
 import io.fabric8.karaf.checks.HealthChecker;
-
 public class HealthCheckServlet extends HttpServlet {
+
 
     private final CopyOnWriteArrayList<HealthChecker> checkers;
 
