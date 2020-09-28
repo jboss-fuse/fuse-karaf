@@ -17,44 +17,56 @@
 
 package io.fabric8.karaf.checks.internal;
 
-import javax.servlet.ServletException;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 
 import io.fabric8.karaf.checks.HealthChecker;
 import io.fabric8.karaf.checks.ReadinessChecker;
-import org.apache.felix.scr.annotations.Activate;
-import org.apache.felix.scr.annotations.Component;
-import org.apache.felix.scr.annotations.ConfigurationPolicy;
-import org.apache.felix.scr.annotations.Deactivate;
-import org.apache.felix.scr.annotations.Reference;
-import org.apache.felix.scr.annotations.ReferenceCardinality;
-import org.apache.felix.scr.annotations.ReferencePolicy;
+import io.undertow.Handlers;
+import io.undertow.Undertow;
+import io.undertow.server.HttpHandler;
+import io.undertow.server.handlers.PathHandler;
+import io.undertow.servlet.Servlets;
+import io.undertow.servlet.api.DeploymentInfo;
+import io.undertow.servlet.api.DeploymentManager;
+import io.undertow.servlet.api.ServletContainer;
+import io.undertow.servlet.api.ServletInfo;
+import io.undertow.servlet.util.ImmediateInstanceFactory;
+import org.osgi.service.component.annotations.Activate;
+import org.osgi.service.component.annotations.Component;
+import org.osgi.service.component.annotations.ConfigurationPolicy;
+import org.osgi.service.component.annotations.Deactivate;
+import org.osgi.service.component.annotations.Reference;
+import org.osgi.service.component.annotations.ReferenceCardinality;
+import org.osgi.service.component.annotations.ReferencePolicy;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-@Component(
-    name      = "io.fabric8.karaf.k8s.check",
-    immediate = true,
-    enabled   = true,
-    policy    = ConfigurationPolicy.IGNORE,
-    createPid = false
-)
+@Component(name = "io.fabric8.karaf.k8s.check", immediate = true, enabled = true,
+        configurationPolicy = ConfigurationPolicy.OPTIONAL, configurationPid = "io.fabric8.checks")
 public class ChecksService {
 
-    @Reference(referenceInterface = HttpService.class, cardinality = ReferenceCardinality.MANDATORY_UNARY)
+    public static final Logger LOG = LoggerFactory.getLogger(ChecksService.class);
+
+    @Reference(service = HttpService.class, cardinality = ReferenceCardinality.MANDATORY)
     private HttpService httpService;
 
-    @Reference(referenceInterface = ReadinessChecker.class, cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    @Reference(service = ReadinessChecker.class, cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     final CopyOnWriteArrayList<ReadinessChecker> readinessCheckers = new CopyOnWriteArrayList<>();
 
-    @Reference(referenceInterface = HealthChecker.class, cardinality = ReferenceCardinality.OPTIONAL_MULTIPLE, policy = ReferencePolicy.DYNAMIC)
+    @Reference(service = HealthChecker.class, cardinality = ReferenceCardinality.MULTIPLE, policy = ReferencePolicy.DYNAMIC)
     final CopyOnWriteArrayList<HealthChecker> healthCheckers = new CopyOnWriteArrayList<>();
 
-
-    // TODO: perhaps allow these to be configured via pid?
     String readinessCheckPath = "/readiness-check";
     String healthCheckPath = "/health-check";
+
+    // port set in @Activate
+    private int port;
+    private Undertow server;
 
     public ChecksService() {
         bind(new FrameworkState());
@@ -89,14 +101,93 @@ public class ChecksService {
 
     @Activate
     void activate(Map<String, ?> configuration) throws ServletException, NamespaceException {
-        httpService.registerServlet(readinessCheckPath, new ReadinessCheckServlet(readinessCheckers), null, null);
-        httpService.registerServlet(healthCheckPath, new HealthCheckServlet(healthCheckers), null, null);
+        String httpPort = (String) configuration.get("httpPort");
+        this.port = -1;
+        if (httpPort != null && !"".equals(httpPort.trim())) {
+            try {
+                this.port = Integer.parseInt(httpPort);
+            } catch (NumberFormatException e) {
+                LOG.warn("Can't parse {} as TCP port number", httpPort);
+            }
+        }
+
+        String rcsURI = (String) configuration.get("readinessCheckPath");
+        if (rcsURI != null && !"".equals(rcsURI)) {
+            if (!rcsURI.startsWith("/")) {
+                LOG.warn("Readiness Check URI doesn't start with \"/\", falling back to \"/readiness-check\".");
+                readinessCheckPath = "/readiness-check";
+            } else {
+                readinessCheckPath = rcsURI.trim();
+            }
+        }
+        String hcsURI = (String) configuration.get("healthCheckPath");
+        if (hcsURI != null && !"".equals(hcsURI)) {
+            if (!hcsURI.startsWith("/")) {
+                LOG.warn("Health Check URI doesn't start with \"/\", falling back to \"/health-check\".");
+                healthCheckPath = "/health-check";
+            } else {
+                healthCheckPath = hcsURI.trim();
+            }
+        }
+
+        if (this.port == -1) {
+            // register into built-in HttpService
+            LOG.info("Starting health check service in built-in server and {} URI", healthCheckPath);
+            httpService.registerServlet(healthCheckPath, new HealthCheckServlet(healthCheckers), null, null);
+            LOG.info("Starting readiness check service in built-in server and {} URI", readinessCheckPath);
+            httpService.registerServlet(readinessCheckPath, new ReadinessCheckServlet(readinessCheckers), null, null);
+        } else {
+            // create embedded, but simple Undertow instance to register the servlets
+            PathHandler path = Handlers.path();
+            this.server = Undertow.builder()
+                    .addHttpListener(this.port, "0.0.0.0")
+                    .setHandler(path)
+                    .setIoThreads(2)     // defaults to Math.max(Runtime.getRuntime().availableProcessors(), 2);
+                    .setWorkerThreads(4) // defaults to ioThreads * 8
+                    .build();
+
+            HttpServlet hcs = new HealthCheckServlet(healthCheckers);
+            HttpServlet rcs = new ReadinessCheckServlet(readinessCheckers);
+
+            ServletInfo hcServlet = Servlets.servlet("hcs", hcs.getClass(), new ImmediateInstanceFactory<HttpServlet>(hcs));
+            hcServlet.addMapping(healthCheckPath);
+            ServletInfo rcServlet = Servlets.servlet("rcs", rcs.getClass(), new ImmediateInstanceFactory<HttpServlet>(rcs));
+            rcServlet.addMapping(readinessCheckPath);
+
+            DeploymentInfo deploymentInfo = Servlets.deployment()
+                    .setClassLoader(this.getClass().getClassLoader())
+                    .setContextPath("/")
+                    .setDeploymentName("")
+                    .setUrlEncoding("UTF-8")
+                    .addServlets(hcServlet, rcServlet);
+
+            ServletContainer container = Servlets.newContainer();
+            DeploymentManager dm = container.addDeployment(deploymentInfo);
+            dm.deploy();
+            HttpHandler handler = dm.start();
+
+            path.addPrefixPath("/", handler);
+
+            LOG.info("Starting health check service on port {} and {} URI", this.port, healthCheckPath);
+            LOG.info("Starting readiness check service on port {} and {} URI", this.port, readinessCheckPath);
+            server.start();
+        }
     }
 
     @Deactivate
     void deactivate() {
-        httpService.unregister(readinessCheckPath);
-        httpService.unregister(healthCheckPath);
+        if (port != -1) {
+            // stop Undertow
+            LOG.info("Stoping health and readiness check services on port {}", this.port);
+            server.stop();
+            port = -1;
+            server = null;
+        } else {
+            // unregister from built-in HttpService
+            LOG.info("Unregistering health and readiness check services from built-in server");
+            httpService.unregister(healthCheckPath);
+            httpService.unregister(readinessCheckPath);
+        }
     }
 
     void bindHttpService(HttpService httpService) {
@@ -119,4 +210,5 @@ public class ChecksService {
     void unbindHealthCheckers(HealthChecker value) {
         healthCheckers.remove(value);
     }
+
 }

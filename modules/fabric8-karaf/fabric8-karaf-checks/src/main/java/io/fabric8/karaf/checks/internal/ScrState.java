@@ -49,8 +49,6 @@ public class ScrState extends AbstractBundleChecker {
                 return "disabled";
             case (ComponentConfigurationDTO.ACTIVE):
                 return "active";
-            case (ComponentConfigurationDTO.FAILED_ACTIVATION):
-                return "activation failed";
             case (ComponentConfigurationDTO.SATISFIED):
                 // 112.5.4: Delayed Component
                 // [...] the activation of a delayed component configuration does not occur until there is an actual re-

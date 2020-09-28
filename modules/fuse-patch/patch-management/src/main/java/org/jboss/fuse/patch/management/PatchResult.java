@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +32,6 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.http.ParseException;
 import org.jboss.fuse.patch.management.impl.Activator;
 import org.osgi.service.log.LogService;
 
@@ -180,14 +180,14 @@ public class PatchResult {
             if (_state != null && !"".equals(_state)) {
                 try {
                     state = Integer.parseInt(_state);
-                } catch (ParseException ignored) {
+                } catch (NumberFormatException ignored) {
                 }
             }
             String _startLevel = props.getProperty(prefix + START_LEVEL);
             if (_startLevel != null && !"".equals(_startLevel)) {
                 try {
                     startLevel = Integer.parseInt(_startLevel);
-                } catch (ParseException ignored) {
+                } catch (NumberFormatException ignored) {
                 }
             }
             BundleUpdate bundleUpdate = new BundleUpdate(sn, nv, nl, ov, ol, startLevel, state);
