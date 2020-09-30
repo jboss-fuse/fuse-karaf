@@ -360,6 +360,11 @@
                 <f:bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-pax-jms-ibmmq-compatibility/${project.version}</f:bundle>
             </feature>
         </replacement>
+        <replacement mode="merge">
+            <feature name="camel-olingo4" version="${version.org.apache.camel}">
+                <f:bundle>mvn:org.jboss.fuse.modules/fuse-stax2-compatibility/${project.version}</f:bundle>
+            </feature>
+        </replacement>
     </featureReplacements>
 
 </featuresProcessing>
