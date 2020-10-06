@@ -1686,6 +1686,13 @@
                 <version>${version.org.apache.logging.log4j}</version>
             </dependency>
 
+            <!-- Ensure PME can kick in -->
+            <dependency>
+                <groupId>io.swagger.core.v3</groupId>
+                <artifactId>swagger-jaxrs2</artifactId>
+                <version>${version.io.swagger.core.v3}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
