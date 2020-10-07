@@ -93,6 +93,7 @@
         <!-- ENTESB-12869: versions from com.fasterxml.jackson/jackson-bom/2.9.10.20200411-redhat-00001 -->
         <version.com.fasterxml.jackson29>2.9.10</version.com.fasterxml.jackson29>
         <version.com.fasterxml.jackson29.databind>2.9.10.4-redhat-00001</version.com.fasterxml.jackson29.databind>
+        <version.com.fasterxml.jackson29.jsonSchema>2.9.10.redhat-00005</version.com.fasterxml.jackson29.jsonSchema>
         <version.com.fasterxml.jackson29.module>2.9.10</version.com.fasterxml.jackson29.module>
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
@@ -201,7 +202,7 @@
         <version.org.apache.servicemix.bundles.rhino>1.7.7.1_1</version.org.apache.servicemix.bundles.rhino>
         <version.org.apache.servicemix.bundles.saxon>9.8.0-8_1</version.org.apache.servicemix.bundles.saxon>
         <version.org.apache.servicemix.bundles.serp>1.14.1_1</version.org.apache.servicemix.bundles.serp>
-        <version.org.apache.servicemix.bundles.spring>5.2.7.RELEASE_1</version.org.apache.servicemix.bundles.spring>
+        <version.org.apache.servicemix.bundles.spring>5.2.8.RELEASE_1</version.org.apache.servicemix.bundles.spring>
         <version.org.apache.servicemix.bundles.velocity>1.7_6</version.org.apache.servicemix.bundles.velocity>
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
@@ -268,7 +269,7 @@
         <version.org.ow2.asm>8.0.1</version.org.ow2.asm>
         <version.org.postgresql>42.2.14</version.org.postgresql>
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
-        <version.org.springframework>5.2.7.RELEASE</version.org.springframework>
+        <version.org.springframework>5.2.8.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.26</version.org.yaml.snakeyaml>
         <version.org.wildfly.client-xnio>1.0.0.Final</version.org.wildfly.client-xnio>
         <version.org.wildfly.common>1.5.2.Final-redhat-00002</version.org.wildfly.common>
@@ -1418,7 +1419,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-jsonSchema</artifactId>
-                <version>${version.com.fasterxml.jackson29.module}</version>
+                <version>${version.com.fasterxml.jackson29.jsonSchema}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
