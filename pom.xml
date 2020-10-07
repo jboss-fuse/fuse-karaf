@@ -93,6 +93,7 @@
         <!-- ENTESB-12869: versions from com.fasterxml.jackson/jackson-bom/2.9.10.20200411-redhat-00001 -->
         <version.com.fasterxml.jackson29>2.9.10</version.com.fasterxml.jackson29>
         <version.com.fasterxml.jackson29.databind>2.9.10.4-redhat-00001</version.com.fasterxml.jackson29.databind>
+        <version.com.fasterxml.jackson29.jsonSchema>2.9.10.redhat-00005</version.com.fasterxml.jackson29.jsonSchema>
         <version.com.fasterxml.jackson29.module>2.9.10</version.com.fasterxml.jackson29.module>
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
@@ -1418,7 +1419,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-jsonSchema</artifactId>
-                <version>${version.com.fasterxml.jackson29.module}</version>
+                <version>${version.com.fasterxml.jackson29.jsonSchema}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
