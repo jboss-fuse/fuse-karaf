@@ -420,6 +420,7 @@
                         <feature>camel-spring-neo4j</feature>
                         <feature>camel-spring-security</feature>
                         <feature>camel-tika</feature>
+                        <feature>camel-spring-redis</feature>
                         <!-- swagger 1.3 -->
                         <feature>camel-swagger</feature>
                         <feature>camel-virtualbox</feature>
