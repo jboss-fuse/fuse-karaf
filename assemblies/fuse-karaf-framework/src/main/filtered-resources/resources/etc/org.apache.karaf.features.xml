@@ -311,6 +311,14 @@
                 replacement="mvn:org.jboss.xnio/xnio-api/${version.org.jboss.xnio}" mode="maven"/>
         <bundle originalUri="mvn:org.jboss.xnio/xnio-nio/[3.3,4)"
                 replacement="mvn:org.jboss.xnio/xnio-nio/${version.org.jboss.xnio}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.curator/curator-framework/[2.11,3)"
+                replacement="mvn:org.apache.curator/curator-framework/${version.org.apache.curator}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.curator/curator-client/[2.11,3)"
+                replacement="mvn:org.apache.curator/curator-client/${version.org.apache.curator}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.curator/curator-recipes/[2.11,3)"
+                replacement="mvn:org.apache.curator/curator-recipes/${version.org.apache.curator}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.curator/curator-x-discovery/[2.11,3)"
+                replacement="mvn:org.apache.curator/curator-x-discovery/${version.org.apache.curator}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
