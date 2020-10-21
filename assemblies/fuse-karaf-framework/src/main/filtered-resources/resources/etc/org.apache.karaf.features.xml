@@ -319,6 +319,8 @@
                 replacement="mvn:org.apache.curator/curator-recipes/${version.org.apache.curator}" mode="maven"/>
         <bundle originalUri="mvn:org.apache.curator/curator-x-discovery/[2.11,3)"
                 replacement="mvn:org.apache.curator/curator-x-discovery/${version.org.apache.curator}" mode="maven"/>
+        <bundle originalUri="mvn:org.codehaus.woodstox/woodstox-core-asl/[4.4,5)"
+                replacement="mvn:org.codehaus.woodstox/woodstox-core-asl/${version.org.codehaus.woodstox.core}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
