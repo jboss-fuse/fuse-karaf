@@ -55,6 +55,10 @@
             <groupId>io.swagger.core.v3</groupId>
             <artifactId>swagger-jaxrs2</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.fuse.modules</groupId>
+            <artifactId>org.apache.servicemix.specs.activation-api-1.2.1</artifactId>
+        </dependency>
 
     </dependencies>
 
