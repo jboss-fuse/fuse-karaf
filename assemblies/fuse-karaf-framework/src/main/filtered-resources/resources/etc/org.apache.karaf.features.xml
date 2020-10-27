@@ -321,6 +321,8 @@
                 replacement="mvn:org.apache.curator/curator-x-discovery/${version.org.apache.curator}" mode="maven"/>
         <bundle originalUri="mvn:org.codehaus.woodstox/woodstox-core-asl/[4.4,5)"
                 replacement="mvn:org.codehaus.woodstox/woodstox-core-asl/${version.org.codehaus.woodstox.core}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.2.1/[1.2,2)"
+                replacement="mvn:org.jboss.fuse.modules/org.apache.servicemix.specs.activation-api-1.2.1/${project.version}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
