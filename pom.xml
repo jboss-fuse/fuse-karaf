@@ -95,6 +95,7 @@
         <version.com.fasterxml.jackson29.databind>2.9.10.4-redhat-00001</version.com.fasterxml.jackson29.databind>
         <version.com.fasterxml.jackson29.jsonSchema>2.9.10.redhat-00005</version.com.fasterxml.jackson29.jsonSchema>
         <version.com.fasterxml.jackson29.module>2.9.10</version.com.fasterxml.jackson29.module>
+        <version.com.fasterxml.woodstox.core>5.2.1</version.com.fasterxml.woodstox.core>
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
         <version.com.google.guava>27.1-jre</version.com.google.guava>
@@ -227,7 +228,7 @@
         <version.org.codehaus.groovy>2.4.13</version.org.codehaus.groovy>
         <version.org.codehaus.janino>2.5.16</version.org.codehaus.janino>
         <version.org.codehaus.woodstox.core>4.4.1.redhat-00001</version.org.codehaus.woodstox.core>
-        <version.org.codehaus.woodstox.stax2-api>3.1.4</version.org.codehaus.woodstox.stax2-api>
+        <version.org.codehaus.woodstox.stax2-api>4.2.1</version.org.codehaus.woodstox.stax2-api>
         <version.org.eclipse.jdt.core.compiler>4.6.1.redhat-1</version.org.eclipse.jdt.core.compiler>
         <version.org.eclipse.jetty>9.4.30.v20200611</version.org.eclipse.jetty>
         <version.org.eclipse.jgit>5.1.3.201810200350-r</version.org.eclipse.jgit>
