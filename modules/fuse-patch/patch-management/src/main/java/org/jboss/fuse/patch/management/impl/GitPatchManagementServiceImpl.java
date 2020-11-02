@@ -535,6 +535,14 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 // let's use generated patch descriptor
                 File generatedPatchDescriptor = new File(patchesDir, fallbackPatchData.getId() + ".patch");
                 FileOutputStream out = new FileOutputStream(generatedPatchDescriptor);
+
+                // to prevent patch:add for a random ZIP file (and treat it as Rollup patch), let's verify the
+                // existence of some fundamental files
+                List<String> files = fallbackPatchData.getFiles();
+                boolean rollup = files.contains("etc/version.properties");
+                rollup &= files.contains("bin/fuse");
+                rollup &= files.contains("etc/org.apache.karaf.features.xml");
+                fallbackPatchData.setRollupPatch(rollup);
                 try {
                     fallbackPatchData.storeTo(out);
                 } finally {
