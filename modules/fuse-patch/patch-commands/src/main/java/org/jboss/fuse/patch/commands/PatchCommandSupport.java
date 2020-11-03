@@ -32,10 +32,11 @@ import static org.jboss.fuse.patch.management.Utils.stripSymbolicName;
 public abstract class PatchCommandSupport implements Action {
 
     @Reference
-    PatchService service;
+    protected PatchService service;
 
     @Override
     public Object execute() throws Exception {
+        service.autoDeployPatches();
         doExecute(service);
         return null;
     }

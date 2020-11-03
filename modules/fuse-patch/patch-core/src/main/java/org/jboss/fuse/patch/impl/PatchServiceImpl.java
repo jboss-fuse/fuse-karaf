@@ -19,9 +19,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -39,6 +41,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FileUtils;
@@ -135,6 +138,9 @@ public class PatchServiceImpl implements PatchService {
     private BootDoneTracker bootTracker;
     private ExecutorService pool;
 
+    // ZIP file name -> information about the patch it contains - empty after runtime or bundle restart
+    private final Map<String, DeployedPatch> deployedPatches = new HashMap<>();
+
     @Activate
     void activate(ComponentContext componentContext) throws IOException {
         // Use system bundle' bundle context to avoid running into
@@ -159,6 +165,9 @@ public class PatchServiceImpl implements PatchService {
         this.karafHome = new File(bundleContext.getProperty("karaf.home"));
         this.repository = new File(bundleContext.getProperty("karaf.default.repository"));
         helper = new OSGiPatchHelper(karafHome, bundleContext);
+
+        // potentially track patches dropped into FUSE_HOME/patches
+        autoDeployPatches();
 
         load(true);
 
@@ -1423,6 +1432,218 @@ public class PatchServiceImpl implements PatchService {
         }
     }
 
+    @Override
+    public void autoDeployPatches() {
+        // to prevent reading descriptors all over again, we'll list the FUSE_HOME/patches directory
+        // and check timestamps of the ZIP files
+        File[] zips = patchDir.listFiles(f -> {
+            return f.isFile() && f.getName().endsWith(".zip");
+        });
+        if (zips == null) {
+            // should not happen
+            return;
+        }
+
+        // after calling this method we'll have proper state in this.deployedPatches, but we have to
+        // check if any patch needs adding/updating. Removal will happen automatically.
+        refreshAutoDeployCache(zips);
+
+        for (Map.Entry<String, DeployedPatch> e : deployedPatches.entrySet()) {
+            String name = e.getKey();
+            DeployedPatch dp = e.getValue();
+            if (dp.hasChanged()) {
+                File zip = dp.getZipFile();
+                boolean skip = false;
+                if (dp.getTimestamp() == 0L) {
+                    // new patch to be added
+                    LOG.info("Found new patch to deploy: {}", zip.getName());
+                } else {
+                    // zip that was already added, but maybe it was updated
+                    LOG.info("Patch was updated: {}", zip.getName());
+                    String id = dp.getPatchData().getId();
+                    Patch patch = patchManagement.loadPatch(new PatchDetailsRequest(id));
+                    if (patch != null) {
+                        if (patch.getResult() != null && patch.getResult().getKarafBases().size() > 0) {
+                            String containers = String.join(", ", patch.getResult().getKarafBases());
+                            LOG.warn("Patch {} (from file {}) is already installed for these containers: {}, and can't" +
+                                            " be updated. Please don't overwrite auto-deployed and installed patch.",
+                                    id, name, containers);
+                            skip = true;
+                        } else {
+                            LOG.info("Deleting existing auto-deployed patch from {}", name);
+                            patchManagement.delete(patch);
+                        }
+                    }
+                }
+
+                if (!skip) {
+                    // whether it was added or updated, we should fetch+track it now
+                    try {
+                        List<PatchData> pdList = patchManagement.fetchPatches(zip.toURI().toURL());
+                        if (pdList.size() != 1) {
+                            LOG.warn("Multi-patch archive {} is not supported", zip.getName());
+                            continue;
+                        }
+                        dp.setPatchData(pdList.get(0));
+                    } catch (MalformedURLException ignored) {
+                    }
+                    patchManagement.trackPatch(dp.getPatchData());
+                }
+                dp.setTimestamp(dp.getZipFile().lastModified());
+            }
+        }
+
+        persistAutoDeployCache();
+    }
+
+    /**
+     * This method synchronizes runtime information about auto-deployed patches and .management/auto-deploy.txt file
+     * @param zips
+     */
+    private void refreshAutoDeployCache(File[] zips) {
+        // There are three sets:
+        // - .management/auto-deploy.txt - autodeployed (some time ago) patches
+        // - passed zips - current list of ZIPs in FUSE_HOME/patches
+        // - this.deployedPatches - current runtime state that should match .management/auto-deploy.txt but:
+        //    - may be empty when patch-core bundle starts/refreshes
+        //    - may contain more entries if user deleted a ZIP from FUSE_HOME/patches
+
+        File cache = new File(patchDir, ".management/auto-deploy.txt");
+
+        Map<String, String> removed = new HashMap<>();
+        deployedPatches.forEach((name, patch) -> {
+            // potentially all are to be removed if the ZIPs are no longer there
+            removed.put(name, patch.getPatchData().getId());
+        });
+        Map<String, File> added = new HashMap<>();
+        for (File zip : zips) {
+            // potentially all ZIPs are to be added, or at least checked if they should be added/updated
+            added.put(zip.getName(), zip);
+        }
+
+        if (!cache.isFile()) {
+            // initialization - we've definitely not added any ZIP files as patches - it's the first time patch-core
+            // bundle starts
+            try {
+                FileUtils.writeStringToFile(cache, String.format("# generated by Fuse patching mechanism%n"),
+                        StandardCharsets.UTF_8);
+            } catch (IOException e) {
+                LOG.warn("Problem processing patch cache file: {}", e.getMessage(), e);
+                return;
+            }
+            // all zips are to be added, no patches should be removed
+            added.forEach((name, patch) -> {
+                deployedPatches.put(name, new DeployedPatch(patch, 0L));
+            });
+        } else {
+            try {
+                List<String> lines = FileUtils.readLines(cache, StandardCharsets.UTF_8);
+                lines.forEach(l -> {
+                    if (!l.startsWith("#")) {
+                        String[] entry = l.trim().split(Pattern.quote(File.separator));
+                        String name = entry[0];
+                        String id = entry[1];
+                        // timestamp at which it was last added+tracked
+                        long ts = Long.parseLong(entry[2]);
+
+                        if (added.containsKey(name)) {
+                            // it was once added+tracked, but maybe it was changed
+                            if (!deployedPatches.containsKey(name)) {
+                                // just file -> runtime sync
+                                deployedPatches.put(name, new DeployedPatch(added.get(name), ts));
+                            } else {
+                                // explicitly re-set to persisted timestamp to detect a change later
+                                deployedPatches.get(name).setTimestamp(ts);
+                            }
+                            DeployedPatch dp = deployedPatches.get(name);
+                            Patch patch = patchManagement.loadPatch(new PatchDetailsRequest(id));
+                            if (patch == null) {
+                                LOG.warn("Missing patch referenced in patch cache (patch id={})", id);
+                                deployedPatches.remove(name);
+                            } else {
+                                dp.setPatchData(patch.getPatchData());
+                            }
+                            // we don't want to remove it, but when updating we'll remove + add it anyway
+                            removed.remove(name, id);
+                            // remove from "added", so it can only be updated if needed
+                            added.remove(name);
+                        } else {
+                            // it was stored in the cache file, but the ZIP is no longer there and even if it may
+                            // have not been kept in this.deployedPatches ...
+                            deployedPatches.remove(name);
+                            // ..., we have to ensure it's untracked from Git
+                            removed.put(name, id);
+                        }
+                    }
+                });
+            } catch (IOException e) {
+                LOG.warn("Problem processing patch cache file: {}", e.getMessage(), e);
+            }
+        }
+
+        if (removed.size() > 0) {
+            // there are zips once deployed, but no longer available as ZIP files inside FUSE_HOME/patches
+            removed.forEach((name, id) -> {
+                Patch patch = patchManagement.loadPatch(new PatchDetailsRequest(id));
+                if (patch != null) {
+                    if (patch.getResult() != null && patch.getResult().getKarafBases().size() > 0) {
+                        String containers = String.join(", ", patch.getResult().getKarafBases());
+                        LOG.warn("Patch {} (from file {}) is no longer available, but it was used to patch these containers: {}",
+                                id, name, containers);
+                    } else {
+                        LOG.info("Removing information about auto deployed patch with id={} (original patch file: {})",
+                                id, name);
+                        patchManagement.delete(patch);
+                    }
+                }
+            });
+        }
+
+        if (added.size() > 0) {
+            // there are zips added, which were not yet tracked in .management/auto-deploy.txt
+            added.forEach((name, file) -> {
+                if (!deployedPatches.containsKey(name)) {
+                    deployedPatches.put(name, new DeployedPatch(added.get(name), 0L));
+                } else {
+                    // this should never happen...
+                    deployedPatches.get(name).setTimestamp(0L);
+                }
+            });
+        }
+
+        // not adding new ZIPs here, but in autoDeployPatches()
+    }
+
+    @Override
+    public void undeploy(Patch patch) {
+        for (Iterator<DeployedPatch> iterator = deployedPatches.values().iterator(); iterator.hasNext(); ) {
+            DeployedPatch dp = iterator.next();
+            if (dp.getPatchData().getId().equals(patch.getPatchData().getId())) {
+                iterator.remove();
+                LOG.info("Deleting {} patch file", dp.getZipFile());
+                dp.getZipFile().delete();
+            }
+        }
+
+        persistAutoDeployCache();
+    }
+
+    private void persistAutoDeployCache() {
+        File cache = new File(patchDir, ".management/auto-deploy.txt");
+
+        List<String> content = new ArrayList<>(deployedPatches.size() + 1);
+        content.add("# generated by Fuse patching mechanism");
+        deployedPatches.forEach((name, patch) -> {
+            content.add(String.format("%s%s%s%s%d", name, File.separator, patch.getPatchData().getId(),
+                    File.separator, patch.getZipFile().lastModified()));
+        });
+        try {
+            FileUtils.writeLines(cache, content);
+        } catch (IOException e) {
+            LOG.warn("Problem writing patch cache file: {}", e.getMessage(), e);
+        }
+    }
+
     /**
      * <p>Returns a {@link VersionRange} that existing bundle has to satisfy in order to be updated to
      * <code>newVersion</code></p>
@@ -1878,6 +2099,52 @@ public class PatchServiceImpl implements PatchService {
         @Override
         public void frameworkEvent(FrameworkEvent event) {
             l.countDown();
+        }
+    }
+
+    /**
+     * Information about a patch dropped into {@code FUSE_HOME/patches} as a ZIP file. This method
+     * allows only non-rollup patches to be installed, but nothing prevents user from doing something
+     * strange here.
+     */
+    private static class DeployedPatch {
+        // ZIP file with a patch (probably)
+        private final File zipFile;
+        // last time the ZIP file was checked
+        private long timestamp;
+        private PatchData patchData;
+
+        public DeployedPatch(File zip) {
+            this(zip, 0L);
+        }
+
+        public DeployedPatch(File zipFile, long timestamp) {
+            this.zipFile = zipFile;
+            this.timestamp = timestamp;
+        }
+
+        public File getZipFile() {
+            return zipFile;
+        }
+
+        public long getTimestamp() {
+            return timestamp;
+        }
+
+        public void setTimestamp(long timestamp) {
+            this.timestamp = timestamp;
+        }
+
+        public PatchData getPatchData() {
+            return patchData;
+        }
+
+        public void setPatchData(PatchData patchData) {
+            this.patchData = patchData;
+        }
+
+        public boolean hasChanged() {
+            return zipFile.lastModified() > this.timestamp;
         }
     }
 

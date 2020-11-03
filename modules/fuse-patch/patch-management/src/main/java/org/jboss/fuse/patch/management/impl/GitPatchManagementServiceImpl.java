@@ -475,7 +475,11 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                                 File targetDirForPatchResources = new File(patchesDir, patchData.getId());
                                 patchData.setPatchDirectory(targetDirForPatchResources);
                                 patchData.setPatchLocation(patchesDir);
-                                target.renameTo(new File(patchesDir, patchData.getId() + ".patch"));
+                                File dest = new File(patchesDir, patchData.getId() + ".patch");
+                                if (dest.isFile()) {
+                                    Activator.log(LogService.LOG_WARNING, "Patch with ID " + patchData.getId() + " was already added. Overriding existing patch.");
+                                }
+                                target.renameTo(dest);
                                 patches.add(patchData);
                             } else {
                                 throw new PatchException(
@@ -1969,7 +1973,6 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
      * Retrieves <code>Bundle-Version</code> header from JAR file
      * @param file
      * @return
-     * @throws FileNotFoundException
      */
     private String getBundleVersion(File file) {
         JarInputStream jis = null;
