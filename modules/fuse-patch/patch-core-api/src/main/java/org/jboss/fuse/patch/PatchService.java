@@ -72,4 +72,16 @@ public interface PatchService {
      */
     void rollback(Patch patch, boolean simulate, boolean force);
 
+    /**
+     * Check if {@code FUSE_HOME/patches} contains some ZIP files which can automatically be added added and tracked
+     * as normal non-rollup (only!) patches.
+     */
+    void autoDeployPatches();
+
+    /**
+     * When a patch is deleted, we also have to remove associated, auto-deployed ZIP file (if it exists)
+     * @param patch
+     */
+    void undeploy(Patch patch);
+
 }

@@ -1133,6 +1133,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.ops4j.pax.url</groupId>
+                <artifactId>pax-url-aether</artifactId>
+                <version>${version.org.ops4j.pax.url}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.ops4j.pax.transx</groupId>
                 <artifactId>pax-transx-tm-core</artifactId>
                 <version>${version.org.ops4j.pax.transx}</version>

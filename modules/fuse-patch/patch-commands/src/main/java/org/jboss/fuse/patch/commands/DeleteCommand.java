@@ -45,6 +45,13 @@ public class DeleteCommand extends PatchCommandSupport {
     private PatchManagement patchManagement;
 
     @Override
+    public Object execute() throws Exception {
+        // patch:delete doesn't call org.jboss.fuse.patch.PatchService.autoDeployPatches()
+        doExecute(service);
+        return null;
+    }
+
+    @Override
     protected void doExecute(PatchService service) throws Exception {
         Patch patch = patchManagement.loadPatch(new PatchDetailsRequest(patchId));
 
@@ -60,6 +67,7 @@ public class DeleteCommand extends PatchCommandSupport {
         }
 
         patchManagement.delete(patch);
+        service.undeploy(patch);
         System.out.println("Patch '" + patchId + "' was successfully deleted");
     }
 
