@@ -63,16 +63,32 @@
             <artifactId>org.apache.karaf.shell.core</artifactId>
         </dependency>
 
-    </dependencies>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-artifact</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-repository-metadata</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.maven.resolver</groupId>
+            <artifactId>maven-resolver-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.plexus</groupId>
+            <artifactId>plexus-utils</artifactId>
+        </dependency>
 
-    <properties>
-        <fuse.osgi.embed.dependency>
-            fabric-boot-commands,fabric-api,fabric-utils
-        </fuse.osgi.embed.dependency>
-        <fuse.osgi.embed.transitive>
-            true
-        </fuse.osgi.embed.transitive>
-    </properties>
+    </dependencies>
 
     <build>
         <plugins>
@@ -86,8 +102,18 @@
                             *
                         </Import-Package>
                         <Private-Package>
-                            org.jboss.fuse.patch.commands*
+                            org.jboss.fuse.patch.commands,
+                            org.jboss.fuse.patch.commands.completers,
+                            org.jboss.fuse.patch.commands.model
                         </Private-Package>
+                        <Embed-Dependency>
+                            maven-artifact,
+                            maven-repository-metadata,
+                            maven-resolver-api,
+                            maven-resolver-util,
+                            plexus-utils,
+                            commons-lang3
+                        </Embed-Dependency>
                     </instructions>
                 </configuration>
             </plugin>

@@ -1604,7 +1604,21 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                                             boolean rollback)
             throws GitAPIException, IOException {
         if (result.getStatus() == CherryPickResult.CherryPickStatus.CONFLICTING) {
-            Activator.log2(LogService.LOG_WARNING, "Problem with applying the change " + commit.getName() + ":");
+            DirCache cache = fork.getRepository().readDirCache();
+            boolean patchInfoOnly = true;
+            for (int i = 0; i < cache.getEntryCount(); i++) {
+                DirCacheEntry entry = cache.getEntry(i);
+                if (entry.getStage() == DirCacheEntry.STAGE_0) {
+                    continue;
+                }
+                if (!"patch-info.txt".equals(entry.getPathString())) {
+                    patchInfoOnly = false;
+                    break;
+                }
+            }
+            if (!patchInfoOnly) {
+                Activator.log2(LogService.LOG_WARNING, "Problem with applying the change " + commit.getName() + ":");
+            }
 
             String choose = null;
             String backup = null;
