@@ -16,6 +16,7 @@
 package org.jboss.fuse.patch.commands;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,6 +24,7 @@ import org.apache.karaf.shell.api.action.Action;
 import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.jboss.fuse.patch.PatchService;
 import org.jboss.fuse.patch.management.BundleUpdate;
+import org.jboss.fuse.patch.management.CVE;
 import org.jboss.fuse.patch.management.Patch;
 import org.jboss.fuse.patch.management.PatchException;
 import org.jboss.fuse.patch.management.PatchResult;
@@ -58,14 +60,14 @@ public abstract class PatchCommandSupport implements Action {
                 l3 = update.getNewVersion().length();
             }
         }
-        System.out.println(String.format("%-" + l1 + "s   %-" + l2 + "s   %-" + l3 + "s", "[name]", "[old]", "[new]"));
+        System.out.printf("%-" + l1 + "s   %-" + l2 + "s   %-" + l3 + "s%n", "[name]", "[old]", "[new]");
         java.util.List<BundleUpdate> updates = new ArrayList<>(result.getBundleUpdates());
         updates.sort(Comparator.comparing(BundleUpdate::getSymbolicName));
         for (BundleUpdate update : updates) {
-            System.out.println(String.format("%-" + l1 + "s | %-" + l2 + "s | %-" + l3 + "s",
+            System.out.printf("%-" + l1 + "s | %-" + l2 + "s | %-" + l3 + "s%n",
                     update.getSymbolicName() == null ? "" : stripSymbolicName(update.getSymbolicName()),
                     update.getPreviousVersion(),
-                    update.getNewVersion()));
+                    update.getNewVersion());
         }
     }
 
@@ -91,6 +93,7 @@ public abstract class PatchCommandSupport implements Action {
         int l2 = "[installed]".length();
         int l3 = "[rollup]".length();
         int l4 = "[description]".length();
+        int l5 = "[CVEs]".length();
 
         List<Patch> sorted = new ArrayList<>();
         patches.forEach(sorted::add);
@@ -127,18 +130,24 @@ public abstract class PatchCommandSupport implements Action {
             if (desc.length() > l4) {
                 l4 = desc.length();
             }
+            for (CVE cve : patch.getPatchData().getCves()) {
+                if (cve.getId().length() > l5) {
+                    l5 = cve.getId().length();
+                }
+            }
         }
 
         if (!lessInformation) {
-            System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", "[name]", "[installed]", "[rollup]", "[description]"));
+            System.out.printf("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s %-" + l5 + "s%n", "[name]", "[installed]", "[rollup]", "[description]", "[CVEs]");
         } else {
-            System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l4 + "s", "[name]", "[installed]", "[description]"));
+            System.out.printf("%-" + l1 + "s %-" + l2 + "s %-" + l4 + "s %-" + l5 + "s%n", "[name]", "[installed]", "[description]", "[CVEs]");
         }
         for (Patch patch : sorted) {
             String desc = patch.getPatchData().getDescription() != null && !"".equals(patch.getPatchData().getDescription().trim())
                     ? patch.getPatchData().getDescription() : patch.getPatchData().getId();
             String installed = Boolean.toString(patch.isInstalled());
             String rollup = Boolean.toString(patch.getPatchData().isRollupPatch());
+            String cve = "-";
             if (patch.getResult() != null) {
                 if (patch.getResult().getKarafBases().size() > 0) {
                     String kbt = patch.getResult().getKarafBases().get(0);
@@ -146,29 +155,39 @@ public abstract class PatchCommandSupport implements Action {
                     installed = kb[0];
                 }
             }
-            if (!lessInformation) {
-                System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", patch.getPatchData().getId(),
-                        installed, rollup, desc));
-            } else {
-                System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l4 + "s", patch.getPatchData().getId(),
-                        installed, desc));
+            if (patch.getPatchData().getCves().size() > 0) {
+                cve = patch.getPatchData().getCves().get(0).getId();
             }
-            if (patch.getResult() != null && patch.getResult().getKarafBases().size() > 1) {
-                for (String kbt : patch.getResult().getKarafBases().subList(1, patch.getResult().getKarafBases().size())) {
-                    String[] kb = kbt.split("\\s*\\|\\s*");
-                    if (!lessInformation) {
-                        System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s", " ",
-                                kb[0], " ", " "));
-                    } else {
-                        System.out.println(String.format("%-" + l1 + "s %-" + l2 + "s %-" + l4 + "s", " ",
-                                kb[0], " "));
-                    }
+            if (!lessInformation) {
+                System.out.printf("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s %-" + l5 + "s%n", patch.getPatchData().getId(),
+                        installed, rollup, desc, cve);
+            } else {
+                System.out.printf("%-" + l1 + "s %-" + l2 + "s %-" + l4 + "s %-" + l5 + "s%n", patch.getPatchData().getId(),
+                        installed, desc, cve);
+            }
+            int nbase = 1;
+            int ncve = 1;
+            String base = "";
+            cve = "";
+            List<String> bases = patch.getResult() != null ? patch.getResult().getKarafBases() : Collections.emptyList();
+            List<CVE> cves = patch.getPatchData().getCves();
+            while (nbase < bases.size() || ncve < cves.size()) {
+                base = bases.size() > nbase ? bases.get(nbase).split("\\s*\\|\\s*")[0] : "";
+                cve = cves.size() > ncve ? cves.get(ncve).getId() : "";
+                if (!lessInformation) {
+                    System.out.printf("%-" + l1 + "s %-" + l2 + "s %-" + l3 + "s %-" + l4 + "s %-" + l5 + "s%n", " ",
+                            base, " ", " ", cve);
+                } else {
+                    System.out.printf("%-" + l1 + "s %-" + l2 + "s %-" + l4 + "s %-" + l5 + "s%n", " ",
+                            base, " ", cve);
                 }
+                nbase++;
+                ncve++;
             }
 
             if (listBundles) {
                 for (String b : patch.getPatchData().getBundles()) {
-                    System.out.println(String.format(" - %s", b));
+                    System.out.printf(" - %s%n", b);
                 }
             }
         }

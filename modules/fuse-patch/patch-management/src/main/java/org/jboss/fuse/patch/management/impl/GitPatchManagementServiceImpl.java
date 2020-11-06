@@ -29,6 +29,7 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.attribute.PosixFileAttributeView;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
@@ -52,6 +53,11 @@ import java.util.jar.JarInputStream;
 import java.util.jar.Manifest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.xml.XMLConstants;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.compress.archivers.zip.ZipArchiveEntry;
 import org.apache.commons.compress.archivers.zip.ZipFile;
@@ -87,6 +93,7 @@ import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.transport.RefSpec;
 import org.jboss.fuse.patch.management.Artifact;
 import org.jboss.fuse.patch.management.BundleUpdate;
+import org.jboss.fuse.patch.management.CVE;
 import org.jboss.fuse.patch.management.EnvService;
 import org.jboss.fuse.patch.management.EnvType;
 import org.jboss.fuse.patch.management.ManagedPatch;
@@ -115,9 +122,19 @@ import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
 import org.osgi.service.log.LogService;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import static org.eclipse.jgit.lib.IndexDiff.StageState.BOTH_MODIFIED;
-import static org.jboss.fuse.patch.management.Utils.*;
+import static org.jboss.fuse.patch.management.Utils.closeQuietly;
+import static org.jboss.fuse.patch.management.Utils.getPermissionsFromUnixMode;
+import static org.jboss.fuse.patch.management.Utils.getSystemRepository;
+import static org.jboss.fuse.patch.management.Utils.mkdirs;
+import static org.jboss.fuse.patch.management.Utils.mvnurlToArtifact;
+import static org.jboss.fuse.patch.management.Utils.stripSymbolicName;
+import static org.jboss.fuse.patch.management.Utils.updateKarafPackageVersion;
 
 /**
  * <p>An implementation of Git-based patch management system. Deals with patch distributions and their unpacked
@@ -439,6 +456,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             fallbackPatchData.setPatchDirectory(new File(patchesDir, fallbackPatchData.getId()));
             fallbackPatchData.setPatchLocation(patchesDir);
 
+            List<CVE> cves = new LinkedList<>();
+
             if (zf != null) {
                 File systemRepo = getSystemRepository(karafHome, systemContext);
                 try {
@@ -504,6 +523,15 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                             if (target != null) {
                                 // we unzip to system repository
                                 extractAndTrackZipEntry(fallbackPatchData, zf, entry, target, skipRootDir);
+
+                                // CVE metadata handling
+                                if (relativeName.startsWith("org/jboss/redhat-fuse/fuse-karaf-patch-metadata/")) {
+                                    String metadata = relativeName.substring("org/jboss/redhat-fuse/fuse-karaf-patch-metadata/".length());
+                                    if (metadata.contains("/") && metadata.endsWith(".xml")) {
+                                        // should be <metadata xmlns="urn:redhat:fuse:patch-metadata:1"> XML document
+                                        cves.addAll(parseMetadata(target));
+                                    }
+                                }
                             }
                         }
                     }
@@ -519,12 +547,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                         extractAndTrackZipEntry(fallbackPatchData, zf, entry, target, skipRootDir);
                     }
                 } finally {
-                    if (zf != null) {
-                        zf.close();
-                    }
-                    if (patchFile != null) {
-                        patchFile.delete();
-                    }
+                    zf.close();
+                    patchFile.delete();
                 }
             } else {
                 // If the file is not a zip/jar, assume it's a single patch file
@@ -553,12 +577,62 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     Utils.closeQuietly(out);
                 }
                 patches.add(fallbackPatchData);
+            } else {
+                // should be only one - from ZIP
+                for (PatchData pd : patches) {
+                    pd.getCves().addAll(cves);
+                    if (cves.size() > 0) {
+                        // update patch data with CVEs found
+                        try (FileOutputStream out = new FileOutputStream(new File(patchesDir, pd.getId() + ".patch"))) {
+                            pd.storeTo(out);
+                        }
+                    }
+                }
             }
 
             return patches;
         } catch (IOException e) {
             throw new PatchException("Unable to download patch from url " + url, e);
         }
+    }
+
+    private List<CVE> parseMetadata(File target) {
+        List<CVE> cves = new LinkedList<>();
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            dbf.setNamespaceAware(true);
+            dbf.setValidating(false);
+            try {
+                dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            } catch (ParserConfigurationException ignored) {
+            }
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            Document d = db.parse(target);
+            NodeList nl = d.getDocumentElement().getChildNodes();
+            int c = nl.getLength();
+            for (int i = 0; i < c; i++) {
+                Node n = nl.item(i);
+                if (n instanceof Element && n.getLocalName().equals("cves")) {
+                    nl = n.getChildNodes();
+                    c = nl.getLength();
+                    for (int j = 0; j < c; j++) {
+                        n = nl.item(j);
+                        if (n instanceof Element && n.getLocalName().equals("cve")) {
+                            CVE cve = new CVE();
+                            cve.setId(((Element) n).getAttribute("id"));
+                            cve.setDescription(((Element) n).getAttribute("description"));
+                            cve.setCveLink(((Element) n).getAttribute("cve-link"));
+                            cve.setBzLink(((Element) n).getAttribute("bz-link"));
+                            cves.add(cve);
+                        }
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            Activator.log(LogService.LOG_WARNING, "Problem parsing Patch Metadata: " + e.getMessage());
+        }
+        return cves;
     }
 
     /**

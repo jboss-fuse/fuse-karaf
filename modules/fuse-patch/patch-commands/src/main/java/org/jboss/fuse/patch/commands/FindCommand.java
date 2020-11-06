@@ -130,6 +130,7 @@ public class FindCommand extends PatchCommandSupport {
                 System.out.println("You can add the patch using \"patch:add " + url + "\" command, or simply use \"patch:find --add\" option.");
             } else {
                 System.out.println("Invoking \"patch:add " + url + "\" command");
+                System.out.println();
                 Iterable<Patch> patches = service.download(new URL(url));
                 display(service.getPatches(), false);
 
