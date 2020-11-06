@@ -39,8 +39,11 @@ import org.osgi.framework.Version;
 @Command(scope = "patch", name = "update", description = "Updates (or checks for update) the patching mechanism itself")
 public class UpdateCommand extends PatchCommandSupport {
 
-    @Option(name = "--simulation", aliases = { "-s" }, description = "Simulates installation of the patch")
+    @Option(name = "--simulation", aliases = { "-s" }, description = "Only show whether new patching mechanism is available")
     boolean simulation = false;
+
+    @Option(name = "--verbose", aliases = { "-v" }, description = "Print additional information")
+    boolean verbose = false;
 
     @Reference
     BundleContext bundleContext;
@@ -102,6 +105,14 @@ public class UpdateCommand extends PatchCommandSupport {
             featureService.addRepository(URI.create("mvn:org.jboss.fuse.modules.patch/patch-features/" + newestVersion + "/xml/features"));
             featureService.installFeatures(new HashSet<String>(Arrays.asList("patch", "patch-management")),
                     EnumSet.noneOf(FeaturesService.Option.class));
+
+            if (verbose) {
+                System.out.println("Patching mechanism was upgraded to version " + newestVersion);
+            }
+        } else {
+            if (verbose) {
+                System.out.println("Please run \"patch:update\" command to upgrade patching mechanism to version " + newestVersion);
+            }
         }
     }
 

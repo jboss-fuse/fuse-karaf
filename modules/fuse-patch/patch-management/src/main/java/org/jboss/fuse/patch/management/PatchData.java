@@ -38,6 +38,7 @@ public class PatchData {
     private static final String DESCRIPTION = "description";
     private static final String ROLLUP = "rollup";
     private static final String BUNDLES = "bundle";
+    private static final String CVES = "cve";
     private static final String REQUIREMENTS = "requirement";
     private static final String FILES = "file";
     private static final String SOURCE = "source";
@@ -57,7 +58,7 @@ public class PatchData {
     private boolean rollupPatch = false;
 
     private final String id;
-    private String description;
+    private final String description;
     private String migratorBundle;
 
     // directory base of unpacked patch file. May be null if patch file was *.patch, not a ZIP file.
@@ -70,8 +71,12 @@ public class PatchData {
 
     private List<String> bundles = new LinkedList<>();
     private List<String> featureFiles = new LinkedList<>();
-    private List<String> otherArtifacts = new LinkedList<>();
-    private List<String> files = new LinkedList<String>();
+    private final List<String> otherArtifacts = new LinkedList<>();
+    private final List<String> files = new LinkedList<>();
+
+    // ENTESB-14902: CVEs fixed in a patch. Not declared manually, but added dynamically, when a patch
+    // contains org.jboss.redhat-fuse/fuse-karaf-patch-metadata descriptor
+    private final List<CVE> cves = new LinkedList<>();
 
     private Map<String, String> versionRanges;
 
@@ -82,8 +87,8 @@ public class PatchData {
     private List<String> featureOverrides = new LinkedList<>();
 
     // TODO: ↓
-    private Map<String, Long> fileSizes = new HashMap<>();
-    private Map<String, Long> artifactSizes = new HashMap<>();
+    private final Map<String, Long> fileSizes = new HashMap<>();
+    private final Map<String, Long> artifactSizes = new HashMap<>();
 
     public PatchData(String id) {
         this.id = id;
@@ -132,7 +137,7 @@ public class PatchData {
         int count = Integer.parseInt(props.getProperty(BUNDLES + "." + COUNT, "0"));
 
         for (int i = 0; i < count; i++) {
-            String key = BUNDLES + "." + Integer.toString(i);
+            String key = BUNDLES + "." + i;
             String bundle = props.getProperty(key);
             bundles.add(bundle);
 
@@ -151,14 +156,14 @@ public class PatchData {
 
         count = Integer.parseInt(props.getProperty(FEATURE_DESCRIPTOR + "." + COUNT, "0"));
         for (int i = 0; i < count; i++) {
-            String key = FEATURE_DESCRIPTOR + "." + Integer.toString(i);
+            String key = FEATURE_DESCRIPTOR + "." + i;
             featureDescriptors.add(props.getProperty(key));
         }
 
         List<String> requirements = new ArrayList<String>();
         int requirementCount = Integer.parseInt(props.getProperty(REQUIREMENTS + "." + COUNT, "0"));
         for (int i = 0; i < requirementCount; i++) {
-            String key = REQUIREMENTS + "." + Integer.toString(i);
+            String key = REQUIREMENTS + "." + i;
             String requirement = props.getProperty(key);
             requirements.add(requirement);
         }
@@ -168,7 +173,25 @@ public class PatchData {
         // add info for patched files
         count = Integer.parseInt(props.getProperty(FILES + "." + COUNT, "0"));
         for (int i = 0; i < count; i++) {
-            result.files.add(props.getProperty(FILES + "." + Integer.toString(i)));
+            result.files.add(props.getProperty(FILES + "." + i));
+        }
+
+        // add info about CVEs
+        count = Integer.parseInt(props.getProperty(CVES + "." + COUNT, "0"));
+        for (int i = 0; i < count; i++) {
+            String key = CVES + "." + i;
+            CVE cve = new CVE();
+            cve.setId(props.getProperty(key));
+            if (props.containsKey(key + ".description")) {
+                cve.setDescription(props.getProperty(key + ".description"));
+            }
+            if (props.containsKey(key + ".link")) {
+                cve.setCveLink(props.getProperty(key + ".link"));
+            }
+            if (props.containsKey(key + ".bz-link")) {
+                cve.setBzLink(props.getProperty(key + ".bz-link"));
+            }
+            result.cves.add(cve);
         }
 
         return result;
@@ -182,7 +205,7 @@ public class PatchData {
         PrintWriter pw = new PrintWriter(out);
         pw.write("# generated file, do not modify\n");
         pw.write("id = " + getId() + "\n");
-        pw.write(ROLLUP + " = " + Boolean.toString(rollupPatch) + "\n");
+        pw.write(ROLLUP + " = " + rollupPatch + "\n");
         int n = 0;
         if (bundles.size() > 0) {
             for (String bundle : bundles) {
@@ -214,6 +237,25 @@ public class PatchData {
         if (migratorBundle != null) {
             pw.write(String.format("%s = %s\n", MIGRATOR_BUNDLE, migratorBundle));
         }
+
+        n = 0;
+        if (cves.size() > 0) {
+            for (CVE cve : cves) {
+                pw.write(String.format("cve.%d = %s\n", n, cve.getId()));
+                if (cve.getDescription() != null) {
+                    pw.write(String.format("cve.%d.description = %s\n", n, cve.getDescription()));
+                }
+                if (cve.getCveLink() != null) {
+                    pw.write(String.format("cve.%d.link = %s\n", n, cve.getCveLink()));
+                }
+                if (cve.getBzLink() != null) {
+                    pw.write(String.format("cve.%d.bz-link = %s\n", n, cve.getBzLink()));
+                }
+                n++;
+            }
+            pw.write(String.format("cve.count = %d\n", cves.size()));
+        }
+
         pw.close();
     }
 
@@ -239,6 +281,10 @@ public class PatchData {
 
     public List<String> getOtherArtifacts() {
         return otherArtifacts;
+    }
+
+    public List<CVE> getCves() {
+        return cves;
     }
 
     public List<String> getRequirements() {

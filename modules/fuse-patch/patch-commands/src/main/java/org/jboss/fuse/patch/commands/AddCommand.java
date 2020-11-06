@@ -20,7 +20,9 @@ import java.net.URL;
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.Option;
+import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
+import org.apache.karaf.shell.api.console.Session;
 import org.jboss.fuse.patch.PatchService;
 import org.jboss.fuse.patch.management.Patch;
 
@@ -34,10 +36,17 @@ public class AddCommand extends PatchCommandSupport {
     @Argument(required = true, multiValued = false)
     String url;
 
+    @Reference
+    protected Session session;
+
     @Override
     protected void doExecute(PatchService service) throws Exception {
         Iterable<Patch> patches = service.download(new URL(url));
-        display(patches, bundles);
+        display(service.getPatches(), bundles);
+
+        // maybe the added patch contained new patching mechanism?
+        System.out.println();
+        session.execute("patch:update --simulation --verbose");
     }
 
 }

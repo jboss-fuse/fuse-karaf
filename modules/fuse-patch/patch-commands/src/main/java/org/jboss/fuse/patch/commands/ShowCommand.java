@@ -23,6 +23,7 @@ import org.apache.karaf.shell.api.action.lifecycle.Reference;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
 import org.jboss.fuse.patch.PatchService;
 import org.jboss.fuse.patch.commands.completers.PatchCompleter;
+import org.jboss.fuse.patch.management.CVE;
 import org.jboss.fuse.patch.management.ManagedPatch;
 import org.jboss.fuse.patch.management.Patch;
 import org.jboss.fuse.patch.management.PatchDetailsRequest;
@@ -56,21 +57,33 @@ public class ShowCommand extends PatchCommandSupport {
         if (patch == null) {
             throw new PatchException("Patch '" + patchId + "' not found");
         }
-        System.out.println(String.format("Patch ID: %s", patch.getPatchData().getId()));
+        System.out.printf("Patch ID: %s%n", patch.getPatchData().getId());
         if (patch.getManagedPatch() != null) {
-            System.out.println(String.format("Patch Commit ID: %s", patch.getManagedPatch().getCommitId()));
+            System.out.printf("Patch Commit ID: %s%n", patch.getManagedPatch().getCommitId());
         }
-        if (bundles) {
-            System.out.println(String.format("#### %d Bundles%s", patch.getPatchData().getBundles().size(), patch.getPatchData().getBundles().size() == 0 ? "" : ":"));
+        System.out.printf("#### %d CVE fix%s%s%n", patch.getPatchData().getCves().size(),
+                patch.getPatchData().getCves().size() == 1 ? "" : "es",
+                patch.getPatchData().getCves().size() == 0 ? "" : ":");
+        for (CVE cve : patch.getPatchData().getCves()) {
+            System.out.printf(" - %s: %s%n", cve.getId(), cve.getDescription());
+            if (cve.getBzLink() != null && !"".equals(cve.getBzLink().trim())) {
+                System.out.printf("   Bugzilla link: %s%n", cve.getBzLink());
+            }
+            if (cve.getCveLink() != null && !"".equals(cve.getCveLink().trim())) {
+                System.out.printf("   CVE link: %s%n", cve.getCveLink());
+            }
+        }
+        if (bundles && patch.getPatchData().getBundles() != null) {
+            System.out.printf("#### %d Bundles%s%n", patch.getPatchData().getBundles().size(), patch.getPatchData().getBundles().size() == 0 ? "" : ":");
             iterate(patch.getPatchData().getBundles());
         }
         if (files) {
             ManagedPatch details = patch.getManagedPatch();
-            System.out.println(String.format("#### %d Files added%s", details.getFilesAdded().size(), details.getFilesAdded().size() == 0 ? "" : ":"));
+            System.out.printf("#### %d Files added%s%n", details.getFilesAdded().size(), details.getFilesAdded().size() == 0 ? "" : ":");
             iterate(details.getFilesAdded());
-            System.out.println(String.format("#### %d Files modified%s", details.getFilesModified().size(), details.getFilesModified().size() == 0 ? "" : ":"));
+            System.out.printf("#### %d Files modified%s%n", details.getFilesModified().size(), details.getFilesModified().size() == 0 ? "" : ":");
             iterate(details.getFilesModified());
-            System.out.println(String.format("#### %d Files removed%s", details.getFilesRemoved().size(), details.getFilesRemoved().size() == 0 ? "" : ":"));
+            System.out.printf("#### %d Files removed%s%n", details.getFilesRemoved().size(), details.getFilesRemoved().size() == 0 ? "" : ":");
             iterate(details.getFilesRemoved());
         }
         if (diff) {
@@ -84,7 +97,7 @@ public class ShowCommand extends PatchCommandSupport {
      */
     private void iterate(java.util.List<String> fileNames) {
         for (String name : fileNames) {
-            System.out.println(String.format(" - %s", name));
+            System.out.printf(" - %s%n", name);
         }
     }
 
