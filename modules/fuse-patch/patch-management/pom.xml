@@ -127,6 +127,7 @@
                             javax.net.ssl,
                             javax.xml*,
                             org.xml.sax*,
+                            org.w3c.dom,
                             org.osgi.framework,
                             org.osgi.framework.startlevel,
                             org.osgi.service.log;resolution:=optional,
