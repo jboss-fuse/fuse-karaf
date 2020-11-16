@@ -706,7 +706,7 @@ public class PatchServiceImpl implements PatchService {
                         for (String featureOverride : overridesForFeatureKeys) {
                             System.out.println("overriding feature: " + featureOverride);
                         }
-                        if (overridesForFeatureKeys.size() > 0) {
+                        if (overridesForFeatureKeys.size() > 0 || updatesForBundleKeys.size() > 0) {
                             System.out.println("refreshing features");
                             featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
                         }
