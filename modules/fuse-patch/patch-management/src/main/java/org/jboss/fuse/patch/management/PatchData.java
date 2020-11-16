@@ -209,7 +209,11 @@ public class PatchData {
         int n = 0;
         if (bundles.size() > 0) {
             for (String bundle : bundles) {
-                pw.write(String.format("bundle.%d = %s\n", n++, bundle));
+                pw.write(String.format("bundle.%d = %s\n", n, bundle));
+                if (versionRanges.containsKey(bundle)) {
+                    pw.write(String.format("bundle.%d.range = %s\n", n, versionRanges.get(bundle)));
+                }
+                n++;
             }
             pw.write(String.format("bundle.count = %d\n", n));
         }
