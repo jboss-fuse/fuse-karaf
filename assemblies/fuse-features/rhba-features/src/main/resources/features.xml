@@ -34,7 +34,7 @@
         <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
         <bundle>mvn:org.apache.santuario/xmlsec/${version.org.apache.santuario}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${version.org.apache.servicemix.bundles.antlr}</bundle>
-        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-impl/${version.org.apache.servicemix.bundles.jaxb}</bundle>
+        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-runtime/${version.org.apache.servicemix.bundles.jaxb}</bundle>
         <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/${version.org.apache.servicemix.bundles.javax-inject}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.poi/${version.org.apache.servicemix.bundles.poi}</bundle>
@@ -55,7 +55,7 @@
         <bundle>mvn:javax.transaction/javax.transaction-api/${version.javax.transaction}</bundle>
         <bundle>mvn:org.hibernate.javax.persistence/hibernate-jpa-2.1-api/${version.org.hibernate.javax.persistence}</bundle>
         <bundle>mvn:com.google.guava/guava/${version.com.google.guava20}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson.core}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson29}</bundle>
         <bundle>mvn:com.sun.mail/javax.mail/${version.com.sun.mail}</bundle>
     </feature>
 
@@ -70,11 +70,12 @@
     <feature name="kie7-remote-dependencies">
         <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jsr339-api-2.0.1/${version.org.apache.servicemix.specs}</bundle>
         <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson.core}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${version.com.fasterxml.jackson.core}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${version.com.fasterxml.jackson.core.databind}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${version.com.fasterxml.jackson.module}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.datatype/jackson-datatype-jsr310/${version.com.fasterxml.jackson29}</bundle>
+        <!-- No jackson dependencies here, because RHPAM 7.10 needs Jackson 2.10, so these can't be provided here (Fuse uses 2.9) -->
+<!--        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson.core}</bundle>-->
+<!--        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${version.com.fasterxml.jackson.core}</bundle>-->
+<!--        <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${version.com.fasterxml.jackson.core.databind}</bundle>-->
+<!--        <bundle>mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${version.com.fasterxml.jackson.module}</bundle>-->
+<!--        <bundle>mvn:com.fasterxml.jackson.datatype/jackson-datatype-jsr310/${version.com.fasterxml.jackson29}</bundle>-->
         <bundle>mvn:javax.transaction/javax.transaction-api/${version.javax.transaction}</bundle>
         <bundle>mvn:javax.jms/javax.jms-api/${version.javax.jms}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/${version.org.apache.servicemix.bundles.xpp3}</bundle>
