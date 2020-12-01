@@ -205,10 +205,8 @@
 
                                 <!-- I don't quite like it - think about changing it -->
                                 <echo message="Fixing versions in bin scripts" />
-                                <replace file="${project.build.outputDirectory}/resources/bin/client"
-                                        token="org/slf4j/slf4j-api/1.7.12/slf4j-api-1.7.12" value="org/slf4j/slf4j-api/${version.org.slf4j}/slf4j-api-${version.org.slf4j}" />
-                                <replace file="${project.build.outputDirectory}/resources/bin/client.bat"
-                                        token="org\slf4j\slf4j-api\1.7.12\slf4j-api-1.7.12" value="org\slf4j\slf4j-api\${version.org.slf4j}\slf4j-api-${version.org.slf4j}" />
+                                <replace file="${project.build.outputDirectory}/resources/bin/client" token="org/slf4j/slf4j-api/1.7.12/slf4j-api-1.7.12" value="org/slf4j/slf4j-api/${version.org.slf4j}/slf4j-api-${version.org.slf4j}" />
+                                <replace file="${project.build.outputDirectory}/resources/bin/client.bat" token="org\slf4j\slf4j-api\1.7.12\slf4j-api-1.7.12" value="org\slf4j\slf4j-api\${version.org.slf4j}\slf4j-api-${version.org.slf4j}" />
 
                                 <echo message="Customizing etc configuration files" />
                                 <concat destfile="${project.build.outputDirectory}/resources/etc/config.properties" append="true" encoding="UTF-8">

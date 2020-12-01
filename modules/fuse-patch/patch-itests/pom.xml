@@ -265,7 +265,7 @@
                             <target>
                                 <mkdir dir="${karaf.home}/../patches/_baseline-root" />
                                 <copy todir="${karaf.home}/../patches/_baseline-root">
-                                    <fileset dir="${karaf.home}"/>
+                                    <fileset dir="${karaf.home}" />
                                 </copy>
                                 <copy todir="${karaf.home}/../patches/_baseline-root/etc">
                                     <fileset dir="${project.basedir}/src/test/resources/etc">
