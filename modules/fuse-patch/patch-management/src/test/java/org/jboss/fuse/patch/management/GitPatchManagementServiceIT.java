@@ -658,7 +658,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
         assertThat(baselineCommit.getId(), equalTo(baselineCommitFromTag.getId()));
 
         List<DiffEntry> patchDiff = repository.diff(fork, baselineCommit, patchCommit);
-        int changes = SystemUtils.IS_OS_WINDOWS ? 7 : 8;
+        int changes = SystemUtils.IS_OS_WINDOWS ? 9 : 10;
         assertThat("patch-4 should lead to " + changes + " changes", patchDiff.size(), equalTo(changes));
         for (Iterator<DiffEntry> iterator = patchDiff.iterator(); iterator.hasNext();) {
             DiffEntry de = iterator.next();
@@ -684,6 +684,12 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
                 iterator.remove();
             }
             if ("patch-info.txt".equals(de.getNewPath()) && de.getChangeType() == DiffEntry.ChangeType.ADD) {
+                iterator.remove();
+            }
+            if ("bin/fuse".equals(de.getNewPath()) && de.getChangeType() == DiffEntry.ChangeType.ADD) {
+                iterator.remove();
+            }
+            if ("etc/org.apache.karaf.features.xml".equals(de.getNewPath()) && de.getChangeType() == DiffEntry.ChangeType.ADD) {
                 iterator.remove();
             }
         }
