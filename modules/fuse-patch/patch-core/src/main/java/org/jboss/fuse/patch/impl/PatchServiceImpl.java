@@ -1613,10 +1613,16 @@ public class PatchServiceImpl implements PatchService {
 
     @Override
     public void undeploy(Patch patch) {
-        deployedPatches.values().stream().filter(dp -> dp.getPatchData().getId().equals(patch.getPatchData().getId())).forEach(dp -> {
-            LOG.info("Deleting {} patch file", dp.getZipFile());
-            dp.getZipFile().delete();
-        });
+        // please don't change to lambdas, as the patch being undeployed has to be iterator.remove()d from
+        // deployedPatches
+        for (Iterator<DeployedPatch> iterator = deployedPatches.values().iterator(); iterator.hasNext(); ) {
+            DeployedPatch dp = iterator.next();
+            if (dp.getPatchData().getId().equals(patch.getPatchData().getId())) {
+                iterator.remove();
+                LOG.info("Deleting {} patch file", dp.getZipFile());
+                dp.getZipFile().delete();
+            }
+        }
 
         persistAutoDeployCache();
     }
