@@ -29,6 +29,7 @@ import org.junit.runner.RunWith;
 import org.ops4j.pax.exam.junit.PaxExam;
 import org.ops4j.pax.exam.spi.reactors.ExamReactorStrategy;
 import org.ops4j.pax.exam.spi.reactors.PerClass;
+import org.osgi.framework.BundleContext;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -48,7 +49,8 @@ public class PatchFilesIntegrationTest extends AbstractPatchIntegrationTest {
 
     @Before
     public void createPatchZipFiles() throws IOException {
-        File patches = new File(context.getProperty("fuse.patch.location"));
+        File patches = new File(context.getProperty("fuse.patch.location") + "/../patches2");
+        patches.mkdirs();
         try (ZipArchiveOutputStream zos = new ZipArchiveOutputStream(new File(patches, "file-01.zip"))) {
             zos.putArchiveEntry(new ZipArchiveEntry("file-01.patch"));
             IOUtils.copy(context.getBundle().getResource("patches/file-01.patch").openStream(), zos);
@@ -72,6 +74,12 @@ public class PatchFilesIntegrationTest extends AbstractPatchIntegrationTest {
             IOUtils.copy(new ByteArrayInputStream(PATCHED_FILE_CONTENTS.getBytes("UTF-8")), zos);
             zos.closeArchiveEntry();
         }
+    }
+
+    protected void load(BundleContext context, String name) throws Exception {
+        File patch = new File(context.getProperty("fuse.patch.location") + "/../patches2", name + ".zip");
+
+        service.download(patch.toURI().toURL());
     }
 
     @Test
