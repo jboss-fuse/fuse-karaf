@@ -706,7 +706,8 @@ public class PatchServiceImpl implements PatchService {
                         for (String featureOverride : overridesForFeatureKeys) {
                             System.out.println("overriding feature: " + featureOverride);
                         }
-                        if (overridesForFeatureKeys.size() > 0 || updatesForBundleKeys.size() > 0) {
+                        if (featuresService != null
+                                && (overridesForFeatureKeys.size() > 0 || updatesForBundleKeys.size() > 0)) {
                             System.out.println("refreshing features");
                             featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
                         }
@@ -1536,44 +1537,42 @@ public class PatchServiceImpl implements PatchService {
         } else {
             try {
                 List<String> lines = FileUtils.readLines(cache, StandardCharsets.UTF_8);
-                lines.forEach(l -> {
-                    if (!l.startsWith("#")) {
-                        String[] entry = l.trim().split(Pattern.quote(File.separator));
-                        String name = entry[0];
-                        String id = entry[1];
-                        // timestamp at which it was last added+tracked
-                        long ts = Long.parseLong(entry[2]);
+                lines.stream().filter(l -> !l.startsWith("#")).forEach(l -> {
+                    String[] entry = l.trim().split(Pattern.quote(File.separator));
+                    String name = entry[0];
+                    String id = entry[1];
+                    // timestamp at which it was last added+tracked
+                    long ts = Long.parseLong(entry[2]);
 
-                        if (added.containsKey(name)) {
-                            // it was once added+tracked, but maybe it was changed
-                            if (!deployedPatches.containsKey(name)) {
-                                // just file -> runtime sync
-                                deployedPatches.put(name, new DeployedPatch(added.get(name), ts));
-                            } else {
-                                // explicitly re-set to persisted timestamp to detect a change later
-                                deployedPatches.get(name).setTimestamp(ts);
-                            }
-                            DeployedPatch dp = deployedPatches.get(name);
-                            Patch patch = patchManagement.loadPatch(new PatchDetailsRequest(id));
-                            if (patch == null) {
-                                LOG.warn("Missing patch referenced in patch cache (patch id={})", id);
-                                deployedPatches.remove(name);
-                                changed[0] = true;
-                            } else {
-                                dp.setPatchData(patch.getPatchData());
-                            }
-                            // we don't want to remove it, but when updating we'll remove + add it anyway
-                            removed.remove(name, id);
-                            // remove from "added", so it can only be updated if needed
-                            added.remove(name);
+                    if (added.containsKey(name)) {
+                        // it was once added+tracked, but maybe it was changed
+                        if (!deployedPatches.containsKey(name)) {
+                            // just file -> runtime sync
+                            deployedPatches.put(name, new DeployedPatch(added.get(name), ts));
                         } else {
-                            // it was stored in the cache file, but the ZIP is no longer there and even if it may
-                            // have not been kept in this.deployedPatches ...
-                            deployedPatches.remove(name);
-                            // ..., we have to ensure it's untracked from Git
-                            removed.put(name, id);
-                            changed[0] = true;
+                            // explicitly re-set to persisted timestamp to detect a change later
+                            deployedPatches.get(name).setTimestamp(ts);
                         }
+                        DeployedPatch dp = deployedPatches.get(name);
+                        Patch patch = patchManagement.loadPatch(new PatchDetailsRequest(id));
+                        if (patch == null) {
+                            LOG.warn("Missing patch referenced in patch cache (patch id={})", id);
+                            deployedPatches.remove(name);
+                            changed[0] = true;
+                        } else {
+                            dp.setPatchData(patch.getPatchData());
+                        }
+                        // we don't want to remove it, but when updating we'll remove + add it anyway
+                        removed.remove(name, id);
+                        // remove from "added", so it can only be updated if needed
+                        added.remove(name);
+                    } else {
+                        // it was stored in the cache file, but the ZIP is no longer there and even if it may
+                        // have not been kept in this.deployedPatches ...
+                        deployedPatches.remove(name);
+                        // ..., we have to ensure it's untracked from Git
+                        removed.put(name, id);
+                        changed[0] = true;
                     }
                 });
             } catch (IOException e) {
@@ -1602,14 +1601,10 @@ public class PatchServiceImpl implements PatchService {
 
         if (added.size() > 0) {
             // there are zips added, which were not yet tracked in .management/auto-deploy.txt
-            added.forEach((name, file) -> {
-                if (!deployedPatches.containsKey(name)) {
-                    deployedPatches.put(name, new DeployedPatch(added.get(name), 0L));
-                } else {
-                    // this should never happen...
-                    deployedPatches.get(name).setTimestamp(0L);
-                }
-            });
+            final Map<Boolean, List<String>> partitioned = added.keySet().stream().collect(Collectors.partitioningBy(name -> !deployedPatches.containsKey(name)));
+            partitioned.get(true).forEach(name -> deployedPatches.put(name, new DeployedPatch(added.get(name), 0L)));
+            // this should never happen...
+            partitioned.get(false).forEach(name -> deployedPatches.get(name).setTimestamp(0L));
             changed[0] = true;
         }
 
@@ -1619,6 +1614,8 @@ public class PatchServiceImpl implements PatchService {
 
     @Override
     public void undeploy(Patch patch) {
+        // please don't change to lambdas, as the patch being undeployed has to be iterator.remove()d from
+        // deployedPatches
         for (Iterator<DeployedPatch> iterator = deployedPatches.values().iterator(); iterator.hasNext(); ) {
             DeployedPatch dp = iterator.next();
             if (dp.getPatchData().getId().equals(patch.getPatchData().getId())) {

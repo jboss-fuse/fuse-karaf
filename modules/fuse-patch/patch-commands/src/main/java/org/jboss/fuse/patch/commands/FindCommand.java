@@ -70,7 +70,7 @@ public class FindCommand extends PatchCommandSupport {
         try {
             metadataFile = resolver.resolveMetadata("org.jboss.redhat-fuse", "fuse-karaf-patch-repository", "maven-metadata.xml", "");
             if (metadataFile == null) {
-                System.out.println("No patch available in any remote repository (see `maven:repository-list` for a list of conigured repositories)");
+                System.out.println("No patch available in any remote repository (see `maven:repository-list` for a list of configured repositories)");
                 return;
             }
 
