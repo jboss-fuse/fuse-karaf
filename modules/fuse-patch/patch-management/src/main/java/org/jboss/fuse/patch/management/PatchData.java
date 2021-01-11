@@ -210,7 +210,7 @@ public class PatchData {
         if (bundles.size() > 0) {
             for (String bundle : bundles) {
                 pw.write(String.format("bundle.%d = %s\n", n, bundle));
-                if (versionRanges.containsKey(bundle)) {
+                if (versionRanges != null && versionRanges.containsKey(bundle)) {
                     pw.write(String.format("bundle.%d.range = %s\n", n, versionRanges.get(bundle)));
                 }
                 n++;
