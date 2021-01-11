@@ -73,6 +73,8 @@ public abstract class AbstractPatchIntegrationTest extends FuseKarafTestSupport 
 //                configureConsole().ignoreLocalConsole(),
                 editConfigurationFilePut("etc/branding.properties", "welcome", ""), // No welcome banner
                 editConfigurationFilePut("etc/branding-ssh.properties", "welcome", ""),
+                editConfigurationFilePut("etc/system.properties", "karaf.default.repository",
+                        "../../apache-karaf-" + System.getProperty("karaf.version") + "/system"),
 
                 mavenBundle("org.ops4j.pax.tinybundles", "tinybundles").versionAsInProject(),
                 mavenBundle("biz.aQute.bnd", "bndlib").versionAsInProject(),
@@ -179,6 +181,7 @@ public abstract class AbstractPatchIntegrationTest extends FuseKarafTestSupport 
     // Create a 'patchable' bundle with the specified version
     protected static InputStream createPatchableBundle(String version) {
         return TinyBundles.bundle()
+                .set(Constants.BUNDLE_MANIFESTVERSION, "2")
                 .set(Constants.BUNDLE_SYMBOLICNAME, PATCHABLE_BSN)
                 .set(Constants.BUNDLE_VERSION, version)
                 .build();
@@ -204,7 +207,7 @@ public abstract class AbstractPatchIntegrationTest extends FuseKarafTestSupport 
 
         // now, copy the version 1.0.0 bundle into the system folder...
         File base = new File(System.getProperty("karaf.base"));
-        File system = new File(base, "system");
+        File system = new File(base, "../../apache-karaf-" + System.getProperty("karaf.version") + "/system");
         File target = new File(system, "org/jboss/fuse/patch/patchable/1.0.0/patchable-1.0.0.jar");
         target.getParentFile().mkdirs();
 
