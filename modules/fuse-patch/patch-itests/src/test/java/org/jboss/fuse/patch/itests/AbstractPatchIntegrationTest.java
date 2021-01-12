@@ -127,20 +127,21 @@ public abstract class AbstractPatchIntegrationTest extends FuseKarafTestSupport 
 
     // Load a patch into the patching service using service
     protected void load(BundleContext context, String name) throws Exception {
-        File patch = new File(context.getProperty("fuse.patch.location"), name + ".zip");
+        File patch = new File(context.getProperty("fuse.patch.location") + "/../patches2", name + ".zip");
 
         service.download(patch.toURI().toURL());
     }
 
     // Load a patch into the patching service using command
     protected void load(Session session, String name) throws Exception {
-        File patch = new File(context.getProperty("fuse.patch.location"), name + ".zip");
+        File patch = new File(context.getProperty("fuse.patch.location") + "/../patches2", name + ".zip");
 
         execute(session, String.format("patch:add %s", patch.toURI().toURL()));
     }
 
     protected void createPatchZipFiles() throws IOException {
-        File patches = new File(context.getProperty("fuse.patch.location"));
+        File patches = new File(context.getProperty("fuse.patch.location") + "/../patches2");
+        patches.mkdirs();
         try (ZipArchiveOutputStream zos = new ZipArchiveOutputStream(new File(patches, "patch-01.zip"))) {
             zos.putArchiveEntry(new ZipArchiveEntry("patch-01.patch"));
             IOUtils.copy(context.getBundle().getResource("patches/patch-01.patch").openStream(), zos);
