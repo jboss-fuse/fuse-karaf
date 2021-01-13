@@ -76,12 +76,6 @@ public class PatchFilesIntegrationTest extends AbstractPatchIntegrationTest {
         }
     }
 
-    protected void load(BundleContext context, String name) throws Exception {
-        File patch = new File(context.getProperty("fuse.patch.location") + "/../patches2", name + ".zip");
-
-        service.download(patch.toURI().toURL());
-    }
-
     @Test
     public void testInstallAndRollbackPatch01() throws Exception {
         load(context, "file-01");

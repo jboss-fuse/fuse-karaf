@@ -38,9 +38,11 @@ public class PatchData {
     private static final String DESCRIPTION = "description";
     private static final String ROLLUP = "rollup";
     private static final String BUNDLES = "bundle";
+    private static final String CONFIG_PACKAGES = "configPackage";
     private static final String CVES = "cve";
     private static final String REQUIREMENTS = "requirement";
     private static final String FILES = "file";
+    private static final String REMOVAL = "delete";
     private static final String SOURCE = "source";
     private static final String TARGET = "target";
     private static final String COUNT = "count";
@@ -73,6 +75,7 @@ public class PatchData {
     private List<String> featureFiles = new LinkedList<>();
     private final List<String> otherArtifacts = new LinkedList<>();
     private final List<String> files = new LinkedList<>();
+    Map<String, String> fileRemovals = new HashMap<String, String>();
 
     // ENTESB-14902: CVEs fixed in a patch. Not declared manually, but added dynamically, when a patch
     // contains org.jboss.redhat-fuse/fuse-karaf-patch-metadata descriptor
@@ -85,6 +88,10 @@ public class PatchData {
     // if patch ships /org.apache.karaf.features.xml file (valid only for P-Patches), it means we can
     // override features
     private List<String> featureOverrides = new LinkedList<>();
+
+    // patch may ship libraries that affect versions available in etc/config.properties
+    List<String> configPackages = new ArrayList<String>();
+    Map<String, String> configPackageRanges = new HashMap<String, String>();
 
     // TODO: ↓
     private final Map<String, Long> fileSizes = new HashMap<>();
@@ -132,10 +139,11 @@ public class PatchData {
         boolean rollupPatch = "true".equals(props.getProperty(ROLLUP));
 
         List<String> bundles = new ArrayList<String>();
-        List<String> featureDescriptors = new ArrayList<String>();
         Map<String, String> ranges = new HashMap<String, String>();
-        int count = Integer.parseInt(props.getProperty(BUNDLES + "." + COUNT, "0"));
 
+        List<String> featureDescriptors = new ArrayList<String>();
+
+        int count = Integer.parseInt(props.getProperty(BUNDLES + "." + COUNT, "0"));
         for (int i = 0; i < count; i++) {
             String key = BUNDLES + "." + i;
             String bundle = props.getProperty(key);
@@ -170,10 +178,36 @@ public class PatchData {
 
         PatchData result = new PatchData(id, desc, bundles, featureDescriptors, ranges, requirements, installerBundle);
         result.setRollupPatch(rollupPatch);
+
         // add info for patched files
         count = Integer.parseInt(props.getProperty(FILES + "." + COUNT, "0"));
         for (int i = 0; i < count; i++) {
-            result.files.add(props.getProperty(FILES + "." + i));
+            String file = props.getProperty(FILES + "." + i);
+            result.files.add(file);
+            if (props.containsKey(FILES + "." + i + "." + REMOVAL)) {
+                String removalPattern = props.getProperty(FILES + "." + i + "." + REMOVAL);
+                result.fileRemovals.put(file, removalPattern);
+            }
+        }
+
+        // add info about etc/config.properties packages
+        int configPackagesCount = Integer.parseInt(props.getProperty(CONFIG_PACKAGES + "." + COUNT, "0"));
+        for (int i = 0; i < configPackagesCount; i++) {
+            String key = CONFIG_PACKAGES + "." + i;
+            String configPackage = props.getProperty(key);
+            result.configPackages.add(configPackage);
+
+            if (props.containsKey(key + "." + RANGE)) {
+                String range = props.getProperty(key + "." + RANGE);
+                range = range.trim();
+                while (range.startsWith("\"") || range.startsWith("'")) {
+                    range = range.substring(1);
+                }
+                while (range.endsWith("\"") || range.endsWith("'")) {
+                    range = range.substring(0, range.length() - 1);
+                }
+                result.configPackageRanges.put(configPackage, range);
+            }
         }
 
         // add info about CVEs
@@ -232,9 +266,24 @@ public class PatchData {
             pw.write(String.format("artifact.count = %d\n", n));
         }
         n = 0;
+        if (configPackages.size() > 0) {
+            for (String cp : configPackages) {
+                pw.write(String.format("configPackage.%d = %s\n", n, cp));
+                if (configPackageRanges != null && configPackageRanges.containsKey(cp)) {
+                    pw.write(String.format("configPackage.%d.range = %s\n", n, configPackageRanges.get(cp)));
+                }
+                n++;
+            }
+            pw.write(String.format("configPackage.count = %d\n", n));
+        }
+        n = 0;
         if (files.size() > 0) {
             for (String file : files) {
-                pw.write(String.format("file.%d = %s\n", n++, file));
+                pw.write(String.format("file.%d = %s\n", n, file));
+                if (fileRemovals != null && fileRemovals.containsKey(file)) {
+                    pw.write(String.format("file.%d.delete = %s\n", n, fileRemovals.get(file)));
+                }
+                n++;
             }
             pw.write(String.format("file.count = %d\n", n));
         }
@@ -297,6 +346,18 @@ public class PatchData {
 
     public List<String> getFiles() {
         return files;
+    }
+
+    public Map<String, String> getFileRemovals() {
+        return fileRemovals;
+    }
+
+    public List<String> getConfigPackages() {
+        return configPackages;
+    }
+
+    public Map<String, String> getConfigPackageRanges() {
+        return configPackageRanges;
     }
 
     public String getMigratorBundle() {

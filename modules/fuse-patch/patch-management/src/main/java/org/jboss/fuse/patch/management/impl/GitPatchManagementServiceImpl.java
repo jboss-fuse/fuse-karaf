@@ -34,6 +34,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -808,7 +809,44 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             // copy patch resources (but not maven artifacts from system/ or repository/) to working copy
             if (patchData.getPatchDirectory() != null) {
                 boolean removeTargetDir = patchData.isRollupPatch();
-                copyManagedDirectories(patchData.getPatchDirectory(), fork.getRepository().getWorkTree(), removeTargetDir, false, false);
+                final File workTree = fork.getRepository().getWorkTree();
+                copyManagedDirectories(patchData.getPatchDirectory(), workTree, removeTargetDir, false, false);
+
+                // this is the place to apply non-rollup patch file removals
+                if (patchData.getFileRemovals() != null && patchData.getFileRemovals().size() > 0) {
+                    Set<String> doNotTouch = new HashSet<>(patchData.getFileRemovals().keySet());
+                    patchData.getFileRemovals().values().forEach(removalPattern -> {
+                        // for example:
+                        // file.0 = lib/ext/bcprov-jdk15on-1.68.jar
+                        // file.0.delete = lib/ext/bcprov-jdk15on-*.jar
+                        // file.1 = lib/ext/bcpkix-jdk15on-1.68.jar
+                        // file.1.delete = lib/ext/bcpkix-jdk15on-*.jar
+                        File targetDir = workTree;
+                        String[] removalPatternSegments = removalPattern.split("/");
+                        for (int s = 0; s < removalPatternSegments.length - 1; s++) {
+                            // all path segments but the last should not contain wildcards
+                            targetDir = new File(targetDir, removalPatternSegments[s]);
+                        }
+                        Pattern p = Pattern.compile(removalPatternSegments[removalPatternSegments.length - 1]
+                                .replace(".", "\\.").replace("*", ".*"));
+                        File[] files = targetDir.listFiles();
+                        if (files != null) {
+                            for (File f : files) {
+                                String name = f.getName();
+                                boolean proceed = true;
+                                for (String dnt : doNotTouch) {
+                                    try {
+                                        proceed &= !f.getCanonicalPath().endsWith(dnt);
+                                    } catch (IOException ignored) {
+                                    }
+                                }
+                                if (proceed && p.matcher(name).matches()) {
+                                    f.delete();
+                                }
+                            }
+                        }
+                    });
+                }
             }
 
             // add the changes
@@ -1973,6 +2011,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
         updateReferences(fork, "bin/shell.bat", "system/", locationUpdates, true);
         updateReferences(fork, "etc/startup.properties", "", locationUpdates);
         updateReferences(fork, "etc/config.properties", "", locationUpdates);
+        updateConfigProperties(fork, patchData);
 
         // update system karaf package versions in etc/config.properties
         File configProperties = new File(fork.getRepository().getWorkTree(), "etc/config.properties");
@@ -2058,6 +2097,109 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
     }
 
     /**
+     * {@code etc/config.properties} is quite special. It contains package declarations that should be exported
+     * from system bundle - together with versions. When I had to upgrade BouncyCastle library, I found, that
+     * I have to update a lot of package declarations... What's problematic is that there's huge
+     * {@code org.osgi.framework.system.packages.extra} property formatted specially (with {@code \} new line
+     * continuation), which we can only change in line-by-line way.
+     *
+     * @param fork
+     * @param patchData
+     */
+    private void updateConfigProperties(Git fork, PatchData patchData) {
+        File updatedFile = new File(fork.getRepository().getWorkTree(), "etc/config.properties");
+        if (!updatedFile.isFile()) {
+            return;
+        }
+
+        BufferedReader reader = null;
+        StringWriter sw = new StringWriter();
+        try {
+            Activator.log2(LogService.LOG_INFO, "Updating package versions in \"etc/config.properties\"");
+
+            reader = new BufferedReader(new FileReader(updatedFile));
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                for (String cp : patchData.getConfigPackages()) {
+                    // For example:
+                    //     configPackage.0 = org.bouncycastle/1.68
+                    //     configPackage.0.range = [1.66,1.68)
+                    //     configPackage.count = 1
+                    //
+                    // in etc/config.properties:
+                    // org.osgi.framework.system.packages.extra = \
+                    //    ...
+                    //    org.bouncycastle;version=1.66, \
+                    //    org.bouncycastle.asn1;uses:=org.bouncycastle.util;version=1.66, \
+                    //    ...
+
+                    String[] packageVersion = cp.split("/");
+                    String tmpLine = line.trim();
+                    if (!tmpLine.startsWith(packageVersion[0])) {
+                        continue;
+                    }
+                    int v = tmpLine.indexOf("version=");
+                    if (v == -1) {
+                        continue;
+                    }
+                    String tmpVersion = tmpLine.substring(v + "version=".length());
+                    if (tmpVersion.length() < 2) {
+                        continue;
+                    }
+                    String configVersion = null;
+                    if (tmpVersion.charAt(0) == '"') {
+                        configVersion = tmpVersion.substring(1, tmpLine.indexOf('"'));
+                    } else if (tmpVersion.charAt(0) == '\'') {
+                        configVersion = tmpVersion.substring(1, tmpLine.indexOf('\''));
+                    } else {
+                        configVersion = tmpVersion;
+                        // org.bouncycastle;version=1.66;something=something-else \
+                        int end = configVersion.indexOf(";");
+                        if (end < 0) {
+                            // org.bouncycastle;version=1.66, \
+                            end = configVersion.indexOf(",");
+                        }
+                        if (end < 0) {
+                            // org.bouncycastle;version=1.66 \
+                            end = configVersion.indexOf(" ");
+                        }
+                        if (end < 0) {
+                            // org.bouncycastle;version=1.66\
+                            end = configVersion.indexOf("\\");
+                        }
+                        if (end < 0) {
+                            // org.bouncycastle;version=1.66
+                            end = configVersion.length();
+                        }
+                        configVersion = configVersion.substring(0, end);
+                    }
+
+                    if (patchData.getConfigPackageRanges().containsKey(cp)) {
+                        // we have to match the version first
+                        String vr = patchData.getConfigPackageRanges().get(cp);
+                        Version oVer = Utils.getOsgiVersion(configVersion);
+                        VersionRange range = new VersionRange(vr);
+                        if (range.includes(oVer)) {
+                            line = line.replaceAll(configVersion.replace(".", "\\."), packageVersion[1]);
+                        }
+                    } else {
+                        // we just replace the version
+                        line = line.replaceAll(configVersion.replace(".", "\\."), packageVersion[1]);
+                    }
+                }
+                sw.append(line);
+                sw.append("\n");
+            }
+            Utils.closeQuietly(reader);
+            FileUtils.write(updatedFile, sw.toString(), "UTF-8");
+        } catch (Exception e) {
+            Activator.log(LogService.LOG_ERROR, null, e.getMessage(), e, true);
+        } finally {
+            Utils.closeQuietly(reader);
+        }
+    }
+
+    /**
      * Retrieves <code>Bundle-Version</code> header from JAR file
      * @param file
      * @return
@@ -2101,7 +2243,8 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     try {
                         boolean hfPatch = p.getPatchData().getBundles().size() > 0;
                         hfPatch &= p.getPatchData().getFeatureFiles().size() == 0;
-                        hfPatch &= p.getPatchData().getFiles().size() == 0;
+                        // let's allow files to be updated in HF patch
+//                        hfPatch &= p.getPatchData().getFiles().size() == 0;
                         hfPatch &= p.getPatchData().getOtherArtifacts().size() == 0;
                         return patchId;
                     } catch (Exception e) {
