@@ -1429,7 +1429,7 @@ public class PatchServiceImpl implements PatchService {
                     for (String featureOverride : result.getFeatureOverrides()) {
                         System.out.println("removing overriden feature: " + featureOverride);
                     }
-                    if (result.getFeatureOverrides().size() > 0) {
+                    if (featuresService != null && result.getFeatureOverrides().size() > 0) {
                         System.out.println("refreshing features");
                         featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
                     }
@@ -1453,6 +1453,29 @@ public class PatchServiceImpl implements PatchService {
                     }
                 } catch (Exception e) {
                     LOG.warn("Problem updating metadata for patch \"" + patch.getPatchData().getId() + "\": " + e.getMessage());
+                }
+
+
+                // Some updates need a full JVM restart - we didn't do it before ENTESB-15538 for HF patches
+                if (isJvmRestartNeeded(result)) {
+                    boolean handlesFullRestart = Boolean.getBoolean("karaf.restart.jvm.supported");
+                    if (handlesFullRestart) {
+                        System.out.println("Patch " + result.getPatchData().getId() + " rolled back. Restarting Karaf..");
+                        // KARAF-5179 - we need both properties set to true
+                        System.setProperty("karaf.restart", "true");
+                        System.setProperty("karaf.restart.jvm", "true");
+
+                        Thread.currentThread().setContextClassLoader(bundleContext.getBundle(0L).adapt(BundleWiring.class).getClassLoader());
+                        try {
+                            bundleContext.getBundle(0L).stop();
+                        } catch (Exception e) {
+                            e.printStackTrace(System.err);
+                            System.err.flush();
+                        }
+                    } else {
+                        System.out.println("Patch " + result.getPatchData().getId() + " rolled back. Please restart Karaf.");
+                    }
+                    System.out.flush();
                 }
             });
         }
