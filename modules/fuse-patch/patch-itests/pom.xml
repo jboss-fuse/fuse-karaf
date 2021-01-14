@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules.patch</groupId>
         <artifactId>fuse-patch</artifactId>
-        <version>7.8.0.redhat-SNAPSHOT</version>
+        <version>7.8.0.fuse-780038-redhat-00001</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -265,7 +265,7 @@
                             <target>
                                 <mkdir dir="${karaf.home}/../patches/_baseline-root" />
                                 <copy todir="${karaf.home}/../patches/_baseline-root">
-                                    <fileset dir="${karaf.home}"/>
+                                    <fileset dir="${karaf.home}" />
                                 </copy>
                                 <copy todir="${karaf.home}/../patches/_baseline-root/etc">
                                     <fileset dir="${project.basedir}/src/test/resources/etc">
