@@ -1125,6 +1125,14 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                                             .setSource(null)
                                             .setDestination("refs/tags/" + entry.getKey()))
                                     .call();
+
+                            // and remove the patch itself
+                            String id = entry.getKey().substring("patch-".length());
+                            Patch pPatch = loadPatch(new PatchDetailsRequest(id));
+                            if (pPatch != null) {
+                                Activator.log2(LogService.LOG_DEBUG, "Deleting previously installed non-rollup patch " + id + ".");
+                                delete(pPatch);
+                            }
                         }
                     }
 
@@ -1729,7 +1737,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 }
             }
             if (!patchInfoOnly) {
-                Activator.log2(LogService.LOG_WARNING, "Problem with applying the change " + commit.getName() + ":");
+                Activator.log2(LogService.LOG_WARNING, "Problem applying the change " + commit.getName() + ":");
             }
 
             String choose = null;
@@ -3296,6 +3304,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             }
             FileUtils.deleteQuietly(new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".datafiles"));
             FileUtils.deleteQuietly(new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch"));
+            FileUtils.deleteQuietly(new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch.result"));
             FileUtils.deleteQuietly(new File(patch.getPatchData().getPatchLocation(), patch.getPatchData().getId() + ".patch.result.html"));
 
             mainRepository.gc().call();
