@@ -80,6 +80,7 @@ import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
 import org.osgi.framework.startlevel.BundleStartLevel;
@@ -165,6 +166,45 @@ public class PatchServiceImpl implements PatchService {
         this.karafHome = new File(bundleContext.getProperty("karaf.home"));
         this.repository = new File(bundleContext.getProperty("karaf.default.repository"));
         helper = new OSGiPatchHelper(karafHome, bundleContext);
+
+        // ENTESB-15610: delete patches which were patch:added using 7.8.0.GA, because the may
+        // miss important metadata
+        Map<String, Patch> patches = load(false);
+        patches.forEach((id, patch) -> {
+            if (id != null && patch != null && id.startsWith("fuse-karaf-maintenance-patch-")) {
+                String patchVersion = id.substring("fuse-karaf-maintenance-patch-".length());
+                if (!patch.isInstalled()) {
+                    String serviceVersion = patch.getPatchData().getServiceVersion();
+                    String msg = null;
+                    boolean remove = false;
+                    if (serviceVersion == null) {
+                        msg = String.format("Detected %s patch added by earlier version of patch mechanism.\n" +
+                                        "This patch will be removed. Please add it again using patch:add command or run patch:find command.\n" +
+                                        "You can use \"patch:add mvn:org.jboss.redhat-fuse/fuse-karaf-patch-repository/%s/zip\" command.",
+                                patch.getPatchData().getId(), patchVersion);
+                        remove = true;
+                    } else {
+                        Version currentServiceVersion = FrameworkUtil.getBundle(this.getClass()).getVersion();
+                        Version previousServiceVersion = Utils.getOsgiVersion(serviceVersion);
+                        if (previousServiceVersion.compareTo(currentServiceVersion) < 0) {
+                            msg = String.format("Detected %s patch added by version %s of patch mechanism.\n" +
+                                            "This patch will be removed. Please add it again using patch:add command or run patch:find command.\n" +
+                                            "You can use \"patch:add mvn:org.jboss.redhat-fuse/fuse-karaf-patch-repository/%s/zip\" command.",
+                                    patch.getPatchData().getId(), serviceVersion, patchVersion);
+                            remove = true;
+                        }
+                    }
+                    if (remove) {
+                        System.out.println();
+                        System.out.println(msg);
+                        System.out.flush();
+                        patchManagement.delete(patch);
+                        undeploy(patch);
+                        LOG.info(msg);
+                    }
+                }
+            }
+        });
 
         // potentially track patches dropped into FUSE_HOME/patches
         autoDeployPatches();

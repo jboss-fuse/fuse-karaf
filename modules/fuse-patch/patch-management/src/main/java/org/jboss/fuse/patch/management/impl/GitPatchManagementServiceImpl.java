@@ -119,6 +119,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
 import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.SynchronousBundleListener;
 import org.osgi.framework.Version;
 import org.osgi.framework.VersionRange;
@@ -453,6 +454,10 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
             // no descriptor -> assume we have rollup patch or even full, new distribution
             PatchData fallbackPatchData = new PatchData(FilenameUtils.getBaseName(url.getPath()));
             fallbackPatchData.setGenerated(true);
+            Bundle thisBundle = FrameworkUtil.getBundle(this.getClass());
+            if (thisBundle != null) {
+                fallbackPatchData.setServiceVersion(thisBundle.getVersion().toString());
+            }
             fallbackPatchData.setRollupPatch(true);
             fallbackPatchData.setPatchDirectory(new File(patchesDir, fallbackPatchData.getId()));
             fallbackPatchData.setPatchLocation(patchesDir);
@@ -492,6 +497,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                                 }
 
                                 patchData.setGenerated(false);
+                                patchData.setServiceVersion(fallbackPatchData.getServiceVersion());
                                 File targetDirForPatchResources = new File(patchesDir, patchData.getId());
                                 patchData.setPatchDirectory(targetDirForPatchResources);
                                 patchData.setPatchLocation(patchesDir);
