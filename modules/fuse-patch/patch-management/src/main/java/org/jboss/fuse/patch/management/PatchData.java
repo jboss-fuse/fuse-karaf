@@ -49,6 +49,7 @@ public class PatchData {
     private static final String RANGE = "range";
     private static final String MIGRATOR_BUNDLE = "migrator-bundle";
     private static final String FEATURE_DESCRIPTOR = "featureDescriptor";
+    private static final String PATCH_SERVICE_VERSION = "serviceVersion";
 
     // when ZIP file doesn't contain *.patch descriptor, we'll generate it on the fly
     private boolean generated;
@@ -92,6 +93,8 @@ public class PatchData {
     // patch may ship libraries that affect versions available in etc/config.properties
     List<String> configPackages = new ArrayList<String>();
     Map<String, String> configPackageRanges = new HashMap<String, String>();
+
+    private String serviceVersion;
 
     // TODO: ↓
     private final Map<String, Long> fileSizes = new HashMap<>();
@@ -137,6 +140,10 @@ public class PatchData {
         String desc = props.getProperty(DESCRIPTION);
         String installerBundle = props.getProperty(MIGRATOR_BUNDLE);
         boolean rollupPatch = "true".equals(props.getProperty(ROLLUP));
+        String version = props.getProperty(PATCH_SERVICE_VERSION);
+        if (version != null && "".equals(version.trim())) {
+            version = null;
+        }
 
         List<String> bundles = new ArrayList<String>();
         Map<String, String> ranges = new HashMap<String, String>();
@@ -178,6 +185,7 @@ public class PatchData {
 
         PatchData result = new PatchData(id, desc, bundles, featureDescriptors, ranges, requirements, installerBundle);
         result.setRollupPatch(rollupPatch);
+        result.setServiceVersion(version);
 
         // add info for patched files
         count = Integer.parseInt(props.getProperty(FILES + "." + COUNT, "0"));
@@ -240,6 +248,9 @@ public class PatchData {
         pw.write("# generated file, do not modify\n");
         pw.write("id = " + getId() + "\n");
         pw.write(ROLLUP + " = " + rollupPatch + "\n");
+        if (serviceVersion != null) {
+            pw.write("serviceVersion = " + serviceVersion + "\n");
+        }
         int n = 0;
         if (bundles.size() > 0) {
             for (String bundle : bundles) {
@@ -412,6 +423,14 @@ public class PatchData {
 
     public void setFeatureOverrides(List<String> featureOverrides) {
         this.featureOverrides = featureOverrides;
+    }
+
+    public String getServiceVersion() {
+        return serviceVersion;
+    }
+
+    public void setServiceVersion(String serviceVersion) {
+        this.serviceVersion = serviceVersion;
     }
 
 }
