@@ -23,7 +23,11 @@ package org.jboss.fuse.patch.management;
  */
 public class BundleUpdate {
 
+    // the symbolic name of the bundle being updated
     private final String symbolicName;
+    // if existing bundle is updated with similar bundle but different symbolic name, new name is stored here
+    // this is a case with jaxb-impl 2.2 -> jaxb-runtime 2.3 update
+    private String newSymbolicName;
 
     private final String previousVersion;
     private final String previousLocation;
@@ -126,6 +130,14 @@ public class BundleUpdate {
 
     public void setIndependent(boolean independent) {
         this.independent = independent;
+    }
+
+    public String getNewSymbolicName() {
+        return newSymbolicName;
+    }
+
+    public void setNewSymbolicName(String newSn) {
+        this.newSymbolicName = newSn;
     }
 
 }
