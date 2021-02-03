@@ -929,6 +929,9 @@ public class PatchServiceImpl implements PatchService {
                 continue;
             }
             String sn = stripSymbolicName(symbolicNameVersion[0]);
+            if (patch.getPatchData().getOriginalSymbolicName(newLocation) != null) {
+                sn = patch.getPatchData().getOriginalSymbolicName(newLocation);
+            }
             String vr = symbolicNameVersion[1];
             Version newVersion = VersionTable.getVersion(vr);
             Version updateableVersion = new Version(newVersion.getMajor(), newVersion.getMinor(), 0);
