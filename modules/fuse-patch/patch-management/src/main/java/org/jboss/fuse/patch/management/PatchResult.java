@@ -48,6 +48,7 @@ public class PatchResult {
 
     private static final String BUNDLE_UPDATES = "update";
     private static final String SYMBOLIC_NAME = "symbolic-name";
+    private static final String NEW_SYMBOLIC_NAME = "new-symbolic-name";
     private static final String NEW_VERSION = "new-version";
     private static final String NEW_LOCATION = "new-location";
     private static final String OLD_VERSION = "old-version";
@@ -191,6 +192,9 @@ public class PatchResult {
                 }
             }
             BundleUpdate bundleUpdate = new BundleUpdate(sn, nv, nl, ov, ol, startLevel, state);
+            if (props.getProperty(prefix + NEW_SYMBOLIC_NAME) != null) {
+                bundleUpdate.setNewSymbolicName(props.getProperty(prefix + NEW_SYMBOLIC_NAME));
+            }
             if (props.getProperty(prefix + INDEPENDENT) != null) {
                 bundleUpdate.setIndependent(Boolean.parseBoolean(props.getProperty(prefix + INDEPENDENT)));
             }
@@ -302,6 +306,9 @@ public class PatchResult {
         for (BundleUpdate update : getBundleUpdates()) {
             String prefix = BUNDLE_UPDATES + "." + Integer.toString(i) + ".";
             pw.write(prefix + SYMBOLIC_NAME + " = " + update.getSymbolicName() + "\n");
+            if (update.getNewSymbolicName() != null) {
+                pw.write(prefix + NEW_SYMBOLIC_NAME + " = " + update.getNewSymbolicName() + "\n");
+            }
             pw.write(prefix + OLD_VERSION + " = " + update.getPreviousVersion() + "\n");
             pw.write(prefix + OLD_LOCATION + " = " + update.getPreviousLocation().replace("\\", "\\\\") + "\n");
             pw.write(prefix + INDEPENDENT + " = " + update.isIndependent() + "\n");

@@ -1270,6 +1270,7 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 // we'll examine model with resolved property placeholders, but modify the other one
                 for (BundleReplacements.OverrideBundle override : br1) {
                     LocationPattern lp = new LocationPattern(artifact.getCanonicalUri());
+//                    if (lp.matches(override.getOriginalUri())) {
                     if (lp.matches(override.getReplacement())) {
                         // we've found existing override in current etc/org.apache.karaf.features.xml
                         existing = br2.get(idx);
