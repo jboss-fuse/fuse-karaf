@@ -47,6 +47,9 @@ public class PatchData {
     private static final String TARGET = "target";
     private static final String COUNT = "count";
     private static final String RANGE = "range";
+    private static final String ORIGINAL_SYMBOLIC_NAME = "originalSymbolicName";
+    private static final String ORIGINAL_GROUP_ID = "originalGroupId";
+    private static final String ORIGINAL_ARTIFACT_ID = "originalArtifactId";
     private static final String MIGRATOR_BUNDLE = "migrator-bundle";
     private static final String FEATURE_DESCRIPTOR = "featureDescriptor";
     private static final String PATCH_SERVICE_VERSION = "serviceVersion";
@@ -83,6 +86,9 @@ public class PatchData {
     private final List<CVE> cves = new LinkedList<>();
 
     private Map<String, String> versionRanges;
+    private final Map<String, String> originalSymbolicNames = new HashMap<>();
+    private final Map<String, String> originalGroupIds = new HashMap<>();
+    private final Map<String, String> originalArtifactIds = new HashMap<>();
 
     private List<String> requirements;
 
@@ -147,6 +153,9 @@ public class PatchData {
 
         List<String> bundles = new ArrayList<String>();
         Map<String, String> ranges = new HashMap<String, String>();
+        Map<String, String> originalSymbolicNames = new HashMap<String, String>();
+        Map<String, String> originalGroupIds = new HashMap<String, String>();
+        Map<String, String> originalArtifactIds = new HashMap<String, String>();
 
         List<String> featureDescriptors = new ArrayList<String>();
 
@@ -167,6 +176,21 @@ public class PatchData {
                 }
                 ranges.put(bundle, range);
             }
+            if (props.containsKey(key + "." + ORIGINAL_SYMBOLIC_NAME)) {
+                String osn = props.getProperty(key + "." + ORIGINAL_SYMBOLIC_NAME);
+                osn = osn.trim();
+                originalSymbolicNames.put(bundle, osn);
+            }
+            if (props.containsKey(key + "." + ORIGINAL_GROUP_ID)) {
+                String og = props.getProperty(key + "." + ORIGINAL_GROUP_ID);
+                og = og.trim();
+                originalGroupIds.put(bundle, og);
+            }
+            if (props.containsKey(key + "." + ORIGINAL_ARTIFACT_ID)) {
+                String oa = props.getProperty(key + "." + ORIGINAL_ARTIFACT_ID);
+                oa = oa.trim();
+                originalArtifactIds.put(bundle, oa);
+            }
         }
 
         count = Integer.parseInt(props.getProperty(FEATURE_DESCRIPTOR + "." + COUNT, "0"));
@@ -186,6 +210,9 @@ public class PatchData {
         PatchData result = new PatchData(id, desc, bundles, featureDescriptors, ranges, requirements, installerBundle);
         result.setRollupPatch(rollupPatch);
         result.setServiceVersion(version);
+        result.getOriginalSymbolicNames().putAll(originalSymbolicNames);
+        result.getOriginalGroupIds().putAll(originalGroupIds);
+        result.getOriginalArtifactIds().putAll(originalArtifactIds);
 
         // add info for patched files
         count = Integer.parseInt(props.getProperty(FILES + "." + COUNT, "0"));
@@ -257,6 +284,15 @@ public class PatchData {
                 pw.write(String.format("bundle.%d = %s\n", n, bundle));
                 if (versionRanges != null && versionRanges.containsKey(bundle)) {
                     pw.write(String.format("bundle.%d.range = %s\n", n, versionRanges.get(bundle)));
+                }
+                if (originalSymbolicNames.containsKey(bundle)) {
+                    pw.write(String.format("bundle.%d.originalSymbolicName = %s\n", n, originalSymbolicNames.get(bundle)));
+                }
+                if (originalGroupIds.containsKey(bundle)) {
+                    pw.write(String.format("bundle.%d.originalGroupId = %s\n", n, originalGroupIds.get(bundle)));
+                }
+                if (originalArtifactIds.containsKey(bundle)) {
+                    pw.write(String.format("bundle.%d.originalArtifactId = %s\n", n, originalArtifactIds.get(bundle)));
                 }
                 n++;
             }
@@ -431,6 +467,30 @@ public class PatchData {
 
     public void setServiceVersion(String serviceVersion) {
         this.serviceVersion = serviceVersion;
+    }
+
+    public String getOriginalSymbolicName(String bundle) {
+        return originalSymbolicNames.get(bundle);
+    }
+
+    public Map<String, String> getOriginalSymbolicNames() {
+        return originalSymbolicNames;
+    }
+
+    public String getOriginalGroupId(String bundle) {
+        return originalGroupIds.get(bundle);
+    }
+
+    public Map<String, String> getOriginalGroupIds() {
+        return originalGroupIds;
+    }
+
+    public String getOriginalArtifactId(String bundle) {
+        return originalArtifactIds.get(bundle);
+    }
+
+    public Map<String, String> getOriginalArtifactIds() {
+        return originalArtifactIds;
     }
 
 }

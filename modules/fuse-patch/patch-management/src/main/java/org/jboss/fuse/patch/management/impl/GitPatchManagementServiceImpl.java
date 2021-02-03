@@ -1237,6 +1237,13 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     continue;
                 }
 
+                if (patchData.getOriginalGroupId(bundle) != null) {
+                    artifact.setGroupId(patchData.getOriginalGroupId(bundle));
+                }
+                if (patchData.getOriginalArtifactId(bundle) != null) {
+                    artifact.setArtifactId(patchData.getOriginalArtifactId(bundle));
+                }
+
                 // Compute patch bundle version and range
                 Version oVer = Utils.getOsgiVersion(artifact.getVersion());
                 String vr = patchData.getVersionRange(bundle);
