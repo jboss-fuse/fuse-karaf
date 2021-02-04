@@ -20,8 +20,8 @@ package org.jboss.fuse.patch.management;
  */
 public class Artifact {
 
-    private final String groupId;
-    private final String artifactId;
+    private String groupId;
+    private String artifactId;
     private String version;
     private final String type;
     private final String classifier;
@@ -52,6 +52,14 @@ public class Artifact {
 
     public String getVersion() {
         return version;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+    public void setArtifactId(String artifactId) {
+        this.artifactId = artifactId;
     }
 
     public void setVersion(String version) {
