@@ -176,6 +176,11 @@ public class PatchServiceImpl implements PatchService {
                 if (!patch.isInstalled()) {
                     String serviceVersion = patch.getPatchData().getServiceVersion();
                     String msg = null;
+                    File autoDeployedFile = new File(this.getPatchStorage(patch).getParentFile(),
+                            String.format("fuse-karaf-patch-repository-%s.zip", patchVersion));
+                    // no need to inform user about removal if the patch was dropped into patches/ dir, because
+                    // the patch will again be added automatically
+                    boolean showMsg = !autoDeployedFile.isFile();
                     boolean remove = false;
                     if (serviceVersion == null) {
                         msg = String.format("Detected %s patch added by earlier version of patch mechanism.\n" +
@@ -195,12 +200,18 @@ public class PatchServiceImpl implements PatchService {
                         }
                     }
                     if (remove) {
-                        System.out.println();
-                        System.out.println(msg);
-                        System.out.flush();
+                        if (showMsg) {
+                            System.out.println();
+                            System.out.println(msg);
+                            System.out.flush();
+                        } else {
+                            LOG.info("Patch {} will be added again automatically", patch.getPatchData().getId());
+                        }
                         patchManagement.delete(patch);
                         undeploy(patch);
-                        LOG.info(msg);
+                        if (showMsg) {
+                            LOG.info(msg);
+                        }
                     }
                 }
             }
@@ -552,6 +563,7 @@ public class PatchServiceImpl implements PatchService {
 
             // bundle -> url to update the bundle from (used for non-rollup patch)
             final Map<Bundle, String> bundleUpdateLocations = new HashMap<>();
+            final Set<Bundle> toReinstall = new HashSet<Bundle>();
 
             /* A "key" is name + "update'able version". Such version is current version with micro version == 0 */
 
@@ -595,7 +607,7 @@ public class PatchServiceImpl implements PatchService {
                 // to "restore" (install after clearing data/cache) by not including bundles that are
                 // already updated as part of fueatures update
                 List<BundleUpdate> bundleUpdatesInThisPatch = bundleUpdatesInPatch(patch, allBundles,
-                        bundleUpdateLocations, history, updatesForBundleKeys, kind, coreBundles,
+                        bundleUpdateLocations, toReinstall, history, updatesForBundleKeys, kind, coreBundles,
                         featureUpdatesInThisPatch);
 
                 // prepare patch result before doing runtime changes
@@ -741,7 +753,7 @@ public class PatchServiceImpl implements PatchService {
                 Runnable task = () -> {
                     try {
                         // update bundles
-                        applyChanges(bundleUpdateLocations);
+                        applyChanges(bundleUpdateLocations, toReinstall);
 
                         for (String featureOverride : overridesForFeatureKeys) {
                             System.out.println("overriding feature: " + featureOverride);
@@ -842,6 +854,7 @@ public class PatchServiceImpl implements PatchService {
      * @param patch
      * @param allBundles
      * @param bundleUpdateLocations out parameter that gathers update locations for bundles across patches
+     * @param toReinstall
      * @param history
      * @param updatesForBundleKeys
      * @param kind
@@ -853,6 +866,7 @@ public class PatchServiceImpl implements PatchService {
     private List<BundleUpdate> bundleUpdatesInPatch(Patch patch,
                                                     Bundle[] allBundles,
                                                     Map<Bundle, String> bundleUpdateLocations,
+                                                    Set<Bundle> toReinstall,
                                                     BundleVersionHistory history,
                                                     Map<String, BundleUpdate> updatesForBundleKeys,
                                                     PatchKind kind,
@@ -928,22 +942,33 @@ public class PatchServiceImpl implements PatchService {
             if (symbolicNameVersion == null || symbolicNameVersion[0] == null) {
                 continue;
             }
+            String newSn = null;
+            String existingSn = null;
             String sn = stripSymbolicName(symbolicNameVersion[0]);
+            if (patch.getPatchData().getOriginalSymbolicName(newLocation) != null) {
+                String oldSn = patch.getPatchData().getOriginalSymbolicName(newLocation);
+                if (!oldSn.equals(sn)) {
+                    existingSn = oldSn;
+                    newSn = sn;
+                }
+            } else {
+                existingSn = sn;
+            }
             String vr = symbolicNameVersion[1];
             Version newVersion = VersionTable.getVersion(vr);
             Version updateableVersion = new Version(newVersion.getMajor(), newVersion.getMinor(), 0);
             // this bundle update from a patch may be applied only to relevant bundle|updateable-version, not to
             // *every* bundle with exact symbolic name
             String key = null;
-            if (!coreBundles.containsKey(sn)) {
-                key = String.format("%s|%s", sn, updateableVersion.toString());
+            if (!coreBundles.containsKey(existingSn)) {
+                key = String.format("%s|%s", existingSn, updateableVersion.toString());
             } else {
-                key = sn;
+                key = existingSn;
             }
 
             // if existing bundle is within this range, update is possible
             VersionRange range = getUpdateableRange(patch, newLocation, newVersion);
-            if (coreBundles.containsKey(sn)) {
+            if (coreBundles.containsKey(existingSn)) {
                 // for core bundles, we don't want to miss the update - for example fileinstall 3.4.2->3.5.0
                 // so we lower down the lowest possible version of core bundle that we can update
                 if (range == null) {
@@ -954,12 +979,12 @@ public class PatchServiceImpl implements PatchService {
             } else if (range != null) {
                 // if range is specified on non core bundle, the key should be different - updateable
                 // version should be taken from range
-                key = String.format("%s|%s", sn, range.getFloor().toString());
+                key = String.format("%s|%s", existingSn, range.getFloor().toString());
             }
 
             Bundle bundle = updateNotRequired.get(key);
-            if (bundle == null && coreBundles.containsKey(sn)) {
-                bundle = updateNotRequired.get(sn);
+            if (bundle == null && coreBundles.containsKey(existingSn)) {
+                bundle = updateNotRequired.get(existingSn);
             }
             if (bundle == null || range == null) {
                 // this patch ships a bundle that can't be used as an update for ANY currently installed bundle
@@ -978,7 +1003,7 @@ public class PatchServiceImpl implements PatchService {
             Version oldVersion = bundle.getVersion();
             if (range.contains(oldVersion)) {
                 String oldLocation = history.getLocation(bundle);
-                if ("org.ops4j.pax.url.mvn".equals(sn)) {
+                if ("org.ops4j.pax.url.mvn".equals(existingSn)) {
                     Artifact artifact = Utils.mvnurlToArtifact(newLocation, true);
                     if (artifact != null) {
                         URL location = new File(repository,
@@ -991,15 +1016,19 @@ public class PatchServiceImpl implements PatchService {
                 int startLevel = bundle.adapt(BundleStartLevel.class).getStartLevel();
                 int state = bundle.getState();
 
-                BundleUpdate update = new BundleUpdate(sn, newVersion.toString(), newLocation,
+                BundleUpdate update = new BundleUpdate(existingSn, newVersion.toString(), newLocation,
                         oldVersion.toString(), oldLocation, startLevel, state);
-                if (bundleKeysFromFeatures.contains(key) || coreBundles.containsKey(sn)) {
+                if (newSn != null) {
+                    update.setNewSymbolicName(newSn);
+                    toReinstall.add(bundle);
+                }
+                if (bundleKeysFromFeatures.contains(key) || coreBundles.containsKey(existingSn)) {
                     update.setIndependent(false);
                 }
                 updatesInThisPatch.add(update);
                 updateNotRequired.remove(key);
-                if (coreBundles.containsKey(sn)) {
-                    updateNotRequired.remove(sn);
+                if (coreBundles.containsKey(existingSn)) {
+                    updateNotRequired.remove(existingSn);
                 }
                 // Merge result
                 BundleUpdate oldUpdate = updatesForBundleKeys.get(key);
@@ -1423,7 +1452,11 @@ public class PatchServiceImpl implements PatchService {
                 if (bundle.getSymbolicName() == null || update.getSymbolicName() == null) {
                     continue;
                 }
-                if (stripSymbolicName(bundle.getSymbolicName()).equals(stripSymbolicName(update.getSymbolicName()))
+                String sn = update.getSymbolicName();
+                if (update.getNewSymbolicName() != null) {
+                    sn = update.getNewSymbolicName();
+                }
+                if (stripSymbolicName(bundle.getSymbolicName()).equals(stripSymbolicName(sn))
                         && bundle.getVersion().equals(v)) {
                     found = true;
                     break;
@@ -1446,13 +1479,20 @@ public class PatchServiceImpl implements PatchService {
         if (!simulate) {
             // bundle -> old location of the bundle to downgrade from
             final Map<Bundle, String> toUpdate = new HashMap<Bundle, String>();
+            // bundles that has to be reinstalled because of different symbolic name in patch
+            final Set<Bundle> toReinstall = new HashSet<Bundle>();
             for (BundleUpdate update : result.getBundleUpdates()) {
                 Version v = Version.parseVersion(update.getNewVersion() == null ? update.getPreviousVersion() : update.getNewVersion());
                 for (Bundle bundle : allBundles) {
                     if (bundle.getSymbolicName() == null || update.getSymbolicName() == null) {
                         continue;
                     }
-                    if (stripSymbolicName(bundle.getSymbolicName()).equals(stripSymbolicName(update.getSymbolicName()))
+                    String sn = update.getSymbolicName();
+                    if (update.getNewSymbolicName() != null) {
+                        sn = update.getNewSymbolicName();
+                        toReinstall.add(bundle);
+                    }
+                    if (stripSymbolicName(bundle.getSymbolicName()).equals(stripSymbolicName(sn))
                             && bundle.getVersion().equals(v)) {
                         toUpdate.put(bundle, update.getPreviousLocation());
                     }
@@ -1464,12 +1504,13 @@ public class PatchServiceImpl implements PatchService {
 
             Executors.newSingleThreadExecutor().execute(() -> {
                 try {
-                    applyChanges(toUpdate);
+                    applyChanges(toUpdate, toReinstall);
 
                     for (String featureOverride : result.getFeatureOverrides()) {
                         System.out.println("removing overriden feature: " + featureOverride);
                     }
-                    if (featuresService != null && result.getFeatureOverrides().size() > 0) {
+                    if (featuresService != null && result.getFeatureOverrides().size() > 0
+                            || toUpdate.size() > 0) {
                         System.out.println("refreshing features");
                         featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
                     }
@@ -1767,7 +1808,7 @@ public class PatchServiceImpl implements PatchService {
         return new File(patchDir, patch.getPatchData().getId());
     }
 
-    private void applyChanges(Map<Bundle, String> toUpdate) throws BundleException, IOException {
+    private void applyChanges(Map<Bundle, String> toUpdate, Set<Bundle> toReinstall) throws BundleException, IOException {
         List<Bundle> toStop = new ArrayList<Bundle>();
         Map<Bundle, String> lessToUpdate = new HashMap<>();
         for (Bundle b : toUpdate.keySet()) {
@@ -1806,7 +1847,29 @@ public class PatchServiceImpl implements PatchService {
             if (!"org.ops4j.pax.url.mvn".equals(bundle.getSymbolicName())) {
                 System.out.println("updating: " + bundle.getSymbolicName());
                 try {
-                    update(bundle, new URL(e.getValue()));
+                    if (!toReinstall.contains(bundle)) {
+                        update(bundle, new URL(e.getValue()));
+                    } else {
+                        // uninstall + install
+                        int sl = bundle.adapt(BundleStartLevel.class).getStartLevel();
+                        int bs = bundle.getState();
+                        bundle.uninstall();
+                        bundle = bundleContext.installBundle(e.getValue());
+                        if (sl > -1) {
+                            bundle.adapt(BundleStartLevel.class).setStartLevel(sl);
+                        }
+                        switch (bs) {
+                            case Bundle.UNINSTALLED: // ?
+                            case Bundle.INSTALLED:
+                            case Bundle.STARTING:
+                            case Bundle.STOPPING:
+                            case Bundle.RESOLVED:
+                                break;
+                            case Bundle.ACTIVE:
+                                bundle.start();
+                                break;
+                        }
+                    }
                 } catch (BundleException ex) {
                     System.err.println("Failed to update: " + bundle.getSymbolicName() + ", due to: " + e);
                 }

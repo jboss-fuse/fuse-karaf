@@ -1237,6 +1237,13 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     continue;
                 }
 
+                if (patchData.getOriginalGroupId(bundle) != null) {
+                    artifact.setGroupId(patchData.getOriginalGroupId(bundle));
+                }
+                if (patchData.getOriginalArtifactId(bundle) != null) {
+                    artifact.setArtifactId(patchData.getOriginalArtifactId(bundle));
+                }
+
                 // Compute patch bundle version and range
                 Version oVer = Utils.getOsgiVersion(artifact.getVersion());
                 String vr = patchData.getVersionRange(bundle);
@@ -1263,10 +1270,25 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 // we'll examine model with resolved property placeholders, but modify the other one
                 for (BundleReplacements.OverrideBundle override : br1) {
                     LocationPattern lp = new LocationPattern(artifact.getCanonicalUri());
+//                    if (lp.matches(override.getOriginalUri())) {
                     if (lp.matches(override.getReplacement())) {
                         // we've found existing override in current etc/org.apache.karaf.features.xml
-                        existing = br2.get(idx);
-                        break;
+                        // and the replacement URI matches. But if we have:
+                        // <bundle originalUri="mvn:com.sun.xml.bind/jaxb-xjc/[2.3,2.4)"
+                        //         replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/2.2.11_1"
+                        //         mode="maven"/>
+                        // and a new location for patched bundle:
+                        //  - mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-impl/[2.2,2.3)
+                        // we can't simply replace given override. We have to match original group and artifact id
+                        Artifact oldOriginalUri = mvnurlToArtifact(override.getOriginalUri(), true);
+                        // newOriginalUri will have group/artifact IDs set properly from patch descriptor
+                        Artifact newOriginalUri = mvnurlToArtifact(artifact.getCanonicalUri(), true);
+                        if (oldOriginalUri != null && newOriginalUri != null
+                                && oldOriginalUri.getGroupId().equals(newOriginalUri.getGroupId())
+                                && oldOriginalUri.getArtifactId().equals(newOriginalUri.getArtifactId())) {
+                            existing = br2.get(idx);
+                            break;
+                        }
                     }
                     idx++;
                 }

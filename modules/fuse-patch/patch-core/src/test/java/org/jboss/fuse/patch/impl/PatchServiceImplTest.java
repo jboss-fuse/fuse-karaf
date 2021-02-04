@@ -649,7 +649,7 @@ public class PatchServiceImplTest {
 
         PatchServiceImpl service = new PatchServiceImpl();
         Method m = service.getClass().getDeclaredMethod("bundleUpdatesInPatch",
-                Patch.class, Bundle[].class, Map.class, PatchServiceImpl.BundleVersionHistory.class,
+                Patch.class, Bundle[].class, Map.class, Set.class, PatchServiceImpl.BundleVersionHistory.class,
                 Map.class, PatchKind.class, Map.class, List.class);
         m.setAccessible(true);
 
@@ -694,7 +694,7 @@ public class PatchServiceImplTest {
         bundles[7] = bundle("mvn:io.fabric8/pax-castile/1.0.0/jar/uber");
 
         Object _list = m.invoke(service,
-                patch, bundles, new HashMap<>(), new PatchServiceImpl.BundleVersionHistory(new HashMap<String, Patch>()),
+                patch, bundles, new HashMap<>(), new HashSet<>(), new PatchServiceImpl.BundleVersionHistory(new HashMap<String, Patch>()),
                 new HashMap<>(), PatchKind.NON_ROLLUP, new HashMap<>(), null);
         List<BundleUpdate> list = (List<BundleUpdate>) _list;
 
