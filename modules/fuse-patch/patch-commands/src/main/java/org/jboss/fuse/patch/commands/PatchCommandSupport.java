@@ -118,8 +118,12 @@ public abstract class PatchCommandSupport implements Action {
                     // patch installed in standalone mode (root, admin:create)
                     for (String kbt : karafBases) {
                         String[] kb = kbt.split("\\s*\\|\\s*");
-                        if (kb[0].length() > l2) {
-                            l2 = kb[0].length();
+//                        if (kb[0].length() > l2) {
+//                            l2 = kb[0].length();
+//                        }
+                        // ENTESB-15764 - let's only display "true" if the patch was installed
+                        if ("true".length() > l2) {
+                            l2 = "true".length();
                         }
                     }
                 }
@@ -152,7 +156,8 @@ public abstract class PatchCommandSupport implements Action {
                 if (patch.getResult().getKarafBases().size() > 0) {
                     String kbt = patch.getResult().getKarafBases().get(0);
                     String[] kb = kbt.split("\\s*\\|\\s*");
-                    installed = kb[0];
+//                    installed = kb[0];
+                    installed = "true";
                 }
             }
             if (patch.getPatchData().getCves().size() > 0) {
