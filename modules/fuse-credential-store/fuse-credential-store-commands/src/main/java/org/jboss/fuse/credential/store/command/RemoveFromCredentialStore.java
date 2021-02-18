@@ -15,6 +15,8 @@
  */
 package org.jboss.fuse.credential.store.command;
 
+import java.util.Locale;
+
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
@@ -26,7 +28,7 @@ import org.apache.karaf.shell.api.action.lifecycle.Service;
 @Service
 public class RemoveFromCredentialStore extends AbstractCredentialStoreCommand {
 
-    @Argument(index = 0, required = true, description = "Alias for credential Store entry")
+    @Argument(index = 0, required = true, description = "Alias for credential Store entry (case insensitive)")
     private String alias;
 
     @Override
@@ -34,6 +36,8 @@ public class RemoveFromCredentialStore extends AbstractCredentialStoreCommand {
         if (!credentialStoreService.validate()) {
             return null;
         }
+
+        alias = alias.toLowerCase(Locale.ROOT);
 
         if (!credentialStoreService.aliasExists(alias)) {
             System.out.println("No entry with alias \"" + alias + "\" found in credential store.");

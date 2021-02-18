@@ -15,6 +15,8 @@
  */
 package org.jboss.fuse.credential.store.command;
 
+import java.util.Locale;
+
 import org.apache.karaf.shell.api.action.Argument;
 import org.apache.karaf.shell.api.action.Command;
 import org.apache.karaf.shell.api.action.lifecycle.Service;
@@ -27,7 +29,7 @@ import org.jboss.fuse.credential.store.CredentialStoreHelper;
 @Service
 public class StoreInCredentialStore extends AbstractCredentialStoreCommand {
 
-    @Argument(index = 0, required = true, description = "Alias for credential Store entry")
+    @Argument(index = 0, required = true, description = "Alias for credential Store entry (case insensitive)")
     String alias;
 
     @Argument(index = 1, required = false, description = "Secret value to put into Credential Store. If not specified, secret value will be read from standard input.")
@@ -38,6 +40,8 @@ public class StoreInCredentialStore extends AbstractCredentialStoreCommand {
         if (!credentialStoreService.validate()) {
             return null;
         }
+
+        alias = alias.toLowerCase(Locale.ROOT);
 
         if (credentialStoreService.aliasExists(alias)) {
             System.out.println("Entry with alias \"" + alias + "\" already exists in credential store.");
