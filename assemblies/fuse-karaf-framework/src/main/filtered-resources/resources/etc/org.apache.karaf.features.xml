@@ -366,12 +366,6 @@
             </feature>
         </replacement>
         <replacement mode="merge">
-            <feature name="undertow" version="${version.io.undertow-pax-web}">
-                <f:bundle start-level="35">mvn:org.wildfly.common/wildfly-common/${version.org.wildfly.common-xnio}</f:bundle>
-                <f:bundle start-level="35">mvn:org.wildfly.client/wildfly-client-config/${version.org.wildfly.client-xnio}</f:bundle>
-            </feature>
-        </replacement>
-        <replacement mode="merge">
             <feature name="pax-jms-ibmmq" version="${version.org.ops4j.pax.jms}">
                 <f:bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-pax-jms-ibmmq-compatibility/${project.version}</f:bundle>
             </feature>

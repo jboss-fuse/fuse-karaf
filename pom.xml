@@ -123,9 +123,9 @@
         <version.io.prometheus>0.13.0</version.io.prometheus>
         <version.io.swagger>1.5.24.fuse-780018</version.io.swagger>
         <version.io.swagger.core.v3>2.1.3.fuse-780015</version.io.swagger.core.v3>
-        <version.io.undertow>2.0.34.SP1-redhat-00001</version.io.undertow>
-        <!-- version of Undertow used in Pax Web feature -->
-        <version.io.undertow-pax-web>2.0.30.Final</version.io.undertow-pax-web>
+        <version.io.undertow>2.2.5.Final</version.io.undertow>
+        <!-- version of Undertow used in Pax Web feature, to override it correctly -->
+        <version.io.undertow-pax-web>2.2.5.Final</version.io.undertow-pax-web>
         <version.javax.annotation>1.3</version.javax.annotation>
         <version.javax.el2>2.2.5</version.javax.el2>
         <version.javax.enterprise.cdi-api>1.2</version.javax.enterprise.cdi-api>
@@ -248,9 +248,8 @@
         <version.org.jboss.modules>1.10.0.Final-redhat-00001</version.org.jboss.modules>
         <version.org.jboss.narayana>5.9.8.Final-redhat-00002</version.org.jboss.narayana>
         <version.org.jboss.spec.jacc>1.0.2.Final</version.org.jboss.spec.jacc>
-        <version.org.jboss.transaction>7.6.0.Final-redhat-1</version.org.jboss.transaction>
-        <!-- Can't use yet 3.6.5.Final-redhat-00001 from EAP 7.2, because it imports org.jboss.threads and wildfly-client -->
-        <version.org.jboss.xnio>3.5.9.Final</version.org.jboss.xnio>
+        <version.org.jboss.threads>3.2.0.Final</version.org.jboss.threads>
+        <version.org.jboss.xnio>3.8.4.Final</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.jline>3.10.0</version.org.jline>
         <version.org.keycloak>9.0.5.redhat-00001</version.org.keycloak>
@@ -268,7 +267,7 @@
         <version.org.ops4j.pax.swissbox>1.8.3</version.org.ops4j.pax.swissbox>
         <version.org.ops4j.pax.transx>0.4.4</version.org.ops4j.pax.transx>
         <version.org.ops4j.pax.url>2.6.2</version.org.ops4j.pax.url>
-        <version.org.ops4j.pax.web>7.3.13</version.org.ops4j.pax.web>
+        <version.org.ops4j.pax.web>7.4.0</version.org.ops4j.pax.web>
         <version.org.osgi>6.0.0</version.org.osgi>
         <version.org.osgi.compendium>6.0.0</version.org.osgi.compendium>
         <version.org.ow2.asm>8.0.1</version.org.ow2.asm>
@@ -276,10 +275,7 @@
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
         <version.org.springframework>5.2.9.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.26</version.org.yaml.snakeyaml>
-        <version.org.wildfly.client-xnio>1.0.0.Final</version.org.wildfly.client-xnio>
-        <version.org.wildfly.common>1.5.2.Final-redhat-00002</version.org.wildfly.common>
-        <!-- special org.wildfly.common/wildfly-common version for XNIO 3.5.9.Final -->
-        <version.org.wildfly.common-xnio>1.2.0.Final</version.org.wildfly.common-xnio>
+        <version.org.wildfly.common>1.5.4.Final</version.org.wildfly.common>
         <version.org.wildfly.security.elytron>1.10.7.Final-redhat-00001</version.org.wildfly.security.elytron>
         <version.org.wildfly.transaction.client>1.1.11.Final-redhat-00001</version.org.wildfly.transaction.client>
 
