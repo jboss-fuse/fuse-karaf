@@ -289,7 +289,7 @@
                 replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxrs-api-2.1/${version.org.apache.servicemix.specs.jaxrs}" mode="maven" />
         <bundle originalUri="mvn:io.swagger.core.v3/swagger-jaxrs2/[2.0,3)"
                 replacement="wrap:mvn:io.swagger.core.v3/swagger-jaxrs2/${version.io.swagger.core.v3}$overwrite=merge&amp;Import-Package=javax.ws.rs.*;version=2.0,com.fasterxml.jackson.*;version=&quot;[2.9,3)&quot;,io.github.classgraph;version=&quot;[4.8,5)&quot;,com.google.common.base;version=&quot;[20.0,21)&quot;,org.apache.commons.lang3.*;version=&quot;[3.7,4)&quot;,org.reflections.*;version=&quot;[0.9,1)&quot;,org.slf4j;version=&quot;[1.7,2)&quot;,io.swagger.*;version=&quot;[2.0,3)&quot;,javax.ws.rs.*,javax.servlet;version=&quot;[3.1,5)&quot;,javax.servlet.http;version=&quot;[3.1,5)&quot;" mode="maven"/>
-        <bundle originalUri="mvn:org.postgresql/postgresql/[9.4,10)"
+        <bundle originalUri="mvn:org.postgresql/postgresql/[9.4,50)"
                 replacement="mvn:org.postgresql/postgresql/${version.org.postgresql}" mode="maven"/>
         <bundle originalUri="mvn:com.github.ben-manes.caffeine/caffeine/[2.6,3)"
                 replacement="mvn:com.github.ben-manes.caffeine/caffeine/${version.com.github.ben-manes.caffeine}" mode="maven"/>

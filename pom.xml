@@ -271,7 +271,7 @@
         <version.org.osgi>6.0.0</version.org.osgi>
         <version.org.osgi.compendium>6.0.0</version.org.osgi.compendium>
         <version.org.ow2.asm>9.1</version.org.ow2.asm>
-        <version.org.postgresql>42.2.14</version.org.postgresql>
+        <version.org.postgresql>42.2.19</version.org.postgresql>
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
         <version.org.springframework>5.2.13.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.26</version.org.yaml.snakeyaml>
