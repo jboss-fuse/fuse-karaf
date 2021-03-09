@@ -244,7 +244,7 @@
         <version.org.javassist>3.24.1-GA</version.org.javassist>
         <version.org.jasypt>1.9.3</version.org.jasypt>
         <version.org.jboss.jandex>2.0.5.Final-redhat-1</version.org.jboss.jandex>
-        <version.org.jboss.logging>3.4.0.Final-redhat-00001</version.org.jboss.logging>
+        <version.org.jboss.logging>3.4.1.Final-redhat-00001</version.org.jboss.logging>
         <version.org.jboss.modules>1.10.0.Final-redhat-00001</version.org.jboss.modules>
         <version.org.jboss.narayana>5.9.8.Final-redhat-00002</version.org.jboss.narayana>
         <version.org.jboss.spec.jacc>1.0.2.Final</version.org.jboss.spec.jacc>
