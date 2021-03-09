@@ -109,9 +109,9 @@
         <version.com.sun.mail>1.6.1.redhat-1</version.com.sun.mail>
         <version.com.thoughtworks.paranamer>2.8</version.com.thoughtworks.paranamer>
         <version.commons-beanutils>1.9.4.redhat-00002</version.commons-beanutils>
-        <version.commons-codec>1.14</version.commons-codec>
+        <version.commons-codec>1.15</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
-        <version.commons-io>2.7</version.commons-io>
+        <version.commons-io>2.8.0</version.commons-io>
         <version.commons-lang>2.6.0.redhat-7</version.commons-lang>
         <version.commons-net>3.6</version.commons-net>
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
@@ -151,11 +151,11 @@
         <version.org.apache.aries.proxy>1.1.8</version.org.apache.aries.proxy>
         <version.org.apache.aries.spifly>1.2.3</version.org.apache.aries.spifly>
         <version.org.apache.commons.collections4>4.1</version.org.apache.commons.collections4>
-        <version.org.apache.commons.compress>1.19</version.org.apache.commons.compress>
-        <version.org.apache.commons.dbcp2>2.7.0</version.org.apache.commons.dbcp2>
-        <version.org.apache.commons.lang3>3.10</version.org.apache.commons.lang3>
+        <version.org.apache.commons.compress>1.20</version.org.apache.commons.compress>
+        <version.org.apache.commons.dbcp2>2.8.0</version.org.apache.commons.dbcp2>
+        <version.org.apache.commons.lang3>3.12.0</version.org.apache.commons.lang3>
         <version.org.apache.commons.math3>3.6.1</version.org.apache.commons.math3>
-        <version.org.apache.commons.pool2>2.8.0</version.org.apache.commons.pool2>
+        <version.org.apache.commons.pool2>2.9.0</version.org.apache.commons.pool2>
         <version.org.apache.commons.text>1.6.0.redhat-00001</version.org.apache.commons.text>
         <version.org.apache.curator>2.11.1</version.org.apache.curator>
         <version.org.apache.felix>5.6.12</version.org.apache.felix>
