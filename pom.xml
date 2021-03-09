@@ -270,7 +270,7 @@
         <version.org.ops4j.pax.web>7.4.0</version.org.ops4j.pax.web>
         <version.org.osgi>6.0.0</version.org.osgi>
         <version.org.osgi.compendium>6.0.0</version.org.osgi.compendium>
-        <version.org.ow2.asm>8.0.1</version.org.ow2.asm>
+        <version.org.ow2.asm>9.1</version.org.ow2.asm>
         <version.org.postgresql>42.2.14</version.org.postgresql>
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
         <version.org.springframework>5.2.13.RELEASE</version.org.springframework>
