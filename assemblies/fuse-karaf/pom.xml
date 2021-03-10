@@ -337,8 +337,6 @@
                         <feature>camel-mail</feature>
                         <feature>camel-paxlogging</feature>
 
-                        <feature>pax-cdi-weld</feature>
-
                         <feature>pax-jdbc-pool-narayana</feature>
                         <feature>transaction-manager-narayana</feature>
 
@@ -355,7 +353,7 @@
                         <feature>audit-log</feature>
                         <feature>eventadmin</feature>
 
-                        <!-- Karaf Spring 4 features -->
+                        <!-- Karaf Spring 5.2 features -->
                         <feature>spring/[5.2,5.3)</feature>
                         <feature>spring-tx/[5.2,5.3)</feature>
                         <feature>spring-jms/[5.2,5.3)</feature>
@@ -454,12 +452,6 @@
                         <!-- Spring-DM -->
                         <feature>spring-dm</feature>
                         <feature>spring-dm-web</feature>
-
-                        <!-- Old Spring version -->
-                        <feature>spring*/[3,5.2)</feature>
-                        <feature>aries-blueprint-spring/[4,5.2)</feature>
-                        <!-- New Spring version -->
-                        <feature>spring*/[5.3,6)</feature>
 
                         <!-- Jclouds -->
                         <feature>jclouds-chef</feature>

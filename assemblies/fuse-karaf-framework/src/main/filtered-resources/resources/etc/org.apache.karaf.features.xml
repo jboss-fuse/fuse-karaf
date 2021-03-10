@@ -35,7 +35,7 @@
                 replacement="mvn:commons-net/commons-net/${version.commons-net}" mode="maven" />
         <bundle originalUri="mvn:commons-pool/commons-pool/[1.6,2)"
                 replacement="mvn:commons-pool/commons-pool/${version.commons-pool}" mode="maven" />
-        <bundle originalUri="mvn:com.fasterxml/classmate/[1.3,1.4)"
+        <bundle originalUri="mvn:com.fasterxml/classmate/[1.3,1.6)"
                 replacement="mvn:com.fasterxml/classmate/${version.com.fasterxml.classmate}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-annotations/[2.8,2.9)"
                 replacement="mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson.core}" mode="maven" />
@@ -141,6 +141,8 @@
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jasypt/${version.org.apache.servicemix.bundles.jasypt}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1_1"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/${version.org.apache.servicemix.bundles.javax-inject}" mode="maven" />
+        <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/1_2"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/${version.org.apache.servicemix.bundles.javax-inject}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jsch/[0.1,0.2)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jsch/${version.org.apache.servicemix.bundles.jsch}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jzlib/[1.9,2)"
@@ -155,7 +157,7 @@
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/[1.1,1.2)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/${version.org.apache.servicemix.bundles.xpp3}" mode="maven" />
-        <bundle originalUri="mvn:org.apache.sshd/sshd-core/[1,2)"
+        <bundle originalUri="mvn:org.apache.sshd/sshd-core/[1,3)"
                 replacement="mvn:org.apache.sshd/sshd-core/${version.org.apache.sshd}" mode="maven" />
         <bundle originalUri="mvn:org.apache.velocity/velocity"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.velocity/${version.org.apache.servicemix.bundles.velocity}" mode="maven" />
@@ -229,9 +231,9 @@
         <bundle originalUri="mvn:org.ops4j.pax.url/pax-url-war/[2.5,2.6)/jar/uber"
                 replacement="mvn:org.ops4j.pax.url/pax-url-war/${version.org.ops4j.pax.url}/jar/uber" mode="maven" />
         <!-- for pax-jms-activemq/1.0.0 feature -->
-        <bundle originalUri="mvn:org.apache.activemq/activemq-osgi/[5.14,5.16)"
+        <bundle originalUri="mvn:org.apache.activemq/activemq-osgi/[5.14,5.17)"
                 replacement="mvn:org.fusesource/activemq-client/${version.org.fusesource.activemq}" mode="maven" />
-        <bundle originalUri="mvn:org.apache.activemq/activemq-client/[5.14,5.16)"
+        <bundle originalUri="mvn:org.apache.activemq/activemq-client/[5.14,5.17)"
                 replacement="mvn:org.fusesource/activemq-client/${version.org.fusesource.activemq}" mode="maven" />
         <bundle originalUri="wrap:mvn:org.apache.activemq/activemq-client/5.*"
                 replacement="mvn:org.fusesource/activemq-client/${version.org.fusesource.activemq}" mode="maven" />
@@ -289,7 +291,7 @@
                 replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxrs-api-2.1/${version.org.apache.servicemix.specs.jaxrs}" mode="maven" />
         <bundle originalUri="mvn:io.swagger.core.v3/swagger-jaxrs2/[2.0,3)"
                 replacement="wrap:mvn:io.swagger.core.v3/swagger-jaxrs2/${version.io.swagger.core.v3}$overwrite=merge&amp;Import-Package=javax.ws.rs.*;version=2.0,com.fasterxml.jackson.*;version=&quot;[2.9,3)&quot;,io.github.classgraph;version=&quot;[4.8,5)&quot;,com.google.common.base;version=&quot;[20.0,21)&quot;,org.apache.commons.lang3.*;version=&quot;[3.7,4)&quot;,org.reflections.*;version=&quot;[0.9,1)&quot;,org.slf4j;version=&quot;[1.7,2)&quot;,io.swagger.*;version=&quot;[2.0,3)&quot;,javax.ws.rs.*,javax.servlet;version=&quot;[3.1,5)&quot;,javax.servlet.http;version=&quot;[3.1,5)&quot;" mode="maven"/>
-        <bundle originalUri="mvn:org.postgresql/postgresql/[9.4,10)"
+        <bundle originalUri="mvn:org.postgresql/postgresql/[9.4,50)"
                 replacement="mvn:org.postgresql/postgresql/${version.org.postgresql}" mode="maven"/>
         <bundle originalUri="mvn:com.github.ben-manes.caffeine/caffeine/[2.6,3)"
                 replacement="mvn:com.github.ben-manes.caffeine/caffeine/${version.com.github.ben-manes.caffeine}" mode="maven"/>
@@ -338,23 +340,6 @@
                 <f:bundle>mvn:org.hibernate/hibernate-ehcache/${version.org.hibernate}</f:bundle>
             </feature>
         </replacement>
-        <replacement>
-            <feature name="hibernate-orm" version="${version.org.hibernate}" description="Combines all Hibernate core dependencies and required modules into a single feature">
-                <f:feature prerequisite="true">wrap</f:feature>
-                <f:feature>transaction-api</f:feature>
-                <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${version.org.apache.servicemix.bundles.antlr2}</f:bundle>
-                <f:bundle>mvn:org.jboss.logging/jboss-logging/${version.org.jboss.logging}</f:bundle>
-                <f:bundle>mvn:javax.persistence/javax.persistence-api/${version.javax.persistence}</f:bundle>
-                <f:bundle>mvn:org.javassist/javassist/${version.org.javassist}</f:bundle>
-                <f:bundle>mvn:net.bytebuddy/byte-buddy/${version.net.bytebuddy}</f:bundle>
-                <f:bundle>mvn:org.jboss/jandex/${version.org.jboss.jandex}</f:bundle>
-                <f:bundle>mvn:com.fasterxml/classmate/${version.com.fasterxml.classmate}</f:bundle>
-                <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.dom4j/${version.org.apache.servicemix.bundles.dom4j2}</f:bundle>
-                <f:bundle>mvn:org.hibernate.common/hibernate-commons-annotations/${version.org.hibernate.common}</f:bundle>
-                <f:bundle>mvn:org.hibernate/hibernate-core/${version.org.hibernate}</f:bundle>
-                <f:bundle>mvn:org.hibernate/hibernate-osgi/${version.org.hibernate}</f:bundle>
-            </feature>
-        </replacement>
         <replacement mode="merge">
             <feature name="pax-http-whiteboard" version="${version.org.ops4j.pax.web}">
                 <f:bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-el-impl/${version.org.apache.servicemix.bundles.javax-el-impl}</f:bundle>
@@ -363,12 +348,6 @@
         <replacement mode="merge">
             <feature name="pax-http-undertow" version="${version.org.ops4j.pax.web}">
                 <f:bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-servlet-compatibility/${project.version}</f:bundle>
-            </feature>
-        </replacement>
-        <replacement mode="merge">
-            <feature name="undertow" version="${version.io.undertow-pax-web}">
-                <f:bundle start-level="35">mvn:org.wildfly.common/wildfly-common/${version.org.wildfly.common-xnio}</f:bundle>
-                <f:bundle start-level="35">mvn:org.wildfly.client/wildfly-client-config/${version.org.wildfly.client-xnio}</f:bundle>
             </feature>
         </replacement>
         <replacement mode="merge">
