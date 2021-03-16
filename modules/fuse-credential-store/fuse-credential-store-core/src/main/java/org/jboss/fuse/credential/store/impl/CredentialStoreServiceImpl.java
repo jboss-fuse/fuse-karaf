@@ -71,11 +71,11 @@ public class CredentialStoreServiceImpl implements CredentialStoreService {
     public static final Logger LOG = LoggerFactory.getLogger(CredentialStoreServiceImpl.class);
 
     // Elytron classes are private packaged, so it's better to use it explicitly than via Security.addProvider()
-    private Provider elytronProvider;
+    private final Provider elytronProvider;
 
     private CredentialStore credentialStore;
 
-    private BundleContext context;
+    private final BundleContext context;
     private Bundle fileinstallBundle;
 
     // special PersistenceManager that delegates to default one using encryption/decryption on the fly
@@ -208,10 +208,23 @@ public class CredentialStoreServiceImpl implements CredentialStoreService {
         MaskedPasswordAlgorithmSpec maskedPasswordAlgorithmSpec
                 = new MaskedPasswordAlgorithmSpec(ivc, iterationCount, salt);
 
+        return createMaskedPasswordData(algorithm, password, maskedPasswordAlgorithmSpec);
+    }
+
+    public MaskedPasswordData generateMaskedPassword(String algorithm, char[] password, char[] ivc, int iterationCount, byte[] salt, byte[] iv)
+            throws Exception {
+        // ic, iv, salt, iv
+        MaskedPasswordAlgorithmSpec maskedPasswordAlgorithmSpec
+                = new MaskedPasswordAlgorithmSpec(ivc, iterationCount, salt, iv);
+
+        return createMaskedPasswordData(algorithm, password, maskedPasswordAlgorithmSpec);
+    }
+
+    private MaskedPasswordData createMaskedPasswordData(String algorithm, char[] password, MaskedPasswordAlgorithmSpec spec) throws Exception {
         PasswordFactory passwordFactory = PasswordFactory.getInstance(algorithm, elytronProvider);
         // ic, iv, salt, password.
         // Elytron's PasswordFactory can use it to generate masked passwords
-        EncryptablePasswordSpec encryptablePasswordSpec = new EncryptablePasswordSpec(password, maskedPasswordAlgorithmSpec);
+        EncryptablePasswordSpec encryptablePasswordSpec = new EncryptablePasswordSpec(password, spec);
 
         // encrypted master password
         final MaskedPassword maskedPassword =
@@ -226,7 +239,11 @@ public class CredentialStoreServiceImpl implements CredentialStoreService {
 
             @Override
             public AlgorithmParameterSpec getSpec() {
-                return maskedPassword.getParameterSpec();
+                return new MaskedPasswordAlgorithmSpec(
+                        maskedPassword.getInitialKeyMaterial(),
+                        maskedPassword.getIterationCount(),
+                        maskedPassword.getSalt(),
+                        maskedPassword.getInitializationVector());
             }
         };
     }
@@ -372,7 +389,8 @@ public class CredentialStoreServiceImpl implements CredentialStoreService {
         MaskedPasswordSpec spec = new MaskedPasswordSpec(maskedPasswordAlgorithmSpec.getInitialKeyMaterial(),
                 maskedPasswordAlgorithmSpec.getIterationCount(),
                 maskedPasswordAlgorithmSpec.getSalt(),
-                config.getKey());
+                config.getKey(),
+                maskedPasswordAlgorithmSpec.getInitializationVector());
 
         PasswordFactory passwordFactory = PasswordFactory.getInstance(config.getProtectionAlgorithmName(),
                 elytronProvider);

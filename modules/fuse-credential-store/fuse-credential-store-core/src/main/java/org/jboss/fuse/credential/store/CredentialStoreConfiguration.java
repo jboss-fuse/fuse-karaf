@@ -238,4 +238,19 @@ public class CredentialStoreConfiguration {
         setKey(maskedPassword.getSecret());
     }
 
+    /**
+     * Using raw data, configures related, elytron-specific {@link AlgorithmParameterSpec} and secret data.
+     * @param algorithm
+     * @param password
+     * @param ivc
+     * @param iterationCount
+     * @param salt
+     * @param iv
+     */
+    public void configureMaskedPasswordDetails(String algorithm, char[] password, char[] ivc, int iterationCount, byte[] salt, byte[] iv) throws Exception {
+        CredentialStoreService.MaskedPasswordData maskedPassword = credentialStoreService.generateMaskedPassword(algorithm, password, ivc, iterationCount, salt, iv);
+        setProtectionParameters(maskedPassword.getSpec());
+        setKey(maskedPassword.getSecret());
+    }
+
 }

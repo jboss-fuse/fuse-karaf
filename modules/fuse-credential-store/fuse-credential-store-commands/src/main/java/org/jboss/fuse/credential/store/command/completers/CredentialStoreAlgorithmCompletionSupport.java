@@ -45,17 +45,16 @@ public class CredentialStoreAlgorithmCompletionSupport implements Completer {
 //            MaskedPassword.ALGORITHM_MASKED_SHA1_RC2_128,
 //            MaskedPassword.ALGORITHM_MASKED_SHA1_RC4_40,
 //            MaskedPassword.ALGORITHM_MASKED_SHA1_RC4_128,
-            // after https://issues.jboss.org/browse/ELY-867 is fixed, uncomment the below algorithms
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA1_AES_128,
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA224_AES_128,
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA256_AES_128,
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA384_AES_128,
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA512_AES_128,
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA1_AES_256,
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA224_AES_256,
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA256_AES_256,
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA384_AES_256,
-//            MaskedPassword.ALGORITHM_MASKED_HMAC_SHA512_AES_256,
+            "masked-HMAC-SHA1-AES-128", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA1_AES_128,
+            "masked-HMAC-SHA224-AES-128", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA224_AES_128,
+            "masked-HMAC-SHA256-AES-128", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA256_AES_128,
+            "masked-HMAC-SHA384-AES-128", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA384_AES_128,
+            "masked-HMAC-SHA512-AES-128", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA512_AES_128,
+            "masked-HMAC-SHA1-AES-256", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA1_AES_256,
+            "masked-HMAC-SHA224-AES-256", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA224_AES_256,
+            "masked-HMAC-SHA256-AES-256", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA256_AES_256,
+            "masked-HMAC-SHA384-AES-256", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA384_AES_256,
+            "masked-HMAC-SHA512-AES-256", // MaskedPassword.ALGORITHM_MASKED_HMAC_SHA512_AES_256,
     };
 
     private static Set<String> supportedAlgorithms = new HashSet<>(Arrays.asList(EXPLICITLY_SUPPORTED_ALGORITHMS));

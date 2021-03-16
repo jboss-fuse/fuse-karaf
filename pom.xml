@@ -277,7 +277,7 @@
         <version.org.springframework>5.2.13.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.26</version.org.yaml.snakeyaml>
         <version.org.wildfly.common>1.5.4.Final</version.org.wildfly.common>
-        <version.org.wildfly.security.elytron>1.10.7.Final-redhat-00001</version.org.wildfly.security.elytron>
+        <version.org.wildfly.security.elytron>1.14.1.Final-redhat-00001</version.org.wildfly.security.elytron>
         <version.org.wildfly.transaction.client>1.1.11.Final-redhat-00001</version.org.wildfly.transaction.client>
 
         <!-- versions of Maven plugins (and their important dependencies) -->
