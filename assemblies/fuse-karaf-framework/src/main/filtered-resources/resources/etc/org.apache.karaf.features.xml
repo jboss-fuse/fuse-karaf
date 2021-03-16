@@ -159,8 +159,6 @@
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xpp3/${version.org.apache.servicemix.bundles.xpp3}" mode="maven" />
         <bundle originalUri="mvn:org.apache.sshd/sshd-core/[1,3)"
                 replacement="mvn:org.apache.sshd/sshd-core/${version.org.apache.sshd}" mode="maven" />
-        <bundle originalUri="mvn:org.apache.velocity/velocity"
-                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.velocity/${version.org.apache.servicemix.bundles.velocity}" mode="maven" />
         <bundle originalUri="mvn:org.atmosphere/atmosphere-runtime/[2.4,3)"
                 replacement="mvn:org.atmosphere/atmosphere-runtime/${version.org.atmosphere}" mode="maven" />
         <bundle originalUri="mvn:org.glassfish.web/javax.el/[2,3)"
