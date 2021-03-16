@@ -101,6 +101,19 @@ public interface CredentialStoreService {
             throws Exception;
 
     /**
+     * Generates {@link MaskedPasswordData} to protect credential store
+     * @param algorithm
+     * @param password
+     * @param ivc
+     * @param iterationCount
+     * @param salt
+     * @param iv
+     * @return
+     */
+    MaskedPasswordData generateMaskedPassword(String algorithm, char[] password, char[] ivc, int iterationCount, byte[] salt, byte[] iv)
+            throws Exception;
+
+    /**
      * Called to clean up all service registrations and close all the trackers
      * @param restoreOriginalPm whether to register original {@link org.apache.felix.cm.PersistenceManager}
      */

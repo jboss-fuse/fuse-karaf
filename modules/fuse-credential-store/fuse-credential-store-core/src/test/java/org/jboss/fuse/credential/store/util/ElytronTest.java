@@ -297,7 +297,7 @@ public class ElytronTest {
         //  new javax.crypto.spec.PBEParameterSpec(salt, ic)
         //  new javax.crypto.spec.PBEKeySpec(iv)
         // in MaskedPasswordSpec, iv, ic, salt and masked password have to be provided explicitly
-        // https://issues.jboss.org/browse/ELY-867 - can't use PBE algorithms that require IV
+        // https://issues.jboss.org/browse/ELY-867 didn't allow to use PBE algorithms that require IV
         //
         // with MD5-DES it's easy to decrypt the encrypted password simply by using bash, for example, having:
         //  - iv: somearbitrarycrazystringthatdoesnotmatter
@@ -354,7 +354,7 @@ public class ElytronTest {
         }
 
         // PBE ciphers which use com.sun.crypto.provider.PBES2Core spi require javax.crypto.spec.IvParameterSpec
-        // thus can't be used without fixing https://issues.jboss.org/browse/ELY-867
+        // thus can't be used without fixing https://issues.jboss.org/browse/ELY-867 (fixed now)
 
         // after removing ciphers that reuse the same SPI (duplicate names), we're left with:
         //
@@ -409,7 +409,6 @@ public class ElytronTest {
             LOG.info("{} masked password: {}", algorithm, Hex.encodeHexString(password.getMaskedPasswordBytes()));
 
             // clear key spec - masked passwords can do that
-            // though not with each algorithm: https://issues.jboss.org/browse/ELY-867
 //            ClearPasswordSpec cspec = passwordFactory.getKeySpec(password, ClearPasswordSpec.class);
 //            LOG.info("{} clear password: {}", algorithm, new String(cspec.getEncodedPassword()));
         }

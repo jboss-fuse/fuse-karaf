@@ -24,8 +24,6 @@ import org.apache.karaf.shell.api.console.Session;
 
 public final class Helpers {
 
-
-
      static final Set<String> ALGORITHMS_THAT_REQUIRE_IV = new HashSet<>(
             Arrays.asList(
                     "PBEWITHHMACSHA1ANDAES_128",
@@ -37,7 +35,17 @@ public final class Helpers {
                     "PBEWITHHMACSHA384ANDAES_128",
                     "PBEWITHHMACSHA384ANDAES_256",
                     "PBEWITHHMACSHA512ANDAES_128",
-                    "PBEWITHHMACSHA512ANDAES_256"
+                    "PBEWITHHMACSHA512ANDAES_256",
+                    "MASKED-HMAC-SHA1-AES-128",
+                    "MASKED-HMAC-SHA224-AES-128",
+                    "MASKED-HMAC-SHA256-AES-128",
+                    "MASKED-HMAC-SHA384-AES-128",
+                    "MASKED-HMAC-SHA512-AES-128",
+                    "MASKED-HMAC-SHA1-AES-256",
+                    "MASKED-HMAC-SHA224-AES-256",
+                    "MASKED-HMAC-SHA256-AES-256",
+                    "MASKED-HMAC-SHA384-AES-256",
+                    "MASKED-HMAC-SHA512-AES-256"
             )
     );
 
@@ -91,7 +99,7 @@ public final class Helpers {
         return password;
     }
 
-    static boolean isIVNeeded(String algorithm) {
+    public static boolean isIVNeeded(String algorithm) {
         return ALGORITHMS_THAT_REQUIRE_IV.contains(algorithm.toUpperCase());
     }
 }

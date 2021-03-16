@@ -26,6 +26,8 @@ import org.jboss.fuse.credential.store.command.completers.CredentialStoreAlgorit
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.FrameworkUtil;
 
+import static org.jboss.fuse.jasypt.commands.Helpers.isIVNeeded;
+
 /**
  * An Apache Karaf shell command to create a Credential store.
  */
@@ -61,11 +63,17 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
             + "If neither `-w` nor `-W` options are specified, password will be read from standard input.")
     String password;
 
+    @Option(name = "-I", aliases = { "--use-iv-generator" }, description = "Use RandomIvGenerator for encryption. Default is false except for the following algorithms: "
+           + "masked-HMAC-SHA1-AES-128, masked-HMAC-SHA224-AES-128, masked-HMAC-SHA256-AES-128, masked-HMAC-SHA384-AES-128, masked-HMAC-SHA512-AES-128, masked-HMAC-SHA1-AES-256, masked-HMAC-SHA224-AES-256, masked-HMAC-SHA256-AES-256, masked-HMAC-SHA384-AES-256, masked-HMAC-SHA512-AES-256")
+    boolean useIVGenerator = false;
+
     /**
      * Performs the creation of Credential store according to the given command line options.
      */
     @Override
     public Object execute() throws Exception {
+        this.useIVGenerator = this.useIVGenerator || isIVNeeded(algorithm);
+
         if (credentialStoreService.available() && !force) {
             System.err.println("Credential store is already configured. To replace the configuration, please use \"--force\" option.");
             return null;
@@ -146,7 +154,6 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
         int idx = 0;
         for (byte b : iv) {
             ivc[idx] = CHARS[((int)iv[idx] & 0xff) % CHARS.length];
-            iv[idx] = 0;
             idx++;
         }
 
@@ -154,7 +161,11 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
         CredentialStoreConfiguration config = new CredentialStoreConfiguration(credentialStoreService);
         config.setLocation(credentialStoreFile);
         config.setProtectionAlgorithmName(algorithm);
-        config.configureMaskedPasswordDetails(algorithm, password.toCharArray(), ivc, iterationCount, salt);
+        if (useIVGenerator) {
+            config.configureMaskedPasswordDetails(algorithm, password.toCharArray(), ivc, iterationCount, salt, iv);
+        } else {
+            config.configureMaskedPasswordDetails(algorithm, password.toCharArray(), ivc, iterationCount, salt);
+        }
 
         if (persistConfiguration) {
             config.persistConfiguration();
