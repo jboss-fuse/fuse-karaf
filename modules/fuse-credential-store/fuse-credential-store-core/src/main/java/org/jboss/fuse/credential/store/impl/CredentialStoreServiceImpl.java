@@ -373,7 +373,12 @@ public class CredentialStoreServiceImpl implements CredentialStoreService {
                 elytronProvider);
         Map<String, String> parameters = new HashMap<>();
         parameters.put("create", config.getKey() == null ? "false" : "true");
-        parameters.put("keyStoreType", "PKCS12");
+        if ("IBM Corporation".equals(System.getProperty("java.vendor"))) {
+            // ENTESB-15924, ELY-1295
+            parameters.put("keyStoreType", "JCEKS");
+        } else {
+            parameters.put("keyStoreType", "PKCS12");
+        }
         parameters.put("location", config.getLocation().getCanonicalPath());
 
         // side effect (I know, I know, ...) of this call is setting protectionParameters to byte array
