@@ -49,6 +49,7 @@ public class CredentialStoreConfiguration {
 
     public static final String DEFAULT_ALGORITHM = org.wildfly.security.password.interfaces.MaskedPassword.ALGORITHM_MASKED_SHA1_DES_EDE;
     public static final String DEFAULT_LOCATION = "credential.store.p12";
+    public static final String DEFAULT_LOCATION_IBM = "credential.store.jceks";
 
     private static final Base64.Encoder ENCODER = Base64.getEncoder();
     private static final Base64.Decoder DECODER = Base64.getDecoder();
@@ -104,7 +105,10 @@ public class CredentialStoreConfiguration {
      * @return
      */
     public boolean discover() {
-        String defaultLocation = new File(System.getProperty("karaf.etc"), DEFAULT_LOCATION).getAbsolutePath();
+        boolean isIBMJDK = "IBM Corporation".equals(System.getProperty("java.vendor"));
+
+        String defaultLocation = isIBMJDK ? new File(System.getProperty("karaf.etc"), DEFAULT_LOCATION_IBM).getAbsolutePath()
+                : new File(System.getProperty("karaf.etc"), DEFAULT_LOCATION).getAbsolutePath();
 
         String protection = System.getProperty(PROPERTY_CREDENTIAL_STORE_PROTECTION);
         String params = System.getProperty(PROPERTY_CREDENTIAL_STORE_PROTECTION_PARAMS);

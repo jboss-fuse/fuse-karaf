@@ -72,6 +72,8 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
      */
     @Override
     public Object execute() throws Exception {
+        boolean isIBMJDK = "IBM Corporation".equals(System.getProperty("java.vendor"));
+
         this.useIVGenerator = this.useIVGenerator || isIVNeeded(algorithm);
 
         if (credentialStoreService.available() && !force) {
@@ -105,12 +107,17 @@ public final class CreateCredentialStore extends AbstractCredentialStoreCommand 
         // - location
         File credentialStoreFile = null;
         if (location == null) {
-            credentialStoreFile = new File(System.getProperty("karaf.etc"), CredentialStoreConfiguration.DEFAULT_LOCATION);
+            if (isIBMJDK) {
+                credentialStoreFile = new File(System.getProperty("karaf.etc"), CredentialStoreConfiguration.DEFAULT_LOCATION_IBM);
+            } else {
+                credentialStoreFile = new File(System.getProperty("karaf.etc"), CredentialStoreConfiguration.DEFAULT_LOCATION);
+            }
         } else {
             credentialStoreFile = new File(location);
         }
         if (credentialStoreFile.isDirectory()) {
-            File f = new File(credentialStoreFile, CredentialStoreConfiguration.DEFAULT_LOCATION);
+            File f = isIBMJDK ? new File(credentialStoreFile, CredentialStoreConfiguration.DEFAULT_LOCATION_IBM)
+                    : new File(credentialStoreFile, CredentialStoreConfiguration.DEFAULT_LOCATION);
             if (!force && f.isFile()) {
                 System.err.println("File " + f.getCanonicalPath() + " already exist.");
                 return null;
