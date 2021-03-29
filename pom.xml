@@ -206,6 +206,7 @@
         <version.org.apache.servicemix.bundles.saxon>9.8.0-8_1</version.org.apache.servicemix.bundles.saxon>
         <version.org.apache.servicemix.bundles.serp>1.14.1_1</version.org.apache.servicemix.bundles.serp>
         <version.org.apache.servicemix.bundles.spring>5.2.13.RELEASE_1</version.org.apache.servicemix.bundles.spring>
+        <version.org.apache.servicemix.bundles.spring.security>5.3.3.RELEASE_2</version.org.apache.servicemix.bundles.spring.security>
         <version.org.apache.servicemix.bundles.xalan>2.7.2_3</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2_1</version.org.apache.servicemix.bundles.xalan-serializer>
         <version.org.apache.servicemix.bundles.xerces>2.12.0_1</version.org.apache.servicemix.bundles.xerces>
@@ -762,6 +763,12 @@
                 <artifactId>apache-karaf</artifactId>
                 <version>${version.org.apache.karaf}</version>
                 <type>tar.gz</type>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.karaf.itests</groupId>
+                <artifactId>tests</artifactId>
+                <version>${version.org.apache.karaf}</version>
+                <classifier>tests</classifier>
             </dependency>
 
             <dependency>
