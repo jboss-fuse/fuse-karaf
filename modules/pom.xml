@@ -43,7 +43,6 @@
         <module>fuse-servlet-compatibility</module>
         <module>fuse-pax-jms-ibmmq-compatibility</module>
         <module>fuse-stax2-compatibility</module>
-        <module>org.apache.servicemix.specs.activation-api-1.2.1</module>
         <!-- module moved from jboss-fuse/fabric8/components -->
         <module>fabric8-karaf</module>
     </modules>

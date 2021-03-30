@@ -38,6 +38,7 @@
     <modules>
         <module>fuse-itests-common</module>
         <module>fuse-itests-paxexam</module>
+        <module>fuse-itests-karaf</module>
     </modules>
 
 </project>
