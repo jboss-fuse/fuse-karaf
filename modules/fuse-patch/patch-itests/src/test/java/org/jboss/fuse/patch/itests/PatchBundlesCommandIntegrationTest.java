@@ -88,7 +88,7 @@ public class PatchBundlesCommandIntegrationTest extends AbstractPatchIntegration
             }
 
             for (String line : output.toString("UTF-8").split("\\r?\\n")) {
-                if (line.contains(name) && line.contains(!installed ? "false" : "root")) {
+                if (line.contains(name) && line.contains(!installed ? "false" : "true")) {
                     done = true;
                     break;
                 }
