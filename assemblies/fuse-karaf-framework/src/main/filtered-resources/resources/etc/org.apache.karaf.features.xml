@@ -185,10 +185,14 @@
                 replacement="mvn:io.netty/netty-codec/${version.io.netty}" mode="maven" />
         <bundle originalUri="mvn:io.netty/netty-codec-http/[4.1,4.2)"
                 replacement="mvn:io.netty/netty-codec-http/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-codec-socks/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-codec-socks/${version.io.netty}" mode="maven" />
         <bundle originalUri="mvn:io.netty/netty-common/[4.1,4.2)"
                 replacement="mvn:io.netty/netty-common/${version.io.netty}" mode="maven" />
         <bundle originalUri="mvn:io.netty/netty-handler/[4.1,4.2)"
                 replacement="mvn:io.netty/netty-handler/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-handler-proxy/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-handler-proxy/${version.io.netty}" mode="maven" />
         <bundle originalUri="mvn:io.netty/netty-resolver/[4.1,4.2)"
                 replacement="mvn:io.netty/netty-resolver/${version.io.netty}" mode="maven" />
         <bundle originalUri="mvn:io.netty/netty-transport/[4.1,4.2)"
@@ -325,6 +329,8 @@
                 replacement="mvn:org.apache.curator/curator-x-discovery/${version.org.apache.curator}" mode="maven"/>
         <bundle originalUri="mvn:org.codehaus.woodstox/woodstox-core-asl/[4.4,5)"
                 replacement="mvn:org.codehaus.woodstox/woodstox-core-asl/${version.org.codehaus.woodstox.core}" mode="maven"/>
+        <bundle originalUri="mvn:net.i2p.crypto/eddsa/[0.1,1)"
+                replacement="mvn:net.i2p.crypto/eddsa/${version.net.i2p.crypto}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
