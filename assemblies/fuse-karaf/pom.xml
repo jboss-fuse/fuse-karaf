@@ -629,6 +629,7 @@
                         <library>mvn:net.java.dev.jna/jna/${version.net.java.dev.jna};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna-platform/${version.net.java.dev.jna};type:=boot;export:=false</library>
                         <library>mvn:org.apache.karaf.specs/org.apache.karaf.specs.activator/${version.org.apache.karaf};type:=boot;export:=false</library>
+                        <library>mvn:net.i2p.crypto/eddsa/${version.net.i2p.crypto};type:=boot;export:=false</library>
                         <!-- lib/jdk9plus -->
                         <library>mvn:jakarta.xml.bind/jakarta.xml.bind-api/${version.jakarta.xml.bind};type:=jdk9plus;export:=false</library>
                         <library>mvn:jakarta.xml.soap/jakarta.xml.soap-api/${version.jakarta.xml.soap};type:=jdk9plus;export:=false</library>
