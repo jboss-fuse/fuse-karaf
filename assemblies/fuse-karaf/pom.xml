@@ -483,6 +483,9 @@
                         <feature>pax-jms-activemq</feature>
                         <feature>pax-jms-oracleaq</feature>
 
+                        <!-- Unsupported PAX JDBC features -->
+                        <feature>pax-jdbc-pool-aries</feature>
+
                         <!-- Unsupported Karaf features -->
                         <feature>minimal</feature>
                         <feature>standard</feature>
