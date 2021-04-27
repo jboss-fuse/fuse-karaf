@@ -340,8 +340,12 @@ public class PatchServiceImpl implements PatchService {
                     }
                 }
                 Set<String> installedFeatures = null;
+                Set<String> availableFeatures = null;
                 try {
                     installedFeatures = Arrays.stream(featuresService.listInstalledFeatures())
+                            .map(f -> String.format("%s|%s", f.getName(), f.getVersion()))
+                            .collect(Collectors.toSet());
+                    availableFeatures = Arrays.stream(featuresService.listFeatures())
                             .map(f -> String.format("%s|%s", f.getName(), f.getVersion()))
                             .collect(Collectors.toSet());
                 } catch (Exception e) {
@@ -358,8 +362,12 @@ public class PatchServiceImpl implements PatchService {
                     if (!features.get(f)) {
                         System.out.printf("Removing feature %s%n", fv[0]);
                     } else if (installedFeatures == null || !installedFeatures.contains(f)) {
-                        System.out.printf("Restoring feature %s%n", fid);
-                        toInstall.add(fid);
+                        if (availableFeatures == null || availableFeatures.contains(f)) {
+                            System.out.printf("Restoring feature %s%n", fid);
+                            toInstall.add(fid);
+                        } else {
+                            System.out.printf("Skipping unavailable feature %s%n", fid);
+                        }
                     }
                 }
                 try {
