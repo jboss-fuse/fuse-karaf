@@ -152,7 +152,7 @@
         <version.net.bytebuddy>1.9.11.redhat-00002</version.net.bytebuddy>
         <version.net.i2p.crypto>0.3.0</version.net.i2p.crypto>
         <version.net.java.dev.jna>5.7.0</version.net.java.dev.jna>
-        <version.net.sf.ehcache>2.10.5</version.net.sf.ehcache>
+        <version.net.sf.ehcache>2.10.9.2</version.net.sf.ehcache>
         <version.org.antlr4>4.8</version.org.antlr4>
         <version.org.apache.activemq.amq6>5.11.0.redhat-630495</version.org.apache.activemq.amq6>
         <version.org.apache.aries.jpa>2.7.2</version.org.apache.aries.jpa>
