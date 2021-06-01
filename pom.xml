@@ -22,7 +22,7 @@
 
     <groupId>org.jboss.fuse</groupId>
     <artifactId>jboss-fuse-parent</artifactId>
-    <version>7.8.0.redhat-SNAPSHOT</version>
+    <version>7.8.0.fuse-780047</version>
     <packaging>pom</packaging>
 
     <name>Red Hat Fuse :: Parent</name>
@@ -77,8 +77,8 @@
         <!-- versions of "subprojects" of Red Hat Fuse -->
         <version.io.hawt>2.0.0.fuse-sb2-780022-redhat-00001</version.io.hawt>
         <version.org.apache.activemq.artemis>2.13.0.redhat-00006</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.23.2.fuse-780036-redhat-00001</version.org.apache.camel>
-        <version.org.apache.cxf>3.3.6.fuse-780029-redhat-00001</version.org.apache.cxf>
+        <version.org.apache.camel>2.23.2.fuse-780038</version.org.apache.camel>
+        <version.org.apache.cxf>3.3.6.fuse-780031</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.9.fuse-780023-redhat-00001</version.org.apache.karaf>
         <version.org.fusesource.activemq>7.8.0.fuse-sb2-780035-redhat-00001</version.org.fusesource.activemq>
         <version.org.fusesource.camel-sap>7.8.0.fuse-sb2-780035-redhat-00001</version.org.fusesource.camel-sap>
