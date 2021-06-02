@@ -55,7 +55,7 @@
         <bundle>mvn:javax.transaction/javax.transaction-api/${version.javax.transaction}</bundle>
         <bundle dependency="true">mvn:javax.persistence/javax.persistence-api/${version.javax.persistence}</bundle>
         <bundle>mvn:com.google.guava/guava/${version.com.google.guava20}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson29}</bundle>
+        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson}</bundle>
         <bundle>mvn:com.sun.mail/javax.mail/${version.com.sun.mail}</bundle>
     </feature>
 
@@ -70,7 +70,7 @@
     <feature name="kie7-remote-dependencies">
         <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jsr339-api-2.0.1/${version.org.apache.servicemix.specs}</bundle>
         <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
-        <!-- No jackson dependencies here, because RHPAM 7.10 needs Jackson 2.10, so these can't be provided here (Fuse uses 2.9) -->
+        <!-- No jackson dependencies here, because RHPAM 7.10 needs Jackson 2.10, so these can't be provided here (Fuse uses 2.12) -->
 <!--        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson.core}</bundle>-->
 <!--        <bundle>mvn:com.fasterxml.jackson.core/jackson-core/${version.com.fasterxml.jackson.core}</bundle>-->
 <!--        <bundle>mvn:com.fasterxml.jackson.core/jackson-databind/${version.com.fasterxml.jackson.core.databind}</bundle>-->
