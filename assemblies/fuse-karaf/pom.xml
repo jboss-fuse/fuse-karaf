@@ -624,9 +624,12 @@
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces};type:=endorsed;export:=true;delegate:=true</library>
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/${version.org.apache.servicemix.bundles.xalan};type:=endorsed;export:=true;delegate:=true</library>
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${version.org.apache.servicemix.bundles.xalan-serializer};type:=endorsed;export:=true;delegate:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.2.1/${version.org.apache.servicemix.specs.activation};type:=endorsed;export:=true;delegate:=true</library>
                         <!-- lib -->
                         <library>mvn:org.jboss.fuse.modules/fuse-branding/${project.version};type:=default;export:=false</library>
                         <library>mvn:io.prometheus.jmx/jmx_prometheus_javaagent/${version.io.prometheus};type:=default;export:=false</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.locator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <!-- lib/boot -->
                         <library>mvn:org.osgi/org.osgi.core/${version.org.osgi};type:=boot;export:=false</library>
                         <library>mvn:org.apache.karaf/org.apache.karaf.main/${version.org.apache.karaf};type:=boot;export:=false</library>
@@ -639,7 +642,6 @@
                         <library>mvn:jakarta.xml.soap/jakarta.xml.soap-api/${version.jakarta.xml.soap};type:=jdk9plus;export:=false</library>
                         <library>mvn:jakarta.jws/jakarta.jws-api/${version.jakarta.jws};type:=jdk9plus;export:=false</library>
                         <library>mvn:jakarta.xml.ws/jakarta.xml.ws-api/${version.jakarta.xml.ws};type:=jdk9plus;export:=false</library>
-                        <library>mvn:com.sun.activation/javax.activation/${version.com.sun.activation};type:=jdk9plus;export:=false</library>
                         <!-- JAXB implementation is required for Karaf feature parsing -->
                         <library>mvn:org.glassfish.jaxb/jaxb-runtime/${version.org.glassfish.jaxb};type:=jdk9plus;export:=false</library>
                         <library>mvn:org.glassfish.jaxb/txw2/${version.org.glassfish.jaxb};type:=jdk9plus;export:=false</library>
