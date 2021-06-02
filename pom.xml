@@ -123,8 +123,8 @@
         <version.io.netty>4.1.63.Final-redhat-00001</version.io.netty>
         <version.io.opentracing>0.31.0</version.io.opentracing>
         <version.io.prometheus>0.13.0</version.io.prometheus>
-        <version.io.swagger>1.5.24.fuse-780018</version.io.swagger>
-        <version.io.swagger.core.v3>2.1.3.fuse-780015</version.io.swagger.core.v3>
+        <version.io.swagger>1.6.2</version.io.swagger>
+        <version.io.swagger.core.v3>2.1.9</version.io.swagger.core.v3>
         <version.io.undertow>2.2.5.Final-redhat-00001</version.io.undertow>
         <!-- version of Undertow used in Pax Web feature, to override it correctly -->
         <version.io.undertow-pax-web>2.2.5.Final</version.io.undertow-pax-web>
