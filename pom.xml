@@ -352,39 +352,6 @@
             </snapshots>
         </repository>
         <repository>
-            <!-- For io.prometheus.jmx:jmx_prometheus_javaagent:jar:0.14.0.redhat-00002 -->
-            <id>Indy</id>
-            <url>indy.psi.redhat.com/browse/maven/group/static</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Swagger 1.5.18.fuse70-1-redhat-1 -->
-            <id>jb-fuse-7-brew</id>
-            <url>https://download.eng.bos.redhat.com/brewroot/repos/jb-fuse-7-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Narayana 5.5.31.Final-redhat-1 -->
-            <id>jb-eap-7.1-brew</id>
-            <url>https://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.1-rhel-7-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
             <!-- For Artemis -->
             <id>jb-amq-7-brew</id>
             <url>https://download.eng.bos.redhat.com/brewroot/repos/jb-amq-7-build/latest/maven</url>
