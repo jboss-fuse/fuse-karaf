@@ -221,6 +221,7 @@
         <version.org.apache.servicemix.bundles.xmlresolver>1.2.5.fuse-redhat-00006</version.org.apache.servicemix.bundles.xmlresolver>
         <version.org.apache.servicemix.bundles.xpp3>1.1.4.c8-fuse-redhat-00002</version.org.apache.servicemix.bundles.xpp3>
         <version.org.apache.servicemix.bundles.xstream-java8>1.4.11_1</version.org.apache.servicemix.bundles.xstream-java8>
+        <version.org.apache.servicemix.bundles.hapi>3.5.0_1</version.org.apache.servicemix.bundles.hapi>
         <version.org.apache.servicemix.specs>2.9.0</version.org.apache.servicemix.specs>
         <version.org.apache.servicemix.specs.activation>1.2.1_3</version.org.apache.servicemix.specs.activation>
         <version.org.apache.servicemix.specs.jaxb>2.3_3</version.org.apache.servicemix.specs.jaxb>
