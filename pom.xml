@@ -98,7 +98,7 @@
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
         <version.com.google.guava>27.1-jre</version.com.google.guava>
-        <version.com.google.guava.failureaccess>1.0.1</version.com.google.guava.failureaccess>
+        <version.com.google.guava.failureaccess>1.0.1.redhat-00002</version.com.google.guava.failureaccess>
         <version.com.google.guava16>16.0.1</version.com.google.guava16>
         <version.com.google.guava19>19.0.0.redhat-1</version.com.google.guava19>
         <version.com.google.guava20>20.0.0.redhat-1</version.com.google.guava20>
@@ -107,13 +107,13 @@
         <version.com.ning.async-http-client>1.9.40</version.com.ning.async-http-client>
         <version.com.oracle.database.jdbc>19.10.0.0</version.com.oracle.database.jdbc>
         <version.com.sun.activation>1.2.0</version.com.sun.activation>
-        <version.com.sun.istack>3.0.10</version.com.sun.istack>
+        <version.com.sun.istack>3.0.10.redhat-00001</version.com.sun.istack>
         <version.com.sun.mail>1.6.1.redhat-1</version.com.sun.mail>
         <version.com.thoughtworks.paranamer>2.8</version.com.thoughtworks.paranamer>
         <version.commons-beanutils>1.9.4.redhat-00002</version.commons-beanutils>
-        <version.commons-codec>1.15</version.commons-codec>
+        <version.commons-codec>1.15.0.redhat-00001</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
-        <version.commons-io>2.8.0</version.commons-io>
+        <version.commons-io>2.11.0.redhat-00001</version.commons-io>
         <version.commons-lang>2.6.0.redhat-7</version.commons-lang>
         <version.commons-net>3.6</version.commons-net>
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
@@ -138,16 +138,16 @@
         <version.javax.enterprise.cdi-api>1.2</version.javax.enterprise.cdi-api>
         <version.javax.interceptor>1.2.2</version.javax.interceptor>
         <version.javax.jms>2.0.1</version.javax.jms>
-        <version.javax.persistence>2.2</version.javax.persistence>
+        <version.javax.persistence>2.2.0.redhat-1</version.javax.persistence>
         <version.javax.resource>1.7.1</version.javax.resource>
         <version.javax.security.jacc>1.6</version.javax.security.jacc>
         <version.javax.servlet>4.0.1</version.javax.servlet>
         <version.javax.transaction>1.2</version.javax.transaction>
         <version.javax.validation>2.0.1.Final-redhat-1</version.javax.validation>
         <version.javax.ws.rs>2.1.1</version.javax.ws.rs>
-        <version.javax.xml.bind>2.3.0</version.javax.xml.bind>
+        <version.javax.xml.bind>2.3.0.redhat-00003</version.javax.xml.bind>
         <version.joda-time>2.9.9</version.joda-time>
-        <version.junit>4.12</version.junit>
+        <version.junit>4.12.0.redhat-003</version.junit>
         <version.net.bytebuddy>1.9.11.redhat-00002</version.net.bytebuddy>
         <version.net.i2p.crypto>0.3.0</version.net.i2p.crypto>
         <version.net.java.dev.jna>5.7.0</version.net.java.dev.jna>
@@ -159,11 +159,11 @@
         <version.org.apache.aries.proxy>1.1.11</version.org.apache.aries.proxy>
         <version.org.apache.aries.spifly>1.3.2</version.org.apache.aries.spifly>
         <version.org.apache.commons.collections4>4.1</version.org.apache.commons.collections4>
-        <version.org.apache.commons.compress>1.21</version.org.apache.commons.compress>
+        <version.org.apache.commons.compress>1.21.0.redhat-00001</version.org.apache.commons.compress>
         <version.org.apache.commons.dbcp2>2.8.0</version.org.apache.commons.dbcp2>
-        <version.org.apache.commons.lang3>3.12.0</version.org.apache.commons.lang3>
+        <version.org.apache.commons.lang3>3.12.0.redhat-00001</version.org.apache.commons.lang3>
         <version.org.apache.commons.math3>3.6.1</version.org.apache.commons.math3>
-        <version.org.apache.commons.pool2>2.9.0</version.org.apache.commons.pool2>
+        <version.org.apache.commons.pool2>2.9.0.redhat-00001</version.org.apache.commons.pool2>
         <version.org.apache.commons.text>1.6.0.redhat-00001</version.org.apache.commons.text>
         <version.org.apache.curator>2.11.1</version.org.apache.curator>
         <version.org.apache.felix>5.6.12</version.org.apache.felix>
@@ -179,11 +179,11 @@
         <version.org.apache.geronimo.specs.jms_2.0>1.0.0.alpha-2-redhat-2</version.org.apache.geronimo.specs.jms_2.0>
         <version.org.apache.geronimo.specs.jta_1.1>1.1.1.redhat-2</version.org.apache.geronimo.specs.jta_1.1>
         <version.org.apache.httpcomponents.httpasyncclient>4.1.3.redhat-2</version.org.apache.httpcomponents.httpasyncclient>
-        <version.org.apache.httpcomponents.httpclient>4.5.13</version.org.apache.httpcomponents.httpclient>
+        <version.org.apache.httpcomponents.httpclient>4.5.13.redhat-00002</version.org.apache.httpcomponents.httpclient>
         <version.org.apache.httpcomponents.httpcore>4.4.14</version.org.apache.httpcomponents.httpcore>
         <version.org.apache.johnzon>1.1.0</version.org.apache.johnzon>
-        <version.org.apache.logging.log4j>2.14.0</version.org.apache.logging.log4j>
-        <version.org.apache.maven>3.6.3</version.org.apache.maven>
+        <version.org.apache.logging.log4j>2.14.0.redhat-00004</version.org.apache.logging.log4j>
+        <version.org.apache.maven>3.6.3.redhat-00004</version.org.apache.maven>
         <version.org.apache.maven.resolver>1.4.1</version.org.apache.maven.resolver>
         <version.org.apache.mina>2.0.21</version.org.apache.mina>
         <version.org.apache.qpid.proton-j>0.33.6.redhat-00001</version.org.apache.qpid.proton-j>
@@ -235,11 +235,11 @@
         <version.org.bouncycastle>1.69</version.org.bouncycastle>
         <version.org.codehaus.groovy>2.4.13</version.org.codehaus.groovy>
         <version.org.codehaus.janino>2.5.16</version.org.codehaus.janino>
-        <version.org.codehaus.plexus>3.1.0</version.org.codehaus.plexus>
+        <version.org.codehaus.plexus>3.1.0.redhat-00002</version.org.codehaus.plexus>
         <version.org.codehaus.woodstox.core>4.4.1.redhat-00001</version.org.codehaus.woodstox.core>
         <version.org.codehaus.woodstox.stax2-api>4.2.1</version.org.codehaus.woodstox.stax2-api>
         <version.org.eclipse.jdt.core.compiler>4.6.1.redhat-1</version.org.eclipse.jdt.core.compiler>
-        <version.org.eclipse.jetty>9.4.43.v20210629</version.org.eclipse.jetty>
+        <version.org.eclipse.jetty>9.4.43.v20210629-redhat-00001</version.org.eclipse.jetty>
         <version.org.eclipse.jgit>5.1.3.201810200350-r</version.org.eclipse.jgit>
         <version.org.eclipse.persistence>2.1.0</version.org.eclipse.persistence>
         <version.org.fusesource.hawtbuf>1.11.0.redhat-2</version.org.fusesource.hawtbuf>
@@ -250,9 +250,9 @@
         <version.org.hibernate.validator>6.0.22.Final-redhat-00002</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.2.Final-redhat-1</version.org.hibernate.javax.persistence>
         <version.org.javassist>3.24.1-GA</version.org.javassist>
-        <version.org.jasypt>1.9.3</version.org.jasypt>
+        <version.org.jasypt>1.9.3.redhat-00002</version.org.jasypt>
         <version.org.jboss.jandex>2.0.5.Final-redhat-1</version.org.jboss.jandex>
-        <version.org.jboss.logging>3.4.1.Final-redhat-00001</version.org.jboss.logging>
+        <version.org.jboss.logging>3.4.1.Final-redhat-00002</version.org.jboss.logging>
         <version.org.jboss.modules>1.10.0.Final-redhat-00001</version.org.jboss.modules>
         <version.org.jboss.narayana>5.11.3.Final-redhat-00001</version.org.jboss.narayana>
         <version.org.jboss.spec.jacc>1.0.2.Final</version.org.jboss.spec.jacc>
@@ -264,7 +264,7 @@
         <version.org.keycloak>9.0.15.redhat-00002</version.org.keycloak>
         <version.org.keycloak.product>9.0.15.redhat-00002</version.org.keycloak.product>
         <version.org.keycloak.rhsso>7.4.9.GA</version.org.keycloak.rhsso>
-        <version.org.messaginghub.pooled-jms>1.2.1.redhat-00003</version.org.messaginghub.pooled-jms>
+        <version.org.messaginghub.pooled-jms>1.2.1.redhat-00011</version.org.messaginghub.pooled-jms>
         <version.org.mockito>3.8.0</version.org.mockito>
         <version.org.mvel>2.4.0.Final-redhat-1</version.org.mvel>
         <version.org.ops4j.base>1.5.1</version.org.ops4j.base>
@@ -284,7 +284,7 @@
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
         <version.org.springframework>5.2.15.RELEASE</version.org.springframework>
         <version.org.yaml.snakeyaml>1.28</version.org.yaml.snakeyaml>
-        <version.org.wildfly.common>1.5.4.Final</version.org.wildfly.common>
+        <version.org.wildfly.common>1.5.4.Final-redhat-00001</version.org.wildfly.common>
         <version.org.wildfly.security.elytron>1.14.1.Final-redhat-00001</version.org.wildfly.security.elytron>
         <version.org.wildfly.transaction.client>1.1.11.Final-redhat-00001</version.org.wildfly.transaction.client>
 
@@ -352,49 +352,6 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <!-- For Artemis -->
-            <id>jb-amq-7-brew</id>
-            <url>https://download.eng.bos.redhat.com/brewroot/repos/jb-amq-7-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <!-- For Hibernate 5.3.x -->
-            <id>brew-jb-eap-7.2-maven</id>
-            <url>https://download.eng.bos.redhat.com/brewroot/repos/jb-eap-7.2-maven-build/latest/maven</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>apache-snapshots-repository</id>
-            <url>https://repository.apache.org/content/groups/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>daily</updatePolicy>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>ops4j-snapshots-repository</id>
-            <url>https://oss.sonatype.org/content/repositories/ops4j-snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
     </repositories>
 
     <pluginRepositories>
@@ -426,17 +383,6 @@
             </releases>
             <snapshots>
                 <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>apache-snapshots-repository</id>
-            <url>https://repository.apache.org/content/groups/snapshots</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>interval:120</updatePolicy>
             </snapshots>
         </pluginRepository>
     </pluginRepositories>
