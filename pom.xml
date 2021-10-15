@@ -188,7 +188,7 @@
         <version.org.apache.mina>2.0.21</version.org.apache.mina>
         <version.org.apache.qpid.proton-j>0.33.6.redhat-00001</version.org.apache.qpid.proton-j>
         <version.org.apache.qpid.qpid-jms-client>0.54.0.redhat-00001</version.org.apache.qpid.qpid-jms-client>
-        <version.org.apache.santuario>2.1.4</version.org.apache.santuario>
+        <version.org.apache.santuario>2.1.7.redhat-00001</version.org.apache.santuario>
         <version.org.apache.servicemix.bundles.antlr2>2.7.7.5-fuse-redhat-00002</version.org.apache.servicemix.bundles.antlr2>
         <version.org.apache.servicemix.bundles.antlr>3.5.2.2-fuse-redhat-00001</version.org.apache.servicemix.bundles.antlr>
         <version.org.apache.servicemix.bundles.aopalliance>1.0.6.fuse-redhat-00006</version.org.apache.servicemix.bundles.aopalliance>
