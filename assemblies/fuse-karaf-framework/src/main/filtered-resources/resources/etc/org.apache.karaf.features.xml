@@ -291,8 +291,13 @@
                 replacement="mvn:net.bytebuddy/byte-buddy/${version.net.bytebuddy}" mode="maven" />
         <bundle originalUri="mvn:org.apache.mina/mina-core/[2.0,2.1)"
                 replacement="mvn:org.apache.mina/mina-core/${version.org.apache.mina}" mode="maven" />
-        <bundle originalUri="mvn:org.codehaus.groovy/groovy-all/[2.4,3)"
-                replacement="mvn:org.codehaus.groovy/groovy-all/${version.org.codehaus.groovy}" mode="maven" />
+        <!-- special override for hibernate-validator-groovy feature. there's no groovy-all for groovy 2.5.x -->
+        <bundle originalUri="mvn:org.codehaus.groovy/groovy-all/[2.4,2.5)"
+                replacement="mvn:org.codehaus.groovy/groovy-all/${version.org.codehaus.groovy24}" mode="maven" />
+        <bundle originalUri="mvn:org.codehaus.groovy/groovy/[2.4,3)"
+                replacement="mvn:org.codehaus.groovy/groovy/${version.org.codehaus.groovy}" mode="maven" />
+        <bundle originalUri="mvn:org.codehaus.groovy/groovy-jsr223/[2.4,3)"
+                replacement="mvn:org.codehaus.groovy/groovy-jsr223/${version.org.codehaus.groovy}" mode="maven" />
         <bundle originalUri="wrap:mvn:io.opentracing/opentracing-api/0.*"
                 replacement="wrap:mvn:io.opentracing/opentracing-api/${version.io.opentracing}" mode="maven" />
         <bundle originalUri="mvn:org.jboss.spec.javax.security.jacc/jboss-jacc-api_1.5_spec/[1.0,2.0)"
