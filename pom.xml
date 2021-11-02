@@ -139,6 +139,7 @@
         <version.javax.enterprise.cdi-api>1.2</version.javax.enterprise.cdi-api>
         <version.javax.interceptor>1.2.2</version.javax.interceptor>
         <version.javax.jms>2.0.1</version.javax.jms>
+        <version.javax.jws>1.0.0.MR1-redhat-8</version.javax.jws>
         <version.javax.persistence>2.2.0.redhat-1</version.javax.persistence>
         <version.javax.resource>1.7.1</version.javax.resource>
         <version.javax.security.jacc>1.6</version.javax.security.jacc>
@@ -1525,6 +1526,16 @@
                 <groupId>javax.persistence</groupId>
                 <artifactId>javax.persistence-api</artifactId>
                 <version>${version.javax.persistence}</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.jws</groupId>
+                <artifactId>jsr181-api</artifactId>
+                <version>${version.javax.jws}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.jws</groupId>
+                <artifactId>jakarta.jws-api</artifactId>
+                <version>${version.jakarta.jws}</version>
             </dependency>
 
             <!-- JAXB Implementation for JDK9+ -->
