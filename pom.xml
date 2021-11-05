@@ -262,6 +262,7 @@
         <version.org.jboss.xnio>3.8.4.Final-redhat-00001</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.jline>3.10.0</version.org.jline>
+        <version.org.jsoup>1.14.3</version.org.jsoup>
         <version.org.keycloak>9.0.15.redhat-00002</version.org.keycloak>
         <version.org.keycloak.product>9.0.15.redhat-00002</version.org.keycloak.product>
         <version.org.keycloak.rhsso>7.4.9.GA</version.org.keycloak.rhsso>
@@ -1941,6 +1942,12 @@
                 <groupId>org.jboss.xnio</groupId>
                 <artifactId>xnio-nio</artifactId>
                 <version>${version.org.jboss.xnio}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jsoup</groupId>
+                <artifactId>jsoup</artifactId>
+                <version>${version.org.jsoup}</version>
             </dependency>
 
         </dependencies>
