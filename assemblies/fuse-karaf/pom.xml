@@ -618,6 +618,7 @@
                         <library>mvn:org.bouncycastle/bcpkix-jdk15on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
                         <!-- lib/endorsed -->
                         <library>mvn:jakarta.annotation/jakarta.annotation-api/${version.jakarta.annotation};type:=endorsed;export:=false</library>
+                        <library>mvn:com.google.code.findbugs/jsr305/${version.com.google.code.findbugs};type:=endorsed;export:=false</library>
                         <library>mvn:javax.validation/validation-api/${version.javax.validation};type:=endorsed;export:=false</library>
                         <library>mvn:org.apache.karaf.specs/org.apache.karaf.specs.locator/${version.org.apache.karaf};type:=endorsed;export:=false</library>
                         <library>mvn:org.apache.karaf.specs/org.apache.karaf.specs.java.xml/${version.org.apache.karaf};type:=endorsed;export:=false</library>

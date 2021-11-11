@@ -96,6 +96,7 @@
         <version.com.fasterxml.jackson>2.12.1</version.com.fasterxml.jackson>
         <version.com.fasterxml.woodstox.core>5.2.1</version.com.fasterxml.woodstox.core>
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
+        <version.com.google.code.findbugs>3.0.2</version.com.google.code.findbugs>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
         <version.com.google.guava>27.1-jre</version.com.google.guava>
         <version.com.google.guava.failureaccess>1.0.1.redhat-00002</version.com.google.guava.failureaccess>
@@ -1493,6 +1494,20 @@
 
             <!-- javax dependencies -->
 
+            <dependency>
+                <groupId>jakarta.annotation</groupId>
+                <artifactId>jakarta.annotation-api</artifactId>
+                <version>${version.jakarta.annotation}</version>
+            </dependency>
+            <dependency>
+                <!--
+                    This is needed to fix ENTESB-17800 and the problems caused by jsr305 bundle exporting
+                    javax.annotation package with version 3.0.x
+                -->
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>${version.com.google.code.findbugs}</version>
+            </dependency>
             <dependency>
                 <groupId>javax.servlet</groupId>
                 <artifactId>javax.servlet-api</artifactId>
