@@ -750,6 +750,14 @@ public class PatchServiceImpl implements PatchService {
             }
 
             if (!simulate) {
+                try {
+                    // load classes required a bit later - needed in case our bundle gets refreshed
+                    getClass().getClassLoader().loadClass(PatchResult.class.getName());
+                    getClass().getClassLoader().loadClass(PatchReport.class.getName());
+                    getClass().getClassLoader().loadClass(FeatureUpdate.class.getName());
+                } catch (Throwable ignored) {
+                }
+
                 Runnable task = () -> {
                     try {
                         // update bundles
@@ -761,7 +769,11 @@ public class PatchServiceImpl implements PatchService {
                         if (featuresService != null
                                 && (overridesForFeatureKeys.size() > 0 || updatesForBundleKeys.size() > 0)) {
                             System.out.println("refreshing features");
-                            featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                            try {
+                                featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                            } catch (Throwable throwable) {
+                                System.out.println("Problem refreshing features (it is expected when patching bundles used by Karaf's feature service bundle)");
+                            }
                         }
 
                         // persist results of all installed patches
