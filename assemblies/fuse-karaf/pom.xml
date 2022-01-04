@@ -706,8 +706,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <copy file="${project.build.directory}/${project.artifactId}-${project.version}-baseline.zip"
-                                        todir="${project.build.directory}/assembly/system/org/jboss/fuse/fuse-karaf/${project.version}" />
+                                <copy file="${project.build.directory}/${project.artifactId}-${project.version}-baseline.zip" todir="${project.build.directory}/assembly/system/org/jboss/fuse/fuse-karaf/${project.version}" />
                             </target>
                         </configuration>
                     </execution>
@@ -838,8 +837,7 @@
                                             <stylesheet>${basedir}/src/license/licenses.xsl</stylesheet>
                                             <outputDir>${project.build.directory}/assembly/licenses</outputDir>
                                             <fileMappers>
-                                                <fileMapper
-                                                    implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                                     <targetExtension>.html</targetExtension>
                                                 </fileMapper>
                                             </fileMappers>
