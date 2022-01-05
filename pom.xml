@@ -75,14 +75,14 @@
         -->
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
-        <version.io.hawt>2.0.0.fuse-sb2-780013</version.io.hawt>
+        <version.io.hawt>2.0.0.fuse-sb2-7_10_0-00016-redhat-00001</version.io.hawt>
         <version.org.apache.activemq.artemis>2.16.0.redhat-00022</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.23.2.fuse-780032</version.org.apache.camel>
-        <version.org.apache.cxf>3.3.6.fuse-780025</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.9.fuse-780013</version.org.apache.karaf>
-        <version.org.fusesource.activemq>7.8.0.fuse-sb2-780031</version.org.fusesource.activemq>
-        <version.org.fusesource.camel-sap>7.8.0.fuse-sb2-780031</version.org.fusesource.camel-sap>
-        <version.org.apache-extras.camel-extra>2.23.2.fuse-sb2-780032</version.org.apache-extras.camel-extra>
+        <version.org.apache.camel>2.23.2.fuse-7_10_0-00020-redhat-00001</version.org.apache.camel>
+        <version.org.apache.cxf>3.3.6.fuse-7_10_0-00022-redhat-00001</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.12.fuse-7_10_0-00008-redhat-00001</version.org.apache.karaf>
+        <version.org.fusesource.activemq>7.10.0.fuse-sb2-7_10_0-00016-redhat-00001</version.org.fusesource.activemq>
+        <version.org.fusesource.camel-sap>7.10.0.fuse-sb2-7_10_0-00016-redhat-00001</version.org.fusesource.camel-sap>
+        <version.org.apache-extras.camel-extra>2.23.2.fuse-sb2-7_10_0-00020-redhat-00001</version.org.apache-extras.camel-extra>
 
         <!-- versions of normal dependencies of Red Hat Fuse -->
         <version.com.fasterxml.classmate>1.5.1</version.com.fasterxml.classmate>
@@ -96,7 +96,7 @@
         <version.com.fasterxml.jackson>2.12.1</version.com.fasterxml.jackson>
         <version.com.fasterxml.woodstox.core>5.2.1</version.com.fasterxml.woodstox.core>
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
-        <version.com.google.code.findbugs>3.0.2</version.com.google.code.findbugs>
+        <version.com.google.code.findbugs>3.0.2.redhat-00008</version.com.google.code.findbugs>
         <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
         <version.com.google.guava>27.1-jre</version.com.google.guava>
         <version.com.google.guava.failureaccess>1.0.1.redhat-00002</version.com.google.guava.failureaccess>
@@ -121,7 +121,7 @@
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
         <version.io.dropwizard.metrics>3.2.6</version.io.dropwizard.metrics>
         <version.io.fabric8.kubernetes-model>4.6.2</version.io.fabric8.kubernetes-model>
-        <version.io.fabric8.kubernetes-client>4.6.2.fuse-790015</version.io.fabric8.kubernetes-client>
+        <version.io.fabric8.kubernetes-client>4.6.2.fuse-7_10_0-00013-redhat-00001</version.io.fabric8.kubernetes-client>
         <version.io.netty>4.1.68.Final-redhat-00002</version.io.netty>
         <version.io.opentracing>0.31.0</version.io.opentracing>
         <version.io.prometheus>0.14.0.redhat-00002</version.io.prometheus>
@@ -241,7 +241,7 @@
         <version.org.codehaus.woodstox.core>4.4.1.redhat-00001</version.org.codehaus.woodstox.core>
         <version.org.codehaus.woodstox.stax2-api>4.2.1</version.org.codehaus.woodstox.stax2-api>
         <version.org.eclipse.jdt.core.compiler>4.6.1.redhat-1</version.org.eclipse.jdt.core.compiler>
-        <version.org.eclipse.jetty>9.4.43.v20210629-redhat-00001</version.org.eclipse.jetty>
+        <version.org.eclipse.jetty>9.4.43.v20210629-redhat-00003</version.org.eclipse.jetty>
         <version.org.eclipse.jgit>5.1.3.201810200350-r</version.org.eclipse.jgit>
         <version.org.eclipse.persistence>2.1.0</version.org.eclipse.persistence>
         <version.org.fusesource.hawtbuf>1.11.0.redhat-2</version.org.fusesource.hawtbuf>
@@ -282,7 +282,7 @@
         <version.org.ops4j.pax.web>7.4.3</version.org.ops4j.pax.web>
         <version.org.osgi>6.0.0</version.org.osgi>
         <version.org.osgi.compendium>6.0.0</version.org.osgi.compendium>
-        <version.org.ow2.asm>9.2</version.org.ow2.asm>
+        <version.org.ow2.asm>9.2.0.redhat-00001</version.org.ow2.asm>
         <version.org.postgresql>42.2.19</version.org.postgresql>
         <version.org.slf4j>1.7.22.redhat-2</version.org.slf4j>
         <version.org.springframework>5.2.15.RELEASE</version.org.springframework>
@@ -325,69 +325,15 @@
     </properties>
 
     <repositories>
-        <repository>
-            <id>redhat-ga-repository</id>
-            <url>https://maven.repository.redhat.com/ga</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>redhat-ea-repository</id>
-            <url>https://maven.repository.redhat.com/earlyaccess/all</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>jboss-ea</id>
-            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
+        
+        
+        
     </repositories>
 
     <pluginRepositories>
-        <pluginRepository>
-            <id>redhat-ga-repository</id>
-            <url>https://maven.repository.redhat.com/ga</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>redhat-ea-repository</id>
-            <url>https://maven.repository.redhat.com/earlyaccess/all</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-        <pluginRepository>
-            <id>jboss-ea</id>
-            <url>https://repository.jboss.org/nexus/content/groups/ea</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
+        
+        
+        
     </pluginRepositories>
 
     <dependencyManagement>
