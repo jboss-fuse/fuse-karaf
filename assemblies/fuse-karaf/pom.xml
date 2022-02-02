@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse</groupId>
         <artifactId>assemblies</artifactId>
-        <version>7.11.0.redhat-SNAPSHOT</version>
+        <version>7.11.0.fuse-7_11_0-00004</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

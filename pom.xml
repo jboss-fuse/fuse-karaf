@@ -22,7 +22,7 @@
 
     <groupId>org.jboss.fuse</groupId>
     <artifactId>jboss-fuse-parent</artifactId>
-    <version>7.11.0.redhat-SNAPSHOT</version>
+    <version>7.11.0.fuse-7_11_0-00004</version>
     <packaging>pom</packaging>
 
     <name>Red Hat Fuse :: Parent</name>
@@ -75,14 +75,14 @@
         -->
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
-        <version.io.hawt>2.0.0.fuse-sb2-7_10_0-00016-redhat-00001</version.io.hawt>
+        <version.io.hawt>2.0.0.fuse-sb2-7_11_0-00004</version.io.hawt>
         <version.org.apache.activemq.artemis>2.16.0.redhat-00022</version.org.apache.activemq.artemis>
-        <version.org.apache.camel>2.23.2.fuse-7_10_0-00020-redhat-00001</version.org.apache.camel>
-        <version.org.apache.cxf>3.3.6.fuse-7_10_0-00022-redhat-00001</version.org.apache.cxf>
-        <version.org.apache.karaf>4.2.12.fuse-7_10_0-00008-redhat-00001</version.org.apache.karaf>
-        <version.org.fusesource.activemq>7.10.0.fuse-sb2-7_10_0-00016-redhat-00001</version.org.fusesource.activemq>
-        <version.org.fusesource.camel-sap>7.10.0.fuse-sb2-7_10_0-00016-redhat-00001</version.org.fusesource.camel-sap>
-        <version.org.apache-extras.camel-extra>2.23.2.fuse-sb2-7_10_0-00020-redhat-00001</version.org.apache-extras.camel-extra>
+        <version.org.apache.camel>2.23.2.fuse-7_11_0-00005</version.org.apache.camel>
+        <version.org.apache.cxf>3.3.6.fuse-7_11_0-00005</version.org.apache.cxf>
+        <version.org.apache.karaf>4.2.15.fuse-7_11_0-00004</version.org.apache.karaf>
+        <version.org.fusesource.activemq>7.11.0.fuse-sb2-7_11_0-00004</version.org.fusesource.activemq>
+        <version.org.fusesource.camel-sap>7.11.0.fuse-sb2-7_11_0-00004</version.org.fusesource.camel-sap>
+        <version.org.apache-extras.camel-extra>2.23.2.fuse-sb2-7_11_0-00004</version.org.apache-extras.camel-extra>
 
         <!-- versions of normal dependencies of Red Hat Fuse -->
         <version.com.fasterxml.classmate>1.5.1</version.com.fasterxml.classmate>
@@ -121,7 +121,7 @@
         <version.commons-pool>1.6.0.redhat-9</version.commons-pool>
         <version.io.dropwizard.metrics>3.2.6</version.io.dropwizard.metrics>
         <version.io.fabric8.kubernetes-model>4.6.2</version.io.fabric8.kubernetes-model>
-        <version.io.fabric8.kubernetes-client>4.6.2.fuse-790015</version.io.fabric8.kubernetes-client>
+        <version.io.fabric8.kubernetes-client>4.6.2.fuse-7_11_0-00006</version.io.fabric8.kubernetes-client>
         <version.io.netty>4.1.68.Final-redhat-00002</version.io.netty>
         <version.io.opentracing>0.31.0</version.io.opentracing>
         <version.io.prometheus>0.14.0.redhat-00002</version.io.prometheus>
