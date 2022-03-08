@@ -66,6 +66,9 @@
         <bundle dependency="true">mvn:org.apache.geronimo.specs/geronimo-jms_2.0_spec/${version.org.apache.geronimo.specs.jms_2.0}</bundle>
         <bundle>mvn:org.apache.qpid/proton-j/${version.org.apache.qpid.proton-j}</bundle>
         <bundle>mvn:org.apache.qpid/qpid-jms-client/${version.org.apache.qpid.qpid-jms-client}</bundle>
+        <bundle dependency='true'>mvn:io.netty/netty-transport-classes-epoll/${version.io.netty}</bundle>
+        <bundle dependency='true'>mvn:io.netty/netty-transport-classes-kqueue/${version.io.netty}</bundle>
+        <bundle dependency='true'>mvn:io.netty/netty-tcnative-classes/${version.io.netty.tcnative}</bundle>
     </feature>
 
 </features>
