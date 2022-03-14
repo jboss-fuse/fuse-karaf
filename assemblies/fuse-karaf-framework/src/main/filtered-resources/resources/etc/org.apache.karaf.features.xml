@@ -391,6 +391,7 @@
         </replacement>
         <replacement mode="merge">
             <feature name="pax-jms-ibmmq" version="${version.org.ops4j.pax.jms}">
+                <f:bundle start-level="35">mvn:org.json/json/${version.org.json}</f:bundle>
                 <f:bundle start-level="35">mvn:org.jboss.fuse.modules/fuse-pax-jms-ibmmq-compatibility/${project.version}</f:bundle>
             </feature>
         </replacement>
