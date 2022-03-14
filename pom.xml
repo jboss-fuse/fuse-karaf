@@ -1972,6 +1972,11 @@
                 <artifactId>jsoup</artifactId>
                 <version>${version.org.jsoup}</version>
             </dependency>
+            <dependency>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+                <version>${version.org.json}</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.netty</groupId>
