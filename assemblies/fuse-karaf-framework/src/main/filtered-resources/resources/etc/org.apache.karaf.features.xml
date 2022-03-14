@@ -366,8 +366,10 @@
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.hapi-fhir-validation/${version.org.apache.servicemix.bundles.hapi}" mode="maven"/>
         <bundle originalUri="mvn:org.messaginghub/pooled-jms/[1.1,2)"
                 replacement="mvn:org.messaginghub/pooled-jms/${version.org.messaginghub.pooled-jms}" mode="maven"/>
-        <bundle originalUri="mvn:mvn:org.jsoup/jsoup/[1,2)"
-                replacement="mvn:mvn:org.jsoup/jsoup/${version.org.jsoup}" mode="maven"/>
+        <bundle originalUri="mvn:org.jsoup/jsoup/[1,2)"
+                replacement="mvn:org.jsoup/jsoup/${version.org.jsoup}" mode="maven"/>
+        <bundle originalUri="mvn:org.osgi/org.osgi.service.jdbc/[1,2)"
+                replacement="mvn:org.osgi/org.osgi.service.jdbc/${version.org.osgi.service.jdbc}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
