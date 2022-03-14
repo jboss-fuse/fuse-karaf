@@ -47,12 +47,26 @@
                             which conflicts with mvn:javax.jms/javax.jms-api/2.0.1
                         -->
                         <Bundle-SymbolicName>com.ibm.mq.osgi.allclientprereqs</Bundle-SymbolicName>
-                        <Export-Package />
+                        <Private-Package>
+                            org.json
+                        </Private-Package>
+                        <Export-Package>
+                            org.json
+                        </Export-Package>
                         <Import-Package />
                     </instructions>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+        </dependency>
+
+    </dependencies>
 
 </project>

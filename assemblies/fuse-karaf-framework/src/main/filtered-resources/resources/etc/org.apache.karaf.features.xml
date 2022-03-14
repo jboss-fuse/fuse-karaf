@@ -399,6 +399,13 @@
                 <f:bundle>mvn:org.jboss.fuse.modules/fuse-stax2-compatibility/${project.version}</f:bundle>
             </feature>
         </replacement>
+        <replacement mode="merge">
+            <feature name="artemis-core-client" version="${version.org.apache.activemq.artemis}">
+                <f:bundle dependency='true'>mvn:io.netty/netty-transport-classes-epoll/${version.io.netty}</f:bundle>
+                <f:bundle dependency='true'>mvn:io.netty/netty-transport-classes-kqueue/${version.io.netty}</f:bundle>
+                <f:bundle dependency='true'>mvn:io.netty/netty-tcnative-classes/${version.io.netty.tcnative}</f:bundle>
+            </feature>
+        </replacement>
     </featureReplacements>
 
 </featuresProcessing>
