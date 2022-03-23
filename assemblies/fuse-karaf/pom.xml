@@ -421,7 +421,6 @@
                         <feature>camel-jboss6</feature>
                         <feature>camel-rcode</feature>
                         <feature>camel-spring-neo4j</feature>
-                        <feature>camel-spring-security</feature>
                         <feature>camel-tika</feature>
                         <feature>camel-spring-redis</feature>
                         <!-- swagger 1.3 -->
