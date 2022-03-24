@@ -23,6 +23,7 @@ import java.util.Hashtable;
 import java.util.Set;
 
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.slf4j.Logger;
@@ -40,7 +41,7 @@ public class ConfigurationAdminWrapper implements ConfigurationAdmin {
 
     public static final Logger LOG = LoggerFactory.getLogger(ConfigurationAdminWrapper.class);
 
-    private ConfigurationAdmin delegate;
+    private final ConfigurationAdmin delegate;
 
     public ConfigurationAdminWrapper(ConfigurationAdmin delegate) {
         this.delegate = delegate;
@@ -81,12 +82,22 @@ public class ConfigurationAdminWrapper implements ConfigurationAdmin {
         return wrappers;
     }
 
+    @Override
+    public Configuration getFactoryConfiguration(String factoryPid, String name, String location) throws IOException {
+        return new ConfigurationWrapper(delegate.getFactoryConfiguration(factoryPid, location));
+    }
+
+    @Override
+    public Configuration getFactoryConfiguration(String factoryPid, String name) throws IOException {
+        return new ConfigurationWrapper(delegate.getFactoryConfiguration(factoryPid, name));
+    }
+
     /**
      * This configuration wrapper hides dereferenced credential store aliases
      */
     public static class ConfigurationWrapper implements Configuration {
 
-        private Configuration delegate;
+        private final Configuration delegate;
 
         public ConfigurationWrapper(Configuration delegate) {
             this.delegate = delegate;
@@ -155,6 +166,31 @@ public class ConfigurationAdminWrapper implements ConfigurationAdmin {
         @Override
         public long getChangeCount() {
             return delegate.getChangeCount();
+        }
+
+        @Override
+        public Dictionary<String, Object> getProcessedProperties(ServiceReference<?> reference) {
+            return delegate.getProcessedProperties(reference);
+        }
+
+        @Override
+        public boolean updateIfDifferent(Dictionary<String, ?> properties) throws IOException {
+            return delegate.updateIfDifferent(properties);
+        }
+
+        @Override
+        public void addAttributes(ConfigurationAttribute... attrs) throws IOException {
+            delegate.addAttributes(attrs);
+        }
+
+        @Override
+        public Set<ConfigurationAttribute> getAttributes() {
+            return delegate.getAttributes();
+        }
+
+        @Override
+        public void removeAttributes(ConfigurationAttribute... attrs) throws IOException {
+            delegate.removeAttributes(attrs);
         }
     }
 
