@@ -93,7 +93,8 @@
         <version.com.fasterxml.jackson29.databind>2.9.10.4-redhat-00001</version.com.fasterxml.jackson29.databind>
         <version.com.fasterxml.jackson29.jsonSchema>2.9.10.redhat-00005</version.com.fasterxml.jackson29.jsonSchema>
         <version.com.fasterxml.jackson29.module>2.9.10</version.com.fasterxml.jackson29.module>
-        <version.com.fasterxml.jackson>2.12.1</version.com.fasterxml.jackson>
+        <version.com.fasterxml.jackson>2.12.6</version.com.fasterxml.jackson>
+        <version.com.fasterxml.jackson.databind>2.12.6.1</version.com.fasterxml.jackson.databind>
         <version.com.fasterxml.woodstox.core>5.2.1</version.com.fasterxml.woodstox.core>
         <version.com.github.ben-manes.caffeine>2.6.2.redhat-1</version.com.github.ben-manes.caffeine>
         <version.com.google.code.findbugs>3.0.2</version.com.google.code.findbugs>
@@ -216,7 +217,7 @@
         <version.org.apache.servicemix.bundles.rhino>1.7.7.1-fuse-redhat-00005</version.org.apache.servicemix.bundles.rhino>
         <version.org.apache.servicemix.bundles.saxon>9.8.0.14-fuse-redhat-00002</version.org.apache.servicemix.bundles.saxon>
         <version.org.apache.servicemix.bundles.serp>1.15.1_1</version.org.apache.servicemix.bundles.serp>
-        <version.org.apache.servicemix.bundles.spring>5.3.18.1-fuse-redhat-00001</version.org.apache.servicemix.bundles.spring>
+        <version.org.apache.servicemix.bundles.spring>5.3.18.1-fuse-redhat-00002</version.org.apache.servicemix.bundles.spring>
         <version.org.apache.servicemix.bundles.spring.security>5.5.5.1-fuse-redhat-00001</version.org.apache.servicemix.bundles.spring.security>
         <version.org.apache.servicemix.bundles.xalan>2.7.2.3-fuse-redhat-00006</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2.1-fuse-redhat-00006</version.org.apache.servicemix.bundles.xalan-serializer>
@@ -261,7 +262,7 @@
         <version.org.jboss.spec.jacc>1.0.2.Final</version.org.jboss.spec.jacc>
         <version.org.jboss.threads>3.2.0.Final</version.org.jboss.threads>
         <version.org.jboss.transaction>7.6.0.Final-redhat-1</version.org.jboss.transaction>
-        <version.org.jboss.xnio>3.8.6.Final-redhat-00001</version.org.jboss.xnio>
+        <version.org.jboss.xnio>3.8.6.SP1-redhat-00001</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
         <version.org.jline>3.10.0</version.org.jline>
         <version.org.json>20211205</version.org.json>
@@ -1628,7 +1629,7 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
-                <version>${version.com.fasterxml.jackson}</version>
+                <version>${version.com.fasterxml.jackson.databind}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
