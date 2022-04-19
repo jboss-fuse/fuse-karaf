@@ -213,6 +213,12 @@
                 replacement="mvn:io.netty/netty-transport-native-kqueue/${version.io.netty}" mode="maven" />
         <bundle originalUri="mvn:io.netty/netty-transport-native-unix-common/[4.1,4.2)"
                 replacement="mvn:io.netty/netty-transport-native-unix-common/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-transport-classes-kqueue/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-transport-classes-kqueue/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-transport-classes-epoll/[4.1,4.2)"
+                replacement="mvn:io.netty/netty-transport-classes-epoll/${version.io.netty}" mode="maven" />
+        <bundle originalUri="mvn:io.netty/netty-tcnative-classes/[2.0,2.1)"
+                replacement="mvn:io.netty/netty-tcnative-classes/${version.io.netty.tcnative}" mode="maven" />
         <!-- difference between camel-amqp and artemis-amqp - please verify -->
         <bundle originalUri="wrap:mvn:org.apache.qpid/qpid-jms-client/0.22.*"
                 replacement="mvn:org.apache.qpid/qpid-jms-client/${version.org.apache.qpid.qpid-jms-client}" mode="maven" />
@@ -402,7 +408,7 @@
             </feature>
         </replacement>
         <replacement mode="merge">
-            <feature name="artemis-core-client" version="${version.org.apache.activemq.artemis}">
+            <feature name="netty-core" version="${version.io.netty.artemis}">
                 <f:bundle dependency='true'>mvn:io.netty/netty-transport-classes-epoll/${version.io.netty}</f:bundle>
                 <f:bundle dependency='true'>mvn:io.netty/netty-transport-classes-kqueue/${version.io.netty}</f:bundle>
                 <f:bundle dependency='true'>mvn:io.netty/netty-tcnative-classes/${version.io.netty.tcnative}</f:bundle>
