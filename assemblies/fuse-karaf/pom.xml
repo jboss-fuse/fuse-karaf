@@ -438,7 +438,6 @@
                         <feature>camel-http</feature>
                         <feature>camel-ibatis</feature>
                         <feature>camel-javaspace</feature>
-                        <feature>camel-jxpath</feature>
                         <feature>camel-kestrel</feature>
                         <feature>camel-krati</feature>
                         <feature>camel-mina</feature>
