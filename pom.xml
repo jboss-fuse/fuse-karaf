@@ -193,7 +193,7 @@
         <version.org.apache.maven>3.6.3.redhat-00004</version.org.apache.maven>
         <version.org.apache.maven.resolver>1.4.1</version.org.apache.maven.resolver>
         <version.org.apache.mina>2.0.21</version.org.apache.mina>
-        <version.org.apache.qpid.proton-j>0.33.9.redhat-00001</version.org.apache.qpid.proton-j>
+        <version.org.apache.qpid.proton-j>0.33.10.redhat-00001</version.org.apache.qpid.proton-j>
         <version.org.apache.qpid.qpid-jms-client>0.61.0.redhat-00001</version.org.apache.qpid.qpid-jms-client>
         <version.org.apache.santuario>2.1.7.redhat-00001</version.org.apache.santuario>
         <version.org.apache.servicemix.bundles.antlr2>2.7.7.5-fuse-redhat-00002</version.org.apache.servicemix.bundles.antlr2>
