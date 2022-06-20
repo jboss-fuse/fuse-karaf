@@ -2002,6 +2002,27 @@
                 <version>${version.com.github.mwiede.jsch}</version>
             </dependency>
 
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-annotation_1.0_spec</artifactId>
+                <version>${version.org.apache.geronimo.specs.annotation_1.0}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jms_1.1_spec</artifactId>
+                <version>${version.org.apache.geronimo.specs.jms_1.1}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-jta_1.1_spec</artifactId>
+                <version>${version.org.apache.geronimo.specs.jta_1.1}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.geronimo.specs</groupId>
+                <artifactId>geronimo-j2ee-management_1.1_spec</artifactId>
+                <version>${version.org.apache.geronimo.specs.j2ee-management_1.1}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
