@@ -129,6 +129,7 @@
                         <Import-Package>
                             !com.arjuna.*,
                             !javax.resource.spi.*,
+                            javax.security.cert,
                             javax.xml.parsers,
                             org.xml.sax,
                             org.xml.sax.helpers,
