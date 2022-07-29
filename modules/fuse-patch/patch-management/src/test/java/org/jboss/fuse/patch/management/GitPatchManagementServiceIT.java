@@ -370,7 +370,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
                 "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
         assertTrue(bundles.stream().anyMatch(b ->
-                "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
+                "mvn:org.jboss.fuse/fuse-zen/[1.1,1.1.9)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/${version.zen}/war".equals(b.getReplacement())));
         assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())
@@ -398,7 +398,7 @@ public class GitPatchManagementServiceIT extends PatchTestSupport {
                 "mvn:org.jboss.fuse/fuse-tranquility/[1.2.0,1.3.0)".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-tranquility/1.2.3".equals(b.getReplacement())));
         assertTrue(bundles.stream().anyMatch(b ->
-                "mvn:org.jboss.fuse/fuse-zen/[1.1,1.2)/war".equals(b.getOriginalUri())
+                "mvn:org.jboss.fuse/fuse-zen/[1.1,1.1.9)/war".equals(b.getOriginalUri())
                         && "mvn:org.jboss.fuse/fuse-zen/${version.zen}/war".equals(b.getReplacement())));
         assertTrue(bundles.stream().anyMatch(b ->
                 "mvn:org.jboss.fuse/fuse-zen/[1.3.0,1.4.0)/war".equals(b.getOriginalUri())

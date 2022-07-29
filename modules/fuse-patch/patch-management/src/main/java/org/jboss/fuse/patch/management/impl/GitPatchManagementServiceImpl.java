@@ -1237,11 +1237,14 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                     continue;
                 }
 
+                boolean changedGA = false;
                 if (patchData.getOriginalGroupId(bundle) != null) {
                     artifact.setGroupId(patchData.getOriginalGroupId(bundle));
+                    changedGA = true;
                 }
                 if (patchData.getOriginalArtifactId(bundle) != null) {
                     artifact.setArtifactId(patchData.getOriginalArtifactId(bundle));
+                    changedGA = true;
                 }
 
                 // Compute patch bundle version and range
@@ -1283,9 +1286,9 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                         Artifact oldOriginalUri = mvnurlToArtifact(override.getOriginalUri(), true);
                         // newOriginalUri will have group/artifact IDs set properly from patch descriptor
                         Artifact newOriginalUri = mvnurlToArtifact(artifact.getCanonicalUri(), true);
-                        if (oldOriginalUri != null && newOriginalUri != null
+                        if (!changedGA || (oldOriginalUri != null && newOriginalUri != null
                                 && oldOriginalUri.getGroupId().equals(newOriginalUri.getGroupId())
-                                && oldOriginalUri.getArtifactId().equals(newOriginalUri.getArtifactId())) {
+                                && oldOriginalUri.getArtifactId().equals(newOriginalUri.getArtifactId()))) {
                             existing = br2.get(idx);
                             break;
                         }
@@ -1294,11 +1297,12 @@ public class GitPatchManagementServiceImpl implements PatchManagement, GitPatchM
                 }
                 if (existing == null) {
                     existing = new BundleReplacements.OverrideBundle();
+                    // set original URI only when adding new override
+                    existing.setOriginalUri(artifact.getCanonicalUri());
                     br2.add(existing);
                 }
                 // either update existing override or configure a new one
                 existing.setMode(BundleReplacements.BundleOverrideMode.MAVEN);
-                existing.setOriginalUri(artifact.getCanonicalUri());
                 String replacement = existing.getReplacement();
                 if (replacement != null && replacement.contains("${")) {
                     // assume that we have existing replacement="mvn:org.jboss.fuse/fuse-zen/${version.test2}/war"
