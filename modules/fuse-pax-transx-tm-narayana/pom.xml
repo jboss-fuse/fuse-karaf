@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules</groupId>
         <artifactId>fuse-modules</artifactId>
-        <version>7.11.1.redhat-SNAPSHOT</version>
+        <version>7.11.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -129,6 +129,7 @@
                         <Import-Package>
                             !com.arjuna.*,
                             !javax.resource.spi.*,
+                            javax.security.cert,
                             javax.xml.parsers,
                             org.xml.sax,
                             org.xml.sax.helpers,
