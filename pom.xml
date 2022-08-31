@@ -98,7 +98,7 @@
         <version.com.fasterxml.woodstox.core>5.2.1</version.com.fasterxml.woodstox.core>
         <version.com.github.ben-manes.caffeine>2.6.2</version.com.github.ben-manes.caffeine>
         <version.com.google.code.findbugs>3.0.2.redhat-00008</version.com.google.code.findbugs>
-        <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
+        <version.com.google.code.gson>2.8.9.redhat-00001</version.com.google.code.gson>
         <version.com.google.guava>27.1-jre</version.com.google.guava>
         <version.com.google.guava.failureaccess>1.0.1.redhat-00002</version.com.google.guava.failureaccess>
         <version.com.google.guava16>16.0.1</version.com.google.guava16>
@@ -1847,6 +1847,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>failureaccess</artifactId>
                 <version>${version.com.google.guava.failureaccess}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${version.com.google.code.gson}</version>
             </dependency>
             <dependency>
                 <groupId>org.yaml</groupId>
