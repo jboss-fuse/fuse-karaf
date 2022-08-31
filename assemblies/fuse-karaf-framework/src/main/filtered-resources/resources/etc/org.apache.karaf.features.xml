@@ -376,6 +376,8 @@
                 replacement="mvn:org.jsoup/jsoup/${version.org.jsoup}" mode="maven"/>
         <bundle originalUri="mvn:org.osgi/org.osgi.service.jdbc/[1,2)"
                 replacement="mvn:org.osgi/org.osgi.service.jdbc/${version.org.osgi.service.jdbc}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.commons/commons-configuration2/[2.0,2.8)"
+                replacement="mvn:org.apache.commons/commons-configuration2/${version.org.apache.commons.configuration2}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
