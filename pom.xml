@@ -93,8 +93,9 @@
         <version.com.fasterxml.jackson29.databind>2.9.10.4-redhat-00001</version.com.fasterxml.jackson29.databind>
         <version.com.fasterxml.jackson29.jsonSchema>2.9.10.redhat-00005</version.com.fasterxml.jackson29.jsonSchema>
         <version.com.fasterxml.jackson29.module>2.9.10</version.com.fasterxml.jackson29.module>
-        <version.com.fasterxml.jackson>2.12.6</version.com.fasterxml.jackson>
-        <version.com.fasterxml.jackson.databind>2.12.6.1</version.com.fasterxml.jackson.databind>
+        <version.com.fasterxml.jackson>2.12.6.redhat-00001</version.com.fasterxml.jackson>
+        <version.com.fasterxml.jackson.core>2.12.6.redhat-00001</version.com.fasterxml.jackson.core>
+        <version.com.fasterxml.jackson.databind>2.12.6.1-redhat-00004</version.com.fasterxml.jackson.databind>
         <version.com.fasterxml.woodstox.core>5.2.1</version.com.fasterxml.woodstox.core>
         <version.com.github.ben-manes.caffeine>2.6.2</version.com.github.ben-manes.caffeine>
         <version.com.google.code.findbugs>3.0.2.redhat-00008</version.com.google.code.findbugs>
