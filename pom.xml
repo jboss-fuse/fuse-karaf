@@ -76,7 +76,7 @@
 
         <!-- versions of "subprojects" of Red Hat Fuse -->
         <version.io.hawt>2.0.0.fuse-sb2-7_11_0-00036-redhat-00001</version.io.hawt>
-        <version.org.apache.activemq.artemis>2.16.0.redhat-00042</version.org.apache.activemq.artemis>
+        <version.org.apache.activemq.artemis>2.16.0.redhat-00046</version.org.apache.activemq.artemis>
         <version.org.apache.camel>2.23.2.fuse-7_11_0-00037-redhat-00001</version.org.apache.camel>
         <version.org.apache.cxf>3.3.6.fuse-7_11_0-00038-redhat-00001</version.org.apache.cxf>
         <version.org.apache.karaf>4.2.15.fuse-7_11_0-00023-redhat-00001</version.org.apache.karaf>
@@ -93,12 +93,13 @@
         <version.com.fasterxml.jackson29.databind>2.9.10.4-redhat-00001</version.com.fasterxml.jackson29.databind>
         <version.com.fasterxml.jackson29.jsonSchema>2.9.10.redhat-00005</version.com.fasterxml.jackson29.jsonSchema>
         <version.com.fasterxml.jackson29.module>2.9.10</version.com.fasterxml.jackson29.module>
-        <version.com.fasterxml.jackson>2.12.6</version.com.fasterxml.jackson>
-        <version.com.fasterxml.jackson.databind>2.12.6.1</version.com.fasterxml.jackson.databind>
+        <version.com.fasterxml.jackson>2.12.6.redhat-00001</version.com.fasterxml.jackson>
+        <version.com.fasterxml.jackson.core>2.12.6.redhat-00001</version.com.fasterxml.jackson.core>
+        <version.com.fasterxml.jackson.databind>2.12.6.1-redhat-00004</version.com.fasterxml.jackson.databind>
         <version.com.fasterxml.woodstox.core>5.2.1</version.com.fasterxml.woodstox.core>
         <version.com.github.ben-manes.caffeine>2.6.2</version.com.github.ben-manes.caffeine>
         <version.com.google.code.findbugs>3.0.2.redhat-00008</version.com.google.code.findbugs>
-        <version.com.google.code.gson>2.8.2</version.com.google.code.gson>
+        <version.com.google.code.gson>2.8.9.redhat-00001</version.com.google.code.gson>
         <version.com.google.guava>27.1-jre</version.com.google.guava>
         <version.com.google.guava.failureaccess>1.0.1.redhat-00002</version.com.google.guava.failureaccess>
         <version.com.google.guava16>16.0.1</version.com.google.guava16>
@@ -124,14 +125,14 @@
         <version.io.dropwizard.metrics>3.2.6.redhat-00001</version.io.dropwizard.metrics>
         <version.io.fabric8.kubernetes-model>4.6.2</version.io.fabric8.kubernetes-model>
         <version.io.fabric8.kubernetes-client>4.6.2.fuse-7_11_0-00025-redhat-00001</version.io.fabric8.kubernetes-client>
-        <version.io.netty>4.1.74.Final-redhat-00001</version.io.netty>
-        <version.io.netty.tcnative>2.0.50.Final</version.io.netty.tcnative>
+        <version.io.netty>4.1.77.Final-redhat-00001</version.io.netty>
+        <version.io.netty.tcnative>2.0.52.Final-redhat-00001</version.io.netty.tcnative>
         <version.io.netty.artemis>4.1.66.Final-redhat-00001</version.io.netty.artemis>
         <version.io.opentracing>0.32.0</version.io.opentracing>
         <version.io.prometheus>0.14.0.redhat-00002</version.io.prometheus>
         <version.io.swagger>1.6.2</version.io.swagger>
         <version.io.swagger.core.v3>2.1.9</version.io.swagger.core.v3>
-        <version.io.undertow>2.2.17.SP4-redhat-00001</version.io.undertow>
+        <version.io.undertow>2.2.19.SP2-redhat-00001</version.io.undertow>
         <!-- version of Undertow used in Pax Web feature, to override it correctly -->
         <version.io.undertow-pax-web>2.2.16.Final</version.io.undertow-pax-web>
         <version.jakarta.annotation>1.3.5.redhat-00003</version.jakarta.annotation>
@@ -166,6 +167,7 @@
         <version.org.apache.aries.proxy>1.1.11</version.org.apache.aries.proxy>
         <version.org.apache.aries.spifly>1.3.2</version.org.apache.aries.spifly>
         <version.org.apache.commons.collections4>4.1</version.org.apache.commons.collections4>
+        <version.org.apache.commons.configuration2>2.8.0</version.org.apache.commons.configuration2>
         <version.org.apache.commons.compress>1.21.0.redhat-00001</version.org.apache.commons.compress>
         <version.org.apache.commons.dbcp2>2.9.0</version.org.apache.commons.dbcp2>
         <version.org.apache.commons.lang3>3.12.0.redhat-00001</version.org.apache.commons.lang3>
@@ -244,13 +246,13 @@
         <version.org.codehaus.woodstox.core>4.4.1.redhat-00001</version.org.codehaus.woodstox.core>
         <version.org.codehaus.woodstox.stax2-api>4.2.1</version.org.codehaus.woodstox.stax2-api>
         <version.org.eclipse.jdt.core.compiler>4.6.1.redhat-1</version.org.eclipse.jdt.core.compiler>
-        <version.org.eclipse.jetty>9.4.43.v20210629-redhat-00004</version.org.eclipse.jetty>
+        <version.org.eclipse.jetty>9.4.48.v20220622</version.org.eclipse.jetty>
         <version.org.eclipse.jgit>5.1.3.201810200350-r</version.org.eclipse.jgit>
         <version.org.eclipse.persistence>2.1.0</version.org.eclipse.persistence>
         <version.org.fusesource.hawtbuf>1.11.0.redhat-2</version.org.fusesource.hawtbuf>
         <version.org.glassfish.jaxb>2.3.3.redhat-00001</version.org.glassfish.jaxb>
         <version.org.glassfish.web.javax.el>2.2.5</version.org.glassfish.web.javax.el>
-        <version.org.hibernate>5.3.26.Final-redhat-00002</version.org.hibernate>
+        <version.org.hibernate>5.3.27.Final-redhat-00001</version.org.hibernate>
         <version.org.hibernate.common>5.0.5.Final-redhat-00002</version.org.hibernate.common>
         <version.org.hibernate.validator>6.0.23.Final-redhat-00001</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.2.Final-redhat-1</version.org.hibernate.javax.persistence>
@@ -297,7 +299,7 @@
         <version.org.springframework>5.3.20</version.org.springframework>
         <version.org.yaml.snakeyaml>1.28.0.redhat-00001</version.org.yaml.snakeyaml>
         <version.org.wildfly.common>1.5.4.Final-redhat-00001</version.org.wildfly.common>
-        <version.org.wildfly.security.elytron>1.15.11.Final-redhat-00002</version.org.wildfly.security.elytron>
+        <version.org.wildfly.security.elytron>1.15.13.Final-redhat-00001</version.org.wildfly.security.elytron>
         <version.org.wildfly.transaction.client>1.1.11.Final-redhat-00001</version.org.wildfly.transaction.client>
 
         <!-- versions of Maven plugins (and their important dependencies) -->
@@ -1803,6 +1805,11 @@
                 <artifactId>commons-text</artifactId>
                 <version>${version.org.apache.commons.text}</version>
             </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-configuration2</artifactId>
+                <version>${version.org.apache.commons.configuration2}</version>
+            </dependency>
 
             <dependency>
                 <groupId>org.messaginghub</groupId>
@@ -1841,6 +1848,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>failureaccess</artifactId>
                 <version>${version.com.google.guava.failureaccess}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${version.com.google.code.gson}</version>
             </dependency>
             <dependency>
                 <groupId>org.yaml</groupId>

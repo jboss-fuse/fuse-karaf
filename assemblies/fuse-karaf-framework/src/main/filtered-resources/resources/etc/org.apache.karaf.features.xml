@@ -67,6 +67,24 @@
                 replacement="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${version.com.fasterxml.jackson29}" mode="maven" />
         <bundle originalUri="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/[2.9,2.10)"
                 replacement="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${version.com.fasterxml.jackson29}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-annotations/[2.12,2.13)"
+                replacement="mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson.core}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-core/[2.12,2.13)"
+                replacement="mvn:com.fasterxml.jackson.core/jackson-core/${version.com.fasterxml.jackson.core}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.core/jackson-databind/[2.12,2.13)"
+                replacement="mvn:com.fasterxml.jackson.core/jackson-databind/${version.com.fasterxml.jackson.databind}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/[2.12,2.13)"
+                replacement="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-yaml/${version.com.fasterxml.jackson}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/[2.12,2.13)"
+                replacement="mvn:com.fasterxml.jackson.dataformat/jackson-dataformat-xml/${version.com.fasterxml.jackson}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.datatype/jackson-datatype-jsr310/[2.12,2.13)"
+                replacement="mvn:com.fasterxml.jackson.datatype/jackson-datatype-jsr310/${version.com.fasterxml.jackson}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/[2.12,2.13)"
+                replacement="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-base/${version.com.fasterxml.jackson}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/[2.12,2.13)"
+                replacement="mvn:com.fasterxml.jackson.jaxrs/jackson-jaxrs-json-provider/${version.com.fasterxml.jackson}" mode="maven" />
+        <bundle originalUri="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/[2.12,2.13)"
+                replacement="mvn:com.fasterxml.jackson.module/jackson-module-jaxb-annotations/${version.com.fasterxml.jackson}" mode="maven" />
         <bundle originalUri="mvn:com.google.guava/guava/[16,17)"
                 replacement="mvn:com.google.guava/guava/${version.com.google.guava16}" mode="maven" />
         <bundle originalUri="mvn:com.google.guava/guava/[19,20)"
@@ -376,6 +394,8 @@
                 replacement="mvn:org.jsoup/jsoup/${version.org.jsoup}" mode="maven"/>
         <bundle originalUri="mvn:org.osgi/org.osgi.service.jdbc/[1,2)"
                 replacement="mvn:org.osgi/org.osgi.service.jdbc/${version.org.osgi.service.jdbc}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.commons/commons-configuration2/[2.0,2.8)"
+                replacement="mvn:org.apache.commons/commons-configuration2/${version.org.apache.commons.configuration2}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
