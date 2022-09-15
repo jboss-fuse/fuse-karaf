@@ -297,7 +297,7 @@
         <version.org.postgresql>42.3.3</version.org.postgresql>
         <version.org.slf4j>1.7.32.redhat-00001</version.org.slf4j>
         <version.org.springframework>5.3.20</version.org.springframework>
-        <version.org.yaml.snakeyaml>1.28.0.redhat-00001</version.org.yaml.snakeyaml>
+        <version.org.yaml.snakeyaml>1.32.0.redhat-00001</version.org.yaml.snakeyaml>
         <version.org.wildfly.common>1.5.4.Final-redhat-00001</version.org.wildfly.common>
         <version.org.wildfly.security.elytron>1.15.13.Final-redhat-00001</version.org.wildfly.security.elytron>
         <version.org.wildfly.transaction.client>1.1.11.Final-redhat-00001</version.org.wildfly.transaction.client>
