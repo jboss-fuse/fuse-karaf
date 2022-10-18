@@ -274,13 +274,21 @@
         <bundle originalUri="wrap:mvn:org.apache.activemq/activemq-client/5.*"
                 replacement="mvn:org.fusesource/activemq-client/${version.org.fusesource.activemq}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcpkix-jdk15on/[1.50,2)"
-                replacement="mvn:org.bouncycastle/bcpkix-jdk15on/${version.org.bouncycastle}" mode="maven" />
+                replacement="mvn:org.bouncycastle/bcpkix-jdk18on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcprov-jdk15on/[1.50,2)"
-                replacement="mvn:org.bouncycastle/bcprov-jdk15on/${version.org.bouncycastle}" mode="maven" />
+                replacement="mvn:org.bouncycastle/bcprov-jdk18on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcprov-ext-jdk15on/[1.50,2)"
-                replacement="mvn:org.bouncycastle/bcprov-ext-jdk15on/${version.org.bouncycastle}" mode="maven" />
+                replacement="mvn:org.bouncycastle/bcprov-ext-jdk18on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcutil-jdk15on/[1.50,2)"
-                replacement="mvn:org.bouncycastle/bcutil-jdk15on/${version.org.bouncycastle}" mode="maven" />
+                replacement="mvn:org.bouncycastle/bcutil-jdk18on/${version.org.bouncycastle}" mode="maven" />
+        <bundle originalUri="mvn:org.bouncycastle/bcpkix-jdk18on/[1.50,2)"
+                replacement="mvn:org.bouncycastle/bcpkix-jdk18on/${version.org.bouncycastle}" mode="maven" />
+        <bundle originalUri="mvn:org.bouncycastle/bcprov-jdk18on/[1.50,2)"
+                replacement="mvn:org.bouncycastle/bcprov-jdk18on/${version.org.bouncycastle}" mode="maven" />
+        <bundle originalUri="mvn:org.bouncycastle/bcprov-ext-jdk18on/[1.50,2)"
+                replacement="mvn:org.bouncycastle/bcprov-ext-jdk18on/${version.org.bouncycastle}" mode="maven" />
+        <bundle originalUri="mvn:org.bouncycastle/bcutil-jdk18on/[1.50,2)"
+                replacement="mvn:org.bouncycastle/bcutil-jdk18on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:io.swagger/swagger-annotations/[1.5,1.6)"
                 replacement="mvn:io.swagger/swagger-annotations/${version.io.swagger}" mode="maven" />
         <bundle originalUri="mvn:io.swagger/swagger-core/[1.5,1.6)"
