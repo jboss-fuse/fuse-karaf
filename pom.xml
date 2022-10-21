@@ -173,7 +173,7 @@
         <version.org.apache.commons.lang3>3.12.0.redhat-00001</version.org.apache.commons.lang3>
         <version.org.apache.commons.math3>3.6.1</version.org.apache.commons.math3>
         <version.org.apache.commons.pool2>2.11.1.redhat-00001</version.org.apache.commons.pool2>
-        <version.org.apache.commons.text>1.8.0.redhat-00001</version.org.apache.commons.text>
+        <version.org.apache.commons.text>1.10.0.redhat-00001</version.org.apache.commons.text>
         <version.org.apache.curator>2.11.1</version.org.apache.curator>
         <version.org.apache.felix>5.6.12</version.org.apache.felix>
         <version.org.apache.felix.configadmin>1.9.22</version.org.apache.felix.configadmin>
