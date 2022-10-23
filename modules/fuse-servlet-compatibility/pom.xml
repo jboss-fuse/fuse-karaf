@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules</groupId>
         <artifactId>fuse-modules</artifactId>
-        <version>7.11.1.redhat-SNAPSHOT</version>
+        <version>7.11.1.fuse-7_11_1-00010</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
