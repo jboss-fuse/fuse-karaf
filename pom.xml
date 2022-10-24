@@ -279,7 +279,7 @@
         <version.org.ops4j.base>1.5.1</version.org.ops4j.base>
         <version.org.ops4j.pax.cdi>1.1.4</version.org.ops4j.pax.cdi>
         <version.org.ops4j.pax.exam>4.13.4</version.org.ops4j.pax.exam>
-        <version.org.ops4j.pax.jdbc>1.5.3</version.org.ops4j.pax.jdbc>
+        <version.org.ops4j.pax.jdbc>1.5.5</version.org.ops4j.pax.jdbc>
         <version.org.ops4j.pax.jms>1.1.1</version.org.ops4j.pax.jms>
         <version.org.ops4j.pax.logging>1.12.2</version.org.ops4j.pax.logging>
         <version.org.ops4j.pax.swissbox>1.8.4</version.org.ops4j.pax.swissbox>
