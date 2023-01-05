@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse.modules</groupId>
         <artifactId>fuse-credential-store</artifactId>
-        <version>7.11.0.redhat-SNAPSHOT</version>
+        <version>7.12.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -78,7 +78,7 @@
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
+            <artifactId>bcprov-jdk18on</artifactId>
             <scope>test</scope>
         </dependency>
 

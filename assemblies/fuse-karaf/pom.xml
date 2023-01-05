@@ -23,7 +23,7 @@
     <parent>
         <groupId>org.jboss.fuse</groupId>
         <artifactId>assemblies</artifactId>
-        <version>7.11.0.redhat-SNAPSHOT</version>
+        <version>7.12.0.redhat-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -187,17 +187,17 @@
 
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
+            <artifactId>bcprov-jdk18on</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcpkix-jdk15on</artifactId>
+            <artifactId>bcpkix-jdk18on</artifactId>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcutil-jdk15on</artifactId>
+            <artifactId>bcutil-jdk18on</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
@@ -619,9 +619,9 @@
                         -->
                         <!-- lib/ext -->
                         <!-- Bouncy Castle libraries are already added to org.osgi.framework.bootdelegation property -->
-                        <library>mvn:org.bouncycastle/bcprov-jdk15on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
-                        <library>mvn:org.bouncycastle/bcpkix-jdk15on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
-                        <library>mvn:org.bouncycastle/bcutil-jdk15on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
+                        <library>mvn:org.bouncycastle/bcprov-jdk18on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
+                        <library>mvn:org.bouncycastle/bcpkix-jdk18on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
+                        <library>mvn:org.bouncycastle/bcutil-jdk18on/${version.org.bouncycastle};type:=extension;export:=true;delegate:=false</library>
                         <!-- lib/endorsed -->
                         <library>mvn:jakarta.annotation/jakarta.annotation-api/${version.jakarta.annotation};type:=endorsed;export:=false</library>
                         <library>mvn:com.google.code.findbugs/jsr305/${version.com.google.code.findbugs};type:=endorsed;export:=false</library>
