@@ -162,7 +162,7 @@
                             javax.security.sasl,
                             javax.xml.stream,
                             org.ietf.jgss,
-                            org.osgi.framework,
+                            org.osgi.framework;version="1.8",
                             org.osgi.framework.hooks.bundle,
                             org.osgi.framework.hooks.service,
                             org.osgi.service.cm;version="[1.6,2)",
