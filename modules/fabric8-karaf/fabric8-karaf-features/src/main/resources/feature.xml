@@ -42,7 +42,7 @@
     <feature name="fabric8-karaf-checks" description="Fabric8 Karaf Checks" version="${project.version}">
         <feature>scr</feature>
         <feature>http</feature>
-        <feature>undertow</feature>
+        <feature>pax-web-undertow</feature>
         <bundle start-level="65">mvn:io.fabric8/fabric8-karaf-checks/${project.version}</bundle>
         <config name="io.fabric8.checks">#
 #  Copyright 2005-2020 Red Hat, Inc.
@@ -72,7 +72,7 @@ healthCheckPath = /health-check
     <feature name="jkube-karaf-checks" description="Fabric8 Karaf Checks" version="${project.version}">
         <feature>scr</feature>
         <feature>http</feature>
-        <feature>undertow</feature>
+        <feature>pax-web-undertow</feature>
         <bundle start-level="65">mvn:io.fabric8/fabric8-karaf-checks/${project.version}</bundle>
         <config name="io.fabric8.checks">#
 #  Copyright 2005-2020 Red Hat, Inc.

@@ -132,7 +132,7 @@
                             javax.xml*,
                             org.xml.sax*,
                             org.w3c.dom,
-                            org.osgi.framework,
+                            org.osgi.framework;version="1.8",
                             org.osgi.framework.startlevel,
                             org.osgi.service.log;resolution:=optional,
                             org.osgi.util.tracker
