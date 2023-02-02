@@ -456,6 +456,10 @@
                 <f:bundle dependency='true'>mvn:io.netty/netty-transport-classes-epoll/${version.io.netty}</f:bundle>
                 <f:bundle dependency='true'>mvn:io.netty/netty-transport-classes-kqueue/${version.io.netty}</f:bundle>
                 <f:bundle dependency='true'>mvn:io.netty/netty-tcnative-classes/${version.io.netty.tcnative}</f:bundle>
+                <f:bundle dependency='true'>mvn:io.netty/netty-transport-native-unix-common/${version.io.netty}</f:bundle>
+                <f:bundle dependency='true'>mvn:org.bouncycastle/bcprov-jdk18on/${version.org.bouncycastle}</f:bundle>
+                <f:bundle dependency='true'>mvn:org.bouncycastle/bcutil-jdk18on/${version.org.bouncycastle}</f:bundle>
+                <f:bundle dependency='true'>mvn:org.bouncycastle/bctls-jdk18on/${version.org.bouncycastle}</f:bundle>
             </feature>
         </replacement>
     </featureReplacements>
