@@ -136,10 +136,13 @@
         <!-- version of Undertow used in Pax Web feature, to override it correctly -->
         <version.io.undertow-pax-web>2.2.21.Final</version.io.undertow-pax-web>
         <version.jakarta.annotation>1.3.5.redhat-00003</version.jakarta.annotation>
+        <version.jakarta.enterprise.cdi-api>2.0.2.redhat-00004</version.jakarta.enterprise.cdi-api>
+        <version.jakarta.interceptor>1.2.5.redhat-00002</version.jakarta.interceptor>
         <version.jakarta.jws>2.1.0.redhat-00001</version.jakarta.jws>
-        <version.jakarta.xml.bind>2.3.3</version.jakarta.xml.bind>
-        <version.jakarta.xml.soap>1.4.2</version.jakarta.xml.soap>
-        <version.jakarta.xml.ws>2.3.3</version.jakarta.xml.ws>
+        <version.jakarta.transaction>1.3.3.redhat-00002</version.jakarta.transaction>
+        <version.jakarta.xml.bind>2.3.3.redhat-00001</version.jakarta.xml.bind>
+        <version.jakarta.xml.soap>1.4.2.redhat-00001</version.jakarta.xml.soap>
+        <version.jakarta.xml.ws>2.3.3.redhat-00001</version.jakarta.xml.ws>
         <version.javax.annotation>1.3.2.redhat-00001</version.javax.annotation>
         <version.javax.el2>2.2.5</version.javax.el2>
         <version.javax.enterprise.cdi-api>1.2</version.javax.enterprise.cdi-api>
@@ -152,8 +155,6 @@
         <version.javax.servlet>4.0.1</version.javax.servlet>
         <version.javax.transaction>1.2</version.javax.transaction>
         <version.javax.validation>2.0.1.Final-redhat-1</version.javax.validation>
-        <version.javax.ws.rs>2.1.1</version.javax.ws.rs>
-        <version.javax.xml.bind>2.3.0.redhat-00003</version.javax.xml.bind>
         <version.joda-time>2.9.9</version.joda-time>
         <version.junit>4.13.2</version.junit>
         <version.net.bytebuddy>1.11.12.redhat-00002</version.net.bytebuddy>
@@ -1548,16 +1549,6 @@
                 <groupId>javax.resource</groupId>
                 <artifactId>javax.resource-api</artifactId>
                 <version>${version.javax.resource}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.ws.rs</groupId>
-                <artifactId>javax.ws.rs-api</artifactId>
-                <version>${version.javax.ws.rs}</version>
-            </dependency>
-            <dependency>
-                <groupId>javax.xml.bind</groupId>
-                <artifactId>jaxb-api</artifactId>
-                <version>${version.javax.xml.bind}</version>
             </dependency>
             <dependency>
                 <groupId>javax.persistence</groupId>

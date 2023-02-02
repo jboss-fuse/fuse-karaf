@@ -27,8 +27,8 @@
         <bundle>mvn:com.google.protobuf/protobuf-java/${version.com.google.protobuf-drools}</bundle>
         <bundle>mvn:commons-codec/commons-codec/${version.commons-codec}</bundle>
         <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.specs.javax-el3}</bundle>
-        <bundle>mvn:javax.enterprise/cdi-api/${version.javax.enterprise.cdi-api}</bundle>
-        <bundle>mvn:javax.interceptor/javax.interceptor-api/${version.javax.interceptor}</bundle>
+        <bundle>mvn:jakarta.enterprise/jakarta.enterprise.cdi-api/${version.jakarta.enterprise.cdi-api}</bundle>
+        <bundle>mvn:jakarta.interceptor/jakarta.interceptor-api/${version.jakarta.interceptor}</bundle>
         <bundle>mvn:org.antlr/antlr4-runtime/${version.org.antlr4}</bundle>
         <bundle>mvn:org.apache.commons/commons-collections4/${version.org.apache.commons.collections4}</bundle>
         <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
