@@ -21,46 +21,46 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import io.fabric8.karaf.checks.Check;
-import org.ops4j.pax.web.service.spi.WebEvent;
-import org.ops4j.pax.web.service.spi.WebListener;
+import org.ops4j.pax.web.service.spi.model.events.WebApplicationEvent;
+import org.ops4j.pax.web.service.spi.model.events.WebApplicationEventListener;
 import org.osgi.framework.Bundle;
 
 public class WarState extends AbstractBundleChecker
-                            implements WebListener {
+                            implements WebApplicationEventListener {
 
-    private final Map<Long, WebEvent> states = new ConcurrentHashMap<>();
+    private final Map<Long, WebApplicationEvent> states = new ConcurrentHashMap<>();
 
     public WarState() {
-        bundleContext.registerService(WebListener.class, this, null);
+        bundleContext.registerService(WebApplicationEventListener.class, this, null);
     }
 
     @Override
-    public void webEvent(WebEvent event) {
+    public void webEvent(WebApplicationEvent event) {
         states.put(event.getBundle().getBundleId(), event);
     }
 
     @Override
     public Check checkBundle(Bundle bundle) {
-        WebEvent event = states.get(bundle.getBundleId());
-        if (event != null && event.getType() != WebEvent.DEPLOYED && isActive(bundle)) {
+        WebApplicationEvent event = states.get(bundle.getBundleId());
+        if (event != null && event.getType() != WebApplicationEvent.State.DEPLOYED && isActive(bundle)) {
             return new Check("war-state", "War bundle " + bundle.getBundleId() + " is in state " + getState(event));
         }
         return null;
     }
 
-    private String getState(WebEvent webEvent) {
+    private String getState(WebApplicationEvent webEvent) {
         switch (webEvent.getType()) {
-            case WebEvent.DEPLOYED:
+            case DEPLOYED:
                 return "DEPLOYED";
-            case WebEvent.DEPLOYING:
+            case DEPLOYING:
                 return "DEPLOYING";
-            case WebEvent.FAILED:
+            case FAILED:
                 return "FAILED";
-            case WebEvent.UNDEPLOYED:
+            case UNDEPLOYED:
                 return "UNDEPLOYED";
-            case WebEvent.UNDEPLOYING:
+            case UNDEPLOYING:
                 return "UNDEPLOYING";
-            case WebEvent.WAITING:
+            case WAITING:
                 return "WAITING";
             default:
                 return "UNKNOWN";

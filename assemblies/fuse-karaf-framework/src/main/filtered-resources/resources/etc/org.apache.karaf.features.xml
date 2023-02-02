@@ -115,6 +115,8 @@
                 replacement="mvn:jakarta.annotation/jakarta.annotation-api/${version.jakarta.annotation}" mode="maven" />
         <bundle originalUri="mvn:javax.el/javax.el-api/[2,4)"
                 replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.specs.javax-el3}" mode="maven" />
+        <bundle originalUri="mvn:org.ops4j.pax.web/pax-web-compatibility-el2/[8,9)"
+                replacement="mvn:org.jboss.fuse.modules/fuse-el2-compatibility/${project.version}" mode="maven" />
         <bundle originalUri="mvn:jakarta.el/jakarta.el-api/[2,4)"
                 replacement="mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.specs.javax-el3}" mode="maven" />
         <bundle originalUri="mvn:javax.servlet/javax.servlet-api/[3,4)"
