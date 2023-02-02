@@ -35,7 +35,7 @@
         <bundle>mvn:org.apache.santuario/xmlsec/${version.org.apache.santuario}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${version.org.apache.servicemix.bundles.antlr}</bundle>
         <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-runtime/${version.org.apache.servicemix.bundles.jaxb}</bundle>
-        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb}</bundle>
+        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb.xjc}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/${version.org.apache.servicemix.bundles.javax-inject}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.poi/${version.org.apache.servicemix.bundles.poi}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlresolver/${version.org.apache.servicemix.bundles.xmlresolver}</bundle>

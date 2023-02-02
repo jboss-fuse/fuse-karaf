@@ -256,14 +256,16 @@
                 replacement="mvn:com.sun.mail/javax.mail/${version.com.sun.mail}" mode="maven" />
         <bundle originalUri="mvn:com.sun.mail/javax.mail/[1.6,1.7)"
                 replacement="mvn:com.sun.mail/javax.mail/${version.com.sun.mail}" mode="maven" />
+        <bundle originalUri="mvn:jakarta.xml.bind/jakarta.xml.bind-api/[2.3,3)"
+                replacement="mvn:jakarta.xml.bind/jakarta.xml.bind-api/${version.jakarta.xml.bind}" mode="maven" />
         <bundle originalUri="mvn:com.sun.xml.bind/jaxb-impl/[2.3,2.4)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-runtime/${version.org.apache.servicemix.bundles.jaxb}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-impl/[2.2,2.4)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-runtime/${version.org.apache.servicemix.bundles.jaxb}" mode="maven" />
         <bundle originalUri="mvn:com.sun.xml.bind/jaxb-xjc/[2.3,2.4)"
-                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb}" mode="maven" />
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb.xjc}" mode="maven" />
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/[2.2,2.4)"
-                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb}" mode="maven" />
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb.xjc}" mode="maven" />
         <!-- repackaged version of pax-transx-tm-narayana -->
         <bundle originalUri="mvn:org.ops4j.pax.transx/pax-transx-tm-narayana/[0.2,1)"
                 replacement="mvn:org.jboss.fuse.modules/fuse-pax-transx-tm-narayana/${project.version}" mode="maven" />
