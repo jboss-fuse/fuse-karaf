@@ -175,7 +175,7 @@
         <version.org.apache.commons.pool2>2.11.1.redhat-00001</version.org.apache.commons.pool2>
         <version.org.apache.commons.text>1.10.0.redhat-00001</version.org.apache.commons.text>
         <version.org.apache.curator>2.11.1</version.org.apache.curator>
-        <version.org.apache.felix>5.6.12</version.org.apache.felix>
+        <version.org.apache.felix>7.0.5</version.org.apache.felix>
         <version.org.apache.felix.configadmin>1.9.24</version.org.apache.felix.configadmin>
         <version.org.apache.felix.fileinstall>3.7.4</version.org.apache.felix.fileinstall>
         <version.org.apache.felix.gogo>1.1.6</version.org.apache.felix.gogo>
