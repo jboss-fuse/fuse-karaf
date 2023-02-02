@@ -211,22 +211,23 @@
                                 org.osgi.framework.bootdelegation property in etc/config.properties
                         -->
                         <!-- lib/endorsed -->
+                        <library>mvn:jakarta.annotation/jakarta.annotation-api/${version.jakarta.annotation};type:=endorsed;export:=false</library>
+                        <library>mvn:com.google.code.findbugs/jsr305/${version.com.google.code.findbugs};type:=endorsed;export:=false</library>
+                        <library>mvn:javax.validation/validation-api/${version.javax.validation};type:=endorsed;export:=false</library>
+                        <library>mvn:org.apache.karaf.specs/org.apache.karaf.specs.locator/${version.org.apache.karaf};type:=endorsed;export:=false</library>
+                        <library>mvn:org.apache.karaf.specs/org.apache.karaf.specs.java.xml/${version.org.apache.karaf};type:=endorsed;export:=false</library>
+                        <library>mvn:org.apache.karaf.specs/org.apache.karaf.specs.java.xml.ws/${version.org.apache.karaf};type:=endorsed;export:=false</library>
                         <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xerces/${version.org.apache.servicemix.bundles.xerces};type:=endorsed;export:=true;delegate:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxp-api-1.4/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxb-api-2.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.jaxws-api-2.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.saaj-api-1.3/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.stax-api-1.2/${version.org.apache.servicemix.specs};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/${version.org.apache.servicemix.bundles.xalan};type:=endorsed;export:=true</library>
-                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${version.org.apache.servicemix.bundles.xalan-serializer};type:=endorsed;export:=true</library>
-                        <library>mvn:javax.annotation/javax.annotation-api/${version.javax.annotation};type:=endorsed;export:=true</library>
+                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan/${version.org.apache.servicemix.bundles.xalan};type:=endorsed;export:=true;delegate:=true</library>
+                        <library>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xalan-serializer/${version.org.apache.servicemix.bundles.xalan-serializer};type:=endorsed;export:=true;delegate:=true</library>
+                        <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activation-api-1.2.1/${version.org.apache.servicemix.specs.activation};type:=endorsed;export:=true;delegate:=true</library>
                         <!-- lib -->
                         <library>mvn:org.jboss.fuse.modules/fuse-branding/${project.version};type:=default;export:=false</library>
                         <library>mvn:io.prometheus.jmx/jmx_prometheus_javaagent/${version.io.prometheus};type:=default;export:=false</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.locator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <!-- lib/boot -->
-                        <library>mvn:org.osgi/org.osgi.core/${version.org.osgi};type:=boot;export:=false</library>
+                        <library>mvn:org.osgi/osgi.core/${version.org.osgi};type:=boot;export:=false</library>
                         <library>mvn:org.apache.karaf/org.apache.karaf.main/${version.org.apache.karaf};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna/${version.net.java.dev.jna};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna-platform/${version.net.java.dev.jna};type:=boot;export:=false</library>
