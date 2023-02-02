@@ -639,7 +639,7 @@
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.activator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <library>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.locator/${version.org.apache.servicemix.specs};type:=default;export:=true</library>
                         <!-- lib/boot -->
-                        <library>mvn:org.osgi/org.osgi.core/${version.org.osgi};type:=boot;export:=false</library>
+                        <library>mvn:org.osgi/osgi.core/${version.org.osgi};type:=boot;export:=false</library>
                         <library>mvn:org.apache.karaf/org.apache.karaf.main/${version.org.apache.karaf};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna/${version.net.java.dev.jna};type:=boot;export:=false</library>
                         <library>mvn:net.java.dev.jna/jna-platform/${version.net.java.dev.jna};type:=boot;export:=false</library>
