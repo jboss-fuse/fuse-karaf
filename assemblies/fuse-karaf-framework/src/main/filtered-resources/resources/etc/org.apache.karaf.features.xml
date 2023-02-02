@@ -418,6 +418,8 @@
                 replacement="mvn:org.osgi/org.osgi.util.promise/${version.org.osgi.util.promise}" mode="maven"/>
         <bundle originalUri="mvn:org.osgi/org.osgi.util.function/[1.0,2.0)"
                 replacement="mvn:org.osgi/org.osgi.util.function/${version.org.osgi.util.function}" mode="maven"/>
+        <bundle originalUri="mvn:com.google.protobuf/protobuf-java/[3.6,4)"
+                replacement="mvn:com.google.protobuf/protobuf-java/${version.com.google.protobuf-drools}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
