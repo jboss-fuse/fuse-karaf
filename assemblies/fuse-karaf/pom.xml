@@ -304,9 +304,13 @@
                         <feature>scr</feature>
                         <!-- Blueprint -->
                         <feature>aries-blueprint</feature>
-                        <!-- pax-web: undertow, war, whiteboard -->
+                        <!-- Pax Web -->
                         <feature>pax-http-undertow</feature>
-                        <feature>war</feature>
+                        <feature>pax-undertow-websockets</feature>
+                        <feature>pax-web-jsp</feature>
+                        <feature>pax-web-war</feature>
+                        <feature>pax-web-whiteboard</feature>
+                        <feature>pax-web-karaf</feature>
                         <!-- jaas:* commands and modules -->
                         <feature>jaas</feature>
                         <!-- Karaf JMX Management server -->
