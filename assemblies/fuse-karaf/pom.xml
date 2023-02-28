@@ -304,9 +304,13 @@
                         <feature>scr</feature>
                         <!-- Blueprint -->
                         <feature>aries-blueprint</feature>
-                        <!-- pax-web: undertow, war, whiteboard -->
+                        <!-- Pax Web -->
                         <feature>pax-http-undertow</feature>
-                        <feature>war</feature>
+                        <feature>pax-undertow-websockets</feature>
+                        <feature>pax-web-jsp</feature>
+                        <feature>pax-web-war</feature>
+                        <feature>pax-web-whiteboard</feature>
+                        <feature>pax-web-karaf</feature>
                         <!-- jaas:* commands and modules -->
                         <feature>jaas</feature>
                         <!-- Karaf JMX Management server -->
@@ -404,6 +408,8 @@
                         <feature>jetty/[8,9)</feature>
                         <feature>pax-*jetty*</feature>
                         <feature>cxf-*-jetty</feature>
+                        <feature>pax-web-*-keycloak</feature>
+                        <feature>pax-web-*-keycloak18</feature>
                         <feature>blueprint-web</feature>
                         <feature>pax-keycloak*</feature>
                         <feature>camel-jetty8</feature>
@@ -506,6 +512,9 @@
                         <bundle>wrap:mvn:org.apache.activemq/activemq-client</bundle>
                         <!-- CXF-7725 -->
                         <bundle>mvn:org.apache.geronimo.specs/geronimo-ws-metadata_2.0_spec</bundle>
+                        <bundle>mvn:org.ops4j.pax.web/keycloak-common/8.0.17</bundle>
+                        <bundle>mvn:org.ops4j.pax.web/keycloak-*</bundle>
+                        <bundle>mvn:org.ops4j.pax.web/keycloak20-*</bundle>
                     </blacklistedBundles>
                     <blacklistedRepositories>
                         <!-- Blacklisting some repositories because the closure is not consistent -->

@@ -21,16 +21,16 @@
         xmlns:w="urn:jboss:domain:17.0"
         xmlns:io="urn:jboss:domain:io:3.0"
         xsi:schemaLocation="
-            urn:org.ops4j.pax.web:undertow:1.1 https://raw.githubusercontent.com/ops4j/org.ops4j.pax.web/web-8.0.15/pax-web-undertow/src/main/resources/schema/pax-web-undertow_1_1.xsd
+            urn:org.ops4j.pax.web:undertow:1.1 https://raw.githubusercontent.com/ops4j/org.ops4j.pax.web/web-${version.org.ops4j.pax.web}/pax-web-undertow/src/main/resources/schema/pax-web-undertow_1_1.xsd
             urn:jboss:domain:io:3.0 https://raw.githubusercontent.com/wildfly/wildfly-core/16.0.1.Final/io/subsystem/src/main/resources/schema/wildfly-io_3_0.xsd
             urn:jboss:domain:undertow:12.0 https://raw.githubusercontent.com/wildfly/wildfly/24.0.1.Final/undertow/src/main/resources/schema/wildfly-undertow_12_0.xsd
             urn:jboss:domain:17.0 https://raw.githubusercontent.com/wildfly/wildfly-core/16.0.1.Final/server/src/main/resources/schema/wildfly-config_17_0.xsd">
 
     <!--
-		IO subsystem may be used to configure "default" buffer pool and "default" worker which will be used
-		if no "worker" or "buffer-pool" attributes are specified.
-		When no "default" worker and buffer pool are defined, Pax Web will create default workers internally.
-		buffer-pool may be referenced from the listener and websocket
+        IO subsystem may be used to configure "default" buffer pool and "default" worker which will be used
+        if no "worker" or "buffer-pool" attributes are specified.
+        When no "default" worker and buffer pool are defined, Pax Web will create default workers internally.
+        buffer-pool may be referenced from the listener and websocket
 
         buffer-pool:
          - buffer-size defaults to:
@@ -45,9 +45,9 @@
          - io-threads defaults to Math.max(Runtime.getRuntime().availableProcessors(), 2);
          - task-core-threads and task-max-threads default to io-threads * 8
 
-		worker may be referenced from the listener, access-log and websocket
-		 - io-threads defaults to Math.max(Runtime.getRuntime().availableProcessors(), 2);
-		 - task-core-threads and task-max-threads default to io-threads * 8
+        worker may be referenced from the listener, access-log and websocket
+         - io-threads defaults to Math.max(Runtime.getRuntime().availableProcessors(), 2);
+         - task-core-threads and task-max-threads default to io-threads * 8
     -->
     <!--
     <subsystem xmlns="urn:jboss:domain:io:3.0">
@@ -63,7 +63,7 @@
         <!-- org.wildfly.extension.undertow.BufferCacheDefinition -->
         <buffer-cache name="default" buffer-size="1024" buffers-per-region="1024" max-regions="10" />
         <server name="default-server" default-host="localhost" servlet-container="default">
-            <!-- HTTP(S) Listener references Socket Binding (and indirectly - Interfaces) -->
+            <!-- HTTP(S) Listeners reference Socket Bindings (and indirectly - Interfaces) -->
             <http-listener name="http" socket-binding="http"
                            worker="default"
                            buffer-pool="default"
@@ -192,7 +192,7 @@
         <servlet-container name="default" default-session-timeout="30">
             <!-- Not used - configured per container-agnostic web context -->
             <jsp-config />
-            <session-cookie name="JSESSIONID" domain="domain" http-only="true" max-age="130" secure="true" comment="Session Cookie" />
+<!--            <session-cookie name="JSESSIONID" domain="domain" http-only="true" max-age="-1" secure="false" comment="Session Cookie" />-->
             <persistent-sessions path="${karaf.data}/web-sessions" />
             <!-- deflater-level: 0-9. See java.util.zip.Deflater.setLevel(). Used only of per-message-deflate is true -->
             <websockets buffer-pool="default" worker="default"
@@ -233,14 +233,15 @@
     -->
     <security-realm name="default">
         <w:authentication>
+            <!-- Choose one from jaas/properties/users -->
             <!-- JaasIdentityManager for given realm -->
             <w:jaas name="karaf" />
             <!--
-				OR PropertiesIdentityManager for users from properties file in the format:
-					user1 = password, role1, role2, ...
-					user2 = password, role1, role2, ...
-				where password may have a prefix describing MessageDigest to use (as in <w:users>)
-			-->
+                OR PropertiesIdentityManager for users from properties file in the format:
+                    user1 = password, role1, role2, ...
+                    user2 = password, role1, role2, ...
+                where password may have a prefix describing MessageDigest to use (as in <w:users>)
+            -->
 <!--            <w:properties path="${karaf.etc}/undertow-users.properties" />-->
             <!-- OR PropertiesIdentityManager configured directly in XML (no roles can be configured) -->
 <!--            <w:users>-->
