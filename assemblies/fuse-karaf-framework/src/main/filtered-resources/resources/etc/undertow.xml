@@ -177,13 +177,13 @@
             -->
 
             <host name="default-host" alias="localhost">
-                <location name="/" handler="welcome-content" />
+                <!--location name="/" handler="welcome-content" /-->
                 <!--<location name="/docs" handler="docs-content" />-->
                 <!-- pattern: common, combined, "" // io.undertow.server.handlers.accesslog.AccessLogHandler.handleCommonNames() -->
                 <access-log directory="${karaf.data}/log" pattern="common" prefix="access_log." suffix="log" rotate="true" />
                 <filter-ref name="server-header" />
                 <filter-ref name="x-powered-by-header" />
-<!--                <filter-ref name="expression-filter-1" predicate="method(GET)" />-->
+                <filter-ref name="root-redirect" predicate="method(GET) and path(/)" />
                 <!-- uncomment here and in <gzip name="gzip-filter" /> to enable gzip response encoding -->
 <!--                <filter-ref name="gzip-filter" />-->
             </host>
@@ -204,8 +204,8 @@
         </servlet-container>
         <!-- org.wildfly.extension.undertow.handlers.HandlerDefinitions -->
         <handlers>
-            <file name="welcome-content" path="${karaf.home}/welcome-content" cache-buffer-size="1024" cache-buffers="1024"
-                  case-sensitive="false" directory-listing="false" follow-symlink="false" safe-symlink-paths="/dev/null" />
+            <!--file name="welcome-content" path="${karaf.home}/welcome-content" cache-buffer-size="1024" cache-buffers="1024"
+                  case-sensitive="false" directory-listing="false" follow-symlink="false" safe-symlink-paths="/dev/null" /-->
             <!--<file name="docs-content" path="${karaf.home}/docs" />-->
         </handlers>
         <!-- org.wildfly.extension.undertow.filters.FilterDefinitions -->
@@ -217,7 +217,7 @@
             <response-header name="x-powered-by-header" header-name="X-Powered-By" header-value="Open Source" />
             <!-- uncomment here and in <filter-ref name="gzip-filter" /> to enable gzip response encoding -->
 <!--            <gzip name="gzip-filter" />-->
-<!--            <expression-filter name="expression-filter-1" expression="redirect(http://localhost)" />-->
+            <expression-filter name="root-redirect" expression="redirect(/hawtio)" />
             <!-- org.wildfly.extension.undertow.filters.RewriteFilterDefinition#createHttpHandler -->
 <!--            <rewrite name="r-1" target="/c1" redirect="true" />-->
 <!--            <rewrite name="r-2" target="/c2" redirect="false" />-->
