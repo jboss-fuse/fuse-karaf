@@ -19,30 +19,24 @@
 <features name="fuse-features-dependencies-droolsjbpm-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.5.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://karaf.apache.org/xmlns/features/v1.5.0 http://karaf.apache.org/xmlns/features/v1.5.0">
 
-    <!-- features that define bundle dependencies for brms features defined in mvn:org.kie/kie-karaf-features/7.7.x/xml/features -->
+    <!-- features that define bundle dependencies for brms features defined in mvn:org.kie/kie-karaf-features/<version>/xml/features -->
     <!-- this moves version management to karaf and brms provides only kie/drools/jbpm/optaplanner/kie-remote features/bundles -->
 
     <feature name="drools7-dependencies">
         <feature prerequisite="true">wrap</feature>
-        <bundle>mvn:com.google.protobuf/protobuf-java/${version.com.google.protobuf-drools}</bundle>
-        <bundle>mvn:commons-codec/commons-codec/${version.commons-codec}</bundle>
-        <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.specs.javax-el3}</bundle>
-        <bundle>mvn:jakarta.enterprise/jakarta.enterprise.cdi-api/${version.jakarta.enterprise.cdi-api}</bundle>
-        <bundle>mvn:jakarta.interceptor/jakarta.interceptor-api/${version.jakarta.interceptor}</bundle>
-        <bundle>mvn:org.antlr/antlr4-runtime/${version.org.antlr4}</bundle>
-        <bundle>mvn:org.apache.commons/commons-collections4/${version.org.apache.commons.collections4}</bundle>
-        <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
-        <bundle>mvn:org.apache.santuario/xmlsec/${version.org.apache.santuario}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${version.org.apache.servicemix.bundles.antlr}</bundle>
-        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-runtime/${version.org.apache.servicemix.bundles.jaxb}</bundle>
-        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb.xjc}</bundle>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/${version.org.apache.servicemix.bundles.javax-inject}</bundle>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.poi/${version.org.apache.servicemix.bundles.poi}</bundle>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xmlresolver/${version.org.apache.servicemix.bundles.xmlresolver}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xstream-java8/${version.org.apache.servicemix.bundles.xstream-java8}</bundle>
-        <bundle>wrap:mvn:org.codehaus.janino/janino/${version.org.codehaus.janino}$Bundle-SymbolicName=Codehaus-Janino&amp;Bundle-Version=${version.org.codehaus.janino}</bundle>
-        <bundle>mvn:org.eclipse.jdt.core.compiler/ecj/${version.org.eclipse.jdt.core.compiler}</bundle>
+        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb.xjc}</bundle>
+        <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-runtime/${version.org.apache.servicemix.bundles.jaxb}</bundle>
         <bundle>mvn:org.mvel/mvel2/${version.org.mvel}</bundle>
+        <bundle>mvn:org.eclipse.jdt.core.compiler/ecj/${version.org.eclipse.jdt.core.compiler}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.javax-inject/${version.org.apache.servicemix.bundles.javax-inject}</bundle>
+        <bundle>mvn:jakarta.enterprise/jakarta.enterprise.cdi-api/${version.jakarta.enterprise.cdi-api}</bundle>
+        <bundle>mvn:org.apache.servicemix.specs/org.apache.servicemix.specs.javax-el-api-3.0.0/${version.org.apache.servicemix.specs.javax-el3}</bundle>
+        <bundle>mvn:jakarta.interceptor/jakarta.interceptor-api/${version.jakarta.interceptor}</bundle>
+        <bundle>mvn:commons-codec/commons-codec/${version.commons-codec}</bundle>
+        <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
+        <bundle>mvn:org.apache.commons/commons-collections4/${version.org.apache.commons.collections4}</bundle>
     </feature>
 
     <feature name="jbpm7-dependencies">
@@ -50,13 +44,12 @@
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.quartz/${version.org.apache.servicemix.bundles.quartz}</bundle>
         <bundle>mvn:org.jboss.spec.javax.security.jacc/jboss-jacc-api_1.5_spec/${version.org.jboss.spec.jacc}</bundle>
         <bundle>mvn:joda-time/joda-time/${version.joda-time}</bundle>
-        <bundle>mvn:javax.interceptor/javax.interceptor-api/${version.javax.interceptor}</bundle>
+        <bundle>mvn:jakarta.interceptor/jakarta.interceptor-api/${version.jakarta.interceptor}</bundle>
         <bundle>mvn:javax.jms/javax.jms-api/${version.javax.jms}</bundle>
         <bundle>mvn:javax.transaction/javax.transaction-api/${version.javax.transaction}</bundle>
         <bundle dependency="true">mvn:javax.persistence/javax.persistence-api/${version.javax.persistence}</bundle>
         <bundle>mvn:com.google.guava/guava/${version.com.google.guava30}</bundle>
         <bundle>mvn:com.google.guava/failureaccess/${version.com.google.guava.failureaccess}</bundle>
-        <bundle>mvn:com.fasterxml.jackson.core/jackson-annotations/${version.com.fasterxml.jackson}</bundle>
         <bundle>mvn:com.sun.mail/javax.mail/${version.com.sun.mail}</bundle>
     </feature>
 
@@ -64,7 +57,8 @@
         <bundle>mvn:org.apache.commons/commons-lang3/${version.org.apache.commons.lang3}</bundle>
         <bundle>mvn:org.apache.commons/commons-math3/${version.org.apache.commons.math3}</bundle>
         <bundle>mvn:commons-io/commons-io/${version.commons-io}</bundle>
-        <bundle>mvn:com.google.guava/guava/${version.com.google.guava20}</bundle>
+        <bundle>mvn:com.google.guava/guava/${version.com.google.guava30}</bundle>
+        <bundle>mvn:com.google.guava/failureaccess/${version.com.google.guava.failureaccess}</bundle>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.reflections/${version.org.apache.servicemix.bundles.reflections}</bundle>
     </feature>
 
@@ -83,8 +77,8 @@
 
     <feature name="db-dependencies">
         <bundle>mvn:javax.transaction/javax.transaction-api/${version.javax.transaction}</bundle>
-        <bundle start-level="100">mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.commons-dbcp/${version.org.apache.servicemix.bundles.dbcp}</bundle>
-        <bundle start-level="100">mvn:commons-pool/commons-pool/${version.commons-pool}</bundle>
+        <bundle start-level="100">mvn:org.apache.commons/commons-pool2/${version.org.apache.commons.pool2}</bundle>
+        <bundle start-level="100">mvn:org.apache.commons/commons-dbcp2/${version.org.apache.commons.dbcp2}</bundle>
     </feature>
 
     <feature name="hibernate-dependencies">
