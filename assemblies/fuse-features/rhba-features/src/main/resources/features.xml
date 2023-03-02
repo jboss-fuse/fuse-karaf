@@ -25,7 +25,7 @@
     <feature name="drools7-dependencies">
         <feature prerequisite="true">wrap</feature>
         <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.antlr/${version.org.apache.servicemix.bundles.antlr}</bundle>
-        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xstream-java8/${version.org.apache.servicemix.bundles.xstream-java8}</bundle>
+        <bundle>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.xstream/${version.org.apache.servicemix.bundles.xstream}</bundle>
         <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-xjc/${version.org.apache.servicemix.bundles.jaxb.xjc}</bundle>
         <bundle start-level='10'>mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.jaxb-runtime/${version.org.apache.servicemix.bundles.jaxb}</bundle>
         <bundle>mvn:org.mvel/mvel2/${version.org.mvel}</bundle>
