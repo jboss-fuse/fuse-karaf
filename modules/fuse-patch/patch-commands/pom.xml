@@ -99,6 +99,12 @@
                     <instructions>
                         <Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
                         <Import-Package>
+                            org.apache.karaf.features;version="[4.2,5)",
+                            org.apache.karaf.shell.api.action;version="[4.2,5)",
+                            org.apache.karaf.shell.api.action.lifecycle;version="[4.2,5)",
+                            org.apache.karaf.shell.api.console;version="[4.2,5)",
+                            org.apache.karaf.shell.support.completers;version="[4.2,5)",
+                            org.osgi.framework;version="[1.8,2)",
                             *
                         </Import-Package>
                         <Private-Package>
