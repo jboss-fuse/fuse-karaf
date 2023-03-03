@@ -156,7 +156,7 @@
         <version.javax.xml.bind>2.3.0.redhat-00003</version.javax.xml.bind>
         <version.joda-time>2.9.9</version.joda-time>
         <version.junit>4.13.2</version.junit>
-        <version.net.bytebuddy>1.11.12.redhat-00002</version.net.bytebuddy>
+        <version.net.bytebuddy>1.12.18.redhat-00002</version.net.bytebuddy>
         <version.net.i2p.crypto>0.3.0</version.net.i2p.crypto>
         <version.net.java.dev.jna>5.12.1</version.net.java.dev.jna>
         <version.net.sf.ehcache>2.10.9.2</version.net.sf.ehcache>
@@ -253,13 +253,13 @@
         <version.org.fusesource.hawtbuf>1.11.0.redhat-2</version.org.fusesource.hawtbuf>
         <version.org.glassfish.jaxb>2.3.4</version.org.glassfish.jaxb>
         <version.org.glassfish.web.javax.el>2.2.5</version.org.glassfish.web.javax.el>
-        <version.org.hibernate>5.3.28.Final-redhat-00001</version.org.hibernate>
-        <version.org.hibernate.common>5.0.5.Final-redhat-00002</version.org.hibernate.common>
+        <version.org.hibernate>5.6.14.Final-redhat-00001</version.org.hibernate>
+        <version.org.hibernate.common>5.1.2.Final-redhat-00005</version.org.hibernate.common>
         <version.org.hibernate.validator>6.0.23.Final-redhat-00001</version.org.hibernate.validator>
         <version.org.hibernate.javax.persistence>1.0.2.Final-redhat-1</version.org.hibernate.javax.persistence>
         <version.org.javassist>3.27.0.GA-redhat-00001</version.org.javassist>
         <version.org.jasypt>1.9.3.redhat-00002</version.org.jasypt>
-        <version.org.jboss.jandex>2.0.5.Final-redhat-1</version.org.jboss.jandex>
+        <version.org.jboss.jandex>2.4.3.Final-redhat-00001</version.org.jboss.jandex>
         <version.org.jboss.logging>3.4.1.Final-redhat-00002</version.org.jboss.logging>
         <version.org.jboss.modules>1.10.0.Final-redhat-00001</version.org.jboss.modules>
         <version.org.jboss.narayana>5.11.4.Final-redhat-00001</version.org.jboss.narayana>
