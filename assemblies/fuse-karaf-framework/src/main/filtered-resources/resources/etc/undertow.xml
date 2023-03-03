@@ -78,7 +78,7 @@
                            max-connections="1000000"
 
                            resolve-peer-address="false"
-                           disallowed-methods="TRACE OPTIONS"
+                           disallowed-methods="TRACE"
                            secure="false"
 
                            max-post-size="10485760"
