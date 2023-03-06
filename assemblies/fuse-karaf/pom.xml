@@ -407,7 +407,7 @@
                         <feature>service-wrapper</feature>
                         <feature>httplite</feature>
                         <feature>jetty/[8,9)</feature>
-                        <feature>pax-*jetty*</feature>
+                        <feature>pax-web-http-jetty</feature>
                         <feature>cxf-*-jetty</feature>
                         <feature>pax-web-*-keycloak</feature>
                         <feature>pax-web-*-keycloak18</feature>
