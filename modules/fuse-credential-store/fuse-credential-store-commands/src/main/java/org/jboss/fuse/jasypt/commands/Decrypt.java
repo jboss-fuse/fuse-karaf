@@ -33,6 +33,7 @@ import org.jasypt.intf.service.JasyptStatelessService;
 import org.jasypt.iv.ByteArrayFixedIvGenerator;
 import org.jasypt.iv.RandomIvGenerator;
 import org.jboss.fuse.jasypt.commands.completers.JasyptPbeAlgorithmsCompletionSupport;
+import org.jboss.fuse.jasypt.commands.support.FipsRandomSaltGenerator;
 
 import static org.jboss.fuse.jasypt.commands.Helpers.isIVNeeded;
 
@@ -71,6 +72,9 @@ public class Decrypt implements Action {
     @Option(name = "-E", aliases = { "--use-empty-iv-generator" }, description = "Use fixed IV generator for decryption of passwords encrypted with previous versions of Jasypt.")
     boolean useIVGeneratorForLegacyValues = false;
 
+    @Option(name = "--use-fips-secure-random-algorithm", description = "Use SecureRandom algorithm compliant with FIPS")
+    boolean useFIPSSecureRandomAlgorithm = false;
+
     @Argument(index = 0, description = "Input data to decrypt. If no data is specified, it'll be read from standard input.", required = false)
     String input;
 
@@ -105,13 +109,17 @@ public class Decrypt implements Action {
             if (!useIVGeneratorForLegacyValues) {
                 // normal behavior
                 JasyptStatelessService service = new JasyptStatelessService();
+                String randomSaltGeneratorClassName = null;
+                if (useFIPSSecureRandomAlgorithm) {
+                    randomSaltGeneratorClassName = FipsRandomSaltGenerator.class.getName();
+                }
 
                 clear = service.decrypt(
                         input,
                         password, null, null,
                         algorithm, null, null,
                         Integer.toString(iterations), null, null,
-                        null, null, null,
+                        randomSaltGeneratorClassName, null, null,
                         null, null, null,
                         null, null, null,
                         hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null,

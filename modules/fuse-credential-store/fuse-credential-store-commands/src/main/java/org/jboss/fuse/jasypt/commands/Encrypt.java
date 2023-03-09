@@ -28,6 +28,7 @@ import org.jasypt.encryption.pbe.StandardPBEByteEncryptor;
 import org.jasypt.intf.service.JasyptStatelessService;
 import org.jasypt.iv.RandomIvGenerator;
 import org.jboss.fuse.jasypt.commands.completers.JasyptPbeAlgorithmsCompletionSupport;
+import org.jboss.fuse.jasypt.commands.support.FipsRandomSaltGenerator;
 
 import static org.jboss.fuse.jasypt.commands.Helpers.isIVNeeded;
 
@@ -63,6 +64,9 @@ public class Encrypt implements Action {
            + "PBEWITHHMACSHA384ANDAES_256, PBEWITHHMACSHA1ANDAES_256, PBEWITHHMACSHA224ANDAES_128, PBEWITHHMACSHA512ANDAES_128 ")
     boolean useIVGenerator = false;
 
+    @Option(name = "--use-fips-secure-random-algorithm", description = "Use SecureRandom algorithm compliant with FIPS")
+    boolean useFIPSSecureRandomAlgorithm = false;
+
     @Argument(index = 0, description = "Input data to encrypt. If no data is specified, it'll be read from standard input.", required = false)
     String input;
 
@@ -93,12 +97,17 @@ public class Encrypt implements Action {
             Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 
             JasyptStatelessService service = new JasyptStatelessService();
+            String randomSaltGeneratorClassName = null;
+            if (useFIPSSecureRandomAlgorithm) {
+                randomSaltGeneratorClassName = FipsRandomSaltGenerator.class.getName();
+            }
+
             String secret = service.encrypt(
                     input,
                     password, null, null,
                     algorithm, null, null,
                     Integer.toString(iterations), null, null,
-                    null, null, null,
+                    randomSaltGeneratorClassName, null, null,
                     null, null, null,
                     null, null, null,
                     hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null,
