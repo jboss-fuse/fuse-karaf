@@ -124,8 +124,8 @@
         <version.io.dropwizard.metrics>3.2.6.redhat-00001</version.io.dropwizard.metrics>
         <version.io.fabric8.kubernetes-model>4.6.2</version.io.fabric8.kubernetes-model>
         <version.io.fabric8.kubernetes-client>4.6.2.fuse-7_11_1-00015</version.io.fabric8.kubernetes-client>
-        <version.io.netty>4.1.87.Final</version.io.netty>
-        <version.io.netty.tcnative>2.0.56.Final</version.io.netty.tcnative>
+        <version.io.netty>4.1.90.Final</version.io.netty>
+        <version.io.netty.tcnative>2.0.59.Final</version.io.netty.tcnative>
         <version.io.netty.artemis>4.1.66.Final-redhat-00001</version.io.netty.artemis>
         <version.io.opentracing>0.32.0</version.io.opentracing>
         <version.io.prometheus>0.14.0.redhat-00002</version.io.prometheus>
