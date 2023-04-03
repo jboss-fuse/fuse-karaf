@@ -32,6 +32,23 @@
     <repository>mvn:io.hawt/hawtio-karaf/${version.io.hawt}/xml/features</repository>
     <repository>mvn:io.fabric8/fabric8-karaf-features/${project.version}/xml/features</repository>
 
+    <!-- Apache Karaf spec features -->
+
+    <!-- asm -->
+    <feature name="asm" version="${version.org.ow2.asm}">
+        <bundle dependency="false" start-level="20">mvn:org.ow2.asm/asm/${version.org.ow2.asm}</bundle>
+        <bundle dependency="false" start-level="20">mvn:org.ow2.asm/asm-util/${version.org.ow2.asm}</bundle>
+        <bundle dependency="false" start-level="20">mvn:org.ow2.asm/asm-tree/${version.org.ow2.asm}</bundle>
+        <bundle dependency="false" start-level="20">mvn:org.ow2.asm/asm-analysis/${version.org.ow2.asm}</bundle>
+        <bundle dependency="false" start-level="20">mvn:org.ow2.asm/asm-commons/${version.org.ow2.asm}</bundle>
+    </feature>
+
+    <!-- spifly -->
+    <feature name="spifly" version="${version.org.apache.aries.spifly}">
+        <feature>asm</feature>
+        <bundle>mvn:org.apache.aries.spifly/org.apache.aries.spifly.dynamic.bundle/${version.org.apache.aries.spifly}</bundle>
+    </feature>
+
     <!-- Red Hat Fuse Karaf features -->
 
     <feature name="fuse-credential-store-core" description="fuse-credential-store-core" version="${project.version}">

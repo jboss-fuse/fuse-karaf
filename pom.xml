@@ -134,7 +134,7 @@
         <version.io.undertow>2.2.23.SP2-redhat-00001</version.io.undertow>
         <!-- version of Undertow used in Pax Web feature, to override it correctly -->
         <version.io.undertow-pax-web>2.2.23.Final</version.io.undertow-pax-web>
-        <version.jakarta.annotation>1.3.5.redhat-00003</version.jakarta.annotation>
+        <version.jakarta.annotation>1.3.5.redhat-00004</version.jakarta.annotation>
         <version.jakarta.enterprise.cdi-api>2.0.2.redhat-00004</version.jakarta.enterprise.cdi-api>
         <version.jakarta.interceptor>1.2.5.redhat-00002</version.jakarta.interceptor>
         <version.jakarta.jws>2.1.0.redhat-00001</version.jakarta.jws>
@@ -165,7 +165,7 @@
         <version.org.apache.aries.jpa>2.7.3</version.org.apache.aries.jpa>
         <version.org.apache.aries.proxy.api>1.1.1</version.org.apache.aries.proxy.api>
         <version.org.apache.aries.proxy>1.1.11</version.org.apache.aries.proxy>
-        <version.org.apache.aries.spifly>1.3.2</version.org.apache.aries.spifly>
+        <version.org.apache.aries.spifly>1.3.5</version.org.apache.aries.spifly>
         <version.org.apache.commons.collections4>4.1</version.org.apache.commons.collections4>
         <version.org.apache.commons.configuration2>2.8.0</version.org.apache.commons.configuration2>
         <version.org.apache.commons.compress>1.22</version.org.apache.commons.compress>
@@ -268,7 +268,7 @@
         <version.org.jboss.transaction>7.6.0.Final-redhat-1</version.org.jboss.transaction>
         <version.org.jboss.xnio>3.8.7.SP1-redhat-00001</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
-        <version.org.jline>3.21.0</version.org.jline>
+        <version.org.jline>3.21.0.redhat-00001</version.org.jline>
         <version.org.json>20211205</version.org.json>
         <version.org.jsoup>1.14.3</version.org.jsoup>
         <version.org.keycloak>18.0.6.redhat-00001</version.org.keycloak>
@@ -2027,6 +2027,11 @@
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
                 <version>${version.org.json}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jline</groupId>
+                <artifactId>jline</artifactId>
+                <version>${version.org.jline}</version>
             </dependency>
 
             <dependency>
