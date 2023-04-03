@@ -268,7 +268,7 @@
         <version.org.jboss.transaction>7.6.0.Final-redhat-1</version.org.jboss.transaction>
         <version.org.jboss.xnio>3.8.7.SP1-redhat-00001</version.org.jboss.xnio>
         <version.org.jgroups3>3.6.10.Final-redhat-1</version.org.jgroups3>
-        <version.org.jline>3.21.0</version.org.jline>
+        <version.org.jline>3.21.0.redhat-00001</version.org.jline>
         <version.org.json>20211205</version.org.json>
         <version.org.jsoup>1.14.3</version.org.jsoup>
         <version.org.keycloak>18.0.6.redhat-00001</version.org.keycloak>
@@ -2027,6 +2027,11 @@
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
                 <version>${version.org.json}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jline</groupId>
+                <artifactId>jline</artifactId>
+                <version>${version.org.jline}</version>
             </dependency>
 
             <dependency>
