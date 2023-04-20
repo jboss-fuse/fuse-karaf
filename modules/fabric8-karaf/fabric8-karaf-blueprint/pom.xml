@@ -22,7 +22,7 @@
 
     <parent>
         <groupId>io.fabric8</groupId>
-        <version>7.12.0.redhat-SNAPSHOT</version>
+        <version>7.12.0.fuse-7_12_0-00013</version>
         <artifactId>fabric8-karaf</artifactId>
     </parent>
 
