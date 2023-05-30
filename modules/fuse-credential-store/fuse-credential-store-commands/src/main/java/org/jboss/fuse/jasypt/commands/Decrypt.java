@@ -33,6 +33,7 @@ import org.jasypt.intf.service.JasyptStatelessService;
 import org.jasypt.iv.ByteArrayFixedIvGenerator;
 import org.jasypt.iv.RandomIvGenerator;
 import org.jboss.fuse.jasypt.commands.completers.JasyptPbeAlgorithmsCompletionSupport;
+import org.jboss.fuse.jasypt.commands.support.FipsRandomIvGenerator;
 import org.jboss.fuse.jasypt.commands.support.FipsRandomSaltGenerator;
 
 import static org.jboss.fuse.jasypt.commands.Helpers.isIVNeeded;
@@ -123,7 +124,7 @@ public class Decrypt implements Action {
                         null, null, null,
                         null, null, null,
                         hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null,
-                        useIVGenerator ? RandomIvGenerator.class.getName() : null,
+                        useIVGenerator ? (useFIPSSecureRandomAlgorithm ? FipsRandomIvGenerator.class.getName() : RandomIvGenerator.class.getName()) : null,
                         null, null);
             } else {
                 // we are told to decrypt password encrypted with Jasypt version that didn't use IV generator at all.
