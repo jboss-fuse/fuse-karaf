@@ -28,6 +28,7 @@ import org.jasypt.encryption.pbe.StandardPBEByteEncryptor;
 import org.jasypt.intf.service.JasyptStatelessService;
 import org.jasypt.iv.RandomIvGenerator;
 import org.jboss.fuse.jasypt.commands.completers.JasyptPbeAlgorithmsCompletionSupport;
+import org.jboss.fuse.jasypt.commands.support.FipsRandomIvGenerator;
 import org.jboss.fuse.jasypt.commands.support.FipsRandomSaltGenerator;
 
 import static org.jboss.fuse.jasypt.commands.Helpers.isIVNeeded;
@@ -111,7 +112,7 @@ public class Encrypt implements Action {
                     null, null, null,
                     null, null, null,
                     hex ? CommonUtils.STRING_OUTPUT_TYPE_HEXADECIMAL : CommonUtils.STRING_OUTPUT_TYPE_BASE64, null, null,
-                    useIVGenerator ? RandomIvGenerator.class.getName() : null,
+                    useIVGenerator ? (useFIPSSecureRandomAlgorithm ? FipsRandomIvGenerator.class.getName() : RandomIvGenerator.class.getName()) : null,
                     null, null);
 
             System.out.println("Algorithm used: " + algorithm);
