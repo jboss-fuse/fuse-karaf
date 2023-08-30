@@ -108,7 +108,7 @@
         <version.com.google.guava30>30.1.0.jre-redhat-00003</version.com.google.guava30>
         <version.com.google.protobuf-drools>3.16.1</version.com.google.protobuf-drools>
         <version.com.hazelcast>3.12.13</version.com.hazelcast>
-        <version.com.github.mwiede.jsch>0.2.0.redhat-00001</version.com.github.mwiede.jsch>
+        <version.com.github.mwiede.jsch>0.2.11.redhat-00001</version.com.github.mwiede.jsch>
         <version.com.ning.async-http-client>1.9.40</version.com.ning.async-http-client>
         <version.com.oracle.database.jdbc>19.17.0.0</version.com.oracle.database.jdbc>
         <version.com.sun.istack>3.0.10.redhat-00001</version.com.sun.istack>
