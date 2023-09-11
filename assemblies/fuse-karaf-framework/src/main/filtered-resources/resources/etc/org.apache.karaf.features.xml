@@ -420,6 +420,8 @@
                 replacement="mvn:org.osgi/org.osgi.util.function/${version.org.osgi.util.function}" mode="maven"/>
         <bundle originalUri="mvn:com.google.protobuf/protobuf-java/[3.6,4)"
                 replacement="mvn:com.google.protobuf/protobuf-java/${version.com.google.protobuf-drools}" mode="maven"/>
+        <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okio/[1,2)"
+                replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okio/${version.org.apache.servicemix.bundles.okio}" mode="maven"/>
     </bundleReplacements>
 
     <!-- A list of feature replacements that allows changing external feature definitions -->
