@@ -128,7 +128,7 @@
         <version.io.netty.tcnative>2.0.60.Final</version.io.netty.tcnative>
         <version.io.netty.artemis>4.1.66.Final-redhat-00001</version.io.netty.artemis>
         <version.io.opentracing>0.32.0</version.io.opentracing>
-        <version.io.prometheus>0.14.0.redhat-00002</version.io.prometheus>
+        <version.io.prometheus>0.18.0.redhat-00001</version.io.prometheus>
         <version.io.swagger>1.6.2</version.io.swagger>
         <version.io.swagger.core.v3>2.1.9</version.io.swagger.core.v3>
         <version.io.undertow>2.2.23.SP2-redhat-00001</version.io.undertow>
