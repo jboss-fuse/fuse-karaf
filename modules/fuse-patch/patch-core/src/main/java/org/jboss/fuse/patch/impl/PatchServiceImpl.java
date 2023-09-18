@@ -767,19 +767,8 @@ public class PatchServiceImpl implements PatchService {
                         for (String featureOverride : overridesForFeatureKeys) {
                             System.out.println("overriding feature: " + featureOverride);
                         }
-                        boolean restartNeeded = false;
-                        if (featuresService != null
-                                && (overridesForFeatureKeys.size() > 0 || updatesForBundleKeys.size() > 0)) {
-                            System.out.println("refreshing features");
-                            try {
-                                featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
-                            } catch (RejectedExecutionException e) {
-                                System.out.println("Unable to refresh features. Likely the features service itself was refreshed.");
-                                restartNeeded = true;
-                            }
-                        }
 
-                        // persist results of all installed patches
+                        // persist results of all installed patches - before refreshing the features, which may fail
                         for (Patch patch : patches) {
                             PatchResult result = results.get(patch.getPatchData().getId());
 
@@ -792,6 +781,18 @@ public class PatchServiceImpl implements PatchService {
                             System.out.flush();
 
                             result.store();
+                        }
+
+                        boolean restartNeeded = false;
+                        if (featuresService != null
+                                && (overridesForFeatureKeys.size() > 0 || updatesForBundleKeys.size() > 0)) {
+                            System.out.println("refreshing features");
+                            try {
+                                featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                            } catch (RejectedExecutionException e) {
+                                System.out.println("Unable to refresh features. Likely the features service itself was refreshed.");
+                                restartNeeded = true;
+                            }
                         }
 
                         // Some updates need a full JVM restart - we didn't do it before ENTESB-15538 for HF patches
