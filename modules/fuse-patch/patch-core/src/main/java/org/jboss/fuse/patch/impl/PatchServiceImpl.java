@@ -19,6 +19,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -761,12 +763,33 @@ public class PatchServiceImpl implements PatchService {
             if (!simulate) {
                 Runnable task = () -> {
                     try {
-                        // preemptively load classes that will be needed to save patch installation result
-                        // so we won't hit CNFE when patch bundles are refreshed...
-                        getClass().getClassLoader().loadClass(FileUtils.class.getName());
+                        // persist results of all installed patches - before refreshing the features, which may fail
+                        List<File> patchResults = new ArrayList<>(patches.size());
+                        List<File> tmpPatchResults = new ArrayList<>(patches.size());
+                        List<String> messages = new ArrayList<>(patches.size());
                         for (Patch patch : patches) {
                             PatchResult result = results.get(patch.getPatchData().getId());
-                            PatchReport report = patch.getResult().getReport();
+
+                            StringWriter sw = new StringWriter();
+                            try (PrintWriter pw = new PrintWriter(sw)) {
+                                pw.printf("Summary of patch %s:%n", patch.getPatchData().getId());
+                                PatchReport report = patch.getResult().getReport();
+                                pw.printf(" - Bundles updated: %d%n", report.getUpdatedBundles());
+                                pw.printf(" - Features updated: %d%n", report.getUpdatedFeatures());
+                                pw.printf(" - Features removed: %d%n", report.getRemovedFeatures());
+                                pw.printf(" - Features overriden: %d%n", report.getOverridenFeatures());
+                            }
+                            messages.add(sw.toString());
+
+                            result.store();
+                            // rename patch result and rename it back after features are refreshed
+                            File f1 = new File(result.getPatchData().getPatchLocation(),
+                                    result.getPatchData().getId() + ".patch.result");
+                            File f2 = new File(result.getPatchData().getPatchLocation(),
+                                    result.getPatchData().getId() + ".patch.result.tmp");
+                            f1.renameTo(f2);
+                            patchResults.add(f1);
+                            tmpPatchResults.add(f2);
                         }
 
                         // update bundles
@@ -788,19 +811,13 @@ public class PatchServiceImpl implements PatchService {
                             }
                         }
 
-                        // persist results of all installed patches - before refreshing the features, which may fail
-                        for (Patch patch : patches) {
-                            PatchResult result = results.get(patch.getPatchData().getId());
+                        for (int i = 0; i < patchResults.size(); i++) {
+                            File f1 = patchResults.get(i);
+                            File f2 = tmpPatchResults.get(i);
+                            f2.renameTo(f1);
 
-                            System.out.printf("Summary of patch %s:%n", patch.getPatchData().getId());
-                            PatchReport report = patch.getResult().getReport();
-                            System.out.printf(" - Bundles updated: %d%n", report.getUpdatedBundles());
-                            System.out.printf(" - Features updated: %d%n", report.getUpdatedFeatures());
-                            System.out.printf(" - Features removed: %d%n", report.getRemovedFeatures());
-                            System.out.printf(" - Features overriden: %d%n", report.getOverridenFeatures());
+                            System.out.print(messages.get(i));
                             System.out.flush();
-
-                            result.store();
                         }
 
                         // Some updates need a full JVM restart - we didn't do it before ENTESB-15538 for HF patches
