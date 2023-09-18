@@ -41,6 +41,7 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.RejectedExecutionException;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -766,10 +767,16 @@ public class PatchServiceImpl implements PatchService {
                         for (String featureOverride : overridesForFeatureKeys) {
                             System.out.println("overriding feature: " + featureOverride);
                         }
+                        boolean restartNeeded = false;
                         if (featuresService != null
                                 && (overridesForFeatureKeys.size() > 0 || updatesForBundleKeys.size() > 0)) {
                             System.out.println("refreshing features");
-                            featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                            try {
+                                featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                            } catch (RejectedExecutionException e) {
+                                System.out.println("Unable to refresh features. Likely the features service itself was refreshed.");
+                                restartNeeded = true;
+                            }
                         }
 
                         // persist results of all installed patches
@@ -788,7 +795,7 @@ public class PatchServiceImpl implements PatchService {
                         }
 
                         // Some updates need a full JVM restart - we didn't do it before ENTESB-15538 for HF patches
-                        if (isJvmRestartNeeded(results)) {
+                        if (restartNeeded || isJvmRestartNeeded(results)) {
                             boolean handlesFullRestart = Boolean.getBoolean("karaf.restart.jvm.supported");
                             if (handlesFullRestart) {
                                 if (patches.size() == 1) {
