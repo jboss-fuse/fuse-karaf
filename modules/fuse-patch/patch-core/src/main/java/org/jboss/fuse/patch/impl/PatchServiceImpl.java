@@ -761,11 +761,31 @@ public class PatchServiceImpl implements PatchService {
             if (!simulate) {
                 Runnable task = () -> {
                     try {
+                        // preemptively load classes that will be needed to save patch installation result
+                        // so we won't hit CNFE when patch bundles are refreshed...
+                        getClass().getClassLoader().loadClass(FileUtils.class.getName());
+                        for (Patch patch : patches) {
+                            PatchResult result = results.get(patch.getPatchData().getId());
+                            PatchReport report = patch.getResult().getReport();
+                        }
+
                         // update bundles
                         applyChanges(bundleUpdateLocations, toReinstall);
 
                         for (String featureOverride : overridesForFeatureKeys) {
                             System.out.println("overriding feature: " + featureOverride);
+                        }
+
+                        boolean restartNeeded = false;
+                        if (featuresService != null
+                                && (overridesForFeatureKeys.size() > 0 || updatesForBundleKeys.size() > 0)) {
+                            System.out.println("refreshing features");
+                            try {
+                                featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
+                            } catch (RejectedExecutionException e) {
+                                System.out.println("Unable to refresh features. Likely the features service itself was refreshed.");
+                                restartNeeded = true;
+                            }
                         }
 
                         // persist results of all installed patches - before refreshing the features, which may fail
@@ -781,18 +801,6 @@ public class PatchServiceImpl implements PatchService {
                             System.out.flush();
 
                             result.store();
-                        }
-
-                        boolean restartNeeded = false;
-                        if (featuresService != null
-                                && (overridesForFeatureKeys.size() > 0 || updatesForBundleKeys.size() > 0)) {
-                            System.out.println("refreshing features");
-                            try {
-                                featuresService.refreshFeatures(EnumSet.noneOf(FeaturesService.Option.class));
-                            } catch (RejectedExecutionException e) {
-                                System.out.println("Unable to refresh features. Likely the features service itself was refreshed.");
-                                restartNeeded = true;
-                            }
                         }
 
                         // Some updates need a full JVM restart - we didn't do it before ENTESB-15538 for HF patches
