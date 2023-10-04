@@ -223,7 +223,7 @@
         <version.org.apache.servicemix.bundles.saxon>9.8.0.14-fuse-redhat-00002</version.org.apache.servicemix.bundles.saxon>
         <version.org.apache.servicemix.bundles.serp>1.15.1_1</version.org.apache.servicemix.bundles.serp>
         <version.org.apache.servicemix.bundles.spring>5.3.27.1-fuse-redhat-00001</version.org.apache.servicemix.bundles.spring>
-        <version.org.apache.servicemix.bundles.spring.security>5.7.8.1-fuse-redhat-00001</version.org.apache.servicemix.bundles.spring.security>
+        <version.org.apache.servicemix.bundles.spring.security>5.7.11.1-fuse-redhat-00001</version.org.apache.servicemix.bundles.spring.security>
         <version.org.apache.servicemix.bundles.xalan>2.7.2.3-fuse-redhat-00006</version.org.apache.servicemix.bundles.xalan>
         <version.org.apache.servicemix.bundles.xalan-serializer>2.7.2.1-fuse-redhat-00006</version.org.apache.servicemix.bundles.xalan-serializer>
         <version.org.apache.servicemix.bundles.xerces>2.12.2.1-fuse-redhat-00003</version.org.apache.servicemix.bundles.xerces>
