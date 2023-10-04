@@ -125,6 +125,7 @@
                         <Import-Package>
                             org.apache.karaf.features;version="[4.2,5)",
                             org.osgi.framework;version="[1.8,2)",
+                            sun.nio.ch;resolution:=optional,
                             *
                         </Import-Package>
                         <Private-Package>
