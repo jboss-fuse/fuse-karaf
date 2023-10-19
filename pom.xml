@@ -131,9 +131,9 @@
         <version.io.prometheus>0.18.0.redhat-00001</version.io.prometheus>
         <version.io.swagger>1.6.2</version.io.swagger>
         <version.io.swagger.core.v3>2.1.9</version.io.swagger.core.v3>
-        <version.io.undertow>2.2.25.SP3-redhat-00001</version.io.undertow>
+        <version.io.undertow>2.2.28.SP1-redhat-00001</version.io.undertow>
         <!-- version of Undertow used in Pax Web feature, to override it correctly -->
-        <version.io.undertow-pax-web>2.2.26.Final</version.io.undertow-pax-web>
+        <version.io.undertow-pax-web>2.2.28.Final</version.io.undertow-pax-web>
         <version.jakarta.annotation>1.3.5.redhat-00004</version.jakarta.annotation>
         <version.jakarta.enterprise.cdi-api>2.0.2.redhat-00004</version.jakarta.enterprise.cdi-api>
         <version.jakarta.interceptor>1.2.5.redhat-00002</version.jakarta.interceptor>
@@ -248,7 +248,7 @@
         <version.org.codehaus.woodstox.core>4.4.1.redhat-00001</version.org.codehaus.woodstox.core>
         <version.org.codehaus.woodstox.stax2-api>4.2.1</version.org.codehaus.woodstox.stax2-api>
         <version.org.eclipse.jdt.core.compiler>4.6.1.redhat-1</version.org.eclipse.jdt.core.compiler>
-        <version.org.eclipse.jetty>9.4.52.v20230823</version.org.eclipse.jetty>
+        <version.org.eclipse.jetty>9.4.53.v20231009</version.org.eclipse.jetty>
         <version.org.eclipse.jgit>5.1.3.201810200350-r</version.org.eclipse.jgit>
         <version.org.eclipse.persistence>2.1.0</version.org.eclipse.persistence>
         <version.org.fusesource.hawtbuf>1.11.0.redhat-2</version.org.fusesource.hawtbuf>
@@ -287,7 +287,7 @@
         <version.org.ops4j.pax.swissbox>1.8.5</version.org.ops4j.pax.swissbox>
         <version.org.ops4j.pax.transx>0.5.3</version.org.ops4j.pax.transx>
         <version.org.ops4j.pax.url>2.6.14</version.org.ops4j.pax.url>
-        <version.org.ops4j.pax.web>8.0.22</version.org.ops4j.pax.web>
+        <version.org.ops4j.pax.web>8.0.23</version.org.ops4j.pax.web>
         <version.org.osgi>8.0.0</version.org.osgi>
         <version.org.osgi.annotation>8.0.0</version.org.osgi.annotation>
         <version.org.osgi.cmpn>7.0.0</version.org.osgi.cmpn>
