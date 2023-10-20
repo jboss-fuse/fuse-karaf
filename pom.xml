@@ -118,7 +118,7 @@
         <version.commons-codec>1.15.0.redhat-00008</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
         <version.commons-io>2.11.0.redhat-00001</version.commons-io>
-        <version.commons-lang>2.6.0.redhat-7</version.commons-lang>
+        <version.commons-lang>2.6.0.redhat-00008</version.commons-lang>
         <version.commons-net>3.6</version.commons-net>
         <version.commons-pool>1.6.0.redhat-10</version.commons-pool>
         <version.io.dropwizard.metrics>3.2.6.redhat-00001</version.io.dropwizard.metrics>
@@ -157,7 +157,7 @@
         <version.joda-time>2.9.9.redhat-00001</version.joda-time>
         <version.junit>4.13.2</version.junit>
         <version.net.bytebuddy>1.12.18.redhat-00002</version.net.bytebuddy>
-        <version.net.i2p.crypto>0.3.0</version.net.i2p.crypto>
+        <version.net.i2p.crypto>0.3.0.redhat-00001</version.net.i2p.crypto>
         <version.net.java.dev.jna>5.12.1</version.net.java.dev.jna>
         <version.net.sf.ehcache>2.10.9.2</version.net.sf.ehcache>
         <version.org.antlr4>4.8</version.org.antlr4>
@@ -1802,6 +1802,11 @@
                 <version>${version.commons-codec}</version>
             </dependency>
             <dependency>
+                <groupId>commons-lang</groupId>
+                <artifactId>commons-lang</artifactId>
+                <version>${version.commons-lang}</version>
+            </dependency>
+            <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${version.commons-io}</version>
@@ -2065,6 +2070,11 @@
                 <artifactId>netty-common</artifactId>
                 <version>${version.io.netty}</version>
             </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-tcnative-classes</artifactId>
+                <version>${version.io.netty.tcnative}</version>
+            </dependency>
 
             <dependency>
                 <groupId>com.github.mwiede</groupId>
@@ -2091,6 +2101,12 @@
                 <groupId>org.apache.geronimo.specs</groupId>
                 <artifactId>geronimo-j2ee-management_1.1_spec</artifactId>
                 <version>${version.org.apache.geronimo.specs.j2ee-management_1.1}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>net.i2p.crypto</groupId>
+                <artifactId>eddsa</artifactId>
+                <version>${version.net.i2p.crypto}</version>
             </dependency>
 
         </dependencies>
