@@ -105,6 +105,16 @@
       <name>com.mchange.v2.c3p0:type=PooledDataSource,*</name>
       <attribute>properties</attribute>
     </mbean>
+    <mbean>
+      <name>org.apache.logging.log4j2:*</name>
+      <attribute>*</attribute>
+      <operation>*</operation>
+    </mbean>
+    <mbean>
+      <name>jdk.management.jfr:type=FlightRecorder</name>
+      <attribute>*</attribute>
+      <operation>*</operation>
+    </mbean>
   </deny>
 
   <cors>

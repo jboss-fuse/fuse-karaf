@@ -116,6 +116,16 @@
       <attribute>*</attribute>
       <operation>*</operation>
     </mbean>
+    <mbean>
+      <name>org.apache.logging.log4j2:*</name>
+      <attribute>*</attribute>
+      <operation>*</operation>
+    </mbean>
+    <mbean>
+      <name>jdk.management.jfr:type=FlightRecorder</name>
+      <attribute>*</attribute>
+      <operation>*</operation>
+    </mbean>
   </deny>
 
   <!--
