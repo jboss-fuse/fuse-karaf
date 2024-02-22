@@ -2069,6 +2069,21 @@
                 <artifactId>jline</artifactId>
                 <version>${version.org.jline}</version>
             </dependency>
+            <dependency>
+                <groupId>org.jline</groupId>
+                <artifactId>jline-builtins</artifactId>
+                <version>${version.org.jline}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jline</groupId>
+                <artifactId>jline-console</artifactId>
+                <version>${version.org.jline}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jline</groupId>
+                <artifactId>jline-terminal</artifactId>
+                <version>${version.org.jline}</version>
+            </dependency>
 
             <dependency>
                 <groupId>io.netty</groupId>
