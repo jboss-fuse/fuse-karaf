@@ -114,7 +114,7 @@
         <version.com.sun.istack>3.0.10.redhat-00001</version.com.sun.istack>
         <version.com.sun.mail>1.6.2.redhat-00001</version.com.sun.mail>
         <version.com.thoughtworks.paranamer>2.8</version.com.thoughtworks.paranamer>
-        <version.commons-beanutils>1.9.4.redhat-00002</version.commons-beanutils>
+        <version.commons-beanutils>1.9.4.redhat-00003</version.commons-beanutils>
         <version.commons-codec>1.15.0.redhat-00001</version.commons-codec>
         <version.commons-collections>3.2.2.redhat-2</version.commons-collections>
         <version.commons-io>2.11.0.redhat-00001</version.commons-io>
@@ -1796,6 +1796,11 @@
                 <version>${version.org.eclipse.persistence}</version>
             </dependency>
 
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>${version.commons-beanutils}</version>
+            </dependency>
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
