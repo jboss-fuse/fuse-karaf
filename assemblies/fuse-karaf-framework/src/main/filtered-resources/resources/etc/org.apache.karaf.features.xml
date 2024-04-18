@@ -329,7 +329,7 @@
                 replacement="mvn:org.ow2.asm/asm-tree/${version.org.ow2.asm}" mode="maven" />
         <bundle originalUri="mvn:org.ow2.asm/asm-util/[9,10)"
                 replacement="mvn:org.ow2.asm/asm-util/${version.org.ow2.asm}" mode="maven" />
-        <bundle originalUri="mvn:com.google.code.gson/gson/[2.8,3)"
+        <bundle originalUri="mvn:com.google.code.gson/gson/[2.8,2.10)"
                 replacement="mvn:com.google.code.gson/gson/${version.com.google.code.gson}" mode="maven" />
         <bundle originalUri="mvn:org.fusesource.hawtbuf/hawtbuf/[1.11,2)"
                 replacement="mvn:org.fusesource.hawtbuf/hawtbuf/${version.org.fusesource.hawtbuf}" mode="maven" />
@@ -418,7 +418,7 @@
                 replacement="mvn:org.osgi/org.osgi.util.promise/${version.org.osgi.util.promise}" mode="maven"/>
         <bundle originalUri="mvn:org.osgi/org.osgi.util.function/[1.0,2.0)"
                 replacement="mvn:org.osgi/org.osgi.util.function/${version.org.osgi.util.function}" mode="maven"/>
-        <bundle originalUri="mvn:com.google.protobuf/protobuf-java/[3.6,4)"
+        <bundle originalUri="mvn:com.google.protobuf/protobuf-java/[3.6,3.17)"
                 replacement="mvn:com.google.protobuf/protobuf-java/${version.com.google.protobuf-drools}" mode="maven"/>
         <bundle originalUri="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okio/[1,2)"
                 replacement="mvn:org.apache.servicemix.bundles/org.apache.servicemix.bundles.okio/${version.org.apache.servicemix.bundles.okio}" mode="maven"/>
