@@ -288,7 +288,7 @@
         <bundle originalUri="mvn:org.bouncycastle/bcprov-jdk15on/[1.50,2)"
                 replacement="mvn:org.bouncycastle/bcprov-jdk18on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcprov-ext-jdk15on/[1.50,2)"
-                replacement="mvn:org.bouncycastle/bcprov-ext-jdk18on/${version.org.bouncycastle}" mode="maven" />
+                replacement="wrap:mvn:org.bouncycastle/bcprov-ext-jdk18on/${version.org.bouncycastle.ext}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcutil-jdk15on/[1.50,2)"
                 replacement="mvn:org.bouncycastle/bcutil-jdk18on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcpkix-jdk18on/[1.50,2)"
@@ -296,7 +296,7 @@
         <bundle originalUri="mvn:org.bouncycastle/bcprov-jdk18on/[1.50,2)"
                 replacement="mvn:org.bouncycastle/bcprov-jdk18on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcprov-ext-jdk18on/[1.50,2)"
-                replacement="mvn:org.bouncycastle/bcprov-ext-jdk18on/${version.org.bouncycastle}" mode="maven" />
+                replacement="wrap:mvn:org.bouncycastle/bcprov-ext-jdk18on/${version.org.bouncycastle.ext}" mode="maven" />
         <bundle originalUri="mvn:org.bouncycastle/bcutil-jdk18on/[1.50,2)"
                 replacement="mvn:org.bouncycastle/bcutil-jdk18on/${version.org.bouncycastle}" mode="maven" />
         <bundle originalUri="mvn:io.swagger/swagger-annotations/[1.5,1.6)"
